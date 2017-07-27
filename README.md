@@ -1,3 +1,4 @@
 # ManifoldRewrite
-```npm install```
+To get started.
+```npm install``` 
 ```npm start```
