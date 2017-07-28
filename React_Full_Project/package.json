@@ -17,8 +17,10 @@
     "react-addons-transition-group": "15.5.2",
     "react-chartjs-2": "2.1.0",
     "react-dom": "15.5.4",
+    "react-redux": "^5.0.5",
     "react-router-dom": "4.1.1",
-    "reactstrap": "4.6.2"
+    "reactstrap": "4.6.2",
+    "redux": "^3.7.2"
   },
   "scripts": {
     "start": "react-scripts start",
