@@ -13,6 +13,7 @@
     "axios": "^0.16.2",
     "chart.js": "2.5.0",
     "history": "^4.6.1",
+    "query-string": "^5.0.0",
     "react": "^15.5.4",
     "react-addons-css-transition-group": "15.5.2",
     "react-addons-transition-group": "15.5.2",
@@ -22,7 +23,8 @@
     "react-router-dom": "4.1.1",
     "reactstrap": "4.6.2",
     "redux": "^3.7.2",
-    "redux-form": "^7.0.3"
+    "redux-form": "^7.0.3",
+    "redux-promise": "^0.5.3"
   },
   "scripts": {
     "start": "react-scripts start",

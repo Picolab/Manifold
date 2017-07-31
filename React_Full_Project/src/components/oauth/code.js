@@ -1,18 +1,22 @@
 import React, { Component } from 'react';
 import { browserHistory } from 'react-router-dom';
 import { CLIENT_STATE_KEY } from '../../utils/config';
+import { getState } from '../../utils/AuthService';
 import { connect } from 'react-redux';
 import { getAccessToken } from '../../actions';
+import queryString from 'query-string';
+
 
 class Code extends Component {
   handleCodeRoute(){
-    //get the state and code
-    const { state, code } = this.props.match.params;
-    const expectedState = localStorage.getItem(CLIENT_STATE_KEY);
+    const unparsedQuery = this.props.location.search;
+    const { code, state } = queryString.parse(unparsedQuery);
+    console.log(code,state);
+    const expectedState = getState();
     if (state !== expectedState) {
       console.warn("OAuth Security Warning. Client states do not match. (Expected %d but got %d)", expectedState, state);
+      return;
     }
-    console.log("getting access token with code: ", code);
     this.props.getAccessToken(code);
   }
 

@@ -6,6 +6,10 @@ import { getOauthURI } from '../../../utils/AuthService';
 class Login extends Component {
   onSubmit(values) {
     const { hostname, client_secret } = values;
+    console.log("values", values);
+    console.log("hostname", hostname);
+    console.log("client_secret", client_secret);
+    console.log("URL", getOauthURI(hostname, client_secret));
     window.location.assign(getOauthURI(hostname, client_secret));
   }
 

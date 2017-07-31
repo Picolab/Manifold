@@ -9,7 +9,9 @@ class Sidebar extends Component {
   }
 
   activeRoute(routeName) {
-    return this.props.location.pathname.indexOf(routeName) > -1 ? 'nav-item nav-dropdown open' : 'nav-item nav-dropdown';
+    if(this.props.location)//oauth redirect causes this to be null
+      return this.props.location.pathname.indexOf(routeName) > -1 ? 'nav-item nav-dropdown open' : 'nav-item nav-dropdown';
+    return 'nav-item nav-dropdown'
   }
 
   // secondLevelActive(routeName) {
