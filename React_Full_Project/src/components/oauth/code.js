@@ -13,6 +13,7 @@ class Code extends Component {
     const { code, state } = queryString.parse(unparsedQuery);
     console.log(code,state);
     const expectedState = getState();
+    console.log("expectedState:", expectedState);
     if (state !== expectedState) {
       console.warn("OAuth Security Warning. Client states do not match. (Expected %d but got %d)", expectedState, state);
       return;
