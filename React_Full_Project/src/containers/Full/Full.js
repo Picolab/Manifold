@@ -7,6 +7,7 @@ import Aside from '../../components/Aside/';
 import Footer from '../../components/Footer/';
 
 import Dashboard from '../../views/Dashboard/'
+import MyThings from '../../views/MyThings'
 import Charts from '../../views/Charts/'
 import Widgets from '../../views/Widgets/'
 import Buttons from '../../views/Components/Buttons/'
@@ -32,6 +33,7 @@ class Full extends Component {
             <div className="container-fluid">
               <Switch>
                 <Route path="/dashboard" name="Dashboard" component={Dashboard}/>
+                <Route path="/mythings" name="My Things" component={MyThings}/>
                 <Route path="/components/buttons" name="Buttons" component={Buttons}/>
                 <Route path="/components/cards" name="Cards" component={Cards}/>
                 <Route path="/components/forms" name="Forms" component={Forms}/>

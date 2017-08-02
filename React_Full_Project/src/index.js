@@ -8,7 +8,10 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import reducers from './reducers';
 
+//middleware and backend
 import promise from 'redux-promise'
+import { DragDropContextProvider } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 
 // Containers
 import Full from './containers/Full/'
@@ -28,15 +31,17 @@ const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 
 ReactDOM.render((
   <Provider store={createStoreWithMiddleware(reducers)}>
-    <HashRouter history={history}>
-      <Switch>
-        <Route exact path="/login" name="Login Page" component={Login}/>
-        <Route exact path="/register" name="Register Page" component={Register}/>
-        <Route exact path="/404" name="Page 404" component={Page404}/>
-        <Route exact path="/500" name="Page 500" component={Page500}/>
-        <Route path="/code" component={Code}/>
-        <Route path="/" name="Home" render={requireAuth}/>
-      </Switch>
-    </HashRouter>
+    <DragDropContextProvider backend={HTML5Backend}>
+      <HashRouter history={history}>
+        <Switch>
+          <Route exact path="/login" name="Login Page" component={Login}/>
+          <Route exact path="/register" name="Register Page" component={Register}/>
+          <Route exact path="/404" name="Page 404" component={Page404}/>
+          <Route exact path="/500" name="Page 500" component={Page500}/>
+          <Route path="/code" component={Code}/>
+          <Route path="/" name="Home" render={requireAuth}/>
+        </Switch>
+      </HashRouter>
+    </DragDropContextProvider>
   </Provider>
 ), document.getElementById('root'))
