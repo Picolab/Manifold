@@ -2,11 +2,12 @@
 ## Developers
 To get started.
 ```
+cd React_Full_Project
 npm install
 npm start
 ```
 ## Users
-manifold app is used for mannaging your Internet of Things Pico device shadows.... 
+manifold app is used for managing your Internet of Things Pico device shadows.... 
 To learn more check out [PicoLabs website](http://picolabs.io)
 
 ## Note
