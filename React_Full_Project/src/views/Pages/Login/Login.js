@@ -5,11 +5,12 @@ import { getOauthURI } from '../../../utils/AuthService';
 
 class Login extends Component {
   onSubmit(values) {
-    const { hostname, client_secret } = values;
+    const { hostname, client_secret,client_id } = values;
+    console.log("client_id", client_id);
     console.log("values", values);
     console.log("hostname", hostname);
     console.log("URL", getOauthURI(hostname, client_secret));
-    window.location.assign(getOauthURI(hostname, client_secret));
+    window.location.assign(getOauthURI(hostname, client_secret, client_id));
   }
 
   render() {
@@ -27,6 +28,10 @@ class Login extends Component {
                     <div className="input-group mb-3">
                       <span className="input-group-addon"><i className="icon-globe"></i></span>
                       <Field type="text" className="form-control" placeholder="Hostname" name="hostname" component="input"/>
+                    </div>
+                    <div className="input-group mb-3">
+                      <span className="input-group-addon"><i className="icon-user"></i></span>
+                      <Field type="text" className="form-control" placeholder="Client ID" name="client_id" component="input"/>
                     </div>
                     <div className="input-group mb-4">
                       <span className="input-group-addon"><i className="icon-key"></i></span>

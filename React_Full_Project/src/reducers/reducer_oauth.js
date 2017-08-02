@@ -1,5 +1,5 @@
 import { ACCESS_TOKEN } from '../actions';
-import { storeRootECI } from '../utils/AuthService';
+import { storeRootECI, getProtocol, getManifoldURL } from '../utils/AuthService';
 
 export default function(state = {}, action){
   switch (action.type) {
@@ -15,7 +15,7 @@ export default function(state = {}, action){
         return state;
       }
       storeRootECI(access_token);
-      window.location.assign("http://localhost:3000");
+      window.location.assign(getManifoldURL());
       return access_token;
     default:
       return state;
