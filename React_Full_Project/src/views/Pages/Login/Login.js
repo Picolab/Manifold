@@ -8,7 +8,6 @@ class Login extends Component {
     const { hostname, client_secret } = values;
     console.log("values", values);
     console.log("hostname", hostname);
-    console.log("client_secret", client_secret);
     console.log("URL", getOauthURI(hostname, client_secret));
     window.location.assign(getOauthURI(hostname, client_secret));
   }
@@ -46,9 +45,14 @@ class Login extends Component {
                 <div className="card card-inverse card-primary py-5 d-md-down-none" style={{ width: 44 + '%' }}>
                   <div className="card-block text-center">
                     <div>
-                      <h2>Sign up</h2>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                      <button type="button" className="btn btn-primary active mt-3">Register Now!</button>
+                      <h2>PicoLabs Engine</h2>
+                      <p>Use PicoLabs cloud service!</p>
+                      <button
+                        type="button"
+                        className="btn btn-primary active mt-3"
+                        onClick = {()=>{window.location.assign(getOauthURI())}}
+                        >
+                        Authorize</button>
                     </div>
                   </div>
                 </div>
