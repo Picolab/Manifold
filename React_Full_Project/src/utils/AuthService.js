@@ -80,3 +80,8 @@ export function getOauthURI(hostname = HOST, client_secret = CLIENT_SECRET,clien
   const url = `${getProtocol()}${getHostname()}/authorize?response_type=code&redirect_uri=${encodedCallback}&client_id=${getClientId()}&state=${newState}`;
   return url;
 }
+
+export function logOut(){
+    window.localStorage.removeItem(ECI_KEY);
+    window.location.assign(getManifoldURL());
+}

@@ -7,7 +7,7 @@ import Aside from '../../components/Aside/';
 import Footer from '../../components/Footer/';
 
 import Dashboard from '../../views/Dashboard/'
-import MyThings from '../../views/MyThings'
+import MyThings from '../../views/MyThings/'
 import Charts from '../../views/Charts/'
 import Widgets from '../../views/Widgets/'
 import Buttons from '../../views/Components/Buttons/'

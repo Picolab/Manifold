@@ -8,7 +8,19 @@ const brandDanger =   '#f86c6b';
 class MyThings extends Component {
   render(){
     return (
-      <div></div>
+      <div className= "container-fluid">
+        <div className = "row">
+          <div className = "col-md-4">
+
+          </div>
+          <div className = "col-md-4">
+
+          </div>
+          <div className = "col-md-4">
+
+          </div>
+        </div>
+      </div>
     );
   }
 }
