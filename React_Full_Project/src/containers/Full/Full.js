@@ -21,7 +21,13 @@ import Tabs from '../../views/Components/Tabs/'
 import FontAwesome from '../../views/Icons/FontAwesome/'
 import SimpleLineIcons from '../../views/Icons/SimpleLineIcons/'
 
+import { getManifoldInformation } from '../../actions';
+import { connect } from 'react-redux';
+
 class Full extends Component {
+  componentDidMount(){
+    this.props.getManifoldInformation();
+  }
   render() {
     return (
       <div className="app">
@@ -58,4 +64,4 @@ class Full extends Component {
   }
 }
 
-export default Full;
+export default connect(null,{ getManifoldInformation })(Full);

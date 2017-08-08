@@ -10,7 +10,7 @@ export const EVENT_PATH = "sky/event";
 export const FUNCTION_PATH = "sky/cloud";
 export const HOST= "b67fa6a2.ngrok.io";//default host;
 export const CLIENT_SECRET= "cj5vc7tr8000aoeop9dog3c4g"; //default .....
-export const HTTP_PROTOCOL= "https://";
+export const HTTP_PROTOCOL= "http://";
 export const PROTOCOL_KEY= "http_protocol";
 //variables
 //export var CALLBACK_URL = window.localStorage.getItem( CALLBACK_URL_key ) || "https://picolab.github.io/ManifoldRewrite/#/code";
