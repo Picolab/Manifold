@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, Switch, Route, Redirect } from 'react-router-dom';
+import { Link, Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import Header from '../../components/Header/';
 import Sidebar from '../../components/Sidebar/';
 import Breadcrumb from '../../components/Breadcrumb/';
@@ -23,6 +23,7 @@ import SimpleLineIcons from '../../views/Icons/SimpleLineIcons/'
 
 import { getManifoldInformation } from '../../actions';
 import { connect } from 'react-redux';
+
 
 class Full extends Component {
   componentDidMount(){
@@ -64,4 +65,6 @@ class Full extends Component {
   }
 }
 
-export default connect(null,{ getManifoldInformation })(Full);
+export default withRouter(
+  connect(null,{ getManifoldInformation })(Full)
+);
