@@ -3,14 +3,12 @@
 //-----------------------------------------------------------------------------
 ruleset io.picolabs.account_management {
   meta {
-    shares __testing
+    shares __testing, getEciFromOwnerName
     use module io.picolabs.wrangler alias wrangler
   }
   global {
-    __testing = { "queries": [ { "name": "__testing" } ],
-                  "events": [ { "domain": "owner", "type": "login",
-                                "attrs": [ "name", "password" ] },
-                              { "domain": "owner", "type": "creation",
+    __testing = { "queries": [ { "name": "__testing" }, {"name": "getEciFromOwnerName", "args": ["name"]} ],
+                  "events": [ { "domain": "owner", "type": "creation",
                                 "attrs": [ "name", "password" ] },
                               { "domain": "wrangler", "type": "ruleset_added",
                                 "attrs": [ "rids" ] } ] }
@@ -18,21 +16,27 @@ ruleset io.picolabs.account_management {
     nameExists = function(ownername){
       ent:owners.defaultsTo({}) >< ownername
     }
-    //returns true if credentials are valid
-    loginAttempt = function(name, password){
-      _password = ent:owners.defaultsTo({}){name}{"password"}; // this is where you could decrypt a stored encrypted password
-      _password == password
+
+    //this assumes you already checked whether or not the entered info was a DID
+    getEciFromOwnerName = function(name){
+      exists = nameExists(name);
+      exists => ent:owners{name}{"eci"} | "No user found"
     }
-  }
+  }//end global
+
 //
 //New owner account registration and management
 
 rule create_admin{
   select when wrangler ruleset_added where rids.klog("rids") >< meta:rid.klog("meta rid")
   pre{}
-    engine:newChannel(meta:picoId, "Login_" + time:now(), "AdminLogin") setting(new_channel)
+  every {
+    engine:newChannel(meta:picoId, "Router_" + time:now(), "route_to_owner") setting(new_channel)
+  }
   fired{
-    ent:owners := ent:owners.defaultsTo({}).put("root", {"password":"toor","token": new_channel{"id"}});
+    ent:owners := ent:owners.defaultsTo({}).put("root", {"eci": new_channel{"id"}});
+    raise owner event "admin"
+      attributes event:attrs();
   }
 }
 
@@ -48,7 +52,7 @@ rule create_admin{
 
     fired{
       raise wrangler event "new_child_request"
-        attributes event:attrs().put({"event_type":"account","rids":"io.picolabs.child_login"});
+        attributes event:attrs().put({"event_type":"account","rids":"io.picolabs.owner_authentication", "password": password});
     }
     else{
       raise owner event "creation_failure"
@@ -67,27 +71,11 @@ rule create_admin{
     pre{
       a=event:attrs().klog("all attrs: ")
       rs_attrs = event:attr("rs_attrs"){"rs_attrs"};
-      new_owner = {"password":rs_attrs{"password"},"token": event:attr("eci")}
+      new_owner = {"eci": event:attr("eci")}
     }
     fired{
       ent:owners := ent:owners.defaultsTo({}).put(rs_attrs{"name"}, new_owner);
     }
   }
 
-//////// Login Rules
-  rule login{
-    select when owner login
-    pre{
-      owner_id = event:attr("owner_id").defaultsTo("");
-      password = event:attr("password").defaultsTo("");
-      validPass = loginAttempt(owner_id,password);
-      token = ent:owners{owner_id}{"token"};
-    }
-    if validPass then every{
-      // create new eci
-      send_directive("Obtained Token",{"Token": token,
-                                        "pico_id": engine:getPicoIDByECI(token)});
-
-    }
-  }
 }
