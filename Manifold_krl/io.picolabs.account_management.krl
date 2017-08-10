@@ -3,15 +3,17 @@
 //-----------------------------------------------------------------------------
 ruleset io.picolabs.account_management {
   meta {
-    shares __testing, getEciFromOwnerName
+    shares __testing
     use module io.picolabs.wrangler alias wrangler
   }
   global {
-    __testing = { "queries": [ { "name": "__testing" }, {"name": "getEciFromOwnerName", "args": ["name"]} ],
+    __testing = { "queries": [ { "name": "__testing" } ],
                   "events": [ { "domain": "owner", "type": "creation",
                                 "attrs": [ "name", "password" ] },
                               { "domain": "wrangler", "type": "ruleset_added",
-                                "attrs": [ "rids" ] } ] }
+                                "attrs": [ "rids" ] },
+                              { "domain": "owner", "type": "eci_requested",
+                                "attrs": [ "name" ] } ] }
 
     nameExists = function(ownername){
       ent:owners.defaultsTo({}) >< ownername
@@ -37,6 +39,22 @@ rule create_admin{
     ent:owners := ent:owners.defaultsTo({}).put("root", {"eci": new_channel{"id"}});
     raise owner event "admin"
       attributes event:attrs();
+  }
+}
+
+rule eci_from_owner_name{
+  select when owner eci_requested
+  pre{
+    eciResult = getEciFromOwnerName(event:attr("owner_id"));
+  }
+  if eciResult != "No user found" then every{
+    send_directive("Returning eci from owner name", {"eci": eciResult});
+  }fired{
+    raise owner event "login_attempt"
+      attributes event:attrs().put({ "timestamp": time:now() });
+  }else{
+    raise owner event "login_attempt_failed"
+      attributes event:attrs().put({ "timestamp": time:now() });
   }
 }
 
