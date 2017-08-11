@@ -26,11 +26,18 @@ import Page500 from './views/Pages/Page500/'
 import Code from './components/oauth/code';
 import { requireAuth } from './utils/AuthService';
 
+//redux-saga
+import createSagaMiddleware from 'redux-saga'
+import rootSaga from './sagas'
+
+const sagaMiddleware = createSagaMiddleware()
 const history = createBrowserHistory();
-const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
+//const createStoreWithMiddleware = applyMiddleware(promise, sagaMiddleware)(createStore);
+const store = createStore(reducers, applyMiddleware(promise, sagaMiddleware))
+sagaMiddleware.run(rootSaga);
 
 ReactDOM.render((
-  <Provider store={createStoreWithMiddleware(reducers)}>
+  <Provider store={store}>
     <DragDropContextProvider backend={HTML5Backend}>
       <HashRouter history={history}>
         <Switch>

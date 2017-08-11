@@ -27,8 +27,8 @@ import { connect } from 'react-redux';
 
 
 class Full extends Component {
-  componentDidMount(){
-    this.props.getManifoldInformation();
+  componentWillMount(){
+    this.props.dispatch({type: "FETCH_ECI"});
   }
   render() {
     return (
@@ -68,5 +68,5 @@ class Full extends Component {
 }
 
 export default withRouter(
-  connect(null,{ getManifoldInformation })(Full)
+  connect()(Full)//we use connect to get dispatch into props
 );
