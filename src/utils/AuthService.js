@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { browserHistory } from 'react-router';
-import { ECI_KEY, CLIENT_KEY, CLIENT_SECRET_KEY, CLIENT_STATE_KEY, CLIENT_HOST_KEY,PROTOCOL_KEY,CLIENT_KEY_KEY,
+import { OWNER_ECI_KEY,MANIFOLD_ECI_KEY, CLIENT_KEY, CLIENT_SECRET_KEY, CLIENT_STATE_KEY, CLIENT_HOST_KEY,PROTOCOL_KEY,CLIENT_KEY_KEY,
    HOST, CLIENT_SECRET,CALLBACK_URL_KEY,HTTP_PROTOCOL } from './config';
 import Full from '../containers/Full/Full';
 
@@ -17,13 +17,19 @@ export function isLoggedIn(){
 }
 
 export function getRootECI(){
-  return localStorage.getItem(ECI_KEY);
+  return localStorage.getItem(OWNER_ECI_KEY);
 }
 
 export function storeRootECI(eci){
-  window.localStorage.setItem(ECI_KEY, eci.toString());
+  window.localStorage.setItem(OWNER_ECI_KEY, eci.toString());
+}
+export function getManifoldECI(){
+  return localStorage.getItem(MANIFOLD_ECI_KEY);
 }
 
+export function storeManifoldECI(eci){
+  window.localStorage.setItem(MANIFOLD_ECI_KEY, eci.toString());
+}
 export function createState(){
   const new_state = Math.floor(Math.random() * 9999999);
   window.localStorage.setItem(CLIENT_STATE_KEY, new_state.toString());
@@ -82,6 +88,7 @@ export function getOauthURI(hostname = HOST, client_secret = CLIENT_SECRET,clien
 }
 
 export function logOut(){
-    window.localStorage.removeItem(ECI_KEY);
+    window.localStorage.removeItem(OWNER_ECI_KEY);
+    window.localStorage.removeItem(MANIFOLD_ECI_KEY);
     window.location.assign(getManifoldURL());
 }

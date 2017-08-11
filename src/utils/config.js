@@ -1,6 +1,7 @@
 //constants
 export const CLIENT_HOST_KEY = "AUTH_CLIENT_HOST";
-export const ECI_KEY = 'eci_key';
+export const OWNER_ECI_KEY = 'owner_eci_key';
+export const MANIFOLD_ECI_KEY = 'manifold_eci_key';
 export const CLIENT_SECRET_KEY = "AUTH_CLIENT_SECRET";
 export const CLIENT_STATE_KEY = "AUTH_CLIENT_STATE";
 export const CLIENT_KEY = "7001E532-04FC-11E7-B4DC-51DDE71C24E1";
