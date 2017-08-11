@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Dropdown, DropdownMenu, DropdownItem } from 'reactstrap';
-import {logOut} from '../../utils/AuthService'
+import { Link } from 'react-router-dom';
+import {logOut} from '../../utils/AuthService';
 
 class Header extends Component {
 
@@ -71,7 +72,7 @@ class Header extends Component {
           <li className="nav-item">
             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
               <button onClick={this.toggle} className="nav-link dropdown-toggle" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded={this.state.dropdownOpen}>
-                <img src={'img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com"/>
+                <img src={'img/avatars/1.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com"/>
                 <span className="d-md-down-none">admin</span>
               </button>
 
@@ -84,8 +85,7 @@ class Header extends Component {
                 <DropdownItem><i className="fa fa-comments"></i> Comments<span className="badge badge-warning">42</span></DropdownItem>
 
                 <DropdownItem header className="text-center"><strong>Settings</strong></DropdownItem>
-
-                <DropdownItem><i className="fa fa-user"></i> Profile</DropdownItem>
+                <Link to="/profile" style={{ textDecoration: 'none' }}><DropdownItem><i className="fa fa-user"></i> Profile</DropdownItem></Link>
                 <DropdownItem><i className="fa fa-wrench"></i> Settings</DropdownItem>
                 <DropdownItem><i className="fa fa-usd"></i> Payments<span className="badge badge-default">42</span></DropdownItem>
                 <DropdownItem><i className="fa fa-file"></i> Projects<span className="badge badge-primary">42</span></DropdownItem>
