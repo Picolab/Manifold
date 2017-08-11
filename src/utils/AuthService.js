@@ -13,14 +13,14 @@ export function requireAuth(){
 }
 
 export function isLoggedIn(){
-  return !getRootECI() ? false : true;
+  return !getOwnerECI() ? false : true;
 }
 
-export function getRootECI(){
+export function getOwnerECI(){
   return localStorage.getItem(OWNER_ECI_KEY);
 }
 
-export function storeRootECI(eci){
+export function storeOwnerECI(eci){
   window.localStorage.setItem(OWNER_ECI_KEY, eci.toString());
 }
 export function getManifoldECI(){

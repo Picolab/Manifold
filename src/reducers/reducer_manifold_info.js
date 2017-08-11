@@ -1,5 +1,5 @@
 import { MANIFOLD_INFO } from '../actions';
-import { storeRootECI, getProtocol, getManifoldURL } from '../utils/AuthService';
+import { storeOwnerECI, getProtocol, getManifoldURL } from '../utils/AuthService';
 
 export default function(state = {}, action){
   switch (action.type) {
