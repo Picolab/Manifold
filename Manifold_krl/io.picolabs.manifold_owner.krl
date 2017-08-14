@@ -23,7 +23,6 @@ ruleset io.picolabs.manifold_owner {
       manifolds.head(){"eci"}
     }
   }
-
   rule manifold_needed {
     select when manifold channel_needed
     pre {
