@@ -19,3 +19,4 @@ build
 .env
 npm-debug.log
 >>>>>>> 64d8f8a85cef40e7ccbc8e51b05482a9ee4e92ee
+.DS_Store

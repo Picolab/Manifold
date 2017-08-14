@@ -13,5 +13,5 @@ export function createThing(){
 }
 
 export function retrieveManifoldEci(){
-  return axios.get(`${sky_cloud}/io.picolabs.manifold_owner/getManifoldEci`);
+  return axios.post(`${sky_event}/eid/manifold/channel_needed`);
 }
