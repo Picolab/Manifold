@@ -21,8 +21,8 @@ ruleset io.picolabs.manifold_owner {
     getManifoldEci = function(channels){
       manifolds = channels.filter(function(chan){
                     chan{"name"} == config{"pico_name"} && chan{"type"} == config{"channel_type"}
-                  }).klog("manifolds in getManifoldEci(): ");
-      manifolds.head(){"eci"}.klog("getManifoldEci() is returning: ");
+                  });
+      manifolds.head(){"id"};
     }
   }
   rule manifold_needed {
