@@ -11,7 +11,7 @@ function* fetchEci(delayTime, attemptNum, action) {
       yield delay(delayTime);
       const result = yield call(retrieveManifoldEci);
       console.log("result in fetchEci:",result);
-      if(result.data.eci){
+      if(result.data.directives){
         yield put({type: "FETCH_ECI_SUCCEEDED", result});
       }else if(attemptNum <= MAX_ATTEMPT_NUM){//try again
         yield* fetchEci(delayTime + 1000, attemptNum + 1, action);

@@ -33,7 +33,7 @@ ruleset io.picolabs.manifold_owner {
     }fired{last}
   }
 
-  rule channel_needed {
+  rule new_channel_check {
     select when manifold channel_needed
     pre {
       child = getManifoldPico();
@@ -48,7 +48,7 @@ ruleset io.picolabs.manifold_owner {
     }
     fired{last}
   }
-  rule channel_needed {
+  rule return_existing_channel {
     select when manifold channel_needed
     pre {
       child = getManifoldPico();
