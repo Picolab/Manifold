@@ -28,7 +28,7 @@ ruleset io.picolabs.manifold_owner {
     pre {
       child = getManifoldPico();
     }
-    if child != "No Manifold Pico" then every {
+    if child == "No Manifold Pico" then every {
       send_directive("manifold still being created",{})
     }fired{last}
   }
