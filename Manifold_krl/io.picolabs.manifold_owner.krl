@@ -19,7 +19,7 @@ ruleset io.picolabs.manifold_owner {
       child.length() > 0 =>  child[0] | "No Manifold Pico"
     }
     getManifoldEci = function(channels){
-      manifolds = channels.filter(function(chan){chan{"name"} == config{"pico_name"} && chan{"type"} == config{"channel_type"}})
+      manifolds = channels.filter(function(chan){chan{"name"} == config{"pico_name"} && chan{"type"} == config{"channel_type"}});
       manifolds.head(){"eci"}
     }
   }
@@ -28,7 +28,7 @@ ruleset io.picolabs.manifold_owner {
     pre {
       child = getManifoldPico();
     }
-    if child ! = "No Manifold Pico" then every {
+    if child != "No Manifold Pico" then every {
       send_directive("manifold still being created",{})
     }fired{last}
   }
