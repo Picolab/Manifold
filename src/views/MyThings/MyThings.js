@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {createThing} from '../../utils/manifoldSDK';
 
 const brandPrimary =  '#20a8d8';
 const brandSuccess =  '#4dbd74';
@@ -7,7 +8,8 @@ const brandDanger =   '#f86c6b';
 
 class MyThings extends Component {
   handleAddClick(){
-    window.alert("Getting there!!!")
+    //window.alert("Getting there!!!")
+    createThing();
   }
   render(){
     return (

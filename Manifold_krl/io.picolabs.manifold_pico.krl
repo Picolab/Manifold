@@ -28,7 +28,7 @@ ruleset io.picolabs.manifold_pico {
       send_directive("Attempting to create new Thing")
     }
     fired{
-      raise wrangler event "new_child_request"
+      raise wrangler event "child_creation"
         attributes event:attrs().put({"event_type": "manifold_create_thing"})
     }else{
       send_directive("Missing a name for your Thing!")

@@ -1,17 +1,18 @@
 import axios from 'axios';
-import { getHostname, getOwnerECI } from './AuthService';
+import { getHostname, getOwnerECI ,getManifoldECI} from './AuthService';
 
-const sky_cloud = `http://${getHostname()}/sky/cloud/${getOwnerECI()}`;
-const sky_event = `http://${getHostname()}/sky/event/${getOwnerECI()}`
+function sky_cloud(eci){ return `http://${getHostname()}/sky/cloud/${eci}`};
+function sky_event(eci) { return `http://${getHostname()}/sky/event/${eci}`};
+
 
 export function getManifoldInfo(){
-  return axios.get(`${sky_cloud}/io.picolabs.manifold_pico/getManifoldInfo`);
+  return axios.get(`${sky_cloud(getOwnerECI())}/io.picolabs.manifold_pico/getManifoldInfo`);
 }
 
 export function createThing(){
-
+  return axios.post(`${sky_event(getManifoldECI())}/Create_Thing/manifold/create_thing`);
 }
 
 export function retrieveManifoldEci(){
-  return axios.post(`${sky_event}/eid/manifold/channel_needed`);
+  return axios.post(`${sky_event(getOwnerECI())}/eid/manifold/channel_needed`);
 }
