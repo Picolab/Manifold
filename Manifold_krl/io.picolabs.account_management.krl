@@ -3,17 +3,21 @@
 //-----------------------------------------------------------------------------
 ruleset io.picolabs.account_management {
   meta {
-    shares __testing
+    shares __testing,getEciFromOwnerName
     use module io.picolabs.wrangler alias wrangler
   }
   global {
-    __testing = { "queries": [ { "name": "__testing" } ],
+    __testing = { "queries": [ { "name": "__testing" },{ "name": "getEciFromOwnerName", "args":["name"] }  ],
                   "events": [ { "domain": "owner", "type": "creation",
                                 "attrs": [ "name", "password" ] },
                               { "domain": "wrangler", "type": "ruleset_added",
                                 "attrs": [ "rids" ] },
                               { "domain": "owner", "type": "eci_requested",
-                                "attrs": [ "name" ] } ] }
+                                "attrs": [ "name" ] },
+                              { "domain": "owner", "type": "delete",
+                                  "attrs": [ "id" ] },
+                              { "domain": "owner", "type": "deleteChan",
+                                      "attrs": [ "eci" ] } ] }
 
     nameExists = function(ownername){
       ent:owners.defaultsTo({}) >< ownername
@@ -83,7 +87,16 @@ rule eci_from_owner_name{
     pre{}
     send_directive("ownername taken",{"ownername": event:attr("name")});
   }
-
+  rule owner_delete{
+    select when owner delete
+    pre{}
+    engine:removePico(event:attr("id"));
+  }
+  rule removeChannel{
+    select when owner deleteChan
+    pre{}
+    engine:removeChannel(event:attr("eci"));
+  }
   rule owner_token{
     select when owner token_created event_type re#account#
     pre{
