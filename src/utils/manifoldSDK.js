@@ -9,8 +9,8 @@ export function getManifoldInfo(){
   return axios.get(`${sky_cloud(getOwnerECI())}/io.picolabs.manifold_pico/getManifoldInfo`);
 }
 
-export function createThing(){
-  return axios.post(`${sky_event(getManifoldECI())}/Create_Thing/manifold/create_thing`);
+export function createThing(name){
+  return axios.post(`${sky_event(getManifoldECI())}/Create_Thing/manifold/create_thing?name=${name}`);
 }
 
 export function retrieveManifoldEci(){

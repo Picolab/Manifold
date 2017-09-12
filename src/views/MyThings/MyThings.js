@@ -9,7 +9,7 @@ const brandDanger =   '#f86c6b';
 class MyThings extends Component {
   handleAddClick(){
     //window.alert("Getting there!!!")
-    createThing();
+    createThing("ThingsName");
   }
   render(){
     return (
