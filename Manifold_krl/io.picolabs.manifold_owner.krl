@@ -1,6 +1,6 @@
 ruleset io.picolabs.manifold_owner {
   meta {
-    use module io.picolabs.wrangler alias wrangler
+    use module io.picolabs.pico alias wrangler
     shares __testing, getManifoldPico
   }
   global {
@@ -69,7 +69,8 @@ ruleset io.picolabs.manifold_owner {
       manifoldPico =  getManifoldPico()
     }
     if manifoldPico == "No Manifold Pico" then
-      engine:registerRuleset(config{"URI"}[0].klog("URI used:"),meta:rulesetURI.klog("Path used"))
+      //engine:registerRuleset(config{"rids"})
+      noop()
     fired {
       raise wrangler event "child_creation" // HEY HEY!!!! check event api
         attributes { "name": config{"pico_name"}, "color": "#7FFFD4", "rids": config{"rids"} } // check child creation api

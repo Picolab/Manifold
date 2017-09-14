@@ -9,10 +9,20 @@ export function getManifoldInfo(){
   return axios.get(`${sky_cloud(getOwnerECI())}/io.picolabs.manifold_pico/getManifoldInfo`);
 }
 
+export function retrieveManifoldEci(){
+  return axios.post(`${sky_event(getOwnerECI())}/eid/manifold/channel_needed`);
+}
+
 export function createThing(name){
   return axios.post(`${sky_event(getManifoldECI())}/Create_Thing/manifold/create_thing?name=${name}`);
 }
 
-export function retrieveManifoldEci(){
-  return axios.post(`${sky_event(getOwnerECI())}/eid/manifold/channel_needed`);
+export function removeThing(name){
+  return axios.post(`${sky_event(getManifoldECI())}/Remove_Thing/manifold/remove_thing?name=${name}`);
 }
+
+export function updateThing(name,thing){
+  return axios.post(`${sky_event(getManifoldECI())}/Update_Thing/manifold/update_thing?name=${name}`);
+}
+
+

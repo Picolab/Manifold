@@ -1,6 +1,6 @@
 ruleset io.picolabs.manifold_pico {
   meta {
-    use module io.picolabs.wrangler alias wrangler
+    use module io.picolabs.pico alias wrangler
     shares __testing, getManifoldInfo
     provides getManifoldInfo
   }
@@ -25,11 +25,38 @@ ruleset io.picolabs.manifold_pico {
     select when manifold create_thing
     pre {}
     if event:attr("name") then every {
-      send_directive("Attempting to create new Thing")
+      send_directive("Attempting to create new Thing",{"thing":event:attr("name")})
     }
     fired{
       raise wrangler event "child_creation"
-        attributes event:attrs().put({"event_type": "manifold_create_thing"})
+        attributes event:attrs().put({"event_type": "manifold_create_thing"/*,"rids":"io.manifold.thing;io.manifold.timeline;io.manifold.safeNmind;io.manifold.journal"*/})
+    }else{
+      send_directive("Missing a name for your Thing!")
+    }
+  }
+
+  rule removeThing {
+    select when manifold remove_thing
+    pre {}
+    if event:attr("name") then every {
+      send_directive("Attempting to remove Thing",{"thing":event:attr("name")})
+    }
+    fired{
+      raise wrangler event "child_deletion"
+        attributes event:attrs().put({"event_type": "manifold_remove_thing"})
+    }else{
+      send_directive("Missing a name for your Thing!")
+    }
+  }
+
+  rule updateThing {
+    select when manifold update_thing
+    pre {}
+    if event:attr("name") then every {
+      send_directive("Attempting to update Thing",{"thing":event:attr("name")})
+    }
+    fired{
+      //event:send to thing
     }else{
       send_directive("Missing a name for your Thing!")
     }
