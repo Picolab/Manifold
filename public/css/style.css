@@ -2879,7 +2879,9 @@ tbody.collapse.show {
   display: flex;
   flex-direction: column;
   background-color: #fff;
-  border: 1px solid #cfd8dc; }
+  border: 1px solid #cfd8dc;
+  height: inherit;
+  width: inherit; }
 
 .card-block {
   flex: 1 1 auto;

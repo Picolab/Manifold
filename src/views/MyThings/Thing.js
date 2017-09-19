@@ -8,7 +8,7 @@ const brandDanger =   '#f86c6b';
 class Thing extends Component {
   render(){
     return (
-      <div className={"card"}  style={this.props.style}>
+      <div className={"card"}>
         <div className="card-header">
           Card title
         </div>
