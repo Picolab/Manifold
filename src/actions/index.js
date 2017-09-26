@@ -20,12 +20,3 @@ export function getAccessToken(code){
     payload: request
   };
 }
-
-export function getManifoldInformation(){
-  const request = getManifoldInfo();
-
-  return {
-    type: MANIFOLD_INFO,
-    manifold_info: request
-  }
-}

@@ -3,15 +3,14 @@ import { getManifoldInfo } from '../utils/manifoldSDK';
 
 function* fetchManifoldInfo(action) {
   const result = yield call(getManifoldInfo);
-  console.log("THIS IS THE PLACE",result);
   if(result.data.things.things){
-    console.log("DISPATCHING ACTION");
+    console.log("Got here 3");
     yield put({ type: "manifold_info", result })
   }
 }
 
 export default function* watchManifoldInfo() {
-  yield takeLatest("Manifold_Info", fetchManifoldInfo);
+  yield takeLatest("MANIFOLD_INFO", fetchManifoldInfo);
 }
 
 export function* watchEciSuccess() {
