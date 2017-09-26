@@ -6,7 +6,7 @@ function sky_event(eci) { return `http://${getHostname()}/sky/event/${eci}`};
 
 
 export function getManifoldInfo(){
-  return axios.get(`${sky_cloud(getOwnerECI())}/io.picolabs.manifold_pico/getManifoldInfo`);
+  return axios.get(`${sky_cloud(getManifoldECI())}/io.picolabs.manifold_pico/getManifoldInfo`);
 }
 
 export function retrieveManifoldEci(){
@@ -24,5 +24,3 @@ export function removeThing(name){
 export function updateThing(name,thing){
   return axios.post(`${sky_event(getManifoldECI())}/Update_Thing/manifold/update_thing?name=${name}`);
 }
-
-

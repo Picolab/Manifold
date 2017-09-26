@@ -28,7 +28,7 @@ import { connect } from 'react-redux';
 
 class Full extends Component {
   componentWillMount(){
-    this.props.dispatch({type: "FETCH_ECI"});
+    this.props.dispatch({type: "FETCH_ECI"}); //the saga will fetch the eci
   }
   render() {
     return (

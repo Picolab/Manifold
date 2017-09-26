@@ -30,4 +30,4 @@ class Code extends Component {
   }
 }
 
-export default connect(null, {getAccessToken})(Code);
+export default connect(null, {getAccessToken})(Code); //binds the action function getAccessToken to the redux store/reducers

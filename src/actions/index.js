@@ -26,6 +26,6 @@ export function getManifoldInformation(){
 
   return {
     type: MANIFOLD_INFO,
-    payload: request
+    manifold_info: request
   }
 }
