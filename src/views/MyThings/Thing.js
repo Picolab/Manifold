@@ -10,10 +10,12 @@ class Thing extends Component {
     return (
       <div className={"card"} style={{  height: "inherit", width: "inherit" }}>
         <div className="card-header">
-          Card title
+          {this.props.name}
         </div>
         <div className="card-block">
-          Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
+          ID: {this.props.id} <br/>
+          ECI: {this.props.eci}<br/>
+          PARENT_ECI: {this.props.parent_eci}
         </div>
       </div>
     );

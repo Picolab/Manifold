@@ -15,6 +15,7 @@ ruleset io.picolabs.manifold_pico {
       {
         "things": {
           "things": wrangler:children(),
+          "thingsPosition": ent:thingsPos.defaultsTo([]),
           "lastUpdated": ent:thingsUpdate.defaultsTo("null")
         }
       }

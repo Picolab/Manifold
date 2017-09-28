@@ -16,13 +16,9 @@ const brandDanger =   '#f86c6b';
 class MyThings extends Component {
   constructor(props) {
     super(props);
+    console.log("THE PROPS!!!!",props);
     this.onLayoutChange = this.onLayoutChange.bind(this);
     this.onBreakpointChange = this.onBreakpointChange.bind(this);
-    // this.state = {
-    //   items : [0, 1, 2].map(function(i, key, list) {
-    //     return {i: i.toString(), x: i * 2, y: 0, w: 3, h: 2, add: i === (list.length - 1).toString()};
-    //   })
-    // };
     this.state = {
       addModal: false
     }
@@ -63,19 +59,20 @@ class MyThings extends Component {
 
   createElement(el) {
     return (
-      <div key={el.i} data-grid={el} >
-          <Thing />
+      <div key={el.key} data-grid={el} >
+          <Thing name={el.name} id={el.id} parent_eci={el.parent_eci} eci={el.eci}/>
       </div>
     );
   }
 
   render(){
-    //{_.map(this.props.things, this.createElement)}
     return (
       <div>
-        <button style={{float:"right"}} className="btn btn-primary" onClick={() => this.toggleAddModal()}>+</button>
-        <button style={{float:"right"}} className="btn btn-danger" onClick={() => this.handleRemoveClick()}>-</button>
-        <button style={{float:"right"}} className="btn btn-warning" onClick={() => this.handleUpdateClick()}>^</button>
+        <div style={{height:"30px"}}>
+          <button style={{float:"right"}} className="btn btn-primary" onClick={() => this.toggleAddModal()}>+</button>
+          <button style={{float:"right"}} className="btn btn-danger" onClick={() => this.handleRemoveClick()}>-</button>
+          <button style={{float:"right"}} className="btn btn-warning" onClick={() => this.handleUpdateClick()}>^</button>
+        </div>
         <Modal isOpen={this.state.addModal} toggle={this.toggleAddModal} className={'modal-primary'}>
           <ModalHeader toggle={this.toggleAddModal}>Create a new Thing</ModalHeader>
           <ModalBody>
@@ -90,12 +87,14 @@ class MyThings extends Component {
           </ModalFooter>
         </Modal>
 
-        <ResponsiveReactGridLayout {...this.props} onLayoutChange={this.onLayoutChange}
-          onBreakpointChange={this.onBreakpointChange}>
+        <div>
+          <ResponsiveReactGridLayout {...this.props} onLayoutChange={this.onLayoutChange}
+            onBreakpointChange={this.onBreakpointChange}>
 
+            {_.map(this.props.things,this.createElement)}
 
-
-        </ResponsiveReactGridLayout>
+          </ResponsiveReactGridLayout>
+        </div>
       </div>
     );
   }
@@ -107,10 +106,16 @@ MyThings.defaultProps = {
   rowHeight: 100
 };
 
+function addPropsToThings(thingsArray){
+  return thingsArray.map(function(i, key, list) {
+    return {key: key.toString(), x: key * 2, y: 0, w: 3, h: 2, name: i.name, id: i.id, eci: i.eci, parent_eci: i.parent_eci};
+  })
+};
+
 const mapStateToProps = state => {
   if(state.manifoldInfo.things){
     return {
-      things: state.manifoldInfo.things.things.children
+      things: addPropsToThings(state.manifoldInfo.things.things.children)
     }
   }else{
     return {}

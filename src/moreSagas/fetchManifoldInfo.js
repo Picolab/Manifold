@@ -4,7 +4,6 @@ import { getManifoldInfo } from '../utils/manifoldSDK';
 function* fetchManifoldInfo(action) {
   const result = yield call(getManifoldInfo);
   if(result.data.things.things){
-    console.log("Got here 3");
     yield put({ type: "manifold_info", result })
   }
 }
