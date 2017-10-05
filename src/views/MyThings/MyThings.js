@@ -55,9 +55,6 @@ class MyThings extends Component {
     this.toggleRemoveModal();
     this.props.dispatch({type: "command", command: removeThing, params: [nameToDelete]});
   }
-  handleUpdateClick(){
-    updateThing("ThingsName",{});
-  }
 
   onLayoutChange(layout) {
     //this.props.onLayoutChange(layout);
@@ -85,7 +82,6 @@ class MyThings extends Component {
         <div style={{height:"30px"}}>
           <button style={{float:"right"}} className="btn btn-primary" onClick={() => this.toggleAddModal()}>+</button>
           <button style={{float:"right"}} className="btn btn-danger" onClick={() => this.toggleRemoveModal()}>-</button>
-          <button style={{float:"right"}} className="btn btn-warning" onClick={() => this.handleUpdateClick()}>^</button>
         </div>
         <Modal isOpen={this.state.addModal} toggle={this.toggleAddModal} className={'modal-primary'}>
           <ModalHeader toggle={this.toggleAddModal}>Create a new Thing</ModalHeader>
