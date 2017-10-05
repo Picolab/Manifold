@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dropdown, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem, Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import { Link } from 'react-router-dom';
 import {logOut} from '../../utils/AuthService';
 import {createThing,removeThing,updateThing} from '../../utils/manifoldSDK';
@@ -15,10 +15,20 @@ class Thing extends Component {
     super(props);
 
     this.toggle = this.toggle.bind(this);
+    this.toggleBoth = this.toggleBoth.bind(this);
     this.handleRemoveClick = this.handleRemoveClick.bind(this);
+    this.toggleRemoveModal = this.toggleRemoveModal.bind(this);
+
     this.state = {
-      dropdownOpen: false
-    };
+      dropdownOpen: false,
+      removeModal: false
+    }
+  }
+
+  toggleRemoveModal(){
+    this.setState({
+      removeModal: !this.state.removeModal
+    });
   }
 
   handleRemoveClick(){
@@ -33,35 +43,51 @@ class Thing extends Component {
     });
   }
 
+  toggleBoth(){
+    this.setState({
+      dropdownOpen: !this.state.dropdownOpen,
+      removeModal: !this.state.removeModal
+    });
+  }
+
   render(){
     return (
       <div className={"card"} style={{  height: "inherit", width: "inherit" }}>
         <div className="card-header">
           {this.props.name}
-        <i className="fa fa-cogs float-right fa-2x" >
-          <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} >
-            <button onClick={this.toggle} className="nav-link dropdown-toggle" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded={this.state.dropdownOpen}>
 
-            </button>
+          <Dropdown className="float-right" isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+            <DropdownToggle
+              tag="span"
+              onClick={this.toggle}
+              data-toggle="dropdown"
+              aria-expanded={this.state.dropdownOpen} >
 
-            <DropdownMenu className="dropdown-menu-right" style={{zIndex:501}}>
-              <DropdownItem header className="text-center"><strong>Pico Config</strong></DropdownItem>
-
-              <DropdownItem><i className="fa fa-cloud-download"></i>Install App</DropdownItem>
-              <DropdownItem><i className="fa fa-trash" onClick={this.handleRemoveClick()}></i> Delete Pico</DropdownItem>
-              <DropdownItem><i className="fa fa-wrench"></i>Rename</DropdownItem>
-
-
-              <DropdownItem header className="text-center"><strong>App 1 settings</strong></DropdownItem>
-              <Link to="/profile" style={{ textDecoration: 'none' }}><DropdownItem><i className="fa fa-user"></i> Profile</DropdownItem></Link>
-              <DropdownItem><i className="fa fa-wrench"></i> Settings</DropdownItem>
-
-
+              <i className="fa fa-cogs float-right fa-lg" />
+            </DropdownToggle>
+            <DropdownMenu>
+              <DropdownItem onClick={this.toggleBoth}>
+                Delete a Pico
+                <i className="fa fa-trash float-right" />
+              </DropdownItem>
+              <div onClick={this.toggle}>Custom dropdown item</div>
+              <div onClick={this.toggle}>Custom dropdown item</div>
+              <div onClick={this.toggle}>Custom dropdown item</div>
             </DropdownMenu>
           </Dropdown>
-        </i>
-
         </div>
+
+        <Modal isOpen={this.state.removeModal} toggle={this.toggleRemoveModal} className={'modal-danger'}>
+          <ModalHeader toggle={this.toggleRemoveModal}>Delete a Thing</ModalHeader>
+          <ModalBody>
+            Are you sure you want to delete {this.props.name}?
+          </ModalBody>
+          <ModalFooter>
+            <Button color="danger" onClick={this.handleRemoveClick}>Delete Thing</Button>{' '}
+            <Button color="secondary" onClick={this.toggleRemoveModal}>Cancel</Button>
+          </ModalFooter>
+        </Modal>
+
         <div className="card-block">
           ID: {this.props.id} <br/>
           ECI: {this.props.eci}<br/>
