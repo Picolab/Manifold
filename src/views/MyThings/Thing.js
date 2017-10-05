@@ -33,7 +33,7 @@ class Thing extends Component {
 
   handleRemoveClick(){
     const nameToDelete = this.props.name;
-    //this.toggleRemoveModal();
+    this.toggleRemoveModal();
     this.props.dispatch({type: "command", command: removeThing, params: [nameToDelete]});
   }
 
