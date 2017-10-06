@@ -4,11 +4,16 @@ import { Link } from 'react-router-dom';
 import {logOut} from '../../utils/AuthService';
 import {createThing,removeThing,updateThing} from '../../utils/manifoldSDK';
 import { connect } from 'react-redux';
+import testForm from './testForm';
+import InnerHTML from 'dangerously-set-inner-html';
+import Parser from 'html-react-parser';
 
 const brandPrimary =  '#20a8d8';
 const brandSuccess =  '#4dbd74';
 const brandInfo =     '#63c2de';
 const brandDanger =   '#f86c6b';
+
+const testHTML = `<testForm />`;
 
 class Thing extends Component {
   constructor(props) {
@@ -87,11 +92,19 @@ class Thing extends Component {
             <Button color="secondary" onClick={this.toggleRemoveModal}>Cancel</Button>
           </ModalFooter>
         </Modal>
-
+        
         <div className="card-block">
           ID: {this.props.id} <br/>
           ECI: {this.props.eci}<br/>
           PARENT_ECI: {this.props.parent_eci}
+          {Parser(testHTML, {
+            replace: (domNode) => {
+              console.log(domNode, "Look at this!!");
+              if(domNode.name === 'testform'){
+                return <testForm/>
+              }
+            }
+          })}
         </div>
       </div>
     );
