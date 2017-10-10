@@ -14,7 +14,7 @@ const brandSuccess =  '#4dbd74';
 const brandInfo =     '#63c2de';
 const brandDanger =   '#f86c6b';
 
-const testHTML = `<TestForm style={{height: 'inherit'}}/>`;
+const testHTML = `<TestForm />`;
 
 class Thing extends Component {
   constructor(props) {
@@ -33,7 +33,7 @@ class Thing extends Component {
 
   componentWillMount(){
     //query for the discovery and app info
-    this.props.dispatch({type: 'DISCOVERY', eci: this.props.eci});
+    this.props.dispatch({type: 'DISCOVERY', eci: this.props.eci, pico_id: this.props.id});
   }
 
   toggleRemoveModal(){
@@ -103,7 +103,7 @@ class Thing extends Component {
           ID: {this.props.id} <br/>
           ECI: {this.props.eci}<br/>
           PARENT_ECI: {this.props.parent_eci}
-          {Parser(testHTML, {
+          {Parser(this.props.identities[this.props.id][0].options.tile, {
             replace: CardReplace
           })}
         </div>
@@ -113,9 +113,9 @@ class Thing extends Component {
 }
 
 const mapStateToProps = state => {
-  if(state.manifoldInfo.things){
+  if(state.identities){//more than 1 directive/app installed in this pico
     return {
-
+       identities: state.identities
     }
   }else{
     return {}
