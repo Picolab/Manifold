@@ -25,6 +25,7 @@
     "react-dnd": "^2.4.0",
     "react-dnd-html5-backend": "^2.4.1",
     "react-dom": "15.5.4",
+    "react-google-charts": "^1.5.5",
     "react-grid-layout": "^0.15.2",
     "react-redux": "^5.0.5",
     "react-router-dom": "4.1.1",
