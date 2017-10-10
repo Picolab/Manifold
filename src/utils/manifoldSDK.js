@@ -24,3 +24,7 @@ export function removeThing(name){
 export function updateThing(name,thing){
   return axios.post(`${sky_event(getManifoldECI())}/Update_Thing/manifold/update_thing?name=${name}`);
 }
+
+export function discovery(eci){
+  return axios.post(`${sky_event(eci)}/DISCOVERY/manifold/apps`);
+}

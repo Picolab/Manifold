@@ -4,16 +4,17 @@ import { Link } from 'react-router-dom';
 import {logOut} from '../../utils/AuthService';
 import {createThing,removeThing,updateThing} from '../../utils/manifoldSDK';
 import { connect } from 'react-redux';
-import testForm from './testForm';
+import TestForm from './testForm';
 import InnerHTML from 'dangerously-set-inner-html';
 import Parser from 'html-react-parser';
+import CardReplace from '../../utils/cardReplaceAPI';
 
 const brandPrimary =  '#20a8d8';
 const brandSuccess =  '#4dbd74';
 const brandInfo =     '#63c2de';
 const brandDanger =   '#f86c6b';
 
-const testHTML = `<testForm />`;
+const testHTML = `<TestForm style={{height: 'inherit'}}/>`;
 
 class Thing extends Component {
   constructor(props) {
@@ -28,6 +29,11 @@ class Thing extends Component {
       dropdownOpen: false,
       removeModal: false
     }
+  }
+
+  componentWillMount(){
+    //query for the discovery and app info
+    this.props.dispatch({type: 'DISCOVERY', eci: this.props.eci});
   }
 
   toggleRemoveModal(){
@@ -72,7 +78,7 @@ class Thing extends Component {
             </DropdownToggle>
             <DropdownMenu>
               <DropdownItem onClick={this.toggleBoth}>
-                Delete a Pico
+                Delete this Pico
                 <i className="fa fa-trash float-right" />
               </DropdownItem>
               <div onClick={this.toggle}>Custom dropdown item</div>
@@ -92,18 +98,13 @@ class Thing extends Component {
             <Button color="secondary" onClick={this.toggleRemoveModal}>Cancel</Button>
           </ModalFooter>
         </Modal>
-        
+
         <div className="card-block">
           ID: {this.props.id} <br/>
           ECI: {this.props.eci}<br/>
           PARENT_ECI: {this.props.parent_eci}
           {Parser(testHTML, {
-            replace: (domNode) => {
-              console.log(domNode, "Look at this!!");
-              if(domNode.name === 'testform'){
-                return <testForm/>
-              }
-            }
+            replace: CardReplace
           })}
         </div>
       </div>
@@ -111,4 +112,15 @@ class Thing extends Component {
   }
 }
 
-export default connect()(Thing);
+const mapStateToProps = state => {
+  if(state.manifoldInfo.things){
+    return {
+
+    }
+  }else{
+    return {}
+  }
+}
+
+
+export default connect(mapStateToProps)(Thing);

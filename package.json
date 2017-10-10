@@ -26,6 +26,7 @@
     "react-dnd-html5-backend": "^2.4.1",
     "react-dom": "15.5.4",
     "react-grid-layout": "^0.15.2",
+    "react-html-parser": "^2.0.1",
     "react-redux": "^5.0.5",
     "react-router-dom": "4.1.1",
     "reactstrap": "4.6.2",
