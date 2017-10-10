@@ -24,10 +24,12 @@ class Thing extends Component {
     this.toggleBoth = this.toggleBoth.bind(this);
     this.handleRemoveClick = this.handleRemoveClick.bind(this);
     this.toggleRemoveModal = this.toggleRemoveModal.bind(this);
+    this.injectCode = this.injectCode.bind(this);
 
     this.state = {
       dropdownOpen: false,
-      removeModal: false
+      removeModal: false,
+      currentApp: 0
     }
   }
 
@@ -59,6 +61,26 @@ class Thing extends Component {
       dropdownOpen: !this.state.dropdownOpen,
       removeModal: !this.state.removeModal
     });
+  }
+
+  injectCode(){
+    const thingIdentity = this.props.identities[this.props.id];
+    if(thingIdentity && thingIdentity[this.state.currentApp]){
+      const currentAppInfo = thingIdentity[this.state.currentApp];
+      if(currentAppInfo.options && currentAppInfo.options.tile){
+        const htmlString = currentAppInfo.options.tile;
+        return (
+          Parser(htmlString, {
+            replace: CardReplace
+          })
+        )
+      }
+    }
+
+    //have a default return
+    return (
+      <div>There are no apps currently installed on this Thing!</div>
+    )
   }
 
   render(){
@@ -103,9 +125,7 @@ class Thing extends Component {
           ID: {this.props.id} <br/>
           ECI: {this.props.eci}<br/>
           PARENT_ECI: {this.props.parent_eci}
-          {Parser(this.props.identities[this.props.id][0].options.tile, {
-            replace: CardReplace
-          })}
+          {this.injectCode()}
         </div>
       </div>
     );
