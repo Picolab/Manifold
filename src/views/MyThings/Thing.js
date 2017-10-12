@@ -9,6 +9,8 @@ import TestForm from './testForm';
 import InnerHTML from 'dangerously-set-inner-html';
 import Parser from 'html-react-parser';
 import CardReplace from '../../utils/cardReplaceAPI';
+import JsxParser from 'react-jsx-parser';
+import { Chart } from 'react-google-charts';
 
 const brandPrimary =  '#20a8d8';
 const brandSuccess =  '#4dbd74';
@@ -105,9 +107,13 @@ class Thing extends Component {
       if(currentAppInfo.options && currentAppInfo.options.tile){
         const htmlString = currentAppInfo.options.tile;
         return (
-          Parser(htmlString, {
-            replace: CardReplace
-          })
+          <div style={{'maxHeight':'inherit', 'maxWidth':'inherit'}}>
+            <JsxParser
+              bindings={{}}
+              components={{ Chart, TestForm }}
+              jsx={htmlString}
+            />
+          </div>
         )
       }
     }

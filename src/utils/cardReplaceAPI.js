@@ -9,12 +9,16 @@ const CardReplace = function(domNode){
     return <TestForm />
   }else if(domNode.name === 'chart'){
     const attrs = domNode.attribs;
-    console.log("attrs", attrs);
     if(attrs.charttype, attrs.data, attrs.options, attrs.graph_id, attrs.width, attrs.height){
+      const stringToParse = attrs.data.replace(/'/g, "\"");
+      console.log("string to parse:", stringToParse);
+      const dataArray = JSON.parse(stringToParse);
+      console.log("dataArray", dataArray);
+      //const options = JSON.parse(attrs.options);
       return (
         <Chart chartType={attrs.charttype}
-                data={[['Age', 'Weight'], [8, 12], [4, 5.5]]}
-                options={attrs.options}
+                data={dataArray}
+                options={{}}
                 graph_id={attrs.graph_id}
                 width={attrs.width}
                 height={attrs.height}>
