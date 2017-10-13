@@ -28,6 +28,7 @@
     "react-google-charts": "^1.5.5",
     "react-grid-layout": "^0.15.2",
     "react-html-parser": "^2.0.1",
+    "react-input-enhancements": "^0.5.4",
     "react-jsx-parser": "^1.1.2",
     "react-redux": "^5.0.5",
     "react-router-dom": "4.1.1",
