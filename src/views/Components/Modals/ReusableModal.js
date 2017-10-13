@@ -1,6 +1,23 @@
 import React, { Component } from 'react';
 
 class ReusableModal extends Component {
+  constructor(props) {
+    super(props);
+    console.log("THE PROPS!!!!",props);
+    this.onLayoutChange = this.onLayoutChange.bind(this);
+    this.onBreakpointChange = this.onBreakpointChange.bind(this);
+    this.state = {
+      addModal: false,
+      removeModal: false,
+      name: "",
+      nameToDelete: ""
+    }
+    this.toggleAddModal = this.toggleAddModal.bind(this);
+    this.toggleRemoveModal = this.toggleRemoveModal.bind(this);
+    this.handleAddClick = this.handleAddClick.bind(this);
+    this.handleRemoveClick = this.handleRemoveClick.bind(this);
+  }
+
   render() {
     return (
       <Modal isOpen={this.props.isOpen} toggle={this.props.isOpen} className={this.props.className}>

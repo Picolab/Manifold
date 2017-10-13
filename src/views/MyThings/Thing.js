@@ -9,6 +9,7 @@ import InnerHTML from 'dangerously-set-inner-html';
 import Parser from 'html-react-parser';
 import CardReplace from '../../utils/cardReplaceAPI';
 import JsxParser from 'react-jsx-parser';
+import JournalTemplate from '../Templates/journalTemplate';
 import { Chart } from 'react-google-charts';
 
 const brandPrimary =  '#20a8d8';
@@ -75,7 +76,7 @@ class Thing extends Component {
           <div style={{'maxHeight':'inherit', 'maxWidth':'inherit'}}>
             <JsxParser
               bindings={{}}
-              components={{ Chart, TestForm }}
+              components={{ Chart, TestForm, JournalTemplate }}
               jsx={htmlString}
             />
           </div>
@@ -128,16 +129,15 @@ class Thing extends Component {
         </Modal>
 
         <div className="card-block">
-          ID: {this.props.id} <br/>
-          ECI: {this.props.eci}<br/>
-          PARENT_ECI: {this.props.parent_eci}
           {this.injectCode()}
         </div>
       </div>
     );
   }
 }
-
+// ID: {this.props.id} <br/>
+// ECI: {this.props.eci}<br/>
+// PARENT_ECI: {this.props.parent_eci}
 const mapStateToProps = state => {
   if(state.identities){//more than 1 directive/app installed in this pico
     return {

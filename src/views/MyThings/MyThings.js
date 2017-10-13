@@ -6,8 +6,6 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import Thing from './Thing';
 
-
-
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 const brandPrimary =  '#20a8d8';
