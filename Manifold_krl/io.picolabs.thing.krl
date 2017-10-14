@@ -25,14 +25,12 @@ ruleset io.picolabs.thing {
   rule installApp {
     select when manifold installapp
     pre {}
-    if event:attr("rid") then every {
-      wrangler:installRulesets(event:attr("rid")) setting(rids)
-      send_directive("Attempted to installapp",{"app":rids})
-    }
+    noop()
     fired{
+      raise wrangler event "install_rulesets_requested"
+        attributes event:attrs();
     }
   }
-
 
 
 }//end ruleset
