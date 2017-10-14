@@ -4,6 +4,24 @@ import { getHostname, getOwnerECI ,getManifoldECI} from './AuthService';
 function sky_cloud(eci){ return `http://${getHostname()}/sky/cloud/${eci}`};
 function sky_event(eci) { return `http://${getHostname()}/sky/event/${eci}`};
 
+function encodeQueryData(data) {
+  let ret = [];
+  for (let d in data){
+    ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
+  }
+  return ret.join('&');
+}
+
+export function customEvent(domain, type, attributes, eid){
+  eid = eid ? eid : "customEvent";
+  const attrs = encodeQueryData(attributes);
+  return axios.post(`${sky_event(getOwnerECI())}/${eid}/${domain}/${type}?${attrs}`);
+}
+
+export function customQuery(ruleset, funcName, params){
+  const parameters = encodeQueryData(params);
+  return axios.get(`${sky_cloud(getManifoldECI())}/${ruleset}/${funcName}/${parameters}`);
+}
 
 export function getManifoldInfo(){
   return axios.get(`${sky_cloud(getManifoldECI())}/io.picolabs.manifold_pico/getManifoldInfo`);

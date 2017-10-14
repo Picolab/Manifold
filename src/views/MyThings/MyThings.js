@@ -83,7 +83,7 @@ class MyThings extends Component {
           <button style={{float:"right"}} className="btn btn-primary" onClick={() => this.toggleAddModal()}>+</button>
           <button style={{float:"right"}} className="btn btn-warning" onClick={() => this.toggleRegisterRulesetModal()}>R</button>
         </div>
-        
+
         <Modal isOpen={this.state.addModal} toggle={this.toggleAddModal} className={'modal-primary'}>
           <ModalHeader toggle={this.toggleAddModal}>Create a new Thing</ModalHeader>
           <ModalBody>
