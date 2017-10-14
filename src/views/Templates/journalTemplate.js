@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem, Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
+import { Form, FormGroup, Label, Input, FormText,Dropdown, DropdownMenu, DropdownToggle, DropdownItem, Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
@@ -13,10 +13,14 @@ class JournalTemplate extends Component {
     super(props);
 
     this.toggleAddModal = this.toggleAddModal.bind(this);
+    this.handleLogClick = this.handleLogClick.bind(this);
     this.state = {
       addModal: false,
       name: ""
     }
+  }
+  handleLogClick(){
+   
   }
 
   toggleAddModal() {
@@ -35,6 +39,25 @@ class JournalTemplate extends Component {
     );
   }
 
+  entryForm(){
+    return(
+      <div>  
+         <Form>
+        <FormGroup>
+          <Label for="entryName">name</Label>
+          <Input type="text" name="email" id="exampleEmail" placeholder="with a placeholder" />
+        </FormGroup>
+
+        <FormGroup>
+          <Label for="exampleText">Text Area</Label>
+          <Input type="textarea" name="text" id="entryText" />
+        </FormGroup>
+
+      </Form>
+      </div>
+    );
+  }
+
   render(){
     console.log("props",
       this.props.entries
@@ -43,8 +66,20 @@ class JournalTemplate extends Component {
       <div>
         <p style={{verticalAlign:"top", textAlign:"center"}}>{this.props.header}</p>
         <button style={{position: "absolute", top: "50px", right: "8px"}} className="btn btn-primary btn-sm" onClick={() => this.toggleAddModal()}>+</button>
-
+        
+        <Modal isOpen={this.state.addModal}  className={'modal-danger'}>
+          <ModalHeader >Make an Entry </ModalHeader>
+          <ModalBody>
+            {this.entryForm()}
+          </ModalBody>
+          <ModalFooter>
+            <Button color="danger" onClick={this.handleLogClick}>Log entry</Button>
+            <Button color="secondary" onClick={this.toggleAddModal}>Cancel</Button>
+          </ModalFooter>
+        </Modal>
+        
         {this.props.entries.map(this.createEntry)}
+
       </div>
     );
   }

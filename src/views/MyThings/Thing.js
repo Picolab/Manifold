@@ -161,8 +161,8 @@ class Thing extends Component {
           </Dropdown>
         </div>
 
-        <Modal isOpen={this.state.removeModal} toggle={this.toggleRemoveModal} className={'modal-danger'}>
-          <ModalHeader toggle={this.toggleRemoveModal}>Delete a Thing</ModalHeader>
+        <Modal isOpen={this.state.removeModal} className={'modal-danger'}>
+          <ModalHeader >Delete a Thing</ModalHeader>
           <ModalBody>
             Are you sure you want to delete {this.props.name}?
           </ModalBody>
@@ -172,12 +172,11 @@ class Thing extends Component {
           </ModalFooter>
         </Modal>
 
-        <Modal isOpen={this.state.installRulesetModal} toggle={this.toggleInstallRulesetModal} className={'modal-info'}>
-          <ModalHeader toggle={this.toggleInstallRulesetModal}>Install an App</ModalHeader>
+        <Modal isOpen={this.state.installRulesetModal} className={'modal-info'}>
+          <ModalHeader >Install an App</ModalHeader>
           <ModalBody>
             <div className="form-group">
               <label> Select a ruleset to install:</label>
-              {/*<input type="text" className="form-control" id="url" placeholder="Lord Sauron" onChange={(element) => this.setState({ url: element.target.value})}/>*/}
                   <Col xs={6}>
                     <Combobox defaultValue={this.state.value}
                               options={this.state.options}
@@ -192,7 +191,7 @@ class Thing extends Component {
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button color="info" onClick={this.handleInstallRulesetClick}>Install it</Button>{' '}
+            <Button color="info" onClick={this.handleInstallRulesetClick}>Install it</Button>
             <Button color="secondary" onClick={this.toggleInstallRulesetModal}>Cancel</Button>
           </ModalFooter>
         </Modal>
