@@ -110,13 +110,21 @@ class Thing extends Component {
     if(thingIdentity && thingIdentity[this.state.currentApp]){
       const currentAppInfo = thingIdentity[this.state.currentApp];
       if(currentAppInfo.options && currentAppInfo.options.tile){
-        const htmlString = currentAppInfo.options.tile;
+        const jsxString = currentAppInfo.options.tile;//
+        var bindings;
+        console.log("currentAppInfo.options", currentAppInfo.options);
+        if(currentAppInfo.options.bindings){
+          bindings = currentAppInfo.options.bindings;
+        }else{
+          bindings = {};
+        }
+        console.log("Bindings!", bindings);
         return (
           <div style={{'maxHeight':'inherit', 'maxWidth':'inherit'}}>
             <JsxParser
-              bindings={{}}
+              bindings={bindings}
               components={{ Chart, TestForm, JournalTemplate }}
-              jsx={htmlString}
+              jsx={jsxString}
             />
           </div>
         )
