@@ -21,7 +21,7 @@ class JournalTemplate extends Component {
   }
 
   handleLogClick(){
-   
+
   }
 
   toggleAddModal() {
@@ -31,10 +31,10 @@ class JournalTemplate extends Component {
     });
   }
 
-  createEntry(entry) {
+  createEntry(entry, index) {
     console.log("create entry",entry);
     return(
-      <div>
+      <div key={index}>
         {entry.title}: {entry.data}
       </div>
     );
@@ -42,7 +42,7 @@ class JournalTemplate extends Component {
 
   entryForm(){
     return(
-      <div>  
+      <div>
          <Form>
         <FormGroup>
           <Label for="entryName">name</Label>
@@ -67,7 +67,7 @@ class JournalTemplate extends Component {
       <div>
         <p style={{verticalAlign:"top", textAlign:"center"}}>{this.props.header}</p>
         <button style={{position: "absolute", top: "50px", right: "8px"}} className="btn btn-primary btn-sm" onClick={() => this.toggleAddModal()}>+</button>
-        
+
         {this.props.entries.map(this.createEntry)}
         
         <Modal isOpen={this.state.addModal}  className={'modal-danger'}>

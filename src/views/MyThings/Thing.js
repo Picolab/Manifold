@@ -27,10 +27,10 @@ class Thing extends Component {
     this.toggleSettings = this.toggleSettings.bind(this);
     this.toggleBothRemove = this.toggleBothRemove.bind(this);
     this.toggleBothInstall = this.toggleBothInstall.bind(this);
-    // handle clicks 
+    // handle clicks
     this.handleRemoveClick = this.handleRemoveClick.bind(this);
     this.handleInstallRulesetClick = this.handleInstallRulesetClick.bind(this);
-    // modals 
+    // modals
     this.toggleRemoveModal = this.toggleRemoveModal.bind(this);
     this.toggleInstallRulesetModal = this.toggleInstallRulesetModal.bind(this);
     // drop downs
@@ -46,7 +46,7 @@ class Thing extends Component {
       url: "",
       currentApp: 0,
       value: "DEFAULT INPUT VAL",
-      options: ["OPT1", "OPT2", "THING3", "WHATEVER", "LOOOOOONG ENTRY"]
+      options: ["io.picolabs.journal"]
     }
   }
 
@@ -74,8 +74,10 @@ class Thing extends Component {
   }
 
   handleInstallRulesetClick(){
-  this.toggleInstallRulesetModal();
-  this.props.dispatch({type: "command", command: installApp , params: [this.props.eci, this.state.rulesetToInstallName] });
+    this.toggleInstallRulesetModal();
+    console.log(this.props.eci);
+    console.log(this.state.rulesetToInstallName);
+    this.props.dispatch({type: "command", command: installApp , params: [this.props.eci, this.state.rulesetToInstallName] });
   }
 
   toggleSettings() {
