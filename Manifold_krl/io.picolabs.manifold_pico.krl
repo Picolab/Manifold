@@ -53,7 +53,10 @@ ruleset io.picolabs.manifold_pico {
   rule thingCompleted{
     select when wrangler child_initialized where rs_attrs{"event_type"} == "manifold_create_thing"
     pre{}
-    noop()
+    event:send(
+        { "eci": event:attr("eci"),
+          "domain": "wrangler", "type": "install_rulesets_requested",
+          "attrs": {"rid":"io.picolabs.thing"} })
     fired{
       ent:thingsUpdate := time:now();
     }
@@ -64,7 +67,7 @@ ruleset io.picolabs.manifold_pico {
     pre {}
     if event:attr("rid") then every {
       wrangler:installRulesets(event:attr("rid")) setting(rids)
-      send_directive("Attempting to installapp",{"app":rids})
+      send_directive("Attempted to installapp",{"app":rids})
     }
     fired{
     }
