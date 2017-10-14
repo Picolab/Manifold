@@ -62,17 +62,5 @@ ruleset io.picolabs.manifold_pico {
     }
   }
 
-  rule installApp {
-    select when manifold installapp
-    pre {}
-    if event:attr("rid") then every {
-      wrangler:installRulesets(event:attr("rid")) setting(rids)
-      send_directive("Attempted to installapp",{"app":rids})
-    }
-    fired{
-    }
-  }
-
-
 
 }//end ruleset
