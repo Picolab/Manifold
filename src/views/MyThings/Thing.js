@@ -27,10 +27,13 @@ class Thing extends Component {
     this.toggleSettings = this.toggleSettings.bind(this);
     this.toggleBothRemove = this.toggleBothRemove.bind(this);
     this.toggleBothInstall = this.toggleBothInstall.bind(this);
+    // handle clicks 
     this.handleRemoveClick = this.handleRemoveClick.bind(this);
     this.handleInstallRulesetClick = this.handleInstallRulesetClick.bind(this);
+    // modals 
     this.toggleRemoveModal = this.toggleRemoveModal.bind(this);
     this.toggleInstallRulesetModal = this.toggleInstallRulesetModal.bind(this);
+    // drop downs
     this.toggleInstallRulesetDropdown = this.toggleInstallRulesetDropdown.bind(this);
     this.injectCode = this.injectCode.bind(this);
 
@@ -73,7 +76,7 @@ class Thing extends Component {
   handleInstallRulesetClick(){
   const appURL = this.props.url;
   this.toggleInstallRulesetModal();
-  //this.props.dispatch({type: "command", command: installRuleset, params: [appURL]});
+  this.props.dispatch({type: "installApp", eci: this.props.eci, pico_id: this.props.id, rid: this.state.rulesetToInstallName});
   }
 
   toggleSettings() {
@@ -175,24 +178,17 @@ class Thing extends Component {
             <div className="form-group">
               <label> Select a ruleset to install:</label>
               {/*<input type="text" className="form-control" id="url" placeholder="Lord Sauron" onChange={(element) => this.setState({ url: element.target.value})}/>*/}
-
-
                   <Col xs={6}>
                     <Combobox defaultValue={this.state.value}
                               options={this.state.options}
-                              onChange={console.log("SUP HOMIES")}
+                              onSelect={(element) => this.setState({ rulesetToInstallName: element})}
                               autosize
-                              autocomplete
-                              placeholder="APP NAME">
+                              autocomplete>
                       {(inputProps, { matchingText, width }) =>
-                        <input type='text' {...inputProps} />
+                        <input {...inputProps} type='text' placeholder="Select APP" />
                       }
                     </Combobox>
                   </Col>
-
-
-
-
             </div>
           </ModalBody>
           <ModalFooter>

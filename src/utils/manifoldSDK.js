@@ -21,10 +21,10 @@ export function removeThing(name){
   return axios.post(`${sky_event(getManifoldECI())}/Remove_Thing/manifold/remove_thing?name=${name}`);
 }
 
-export function updateThing(name,thing){
-  return axios.post(`${sky_event(getManifoldECI())}/Update_Thing/manifold/update_thing?name=${name}`);
-}
-
 export function discovery(eci){
   return axios.post(`${sky_event(eci)}/DISCOVERY/manifold/apps`);
+}
+
+export function installApp(eci,rid){
+  return axios.post(`${sky_event(eci)}/Apps/manifold/installapp?rid=${rid}`);
 }

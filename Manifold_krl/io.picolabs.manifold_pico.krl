@@ -32,7 +32,7 @@ ruleset io.picolabs.manifold_pico {
       raise wrangler event "child_creation"
         attributes event:attrs().put({"event_type": "manifold_create_thing"/*,"rids":"io.manifold.thing;io.manifold.timeline;io.manifold.safeNmind;io.manifold.journal"*/})
     }else{
-      send_directive("Missing a name for your Thing!")
+      //send_directive("Missing a name for your Thing!")
     }
   }
 
@@ -46,20 +46,7 @@ ruleset io.picolabs.manifold_pico {
       raise wrangler event "child_deletion"
         attributes event:attrs().put({"event_type": "manifold_remove_thing"})
     }else{
-      send_directive("Missing a name for your Thing!")
-    }
-  }
-
-  rule updateThing {
-    select when manifold update_thing
-    pre {}
-    if event:attr("name") then every {
-      send_directive("Attempting to update Thing",{"thing":event:attr("name")})
-    }
-    fired{
-      //event:send to thing
-    }else{
-      send_directive("Missing a name for your Thing!")
+      //send_directive("Missing a name for your Thing!")
     }
   }
 
@@ -71,6 +58,18 @@ ruleset io.picolabs.manifold_pico {
       ent:thingsUpdate := time:now();
     }
   }
+
+  rule installApp {
+    select when manifold installapp
+    pre {}
+    if event:attr("rid") then every {
+      wrangler:installRulesets(event:attr("rid")) setting(rids)
+      send_directive("Attempting to installapp",{"app":rids})
+    }
+    fired{
+    }
+  }
+
 
 
 }//end ruleset

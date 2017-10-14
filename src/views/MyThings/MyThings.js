@@ -21,15 +21,11 @@ class MyThings extends Component {
     this.onBreakpointChange = this.onBreakpointChange.bind(this);
     this.state = {
       addModal: false,
-      removeModal: false,
       name: "",
       registerRulesetModal: false,
-      nameToDelete: ""
     }
     this.toggleAddModal = this.toggleAddModal.bind(this);
-    this.toggleRemoveModal = this.toggleRemoveModal.bind(this);
     this.handleAddClick = this.handleAddClick.bind(this);
-    this.handleRemoveClick = this.handleRemoveClick.bind(this);
     this.handleRegisterRulesetClick = this.handleRegisterRulesetClick.bind(this);
     this.toggleRegisterRulesetModal = this.toggleRegisterRulesetModal.bind(this);
   }
@@ -48,13 +44,6 @@ class MyThings extends Component {
     });
   }
 
-  toggleRemoveModal(){
-    this.setState({
-      removeModal: !this.state.removeModal,
-      nameToDelete: ""
-    });
-  }
-
   handleRegisterRulesetClick(){
     const appURL = this.props.url;
     this.toggleRegisterRulesetModal();
@@ -65,11 +54,6 @@ class MyThings extends Component {
     const newName = this.state.name;
     this.toggleAddModal();
     this.props.dispatch({type: "command", command: createThing, params: [newName]});
-  }
-  handleRemoveClick(){
-    const nameToDelete = this.state.nameToDelete;
-    this.toggleRemoveModal();
-    this.props.dispatch({type: "command", command: removeThing, params: [nameToDelete]});
   }
 
   onLayoutChange(layout) {
@@ -97,9 +81,9 @@ class MyThings extends Component {
       <div>
         <div style={{height:"30px"}}>
           <button style={{float:"right"}} className="btn btn-primary" onClick={() => this.toggleAddModal()}>+</button>
-          <button style={{float:"right"}} className="btn btn-danger" onClick={() => this.toggleRemoveModal()}>-</button>
           <button style={{float:"right"}} className="btn btn-warning" onClick={() => this.toggleRegisterRulesetModal()}>R</button>
         </div>
+        
         <Modal isOpen={this.state.addModal} toggle={this.toggleAddModal} className={'modal-primary'}>
           <ModalHeader toggle={this.toggleAddModal}>Create a new Thing</ModalHeader>
           <ModalBody>
@@ -111,20 +95,6 @@ class MyThings extends Component {
           <ModalFooter>
             <Button color="primary" onClick={this.handleAddClick}>Create Thing</Button>{' '}
             <Button color="secondary" onClick={this.toggleAddModal}>Cancel</Button>
-          </ModalFooter>
-        </Modal>
-
-        <Modal isOpen={this.state.removeModal} toggle={this.toggleRemoveModal} className={'modal-primary'}>
-          <ModalHeader toggle={this.toggleRemoveModal}>Delete a Thing</ModalHeader>
-          <ModalBody>
-            <div className="form-group">
-              <label> Thing's name you wish to delete</label>
-              <input type="text" className="form-control" id="name" placeholder="Lord Sauron" onChange={(element) => this.setState({ nameToDelete: element.target.value})}/>
-            </div>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={this.handleRemoveClick}>Delete Thing</Button>{' '}
-            <Button color="secondary" onClick={this.toggleRemoveModal}>Cancel</Button>
           </ModalFooter>
         </Modal>
 
@@ -178,8 +148,5 @@ const mapStateToProps = state => {
   }
 }
 
-export function deletePico(){
-  this.toggleRemoveModal();
-}
 
 export default connect(mapStateToProps)(MyThings);
