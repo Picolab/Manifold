@@ -3,7 +3,7 @@ import { Col, Dropdown, ButtonDropdownMenu, DropdownMenu, ButtonDropdown, Dropdo
 import { Link } from 'react-router-dom';
 import {logOut} from '../../utils/AuthService';
 import { Combobox } from 'react-input-enhancements';
-import {createThing,removeThing,updateThing} from '../../utils/manifoldSDK';
+import {createThing,removeThing,updateThing,installApp} from '../../utils/manifoldSDK';
 import { connect } from 'react-redux';
 import TestForm from './testForm';
 import InnerHTML from 'dangerously-set-inner-html';
@@ -75,7 +75,7 @@ class Thing extends Component {
 
   handleInstallRulesetClick(){
   this.toggleInstallRulesetModal();
-  this.props.dispatch({type: "installApp", eci: this.props.eci, pico_id: this.props.id, rid: this.state.rulesetToInstallName});
+  this.props.dispatch({type: "command", command: installApp , params: [this.props.eci, this.state.rulesetToInstallName] });
   }
 
   toggleSettings() {
