@@ -12,15 +12,15 @@ function encodeQueryData(data) {
   return ret.join('&');
 }
 
-export function customEvent(domain, type, attributes, eid){
+export function customEvent(eci, domain, type, attributes, eid){
   eid = eid ? eid : "customEvent";
   const attrs = encodeQueryData(attributes);
-  return axios.post(`${sky_event(getOwnerECI())}/${eid}/${domain}/${type}?${attrs}`);
+  return axios.post(`${sky_event(eci)}/${eid}/${domain}/${type}?${attrs}`);
 }
 
-export function customQuery(ruleset, funcName, params){
+export function customQuery(eci, ruleset, funcName, params){
   const parameters = encodeQueryData(params);
-  return axios.get(`${sky_cloud(getManifoldECI())}/${ruleset}/${funcName}/${parameters}`);
+  return axios.get(`${sky_cloud(eci)}/${ruleset}/${funcName}/${parameters}`);
 }
 
 export function getManifoldInfo(){

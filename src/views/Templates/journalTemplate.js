@@ -31,7 +31,7 @@ class JournalTemplate extends Component {
       LogEntry: ""
     });//reset everything
 
-    this.props.dispatch({ type: 'command', command: customEvent, params: ["journal", "new_entry", {"title": logTitle, "memo": logEntry}]})
+    this.props.dispatch({ type: 'command', command: customEvent, params: [this.props.eci, "journal", "new_entry", {"title": logTitle, "memo": logEntry}]})
   }
 
   toggleLogModal() {

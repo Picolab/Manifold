@@ -115,6 +115,7 @@ class Thing extends Component {
         console.log("currentAppInfo.options", currentAppInfo.options);
         if(currentAppInfo.options.bindings){
           bindings = currentAppInfo.options.bindings;
+          bindings.eci = this.props.eci;
         }else{
           bindings = {};
         }
