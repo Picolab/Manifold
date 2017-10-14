@@ -74,7 +74,6 @@ class Thing extends Component {
   }
 
   handleInstallRulesetClick(){
-  const appURL = this.props.url;
   this.toggleInstallRulesetModal();
   this.props.dispatch({type: "installApp", eci: this.props.eci, pico_id: this.props.id, rid: this.state.rulesetToInstallName});
   }
@@ -155,8 +154,6 @@ class Thing extends Component {
                 <i className="fa fa-cloud-download float-right"/>
               </DropdownItem>
 
-              <div onClick={this.toggleSettings}>Custom dropdown item</div>
-              <div onClick={this.toggleSettings}>Custom dropdown item</div>
             </DropdownMenu>
           </Dropdown>
         </div>
