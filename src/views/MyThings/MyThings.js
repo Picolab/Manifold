@@ -53,7 +53,12 @@ class MyThings extends Component {
   handleAddClick(){
     const newName = this.state.name;
     this.toggleAddModal();
-    this.props.dispatch({type: "command", command: createThing, params: [newName]});
+    this.props.dispatch({
+      type: "command",
+      command: createThing,
+      params: [newName],
+      query: { type: 'MANIFOLD_INFO'}
+    });
   }
 
   onLayoutChange(layout) {

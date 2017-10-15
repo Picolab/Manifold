@@ -30,8 +30,15 @@ class JournalTemplate extends Component {
       LogTitle: "", // this will reset the title/entry info when you navigate away from the log modal
       LogEntry: ""
     });//reset everything
-
-    this.props.dispatch({ type: 'command', command: customEvent, params: [this.props.eci, "journal", "new_entry", {"title": logTitle, "memo": logEntry}]})
+    if(logTitle != "" && logEntry != ""){
+      this.props.dispatch({
+        type: 'command',
+        command: customEvent,
+        params: [this.props.eci, "journal", "new_entry", {"title": logTitle, "memo": logEntry}],
+        query: { type: 'DISCOVERY', eci: this.props.eci, pico_id: this.props.id },
+        delay: "500" //wait a half second
+      });
+    }
   }
 
   toggleLogModal() {
@@ -97,4 +104,14 @@ class JournalTemplate extends Component {
   }
 }
 
-export default connect()(JournalTemplate);
+const mapStateToProps = state => {
+  if(state.identities){
+    return {
+       identities: state.identities
+    }
+  }else{
+    return {}
+  }
+}
+
+export default connect(mapStateToProps)(JournalTemplate);

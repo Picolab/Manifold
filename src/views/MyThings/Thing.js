@@ -70,14 +70,29 @@ class Thing extends Component {
   handleRemoveClick(){
     const nameToDelete = this.props.name;
     this.toggleRemoveModal();
-    this.props.dispatch({type: "command", command: removeThing, params: [nameToDelete]});
+    this.props.dispatch({
+      type: "command",
+      command: removeThing,
+      params: [nameToDelete],
+      query: { type: 'MANIFOLD_INFO' }
+    });
   }
 
   handleInstallRulesetClick(){
-    this.toggleInstallRulesetModal();
     console.log(this.props.eci);
     console.log(this.state.rulesetToInstallName);
-    this.props.dispatch({type: "command", command: installApp , params: [this.props.eci, this.state.rulesetToInstallName] });
+    if (this.state.rulesetToInstallName != null && this.state.rulesetToInstallName != "") {
+      this.props.dispatch({
+        type: "command",
+        command: installApp,
+        params: [this.props.eci, this.state.rulesetToInstallName],
+        query: { type: 'DISCOVERY', eci: this.props.eci, pico_id: this.props.id },
+        delay: 500
+      });
+      this.toggleInstallRulesetModal();
+    }else{
+      alert("Please select a ruleset to install or hit cancel.");
+    }
   }
 
   toggleSettings() {
@@ -116,12 +131,13 @@ class Thing extends Component {
         if(currentAppInfo.options.bindings){
           bindings = currentAppInfo.options.bindings;
           bindings.eci = this.props.eci;
+          bindings.id = this.props.id;
         }else{
           bindings = {};
         }
         console.log("Bindings!", bindings);
         return (
-          <div style={{'maxHeight':'inherit', 'maxWidth':'inherit'}}>
+          <div>
             <JsxParser
               bindings={bindings}
               components={{ Chart, TestForm, JournalTemplate }}
@@ -215,7 +231,7 @@ class Thing extends Component {
 // ECI: {this.props.eci}<br/>
 // PARENT_ECI: {this.props.parent_eci}
 const mapStateToProps = state => {
-  if(state.identities){//more than 1 directive/app installed in this pico
+  if(state.identities){
     return {
        identities: state.identities
     }
