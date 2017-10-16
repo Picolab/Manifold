@@ -94,7 +94,7 @@ class MyThings extends Component {
           <ModalBody>
             <div className="form-group">
               <label> New Thing's name</label>
-              <input type="text" className="form-control" id="name" placeholder="Lord Sauron" onChange={(element) => this.setState({ name: element.target.value})}/>
+              <input type="text" className="form-control" id="name" placeholder="THING NAME" onChange={(element) => this.setState({ name: element.target.value})}/>
             </div>
           </ModalBody>
           <ModalFooter>
