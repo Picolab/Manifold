@@ -136,6 +136,7 @@ class Thing extends Component {
           bindings = {};
         }
         console.log("Bindings!", bindings);
+        console.log("this.props!", this.props);
         return (
           <div>
             <JsxParser
