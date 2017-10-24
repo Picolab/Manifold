@@ -1,5 +1,4 @@
-import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
-import { getManifoldInfo } from '../utils/manifoldSDK';
+import { call, put, takeLatest } from 'redux-saga/effects';
 import { delay } from 'redux-saga';
 
 function* execute(action) {
@@ -9,7 +8,7 @@ function* execute(action) {
       console.log("Delaying " + action.delay + " milliseconds");
       yield delay(action.delay);
     }
-    if(action.query && action.query.type && action.query.type != ""){
+    if(action.query && action.query.type && action.query.type !== ""){
       yield put(action.query);
     }
     //yield put({ type: "MANIFOLD_INFO" });

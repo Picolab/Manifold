@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import {Field, reduxForm} from 'redux-form';
-import { connect } from 'react-redux';
+import { reduxForm } from 'redux-form';
 import { getOauthURI } from '../../../utils/AuthService';
 
 class Login extends Component {
@@ -14,7 +13,7 @@ class Login extends Component {
   }
 
   render() {
-    const { handleSubmit } = this.props;
+    //const { handleSubmit } = this.props;
     return (
       <div className="app flex-row align-items-center">
         <div className="container">

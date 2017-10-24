@@ -1,5 +1,5 @@
 import { delay } from 'redux-saga';
-import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 import { retrieveManifoldEci } from '../utils/manifoldSDK';
 
 const START_DELAY_TIME = 0;

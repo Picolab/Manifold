@@ -1,6 +1,4 @@
 import axios from 'axios';
-import { HOST, CLIENT_KEY, CLIENT_SECRET } from '../utils/config';
-import { getManifoldInfo } from '../utils/manifoldSDK';
 import { getCallbackURL,getHostname,getClientSecret,getProtocol,getClientId } from '../utils/AuthService';
 export const ACCESS_TOKEN = 'access_token';
 export const MANIFOLD_INFO = 'manifold_info';

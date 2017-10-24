@@ -13,9 +13,6 @@ import promise from 'redux-promise'
 import { DragDropContextProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
-// Containers
-import Full from './containers/Full/'
-
 // Views
 import Login from './views/Pages/Login/'
 import Register from './views/Pages/Register/'

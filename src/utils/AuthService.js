@@ -1,6 +1,5 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import { browserHistory } from 'react-router';
 import { OWNER_ECI_KEY,MANIFOLD_ECI_KEY, CLIENT_KEY, CLIENT_SECRET_KEY, CLIENT_STATE_KEY, CLIENT_HOST_KEY,PROTOCOL_KEY,CLIENT_KEY_KEY,
    HOST, CLIENT_SECRET,CALLBACK_URL_KEY,HTTP_PROTOCOL } from './config';
 import Full from '../containers/Full/Full';

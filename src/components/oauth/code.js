@@ -1,6 +1,4 @@
-import React, { Component } from 'react';
-import { browserHistory } from 'react-router-dom';
-import { CLIENT_STATE_KEY } from '../../utils/config';
+import { Component } from 'react';
 import { getState } from '../../utils/AuthService';
 import { connect } from 'react-redux';
 import { getAccessToken } from '../../actions';

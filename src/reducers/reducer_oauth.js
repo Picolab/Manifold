@@ -1,5 +1,5 @@
 import { ACCESS_TOKEN } from '../actions';
-import { storeOwnerECI, getProtocol, getManifoldURL } from '../utils/AuthService';
+import { storeOwnerECI, getManifoldURL } from '../utils/AuthService';
 
 export default function(state = "", action){
   console.log("The action at the start",action);
