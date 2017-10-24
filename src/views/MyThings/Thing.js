@@ -96,6 +96,7 @@ class Thing extends Component {
   }
 
   toggleSettings() {
+    console.log("SUP");
     this.setState({
       dropdownOpen: !this.state.dropdownOpen
     });
@@ -157,22 +158,22 @@ class Thing extends Component {
 
   render(){
     return (
-      <div className={"card"} style={{  height: "inherit", width: "inherit" }}>
+      <div className={"card"} style={{  height: "inherit", width: "inherit"}}>
         <div className="card-header">
           {this.props.name}
 
-          <Dropdown className="float-right" isOpen={this.state.dropdownOpen} toggle={this.toggleSettings}>
+          <Dropdown className="float-right"  isOpen={this.state.dropdownOpen} toggle={this.toggleSettings} style={{paddingLeft:"125px"}}>
             <DropdownToggle
               tag="span"
               onClick={this.toggleSettings}
               data-toggle="dropdown"
               aria-expanded={this.state.dropdownOpen} >
 
-              <i className="fa fa-cogs float-right fa-lg" />
+              <i className="fa fa-cogs float-right fa-lg" style={{backgroundColor:"#ddd", padding:"5px", borderStyle:"solid", borderColor:"#aaa"}}/>
             </DropdownToggle>
             <DropdownMenu>
 
-              <DropdownItem onClick={this.toggleBothRemove}>
+              <DropdownItem onClick={this.toggleBothRemove} >
                 Delete a Pico
                 <i className="fa fa-trash float-right" />
               </DropdownItem>
