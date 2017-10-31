@@ -46,6 +46,11 @@ class Thing extends Component {
           picture: 'http://i.imgur.com/adIpFYY.jpg'
         },
         {
+          id:uuid.v4(), //generates a unique id for each installed app
+          title: 'app3',
+          picture: 'http://i.imgur.com/adIpFYY.jpg'
+        },
+        {
           id:uuid.v4(),
           title: 'app2',
           picture: 'https://www.dogalize.com/wp-content/uploads/2017/01/shiba-inu-944510_1280.jpg'
@@ -57,7 +62,7 @@ class Thing extends Component {
       installRulesetModal: false,
       rulesetToInstallName: "",
       url: "",
-      currentApp: 0,
+      currentApp: "",
       value: "DEFAULT INPUT VAL",
       options: ["io.picolabs.journal"]
     }
@@ -110,7 +115,10 @@ class Thing extends Component {
   }
 
   handleCarouselDotClick(title){
-    console.log("HELLO FROM DOT: " + title );
+    this.setState({
+      currentApp: title
+    });
+    console.log("HELLO FROM DOT: " + this.state.currentApp );
   }
 
   toggleInstallRulesetDropdown(){

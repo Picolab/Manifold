@@ -4,7 +4,7 @@
 ruleset io.picolabs.account_management {
   meta {
     shares __testing,getEciFromOwnerName
-    use module io.picolabs.wrangler alias wrangler
+    use module io.picolabs.pico alias wrangler
   }
   global {
     __testing = { "queries": [ { "name": "__testing" },{ "name": "getEciFromOwnerName", "args":["name"] }  ],

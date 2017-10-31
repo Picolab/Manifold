@@ -8,10 +8,7 @@ class ThingFooterItem extends Component {
 
   render(){
     return(
-      <div>
         <btn className="circle" onClick={this.dotClicked.bind(this, this.props.app.title)}></btn>
-        {this.props.app.title}
-      </div>
     );
   }
 }
