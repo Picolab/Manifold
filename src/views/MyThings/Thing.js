@@ -15,13 +15,12 @@ import JournalTemplate from '../Templates/journalTemplate';
 import { Chart } from 'react-google-charts';
 import ThingFooter from './ThingFooter';
 import ThingHeader from './ThingHeader';
+import CustomComponentMap from '../Templates/customComponentMap';
 
 const brandPrimary =  '#20a8d8';
 const brandSuccess =  '#4dbd74';
 const brandInfo =     '#63c2de';
 const brandDanger =   '#f86c6b';
-
-const testHTML = `<TestForm />`;
 
 class Thing extends Component {
   constructor(props) {
@@ -123,28 +122,29 @@ class Thing extends Component {
     const thingIdentity = this.props.identities[this.props.id];
     if(thingIdentity && thingIdentity[this.state.currentApp]){
       const currentAppInfo = thingIdentity[this.state.currentApp];
-      if(currentAppInfo.options && currentAppInfo.options.tile){
-        const jsxString = currentAppInfo.options.tile;//
+      if(currentAppInfo.options){
         var bindings;
-        console.log("currentAppInfo.options", currentAppInfo.options);
         if(currentAppInfo.options.bindings){
           bindings = currentAppInfo.options.bindings;
           bindings.eci = this.props.eci;
           bindings.id = this.props.id;
         }else{
-          bindings = {};
+          return (<div>Missing bindings from the pico!</div>)
         }
-        console.log("Bindings!", bindings);
-        console.log("this.props!", this.props);
-        return (
-          <div>
-            <JsxParser
-              bindings={bindings}
-              components={{ Chart, TestForm, JournalTemplate }}
-              jsx={jsxString}
-            />
-          </div>
-        )
+        const CustomComponent = CustomComponentMap[currentAppInfo.options.rid];
+        if(CustomComponent){
+          return (
+            <div>
+              <CustomComponent {...bindings} />
+            </div>
+          )
+        }else{
+          return (
+            <div>
+              Error loading the custom component!
+            </div>
+          )
+        }
       }
     }
 
@@ -156,50 +156,58 @@ class Thing extends Component {
     )
   }
 
+  renderRemoveModal(){
+    return (
+      <Modal isOpen={this.state.removeModal} className={'modal-danger'}>
+        <ModalHeader >Delete a Thing</ModalHeader>
+        <ModalBody>
+          Are you sure you want to delete {this.props.name}?
+        </ModalBody>
+        <ModalFooter>
+          <Button color="danger" onClick={this.handleRemoveClick}>Delete Thing</Button>{' '}
+          <Button color="secondary" onClick={this.toggleRemoveModal}>Cancel</Button>
+        </ModalFooter>
+      </Modal>
+    )
+  }
+
+  renderInstallModal(){
+    return (
+      <Modal isOpen={this.state.installRulesetModal} className={'modal-info'}>
+        <ModalHeader >Install an App</ModalHeader>
+        <ModalBody>
+          <div className="form-group">
+            <label> Select a ruleset to install:</label>
+                <Col xs={6}>
+                  <Combobox defaultValue={this.state.value}
+                            options={this.state.options}
+                            onSelect={(element) => this.setState({ rulesetToInstallName: element})}
+                            autosize
+                            autocomplete>
+                    {(inputProps, { matchingText, width }) =>
+                      <input {...inputProps} type='text' placeholder="Select APP" />
+                    }
+                  </Combobox>
+                </Col>
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="info" onClick={this.handleInstallRulesetClick}>Install it</Button>
+          <Button color="secondary" onClick={this.toggleInstallRulesetModal}>Cancel</Button>
+        </ModalFooter>
+      </Modal>
+    )
+  }
+
   render(){
     return (
       <div className={"card"} style={{  height: "inherit", width: "inherit"}}>
         <ThingHeader name={this.props.name} openRemoveModal={this.toggleRemoveModal} openInstallModal={this.toggleInstallRulesetModal}/>
-
-
-        <Modal isOpen={this.state.removeModal} className={'modal-danger'}>
-          <ModalHeader >Delete a Thing</ModalHeader>
-          <ModalBody>
-            Are you sure you want to delete {this.props.name}?
-          </ModalBody>
-          <ModalFooter>
-            <Button color="danger" onClick={this.handleRemoveClick}>Delete Thing</Button>{' '}
-            <Button color="secondary" onClick={this.toggleRemoveModal}>Cancel</Button>
-          </ModalFooter>
-        </Modal>
-
-        <Modal isOpen={this.state.installRulesetModal} className={'modal-info'}>
-          <ModalHeader >Install an App</ModalHeader>
-          <ModalBody>
-            <div className="form-group">
-              <label> Select a ruleset to install:</label>
-                  <Col xs={6}>
-                    <Combobox defaultValue={this.state.value}
-                              options={this.state.options}
-                              onSelect={(element) => this.setState({ rulesetToInstallName: element})}
-                              autosize
-                              autocomplete>
-                      {(inputProps, { matchingText, width }) =>
-                        <input {...inputProps} type='text' placeholder="Select APP" />
-                      }
-                    </Combobox>
-                  </Col>
-            </div>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="info" onClick={this.handleInstallRulesetClick}>Install it</Button>
-            <Button color="secondary" onClick={this.toggleInstallRulesetModal}>Cancel</Button>
-          </ModalFooter>
-        </Modal>
+        {this.renderInstallModal()}
+        {this.renderRemoveModal()}
 
         <div className="card-block">
           {this.injectCode()}
-
         </div>
 
         <ThingFooter dotClicked={this.handleCarouselDotClick} installedApps={this.state.installedApps}/>

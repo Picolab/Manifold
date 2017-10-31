@@ -58,12 +58,6 @@ class JournalTemplate extends Component {
     );
   }
 
-  checkForIdentities(that){
-    var itents = that.props.identities[that.props.id];
-    console.log("That is that", itents  , (itents ? itents[0].options.bindings : that.props));
-    return (itents ? itents[0].options.bindings : that.props).entries.map(that.createEntry)
-  }
-
   entryForm(){
     return(
       <div>
@@ -84,6 +78,20 @@ class JournalTemplate extends Component {
     );
   }
 
+  renderEntries(){
+    if(this.props.entries){
+      return (
+        this.props.entries.map(this.createEntry)
+      )
+    }else{
+      return (
+        <div>
+          No entries defined
+        </div>
+      )
+    }
+  }
+
   render(){
     console.log("props",
       this.props
@@ -93,7 +101,7 @@ class JournalTemplate extends Component {
         <p style={{verticalAlign:"top", textAlign:"center"}}>{this.props.header}</p>
         <button style={{position: "absolute", top: "50px", right: "8px"}} className="btn btn-primary btn-sm" onClick={() => this.toggleLogModal()}>+</button>
 
-        {this.checkForIdentities(this)}
+        {this.renderEntries()}
 
         <Modal isOpen={this.state.logModal}  className={'modal-primary'}>
           <ModalHeader >Make an Entry </ModalHeader>
