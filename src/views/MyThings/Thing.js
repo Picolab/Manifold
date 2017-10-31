@@ -43,17 +43,20 @@ class Thing extends Component {
         {
           id:uuid.v4(), //generates a unique id for each installed app
           title: 'app1',
-          picture: 'http://i.imgur.com/adIpFYY.jpg'
+          picture: 'http://i.imgur.com/adIpFYY.jpg',
+          index: 0
         },
         {
           id:uuid.v4(), //generates a unique id for each installed app
           title: 'app3',
-          picture: 'http://i.imgur.com/adIpFYY.jpg'
+          picture: 'http://i.imgur.com/adIpFYY.jpg',
+          index: 1
         },
         {
           id:uuid.v4(),
           title: 'app2',
-          picture: 'https://www.dogalize.com/wp-content/uploads/2017/01/shiba-inu-944510_1280.jpg'
+          picture: 'https://www.dogalize.com/wp-content/uploads/2017/01/shiba-inu-944510_1280.jpg',
+          index: 2
         }
 
       ],
@@ -62,7 +65,7 @@ class Thing extends Component {
       installRulesetModal: false,
       rulesetToInstallName: "",
       url: "",
-      currentApp: "",
+      currentApp: 0,
       value: "DEFAULT INPUT VAL",
       options: ["io.picolabs.journal"]
     }
@@ -114,11 +117,11 @@ class Thing extends Component {
     }
   }
 
-  handleCarouselDotClick(title){
+  handleCarouselDotClick(app){
     this.setState({
-      currentApp: title
+      currentApp: app.index
     });
-    console.log("HELLO FROM DOT: " + this.state.currentApp );
+    console.log("HELLO FROM DOT: " + app.title );
   }
 
   toggleInstallRulesetDropdown(){
