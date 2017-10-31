@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
 
 class ThingFooterItem extends Component {
-  dotClicked(title){
-    this.props.onDotClick(title);
+  dotClicked(app){
+    this.props.onDotClick(app);
     //console.log(title);
   }
 
   render(){
     return(
-      <div>
-        <btn className="circle" onClick={this.dotClicked.bind(this, this.props.app.title)}></btn>
-        {this.props.app.title}
-      </div>
+        <btn className="circle" onClick={this.dotClicked.bind(this, this.props.app)}></btn>
     );
   }
 }

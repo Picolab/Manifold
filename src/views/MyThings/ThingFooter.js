@@ -2,8 +2,8 @@ import React, { Component} from 'react';
 import ThingFooterItem from './ThingFooterItem';
 
 class ThingFooter extends Component{
-  handleDotClick(title){
-    this.props.dotClicked(title);
+  handleDotClick(app){
+    this.props.dotClicked(app);
   }
 
   render(){
