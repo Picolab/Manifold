@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import uuid from 'uuid';
 import { Col, Dropdown, ButtonDropdownMenu, DropdownMenu, ButtonDropdown, DropdownToggle, DropdownItem, Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import { Link } from 'react-router-dom';
 import {logOut} from '../../utils/AuthService';
@@ -12,6 +13,8 @@ import CardReplace from '../../utils/cardReplaceAPI';
 import JsxParser from 'react-jsx-parser';
 import JournalTemplate from '../Templates/journalTemplate';
 import { Chart } from 'react-google-charts';
+import ThingFooter from './ThingFooter';
+import ThingHeader from './ThingHeader';
 
 const brandPrimary =  '#20a8d8';
 const brandSuccess =  '#4dbd74';
@@ -24,12 +27,10 @@ class Thing extends Component {
   constructor(props) {
     super(props);
 
-    this.toggleSettings = this.toggleSettings.bind(this);
-    this.toggleBothRemove = this.toggleBothRemove.bind(this);
-    this.toggleBothInstall = this.toggleBothInstall.bind(this);
     // handle clicks
     this.handleRemoveClick = this.handleRemoveClick.bind(this);
     this.handleInstallRulesetClick = this.handleInstallRulesetClick.bind(this);
+    this.handleCarouselDotClick = this.handleCarouselDotClick.bind(this);
     // modals
     this.toggleRemoveModal = this.toggleRemoveModal.bind(this);
     this.toggleInstallRulesetModal = this.toggleInstallRulesetModal.bind(this);
@@ -38,7 +39,19 @@ class Thing extends Component {
     this.injectCode = this.injectCode.bind(this);
 
     this.state = {
-      dropdownOpen: false,
+    installedApps : [
+        {
+          id:uuid.v4(), //generates a unique id for each installed app
+          title: 'app1',
+          picture: 'http://i.imgur.com/adIpFYY.jpg'
+        },
+        {
+          id:uuid.v4(),
+          title: 'app2',
+          picture: 'https://www.dogalize.com/wp-content/uploads/2017/01/shiba-inu-944510_1280.jpg'
+        }
+
+      ],
       installRulesetDropdownOpen: false,
       removeModal: false,
       installRulesetModal: false,
@@ -53,6 +66,7 @@ class Thing extends Component {
   componentWillMount(){
     //query for the discovery and app info
     this.props.dispatch({type: 'DISCOVERY', eci: this.props.eci, pico_id: this.props.id});
+
   }
 
   toggleRemoveModal(){
@@ -95,29 +109,13 @@ class Thing extends Component {
     }
   }
 
-  toggleSettings() {
-    console.log("SUP");
-    this.setState({
-      dropdownOpen: !this.state.dropdownOpen
-    });
+  handleCarouselDotClick(title){
+    console.log("HELLO FROM DOT: " + title );
   }
+
   toggleInstallRulesetDropdown(){
     this.setState({
       installRulesetDropdownOpen: !this.state.installRulesetDropdownOpen
-    });
-  }
-
-  toggleBothRemove(){
-    this.setState({
-      dropdownOpen: !this.state.dropdownOpen,
-      removeModal: !this.state.removeModal
-    });
-  }
-
-  toggleBothInstall(){
-    this.setState({
-      dropdownOpen: !this.state.dropdownOpen,
-      installRulesetModal: !this.state.installRulesetModal
     });
   }
 
@@ -152,40 +150,17 @@ class Thing extends Component {
 
     //have a default return
     return (
-      <div>There are no apps currently installed on this Thing!</div>
+      <div>
+        There are no apps currently installed on this Thing!
+      </div>
     )
   }
 
   render(){
     return (
       <div className={"card"} style={{  height: "inherit", width: "inherit"}}>
-        <div className="card-header">
-          {this.props.name}
+        <ThingHeader name={this.props.name} openRemoveModal={this.toggleRemoveModal} openInstallModal={this.toggleInstallRulesetModal}/>
 
-          <Dropdown className="float-right"  isOpen={this.state.dropdownOpen} toggle={this.toggleSettings} style={{paddingLeft:"125px"}}>
-            <DropdownToggle
-              tag="span"
-              onClick={this.toggleSettings}
-              data-toggle="dropdown"
-              aria-expanded={this.state.dropdownOpen} >
-
-              <i className="fa fa-cogs float-right fa-lg" style={{backgroundColor:"#ddd", padding:"5px", borderStyle:"solid", borderColor:"#aaa"}}/>
-            </DropdownToggle>
-            <DropdownMenu>
-
-              <DropdownItem onClick={this.toggleBothRemove} >
-                Delete a Pico
-                <i className="fa fa-trash float-right" />
-              </DropdownItem>
-
-              <DropdownItem onClick={this.toggleBothInstall}>
-                Install an App
-                <i className="fa fa-cloud-download float-right"/>
-              </DropdownItem>
-
-            </DropdownMenu>
-          </Dropdown>
-        </div>
 
         <Modal isOpen={this.state.removeModal} className={'modal-danger'}>
           <ModalHeader >Delete a Thing</ModalHeader>
@@ -224,7 +199,11 @@ class Thing extends Component {
 
         <div className="card-block">
           {this.injectCode()}
+
         </div>
+
+        <ThingFooter dotClicked={this.handleCarouselDotClick} installedApps={this.state.installedApps}/>
+
       </div>
     );
   }
