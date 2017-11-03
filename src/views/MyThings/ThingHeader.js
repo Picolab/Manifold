@@ -34,9 +34,11 @@ class ThingHeader extends Component {
     render(){
       return(
         <div className="card-header">
-          {this.props.name}
+          <div style={{float: "left", "max-width":"85%", "overflow":"hidden", "text-overflow": "ellipsis"}}>
+            {this.props.name}
+          </div>
 
-          <Dropdown className="float-right"  isOpen={this.state.dropdownOpen} toggle={this.toggleSettings.bind(this)} style={{paddingLeft:"125px"}}>
+          <Dropdown className="float-right"  isOpen={this.state.dropdownOpen} toggle={this.toggleSettings.bind(this)} style={{paddingLeft:"8px"}}>
             <DropdownToggle
               tag="span"
               onClick={this.toggleSettings.bind(this)}
