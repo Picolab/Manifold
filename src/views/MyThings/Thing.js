@@ -217,7 +217,7 @@ class Thing extends Component {
         {this.renderInstallModal()}
         {this.renderRemoveModal()}
 
-        <div className="card-block" style={{"text-overflow": "clip", overflow: "hidden"}}>
+        <div className="card-block" style={{"textOverflow": "clip", overflow: "hidden"}}>
           {this.injectCode()}
         </div>
 

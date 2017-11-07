@@ -34,7 +34,7 @@ class ThingHeader extends Component {
     render(){
       return(
         <div className="card-header">
-          <div style={{float: "left", "max-width":"85%", "overflow":"hidden", "text-overflow": "ellipsis"}}>
+          <div style={{float: "left", "maxWidth":"85%", "overflow":"hidden", "textOverflow": "ellipsis"}}>
             {this.props.name}
           </div>
 
