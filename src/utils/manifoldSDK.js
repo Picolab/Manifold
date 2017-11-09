@@ -4,6 +4,7 @@ import { getHostname, getOwnerECI ,getManifoldECI} from './AuthService';
 function sky_cloud(eci){ return `http://${getHostname()}/sky/cloud/${eci}`};
 function sky_event(eci) { return `http://${getHostname()}/sky/event/${eci}`};
 
+
 function encodeQueryData(data) {
   let ret = [];
   for (let d in data){

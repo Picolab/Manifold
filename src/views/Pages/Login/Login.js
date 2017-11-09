@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { reduxForm } from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
 import { getOauthURI } from '../../../utils/AuthService';
 
 class Login extends Component {
@@ -13,18 +13,18 @@ class Login extends Component {
   }
 
   render() {
-    //const { handleSubmit } = this.props;
+    const { handleSubmit } = this.props;
     return (
       <div className="app flex-row align-items-center">
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-md-8">
               <div className="card-group mb-0">
-                {/*
+
                 <div className="card p-4">
                   <form className="card-block" onSubmit={handleSubmit(this.onSubmit.bind(this))}>
                     <h1>Authorize</h1>
-                    <p className="text-muted">Enter your server's information</p>
+                    <p className="text-muted">Enter your servers information</p>
                     <div className="input-group mb-3">
                       <span className="input-group-addon"><i className="icon-globe"></i></span>
                       <Field type="text" className="form-control" placeholder="Hostname" name="hostname" component="input"/>
@@ -47,7 +47,7 @@ class Login extends Component {
                     </div>
                   </form>
                 </div>
-                */}
+
                 <div className="card card-inverse card-primary py-5 d-md-down-none" style={{ width: 44 + '%' }}>
                   <div className="card-block text-center">
                     <div>
