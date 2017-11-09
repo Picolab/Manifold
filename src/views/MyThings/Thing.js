@@ -200,7 +200,7 @@ class Thing extends Component {
         {this.renderInstallModal()}
         {this.renderRemoveModal()}
 
-        <div className="card-block">
+        <div className="card-block" style={{"textOverflow": "clip", overflow: "hidden"}}>
           {this.injectCode()}
         </div>
         <ThingFooter dotClicked={this.handleCarouselDotClick} installedApps={this.props.identities[this.props.id]} currentApp={this.state.currentApp}/>

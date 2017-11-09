@@ -98,10 +98,14 @@ class JournalTemplate extends Component {
     );
     return (
       <div>
-        <p style={{verticalAlign:"top", textAlign:"center"}}>{this.props.header}</p>
-        <button style={{position: "absolute", top: "51px", right: "8px"}} className="btn btn-primary btn-sm" onClick={() => this.toggleLogModal()}>+</button>
+        <div name="journal-header">
+          <p style={{verticalAlign:"top", textAlign:"center"}}>{this.props.header}</p>
+          <button style={{position:"absolute", top: "51px", right: "8px"}} className="btn btn-primary btn-sm" onClick={() => this.toggleLogModal()}>+</button>
+        </div>
 
-        {this.renderEntries()}
+        <div name="journal-entries">
+          {this.renderEntries()}
+        </div>
 
         <Modal isOpen={this.state.logModal}  className={'modal-primary'}>
           <ModalHeader >Make an Entry </ModalHeader>
