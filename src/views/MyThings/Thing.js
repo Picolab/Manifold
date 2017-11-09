@@ -49,7 +49,7 @@ class Thing extends Component {
       appsMaxIndex: -1, //-1 indicates no apps are installed, allows the incremental functionality to work
       currentApp: 0,
       value: "DEFAULT INPUT VAL",
-      appsToInstallOptions: ["io.picolabs.journal", "io.picolabs.tempTestApp", "io.picolabs.helloWorld"]
+      appsToInstallOptions: ["io.picolabs.journal", "io.picolabs.wovyn_device", "io.picolabs.tempTestApp", "io.picolabs.helloWorld"]
     }
   }
 

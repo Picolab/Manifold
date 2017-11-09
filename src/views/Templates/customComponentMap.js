@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import JournalTemplate from './journalTemplate';
 import TempTestAppTemplate from './tempTestAppTemplate';
 import HelloWorldTemplate from './helloWorldTemplate';
+import WovynDeviceTemplate from './wovynDeviceTemplate';
 
 /*
 In the future, consider abandoning this mapping of a string to a component with the Webpack Externals.
@@ -13,5 +14,6 @@ See https://webpack.js.org/configuration/externals/ for more information.
 export default {
   'io.picolabs.journal': JournalTemplate,
   'io.picolabs.tempTestApp': TempTestAppTemplate,
-  'io.picolabs.helloWorld': HelloWorldTemplate
+  'io.picolabs.helloWorld': HelloWorldTemplate,
+  'io.picolabs.wovyn_device': WovynDeviceTemplate
 }
