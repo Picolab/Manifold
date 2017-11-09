@@ -37,43 +37,25 @@ class Thing extends Component {
     this.toggleInstallRulesetDropdown = this.toggleInstallRulesetDropdown.bind(this);
     this.injectCode = this.injectCode.bind(this);
 
-    this.state = {
-    installedApps : [
-        {
-          id:uuid.v4(), //generates a unique id for each installed app
-          title: 'app1',
-          picture: 'http://i.imgur.com/adIpFYY.jpg',
-          index: 0
-        },
-        {
-          id:uuid.v4(), //generates a unique id for each installed app
-          title: 'app3',
-          picture: 'http://i.imgur.com/adIpFYY.jpg',
-          index: 1
-        },
-        {
-          id:uuid.v4(),
-          title: 'app2',
-          picture: 'https://www.dogalize.com/wp-content/uploads/2017/01/shiba-inu-944510_1280.jpg',
-          index: 2
-        }
+    //this.appendAppToDotList = this.appendAppToDotList.bind(this);
 
-      ],
+    this.state = {
+      installedApps:[],
       installRulesetDropdownOpen: false,
       removeModal: false,
       installRulesetModal: false,
       rulesetToInstallName: "",
       url: "",
+      appsMaxIndex: -1, //-1 indicates no apps are installed, allows the incremental functionality to work
       currentApp: 0,
       value: "DEFAULT INPUT VAL",
-      options: ["io.picolabs.journal"]
+      appsToInstallOptions: ["io.picolabs.journal", "io.picolabs.tempTestApp", "io.picolabs.helloWorld"]
     }
   }
 
   componentWillMount(){
     //query for the discovery and app info
     this.props.dispatch({type: 'DISCOVERY', eci: this.props.eci, pico_id: this.props.id});
-
   }
 
   toggleRemoveModal(){
@@ -111,16 +93,17 @@ class Thing extends Component {
         delay: 500
       });
       this.toggleInstallRulesetModal();
+
     }else{
       alert("Please select a ruleset to install or hit cancel.");
     }
   }
 
-  handleCarouselDotClick(app){
+  handleCarouselDotClick(index){
     this.setState({
-      currentApp: app.index
+      currentApp: index
     });
-    console.log("HELLO FROM DOT: " + app.title );
+    console.log("HELLO FROM DOT: " + index );
   }
 
   toggleInstallRulesetDropdown(){
@@ -191,7 +174,7 @@ class Thing extends Component {
             <label> Select a ruleset to install:</label>
                 <Col xs={6}>
                   <Combobox defaultValue={this.state.value}
-                            options={this.state.options}
+                            options={this.state.appsToInstallOptions}
                             onSelect={(element) => this.setState({ rulesetToInstallName: element})}
                             autosize
                             autocomplete>
@@ -220,8 +203,7 @@ class Thing extends Component {
         <div className="card-block">
           {this.injectCode()}
         </div>
-
-        <ThingFooter dotClicked={this.handleCarouselDotClick} installedApps={this.state.installedApps}/>
+        <ThingFooter dotClicked={this.handleCarouselDotClick} installedApps={this.props.identities[this.props.id]} currentApp={this.state.currentApp}/>
 
       </div>
     );
@@ -232,8 +214,10 @@ class Thing extends Component {
 // PARENT_ECI: {this.props.parent_eci}
 const mapStateToProps = state => {
   if(state.identities){
+    var id = state.manifoldInfo.things.things.children[0].id
+    var thisPicoAppsMetadata = state.identities[id]
     return {
-       identities: state.identities
+       identities: state.identities,
     }
   }else{
     return {}

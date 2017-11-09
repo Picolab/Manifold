@@ -9,8 +9,8 @@ export const CLIENT_KEY_KEY = "client_key";
 export const CALLBACK_URL_KEY = "callback_url";
 export const EVENT_PATH = "sky/event";
 export const FUNCTION_PATH = "sky/cloud";
-export const HOST= "picos.byu.edu:8080";//default host;
-export const CLIENT_SECRET= "cj8ulrsqo004ykerp4udzb9iw"; //default .....
+export const HOST= "b67fa6a2.ngrok.io";//default host;
+export const CLIENT_SECRET= "cj5vc7tr8000aoeop9dog3c4g"; //default .....
 export const HTTP_PROTOCOL= "http://";
 export const PROTOCOL_KEY= "http_protocol";
 //variables

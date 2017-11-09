@@ -9,7 +9,7 @@ const brandSuccess =  '#4dbd74';
 const brandInfo =     '#63c2de';
 const brandDanger =   '#f86c6b';
 
-class JournalTemplate extends Component {
+class TempTestAppTemplate extends Component {
   constructor(props) {
     super(props);
 
@@ -99,7 +99,7 @@ class JournalTemplate extends Component {
     return (
       <div>
         <p style={{verticalAlign:"top", textAlign:"center"}}>{this.props.header}</p>
-        <button style={{position: "absolute", top: "51px", right: "8px"}} className="btn btn-primary btn-sm" onClick={() => this.toggleLogModal()}>+</button>
+        <button style={{position: "absolute", top: "51px", right: "8px"}} className="btn btn-warning btn-sm" onClick={() => this.toggleLogModal()}>+</button>
 
         {this.renderEntries()}
 
@@ -128,4 +128,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps)(JournalTemplate);
+export default connect(mapStateToProps)(TempTestAppTemplate);

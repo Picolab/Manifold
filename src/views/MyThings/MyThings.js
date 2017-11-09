@@ -16,7 +16,7 @@ const ResponsiveReactGridLayout = WidthProvider(Responsive);
 class MyThings extends Component {
   constructor(props) {
     super(props);
-    console.log("THE PROPS!!!!",props);
+    //console.log("THE PROPS!!!!",props);
     this.onLayoutChange = this.onLayoutChange.bind(this);
     this.onBreakpointChange = this.onBreakpointChange.bind(this);
     this.state = {
@@ -139,7 +139,7 @@ MyThings.defaultProps = {
 
 function addPropsToThings(thingsArray){
   return thingsArray.map(function(i, key, list) {
-    return {key: key.toString(), x: key * 2, y: 0, w: 3, h: 2, name: i.name, id: i.id, eci: i.eci, parent_eci: i.parent_eci};
+    return {key: key.toString(), x: key * 2, y: 0, w: 3, h: 2.25, minW: 3, minH: 2.25, maxW: 8, maxH: 5, name: i.name, id: i.id, eci: i.eci, parent_eci: i.parent_eci};
   })
 };
 

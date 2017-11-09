@@ -11,7 +11,7 @@ class ThingHeader extends Component {
     }
 
     toggleSettings() {
-      console.log("SUP");
+      //console.log("Settings dropdown toggled");
       this.setState({
         dropdownOpen: !this.state.dropdownOpen
       });

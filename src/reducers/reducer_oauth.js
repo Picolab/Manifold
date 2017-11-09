@@ -2,7 +2,7 @@ import { ACCESS_TOKEN } from '../actions';
 import { storeOwnerECI, getManifoldURL } from '../utils/AuthService';
 
 export default function(state = "", action){
-  console.log("The action at the start",action);
+  //console.log("The action at the start",action);
   switch (action.type) {
     case ACCESS_TOKEN:
       console.log("action.payload.data in reducer_oauth:",action.payload.data);
