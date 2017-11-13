@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { createThing } from '../../utils/manifoldSDK';
+import { createThing, moveThing } from '../../utils/manifoldSDK';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import _ from 'lodash';
@@ -13,6 +13,7 @@ class MyThings extends Component {
     super(props);
     //console.log("THE PROPS!!!!",props);
     this.onLayoutChange = this.onLayoutChange.bind(this);
+    this.updateLayout = this.updateLayout.bind(this);
     this.onBreakpointChange = this.onBreakpointChange.bind(this);
     this.state = {
       addModal: false,
@@ -30,7 +31,6 @@ class MyThings extends Component {
       registerRulesetModal: !this.state.registerRulesetModal
     });
   }
-
 
   toggleAddModal() {
     this.setState({
@@ -56,8 +56,31 @@ class MyThings extends Component {
     });
   }
 
+  updateLayout(layout) {
+    for (var thing of layout) {
+      var comp = this.state.layout[thing.i];
+      if (!comp || 
+        thing.x != comp.x || thing.y != comp.y || 
+        thing.w != comp.w || thing.h != comp.h) {
+        
+        var thingName = this.props.things[thing.i].name;
+        this.props.dispatch({
+          type: "command",
+          command: moveThing,
+          params: [thingName, thing.x, thing.y, thing.w, thing.h],
+          query: { type: 'MANIFOLD_INFO'}
+        });
+      }
+    }
+  }
+
   onLayoutChange(layout) {
     //this.props.onLayoutChange(layout);
+    if (!this.state.layout || this.state.layout.length == 0) {
+      this.setState({layout: layout});
+      return;
+    }
+    this.updateLayout(layout);
     this.setState({layout: layout});
   }
 
@@ -115,7 +138,7 @@ class MyThings extends Component {
 
         <div>
           <ResponsiveReactGridLayout {...this.props} onLayoutChange={this.onLayoutChange}
-            onBreakpointChange={this.onBreakpointChange}>
+            onBreakpointChange={this.onBreakpointChange}> 
 
             {_.map(this.props.things,this.createElement)}
 
@@ -132,16 +155,18 @@ MyThings.defaultProps = {
   rowHeight: 100
 };
 
-function addPropsToThings(thingsArray){
+function addPropsToThings(thingsArray, thingPositions){
+  for (var thing of thingsArray)
+    thing.pos = thingPositions[thing.name];
   return thingsArray.map(function(i, key, list) {
-    return {key: key.toString(), x: key * 2, y: 0, w: 3, h: 2.25, minW: 3, minH: 2.25, maxW: 8, maxH: 5, name: i.name, id: i.id, eci: i.eci, parent_eci: i.parent_eci};
+    return {key: key.toString(), x: i.pos.x, y: i.pos.y, w: i.pos.w, h: i.pos.h, minW: i.pos.minw, minH: i.pos.minh, maxW: i.pos.maxw, maxH: i.pos.maxh, name: i.name, id: i.id, eci: i.eci, parent_eci: i.parent_eci};
   })
 };
 
 const mapStateToProps = state => {
   if(state.manifoldInfo.things){
     return {
-      things: addPropsToThings(state.manifoldInfo.things.things.children)
+      things: addPropsToThings(state.manifoldInfo.things.things.children, state.manifoldInfo.things.thingsPosition)
     }
   }else{
     return {}

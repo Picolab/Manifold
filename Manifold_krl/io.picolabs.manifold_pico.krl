@@ -13,9 +13,10 @@ ruleset io.picolabs.manifold_pico {
 
     getManifoldInfo = function(){
       {
+        
         "things": {
           "things": wrangler:children(),
-          "thingsPosition": ent:thingsPos.defaultsTo([]),
+          "thingsPosition": ent:thingsPos.defaultsTo({}),
           "lastUpdated": ent:thingsUpdate.defaultsTo("null")
         }
       }
@@ -58,9 +59,36 @@ ruleset io.picolabs.manifold_pico {
           "domain": "wrangler", "type": "install_rulesets_requested",
           "attrs": {"rid":"io.picolabs.thing"} })
     fired{
+      ent:thingsPos := ent:thingsPos.defaultsTo({});
+      ent:thingsPos := ent:thingsPos.put([event:attr("name")], {
+        "x": 0,
+        "y": 0,
+        "w": 3,
+        "h": 2.25,
+        "minw": 3,
+        "minh": 2.25,
+        "maxw": 8,
+        "maxh": 5});
       ent:thingsUpdate := time:now();
     }
   }
 
+  rule updateLocation {
+    select when manifold move_thing
+    pre {}
+    noop()
+    fired {
+      ent:thingsPos := ent:thingsPos.defaultsTo({});
+      ent:thingsPos := ent:thingsPos.put([event:attr("name")], {
+        "x": event:attr("x").as("Number"),
+        "y": event:attr("y").as("Number"),
+        "w": event:attr("w").as("Number"),
+        "h": event:attr("h").as("Number"),
+        "minw": 3,
+        "minh": 2.25,
+        "maxw": 8,
+        "maxh": 5});
+    }
+  }
 
 }//end ruleset
