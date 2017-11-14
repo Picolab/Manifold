@@ -40,6 +40,10 @@ export function removeThing(name){
   return axios.post(`${sky_event(getManifoldECI())}/Remove_Thing/manifold/remove_thing?name=${name}`);
 }
 
+export function colorThing(name, eci, color){
+  return axios.post(`${sky_event(eci)}/colorThing/visual/update?dname=${name}&color=%23${color.substring(1)}`);
+}
+
 export function moveThing(name, x, y, w, h){
   return axios.post(`${sky_event(getManifoldECI())}/Move_Thing/manifold/move_thing?name=${name}&x=${x}&y=${y}&w=${w}&h=${h}`);
 }

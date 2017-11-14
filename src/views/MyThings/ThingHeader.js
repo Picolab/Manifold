@@ -31,6 +31,13 @@ class ThingHeader extends Component {
       this.props.openInstallModal()
     }
 
+    openColorModal(){
+      this.setState({
+        dropdownOpen: !this.state.dropdownOpen
+      });
+      this.props.openColorModal()
+    }
+
     render(){
       return(
         <div className="card-header">
@@ -57,6 +64,11 @@ class ThingHeader extends Component {
               <DropdownItem onClick={this.openInstallModal.bind(this)}>
                 Install an App
                 <i className="fa fa-cloud-download float-right"/>
+              </DropdownItem>
+
+              <DropdownItem onClick={this.openColorModal.bind(this)}>
+                Change Color
+                <i className="fa fa-cubes float-right"/>
               </DropdownItem>
 
             </DropdownMenu>

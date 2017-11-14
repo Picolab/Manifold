@@ -4,7 +4,7 @@ import { Col, Dropdown, ButtonDropdownMenu, DropdownMenu, ButtonDropdown, Dropdo
 import { Link } from 'react-router-dom';
 import {logOut} from '../../utils/AuthService';
 import { Combobox } from 'react-input-enhancements';
-import {createThing,removeThing,updateThing,installApp} from '../../utils/manifoldSDK';
+import {createThing,removeThing,updateThing,installApp,colorThing} from '../../utils/manifoldSDK';
 import { connect } from 'react-redux';
 import TestForm from './testForm';
 import InnerHTML from 'dangerously-set-inner-html';
@@ -30,9 +30,11 @@ class Thing extends Component {
     this.handleRemoveClick = this.handleRemoveClick.bind(this);
     this.handleInstallRulesetClick = this.handleInstallRulesetClick.bind(this);
     this.handleCarouselDotClick = this.handleCarouselDotClick.bind(this);
+    this.handleColorClick = this.handleColorClick.bind(this);
     // modals
     this.toggleRemoveModal = this.toggleRemoveModal.bind(this);
     this.toggleInstallRulesetModal = this.toggleInstallRulesetModal.bind(this);
+    this.toggleColorModal = this.toggleColorModal.bind(this);
     // drop downs
     this.toggleInstallRulesetDropdown = this.toggleInstallRulesetDropdown.bind(this);
     this.injectCode = this.injectCode.bind(this);
@@ -44,7 +46,9 @@ class Thing extends Component {
       installRulesetDropdownOpen: false,
       removeModal: false,
       installRulesetModal: false,
+      colorModal: false,
       rulesetToInstallName: "",
+      colorChosen: "#cccccc",
       url: "",
       appsMaxIndex: -1, //-1 indicates no apps are installed, allows the incremental functionality to work
       currentApp: 0,
@@ -67,6 +71,12 @@ class Thing extends Component {
   toggleInstallRulesetModal(){
     this.setState({
       installRulesetModal: !this.state.installRulesetModal
+    });
+  }
+
+  toggleColorModal(){
+    this.setState({
+      colorModal: !this.state.colorModal
     });
   }
 
@@ -97,6 +107,16 @@ class Thing extends Component {
     }else{
       alert("Please select a ruleset to install or hit cancel.");
     }
+  }
+
+  handleColorClick(){
+    this.toggleColorModal();
+    this.props.dispatch({
+      type: "command",
+      command: colorThing,
+      params: [this.props.name, this.props.eci, this.state.colorChosen],
+      query: { type: 'MANIFOLD_INFO' }
+    });
   }
 
   handleCarouselDotClick(index){
@@ -193,12 +213,29 @@ class Thing extends Component {
     )
   }
 
+  renderColorModal(){
+    return (
+      <Modal isOpen={this.state.colorModal} className={'modal-info'}>
+        <ModalHeader >Change Thing's Color</ModalHeader>
+        <ModalBody>
+          <label> Select a color: <br/></label>
+          <input type="color" defaultValue={this.state.colorChosen} onChange={(element) => this.setState({"colorChosen": element.target.value})}/>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="info" onClick={this.handleColorClick}>Set Color</Button>{' '}
+          <Button color="secondary" onClick={this.toggleColorModal}>Cancel</Button>
+        </ModalFooter>
+      </Modal>
+    )
+  }
+
   render(){
     return (
       <div className={"card"} style={{  height: "inherit", width: "inherit"}}>
-        <ThingHeader name={this.props.name} openRemoveModal={this.toggleRemoveModal} openInstallModal={this.toggleInstallRulesetModal}/>
+        <ThingHeader name={this.props.name} openRemoveModal={this.toggleRemoveModal} openInstallModal={this.toggleInstallRulesetModal} openColorModal={this.toggleColorModal}/>
         {this.renderInstallModal()}
         {this.renderRemoveModal()}
+        {this.renderColorModal()}
 
         <div className="card-block" style={{"textOverflow": "clip", overflow: "hidden"}}>
           {this.injectCode()}
