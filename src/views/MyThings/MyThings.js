@@ -157,7 +157,7 @@ MyThings.defaultProps = {
 
 function addPropsToThings(thingsArray, thingPositions){
   for (var thing of thingsArray)
-    thing.pos = thingPositions[thing.name];
+    thing.pos = thingPositions[thing.name] || {"x":0, "y":0, "w":3, "h":2.25, "minW":3, "minH":2.25, "maxW":8, "maxH":5};
   return thingsArray.map(function(i, key, list) {
     return {key: key.toString(), x: i.pos.x, y: i.pos.y, w: i.pos.w, h: i.pos.h, minW: i.pos.minw, minH: i.pos.minh, maxW: i.pos.maxw, maxH: i.pos.maxh, name: i.name, id: i.id, eci: i.eci, parent_eci: i.parent_eci};
   })

@@ -44,6 +44,7 @@ ruleset io.picolabs.manifold_pico {
       send_directive("Attempting to remove Thing",{"thing":event:attr("name")})
     }
     fired{
+      ent:thingsPos := ent:thingsPos.filter(function(v,k){k != event:attr("name")});
       raise wrangler event "child_deletion"
         attributes event:attrs().put({"event_type": "manifold_remove_thing"})
     }else{
