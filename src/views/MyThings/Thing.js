@@ -48,7 +48,8 @@ class Thing extends Component {
       installRulesetModal: false,
       colorModal: false,
       rulesetToInstallName: "",
-      colorChosen: "#cccccc",
+      colorChosen: props.color || "#eceff1",
+      color: props.color,
       url: "",
       appsMaxIndex: -1, //-1 indicates no apps are installed, allows the incremental functionality to work
       currentApp: 0,
@@ -114,7 +115,7 @@ class Thing extends Component {
     this.props.dispatch({
       type: "command",
       command: colorThing,
-      params: [this.props.name, this.props.eci, this.state.colorChosen],
+      params: [this.props.name, this.state.colorChosen],
       query: { type: 'MANIFOLD_INFO' }
     });
   }
@@ -232,7 +233,7 @@ class Thing extends Component {
   render(){
     return (
       <div className={"card"} style={{  height: "inherit", width: "inherit"}}>
-        <ThingHeader name={this.props.name} openRemoveModal={this.toggleRemoveModal} openInstallModal={this.toggleInstallRulesetModal} openColorModal={this.toggleColorModal}/>
+        <ThingHeader name={this.props.name} color={this.props.color} openRemoveModal={this.toggleRemoveModal} openInstallModal={this.toggleInstallRulesetModal} openColorModal={this.toggleColorModal}/>
         {this.renderInstallModal()}
         {this.renderRemoveModal()}
         {this.renderColorModal()}
@@ -240,7 +241,7 @@ class Thing extends Component {
         <div className="card-block" style={{"textOverflow": "clip", overflow: "hidden"}}>
           {this.injectCode()}
         </div>
-        <ThingFooter dotClicked={this.handleCarouselDotClick} installedApps={this.props.identities[this.props.id]} currentApp={this.state.currentApp}/>
+        <ThingFooter dotClicked={this.handleCarouselDotClick} color={this.props.color} installedApps={this.props.identities[this.props.id]} currentApp={this.state.currentApp}/>
 
       </div>
     );

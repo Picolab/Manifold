@@ -40,7 +40,7 @@ class ThingHeader extends Component {
 
     render(){
       return(
-        <div className="card-header">
+        <div className="card-header" style={{"background-color": this.props.color}}>
           <div style={{float: "left", "maxWidth":"85%", "overflow":"hidden", "textOverflow": "ellipsis"}}>
             {this.props.name}
           </div>
