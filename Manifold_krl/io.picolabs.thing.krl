@@ -26,7 +26,7 @@ ruleset io.picolabs.thing {
     select when manifold installapp
     pre {}
     noop()
-    fired{
+    always{
       raise wrangler event "install_rulesets_requested"
         attributes event:attrs();
     }

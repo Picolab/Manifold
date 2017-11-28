@@ -1,6 +1,7 @@
 ruleset io.picolabs.manifold_pico {
   meta {
     use module io.picolabs.pico alias wrangler
+    use module io.picolabs.Tx_Rx alias subscription
     shares __testing, getManifoldInfo
     provides getManifoldInfo
   }
@@ -21,6 +22,23 @@ ruleset io.picolabs.manifold_pico {
         }
       }
     }
+    subscriptionSpanningTree = function(){
+      manifold_subs = subscription:buses(["Rx_role"],"manifold;master");
+      span(manifold_subs);
+    }
+
+    span = function(bus){
+      moreChildren = wrangler:skyQuery(bus{"Tx"}, "io.picolabs.Tx_Rx", "buses",{"collectBy" : ["Rx_role"],"filterValue":"manifold;master"}).klog("Sky query result: ");
+
+      gatherbusessbuses = function(bus){
+        arrayOfBusArrays = bus.map(function(sub){ span(sub.klog("bus child: ")) }).klog("More,bus child: ");
+        arrayOfBusArrays.reduce(function(a,b){ a.append(b) });
+      };
+
+      result = (bus.length() == 0) => [] | bus.append(gatherbusessbuses(bus));
+      result
+    }
+    
   }
 
   rule createThing {
@@ -31,7 +49,8 @@ ruleset io.picolabs.manifold_pico {
     }
     fired{
       raise wrangler event "child_creation"
-        attributes event:attrs().put({"event_type": "manifold_create_thing"/*,"rids":"io.manifold.thing;io.manifold.timeline;io.manifold.safeNmind;io.manifold.journal"*/})
+        attributes event:attrs().put({"event_type": "manifold_create_thing"})
+                                .put({"rids":"io.picolabs.thing;io.picolabs.Tx_Rx"})
     }else{
       //send_directive("Missing a name for your Thing!")
     }
@@ -53,12 +72,17 @@ ruleset io.picolabs.manifold_pico {
 
   rule thingCompleted{
     select when wrangler child_initialized where rs_attrs{"event_type"} == "manifold_create_thing"
-    pre{}
-    event:send(
-        { "eci": event:attr("eci"),
-          "domain": "wrangler", "type": "install_rulesets_requested",
-          "attrs": {"rid":"io.picolabs.thing"} })
-    fired{
+    pre{eci = event:attr("eci") }
+      event:send(
+        { "eci": eci,
+          "domain": "wrangler", "type": "subscription",
+          "attrs": {"rid"         : "io.picolabs.thing",
+                    "name"        : "manifold"+";"+event:attr("name")+";"+time:now(),
+                    "Rx_role"     : "manifold"+";"+"master",
+                    "Tx_role"     : "manifold"+";"+"slave",
+                    "common_Tx"   : wrangler:skyQuery( eci , "io.picolabs.pico", "channel",{"value" : "common_Rx"}){"channels"}{"id"}/*{["channels","id"]}*/,
+                    "channel_type": "Manifold"} })
+    always{
       ent:thingsPos := ent:thingsPos.defaultsTo({});
       ent:thingsPos := ent:thingsPos.put([event:attr("name")], {
         "x": 0,

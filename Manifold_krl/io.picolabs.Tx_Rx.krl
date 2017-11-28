@@ -100,8 +100,8 @@ comunication bus structure.
         names.length() > 0 => names[0].klog("uniqueName") | randomName( base + "_")
     }
     checkName = function(name){
-      buses = buses();
-      (buses{name}.isnull() && wrangler:channel(name){"channels"}.isnull())
+      buses = buses().klog("all of the buses in name check");
+      (buses{name}.isnull().klog("name in buses?") && wrangler:channel(name).klog("channels for name check"){"channels"}.isnull().klog("name in channels?") )
     }
     standardOut = function(message) {
       msg = ">> " + message + " results: >>";
@@ -241,12 +241,12 @@ comunication bus structure.
       name   = event:attr("name").klog("InboundNameCheck name")
       attrs = event:attrs()
     }
-    if(checkName(name) != true ) then noop()
-    fired{
-        name.klog(">> could not accept request >>");
+    if(checkName(name).klog("checkName results") == false ) then
         event:send({  "eci"    : event:attr("Tx"),
                       "domain" : "wrangler", "type": "outbound_subscription_cancellation",
                       "attrs"  : attrs.put({"failed_request":"not a unique comunication bus"})}, event:attr("subscriber_host"))
+    fired{
+        name.klog(">> could not accept request >>");
     }
     else{
       attrs.klog("InboundNameCheck attrs");
