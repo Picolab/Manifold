@@ -14,7 +14,6 @@ ruleset io.picolabs.manifold_pico {
 
     getManifoldInfo = function(){
       {
-        
         "things": {
           "things": wrangler:children(),
           "thingsPosition": ent:thingsPos.defaultsTo({}),
@@ -63,6 +62,7 @@ ruleset io.picolabs.manifold_pico {
       send_directive("Attempting to remove Thing",{"thing":event:attr("name")})
     }
     fired{
+      ent:thingsPos := ent:thingsPos.filter(function(v,k){k != event:attr("name")});
       raise wrangler event "child_deletion"
         attributes event:attrs().put({"event_type": "manifold_remove_thing"})
     }else{
@@ -92,7 +92,8 @@ ruleset io.picolabs.manifold_pico {
         "minw": 3,
         "minh": 2.25,
         "maxw": 8,
-        "maxh": 5});
+        "maxh": 5,
+        "color": "#cccccc"});
       ent:thingsUpdate := time:now();
     }
   }
@@ -103,15 +104,24 @@ ruleset io.picolabs.manifold_pico {
     noop()
     fired {
       ent:thingsPos := ent:thingsPos.defaultsTo({});
-      ent:thingsPos := ent:thingsPos.put([event:attr("name")], {
-        "x": event:attr("x").as("Number"),
-        "y": event:attr("y").as("Number"),
-        "w": event:attr("w").as("Number"),
-        "h": event:attr("h").as("Number"),
-        "minw": 3,
-        "minh": 2.25,
-        "maxw": 8,
-        "maxh": 5});
+      ent:thingsPos := ent:thingsPos.put([event:attr("name"), "x"], event:attr("x").as("Number"));
+      ent:thingsPos := ent:thingsPos.put([event:attr("name"), "y"], event:attr("y").as("Number"));
+      ent:thingsPos := ent:thingsPos.put([event:attr("name"), "w"], event:attr("w").as("Number"));
+      ent:thingsPos := ent:thingsPos.put([event:attr("name"), "h"], event:attr("h").as("Number"));
+    }
+  }
+
+  rule colorThing {
+    select when manifold color_thing
+    pre {}
+    if event:attr("dname") then every {
+      send_directive("Attempting to color Thing",{"thing":event:attr("dname")})
+    }
+    fired{
+      ent:thingsPos := ent:thingsPos.defaultsTo({});
+      ent:thingsPos := ent:thingsPos.put([event:attr("dname"), "color"], event:attr("color"));
+    }else{
+      //send_directive("Missing a name for your Thing!")
     }
   }
 
