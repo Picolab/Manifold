@@ -6,17 +6,20 @@ ruleset io.picolabs.Tx_Rx {
     >>
     author "Tedrub Modulas"
     use module io.picolabs.pico alias wrangler
-    provides buses, klogtesting, __testing
-    shares buses, klogtesting, __testing
+    provides buses, autoAcceptConfig, __testing
+    shares buses, autoAcceptConfig, __testing
     logging on
   }
 
  global{
-    __testing = { "queries": [  { "name": "buses", "args":["collectBy","filterValue"] } ],
+    __testing = { "queries": [  { "name": "buses", "args":["collectBy","filterValue"] },
+                                { "name": "autoAcceptConfig"} ],
                   "events": [ { "domain": "wrangler", "type": "subscription",
-                                "attrs": [ "name","Rx_role","Tx_role","common_Tx","channel_type"] },
+                                "attrs": [ "name","Rx_role","Tx_role","common_Tx","channel_type","wild"] },
                               { "domain": "wrangler", "type": "pending_subscription_approval",
                                 "attrs": [ "name" ] },
+                              { "domain": "wrangler", "type": "autoAcceptConfigUpdate",
+                                "attrs": [ "variable", "regex_str" ] },
                               { "domain": "wrangler", "type": "subscription_cancellation",
                                 "attrs": [ "name" ] } ]}
 /*
@@ -24,22 +27,16 @@ comunication bus structure.
 {
   <name>: {
           "name":"Test",
-          "common_Tx":"KwVBFpADrTCmDxoGVuU8Gn"}} //only in originating bus
-          "Tx":"Wut7JLhAQmm3fwBB9JhaDF",
-          "Rx":"PjE4Jy6b9B5CEqjyehJE3h",
+          "common_Tx":""}} //only in originating bus
+          "Tx":"",
+          "Rx":"",
           "Tx_role":"",
           "Rx_role":"",
-          "status":"valid",
+          "status":"",
           "Tx_host": ""
 } 
- */
-// ********************************************************************************************
-// ***                                                                                      ***
-// ***                                      FUNCTIONS                                       ***
-// ***                                                                                      ***
-// ********************************************************************************************
-    /*
-      buses([collectBy[, filterValue]]) with no arguments returns the value of ent:subscriptions (the subscriptions map)
+
+      buses([collectBy[, filterValue]]) with no arguments returns the value of ent:Tx_Rx (the subscriptions map)
       parameters:
         collectBy - if filterValue is omitted, the string or hashpath,
           that indexes the subscriptions map values used to collect()
@@ -77,7 +74,7 @@ comunication bus structure.
           returns the array indexed by "peer" above
     */
     buses = function(collectBy, filterValue){
-      subs = ent:subscriptions.defaultsTo({}, "no subscriptions");
+      subs = ent:Tx_Rx.defaultsTo({});
       collectBy.isnull() => subs | function(){
         subArray = subs.keys().map(function(name){{}.put(name, subs{name})});
         filterValue.isnull() => subArray.collect(function(sub){
@@ -91,204 +88,133 @@ comunication bus structure.
     randomName = function(name_base){
         base = name_base.defaultsTo("");
         buses = buses();
-        array = 1.range(5).map(function(n){
-          random:word()
-          }).klog("randomWords");
-        names = array.filter(function(name){
-          buses{"" + base + name}.isnull()
-        });
-        names.length() > 0 => names[0].klog("uniqueName") | randomName( base + "_")
+        array = 1.range(5).map(function(n){ random:word() });
+        names = array.filter(function(name){ buses{"" + base + name}.isnull() }); // do we need to add a empty string??????
+        names.length() > 0 => names[0] | randomName( base + "_")
     }
     checkName = function(name){
-      buses = buses().klog("all of the buses in name check");
-      (buses{name}.isnull().klog("name in buses?") && wrangler:channel(name).klog("channels for name check"){"channels"}.isnull().klog("name in channels?") )
+      buses = buses();
+      (buses{name}.isnull() && wrangler:channel(name){"channels"}.isnull() )
     }
-    standardOut = function(message) {
-      msg = ">> " + message + " results: >>";
-      msg
+    pending_entry = function(status){
+      {
+        "name"         : event:attr("name"),
+        "Rx_role"      : event:attr("Rx_role").defaultsTo("peer", "peer used as Rx_role"),
+        "Tx_role"      : event:attr("Tx_role").defaultsTo("peer", "peer used as Tx_role"),
+        "Tx_host"      : event:attr("Tx_host"),
+        "status"       : status
+      }
     }
-    standardError = function(message) {
-      error = ">> error: " + message + " >>";
-      error
-    } 
+    autoAcceptConfig = function(){ 
+      ent:autoAcceptConfig.defaultsTo({})
+    }
   }
 
   rule create_common_Rx{
     select when wrangler ruleset_added where rids >< meta:rid
-    pre{}
-    every {
-      engine:newChannel(meta:picoId, "common_Rx", "Tx_Rx")
-      //wrangler:createChannel(...)
+    pre{
+      channel = wrangler:channel("common_Rx"){"channels"}
     }
+    if(channel.isnull() || channel{"type"} != "Tx_Rx") then
+      engine:newChannel(meta:picoId, "common_Rx", "Tx_Rx")//wrangler:createChannel(...)
     fired{
-      raise Tx_Rx event "common_Rx_created"
-        attributes event:attrs();
+      raise Tx_Rx event "common_Rx_created" attributes event:attrs();
+    }
+    else{
+      raise Tx_Rx event "common_Rx_not_created" attributes event:attrs(); //exists 
     }
   }
 
   rule NameCheck {
     select when wrangler subscription
-    pre {
-      name   = event:attr("name") || randomName().klog("random name") 
-    }
-    if(checkName(name)) then noop()
+    if(checkName(event:attr("name") || randomName().klog("random name") )) then noop()
     fired{
-      raise wrangler event "checked_name_Tx_Rx"
-       attributes  event:attrs()
+      raise wrangler event "checked_name_Tx_Rx" attributes  event:attrs()
     }
     else{
-      raise wrangler event "duplicate_name_Tx_Rx_failure"
-       attributes  event:attrs() // API event
+      raise wrangler event "duplicate_name_Tx_Rx_failure" attributes  event:attrs() // API event
     }
   }
-  /*
-comunication bus structure.
-{
-  <name>: {
-          "name":"Test",
-          "common_Tx":"KwVBFpADrTCmDxoGVuU8Gn"}} //only in originating bus
-          "Tx":"Wut7JLhAQmm3fwBB9JhaDF",
-          "Rx":"PjE4Jy6b9B5CEqjyehJE3h",
-          "Tx_role":"master",
-          "Rx_role":"slave",
-          "status":"valid",
-          "Tx_host": ""
-} 
- */
+
   rule createMySubscription {
     select when wrangler checked_name_Tx_Rx
-   pre {
-      name          = event:attr("name")
-      Rx_role       = event:attr("Rx_role").defaultsTo("peer", standardError("Rx_role"))
-      Tx_host       = event:attr("Tx_host")
-      Tx_role       = event:attr("Tx_role").defaultsTo("peer", standardError("Tx_role"))
-      common_Tx     = event:attr("common_Tx").defaultsTo("no_Tx", standardError("common_Tx"))
-      channel_type  = event:attr("channel_type").defaultsTo("subs", standardError("channel_type"))
-
-      pending_entry = {
-        "name"      : name,
-        "Rx_role"   : Rx_role,
-        "Tx_role"   : Tx_role,
-        "common_Tx" : common_Tx, // this will remain after accepted
-        "status"    : "outbound", 
-        "Tx_host"   : Tx_host
-      }.klog("pending entry")
-
+    pre {
+      channel_type  = event:attr("channel_type").defaultsTo("Tx_Rx","Tx_Rx channel_type used.")
+      pending_entry = pending_entry("outbound")
+                        .put(["common_Tx"],event:attr("common_Tx")) //.klog("pending entry")
     }
-    if(common_Tx != "no_Tx") // check if we have someone to send a request too
+    if( not pending_entry{"common_Tx"}.isnull()) // check if we have someone to send a request too
     then every {
-      engine:newChannel(wrangler:myself(){"id"}, name ,channel_type) setting(channel); // create Rx
+      engine:newChannel(wrangler:myself(){"id"}, event:attr("name") , channel_type) setting(channel); // create Rx
       //wrangler:createChannel(wrangler:myself(){"id"}, name ,channel_type) setting(channel); // create Rx
     }
     fired {
-      newBus = pending_entry.put(["Rx"],channel.id);
-      ent:subscriptions := buses().put([newBus.name] , newBus);
-      raise wrangler event "pending_subscription" attributes {
-        "status" : pending_entry{"status"},
-        "channel_type" : channel_type,
-        "name" : pending_entry{"name"},
-        "Rx_role" : pending_entry{"Rx_role"},
-        "Tx_role" : pending_entry{"Tx_role"},
-        "common_Tx"  : pending_entry{"common_Tx"},
-        "Rx" : channel.id,
-        "Tx_host"   : Tx_host
-      }
+      newBus = pending_entry.put(["Rx"],channel{"id"});
+      ent:Tx_Rx := buses().put([newBus{"name"}] , newBus );
+      raise wrangler event "pending_subscription" attributes event:attrs().put(newBus.put(["channel_type"], channel_type)) // send channel type but dont store in ent:
     } 
     else {
-      logs.klog(">> failed to create Rx request, no common_Tx provieded >>")
+      raise wrangler event "no_common_Tx_failure" attributes  event:attrs() // API event
     }
   }
   
   rule sendSubscribersSubscribe {
     select when wrangler pending_subscription status re#outbound#
-     pre {
-        name         = event:attr("name")
-        Tx_host      = event:attr("Tx_host")
-        Rx_role      = event:attr("Rx_role")
-        Tx_role      = event:attr("Tx_role")
-        common_Tx    = event:attr("common_Tx").defaultsTo("no_Tx", standardError("common_Tx"))
-        channel_type = event:attr("channel_type")
-        Rx           = event:attr("Rx")
-      }
       event:send({
-          "eci"   : common_Tx, 
+          "eci"   : event:attr("common_Tx").klog(">> sent Tx_Rx request to >>"), 
           "domain": "wrangler", "type": "pending_subscription",
-          "attrs" : {
-             "name"         : name,
-             "Rx_role"      : Tx_role,
-             "Tx_role"      : Rx_role,
-             "Tx"           : Rx, 
-             "status"       : "inbound",
-             "channel_type" : channel_type,
-             "Tx_host"      : subscriber_host.isnull() => null | meta:host
-          }}, Tx_host);
-    always {
-      common_Tx.klog(">> sent subscription request to >>")
-    } 
+          "attrs" : event:attrs().put(["status"],"inbound")
+                                 .put(["Rx_role"], event:attr("Tx_role"))
+                                 .put(["Tx_role"], event:attr("Rx_role"))
+                                 .put(["Tx"]     , event:attr("Rx"))
+                                 .put(["Tx_host"], event:attr("Tx_host").isnull() => null | meta:host)
+          }, event:attr("Tx_host"));
   }
 
  rule addOutboundPendingSubscription {
     select when wrangler pending_subscription status re#outbound#
     always { 
-      raise wrangler event "outbound_pending_subscription_added" // API event
-        attributes event:attrs().klog(standardOut("successful outgoing pending subscription >>"))
+      raise wrangler event "outbound_pending_subscription_added" attributes event:attrs()// API event
     } 
   }
 
   rule InboundNameCheck {
     select when wrangler pending_subscription status re#inbound#
-    pre {
-      name   = event:attr("name").klog("InboundNameCheck name")
-      attrs = event:attrs()
-    }
-    if(checkName(name).klog("checkName results") == false ) then
+    if( not checkName(event:attr("name"))) then
         event:send({  "eci"    : event:attr("Tx"),
                       "domain" : "wrangler", "type": "outbound_subscription_cancellation",
-                      "attrs"  : attrs.put({"failed_request":"not a unique comunication bus"})}, event:attr("subscriber_host"))
+                      "attrs"  : event:attrs().put({"failed_request":"not a unique comunication bus"})}, event:attr("subscriber_host"))
     fired{
-        name.klog(">> could not accept request >>");
+      raise wrangler event "duplicate_name_Tx_Rx_failure" attributes  event:attrs() // API event
     }
     else{
-      attrs.klog("InboundNameCheck attrs");
-      raise wrangler event "checked_name_inbound"
-       attributes attrs
+      raise wrangler event "checked_name_inbound" attributes event:attrs()
     }
   }
-
 
   rule addInboundPendingSubscription { 
     select when wrangler checked_name_inbound
    pre {
-      name          = event:attr("name")
-      Rx_role       = event:attr("Rx_role").defaultsTo("peer", standardError("Rx_role"))
-      Tx_host       = event:attr("Tx_host")
-      Tx_role       = event:attr("Tx_role").defaultsTo("peer", standardError("Tx_role"))
-      common_Tx     = event:attr("common_Tx").defaultsTo("no_Tx", standardError("common_Tx"))
-      channel_type  = event:attr("channel_type").defaultsTo("subs", standardError("channel_type"))
-      status        = event:attr("status").defaultsTo("", standardError("status"))
-      Tx            = event:attr("Tx").defaultsTo("", standardError("Tx"))
-      pending_entry = {
-        "name"      : name,
-        "Rx_role"   : Rx_role,
-        "Tx_role"   : Tx_role,
-        "Tx_host"   : Tx_host,
-        "Tx"        : Tx,
-        "status"    : status
-      }.klog("pending entry")
+      pending_entry = pending_entry(event:attr("status"))
+                        .put(["Tx"],event:attr("Tx"))
+                        //.klog("pending entry")
     }
-      engine:newChannel(wrangler:myself(){"id"}, name ,channel_type) setting(channel); // create Rx
+    if( not pending_entry{"Tx"}.isnull()) then
+      engine:newChannel(wrangler:myself(){"id"}, pending_entry{"name"} ,event:attr("channel_type").defaultsTo("Tx_Rx","Tx_Rx channel_type used.")) setting(channel) // create Rx
       //wrangler:createChannel(wrangler:myself(){"id"}, name ,channel_type) setting(channel); // create Rx
-    always { 
-      newBus = pending_entry.put(["Rx"],channel.id);
-      ent:subscriptions := buses().put( [newBus.name] , newBus );
-      raise wrangler event "inbound_pending_subscription_added" // API event
-          attributes event:attrs();
+    fired { 
+      newBus = pending_entry.put(["Rx"],channel{"id"});
+      ent:Tx_Rx := buses().put( [newBus{"name"}] , newBus );
+      raise wrangler event "inbound_pending_subscription_added" attributes event:attrs(); // API event
     } 
+    else {
+      raise wrangler event "no_Tx_failure" attributes  event:attrs() // API event
+    }
   }
 
-rule approveInboundPendingSubscription { 
+  rule approveInboundPendingSubscription { 
     select when wrangler pending_subscription_approval
-    pre{ bus = buses(){event:attr("name")}.klog("bus") }
+    pre{ bus = buses(){event:attr("name")} }
       event:send({
           "eci": bus{"Tx"},
           "domain": "wrangler", "type": "pending_subscription_approved",
@@ -313,14 +239,12 @@ rule approveInboundPendingSubscription {
                       .put({"Tx"     : event:attr("Tx")})
     }
     always{
-      ent:subscriptions := buses.put([updatedBus.name],updatedBus);
-      raise wrangler event "subscription_added" attributes { // API event
-        "bus" : bus
-      }
+      ent:Tx_Rx := buses.put([updatedBus{"name"}],updatedBus);
+      raise wrangler event "subscription_added" attributes { "bus" : bus }// API event
     } 
   }
 
-rule addInboundSubscription { 
+  rule addInboundSubscription { 
     select when wrangler pending_subscription_approved status re#inbound#
     pre{
       buses      = buses()
@@ -328,34 +252,27 @@ rule addInboundSubscription {
       updatedBus = bus.put({"status" : "established"})
     }
     always {
-      ent:subscriptions := buses.put([updatedBus.name],updatedBus);
-      raise wrangler event "subscription_added" attributes {// API event
-        "bus" : bus
-      }
+      ent:Tx_Rx := buses.put([updatedBus{"name"}],updatedBus);
+      raise wrangler event "subscription_added" attributes { "bus" : bus }// API event
     }
   }
-
 
   rule cancelSubscription {
     select when wrangler subscription_cancellation
             or  wrangler inbound_subscription_rejection
             or  wrangler outbound_subscription_cancellation
     pre{
-      name    = event:attr("name")
-      buses   = buses()
-      bus     = buses{name}
+      bus     = buses(){event:attr("name")}
       Tx_host = bus{"Tx_host"}
-      Tx      = bus{"common_Tx"}.defaultsTo(bus{"Tx"})
+      Tx      = bus{"Tx"}.defaultsTo(bus{"common_Tx"})
     }
     event:send({
           "eci"   : Tx,
           "domain": "wrangler", "type": "subscription_removal",
-          "attrs" : { "name": name }
-          }, subscriber_host)
+          "attrs" : { "name": event:attr("name") }
+          }, Tx_host)
     always {
-      raise wrangler event "subscription_removal" attributes {
-        "name" : name
-      }
+      raise wrangler event "subscription_removal" attributes { "name" : event:attr("name") }
     }
   } 
 
@@ -366,14 +283,40 @@ rule addInboundSubscription {
       bus        = buses{event:attr("name")}
       updatedBus = buses.delete(bus{"name"})
     }
-    engine:removeChannel(bus{"Rx"})
-    //wrangler:removeChannel ... 
+    engine:removeChannel(bus{"Rx"}) //wrangler:removeChannel ... 
     always {
-      ent:subscriptions := updatedBus;
-      raise wrangler event "subscription_removed" attributes {// API event
-        "bus" : bus
-      }
+      ent:Tx_Rx := updatedBus;
+      raise wrangler event "subscription_removed" attributes { "bus" : bus } // API event
     } 
-  } 
+  }
 
+  rule autoAccept {
+    select when wrangler inbound_pending_subscription_added
+    pre{
+      /*autoAcceptConfig{
+        var : [regex_str,..,..]
+      }*/
+      matches = ent:autoAcceptConfig.map(function(regs,k) { 
+                              var = event:attr(k);
+                              matches = not var.isnull() => regs.map(function(regex_str){ var.match(regex_str)}).any( function(bool){ bool == true }) | false;
+                              matches }).values().any( function(bool){ bool == true })
+    }
+    if matches.klog("matches") then noop()
+    fired {
+      raise wrangler event "pending_subscription_approval" attributes event:attrs(); //{"name":event:attr("name")}; // only raise event with name ?      
+      raise wrangler event "auto_accepted_Tx_Rx_request" attributes event:attrs(); // API event  
+    }// else ...
+  }
+
+  rule autoAcceptConfigUpdate {
+    select when wrangler autoAcceptConfigUpdate
+    pre{ config = autoAcceptConfig() }
+    if (event:attr("variable") && event:attr("regex_str") ) then noop()
+    fired {
+      ent:autoAcceptConfig := config.put([event:attr("variable")],config{event:attr("variable")}.defaultsTo([]).append([event:attr("regex_str")])); // possible to add the same regex_str multiple times.
+    }
+    else {
+      raise wrangler event "autoAcceptConfigUpdate_failure" attributes event:attrs() // API event
+    }
+  }
 }
