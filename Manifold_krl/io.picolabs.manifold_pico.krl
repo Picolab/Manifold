@@ -26,7 +26,7 @@ ruleset io.picolabs.manifold_pico {
       manifold_subs = subscription:buses(["Rx_role"],"manifold;master").map(function(bus){bus.values().head(){"Tx"}});
       Tx_RxS        = manifold_subs.filter(function(Tx){ not Tx.isnull() }).klog("busses");
       spannedTx     = Tx_RxS.map(function(Tx){ span(Tx) }).reduce(function(a,b){ a.append(b) });
-      Tx_RxS.append(spannedTx).klog("spanning tree.");
+      Tx_RxS.append(spannedTx);
     }
 
     span = function(Tx){
@@ -88,17 +88,18 @@ ruleset io.picolabs.manifold_pico {
                     "common_Tx"   : wrangler:skyQuery( eci , "io.picolabs.pico", "channel",{"value" : "common_Rx"}){"channels"}{"id"}/*{["channels","id"]}*/,
                     "channel_type": "Manifold",
                     "Tx_Rx_Type"  : "Manifold" };  
-      ent:thingsPos := ent:thingsPos.defaultsTo({});
-      ent:thingsPos := ent:thingsPos.put([event:attr("name")], {
-        "x": 0,
-        "y": 0,
-        "w": 3,
-        "h": 2.25,
-        "minw": 3,
-        "minh": 2.25,
-        "maxw": 8,
-        "maxh": 5,
-        "color": "#cccccc"});
+      ent:thingsPos := ent:thingsPos.defaultsTo({}).put([event:attr("name")], 
+                          {
+                            "x"   : 0,
+                            "y"   : 0,
+                            "w"   : 3,
+                            "h"   : 2.25,
+                            "minw": 3,
+                            "minh": 2.25,
+                            "maxw": 8,
+                            "maxh": 5,
+                            "color": "#cccccc"
+                            });
       ent:thingsUpdate := time:now();
     }
   }
@@ -109,10 +110,10 @@ ruleset io.picolabs.manifold_pico {
     noop()
     fired {
       ent:thingsPos := ent:thingsPos.defaultsTo({});
-      ent:thingsPos := ent:thingsPos.put([event:attr("name"), "x"], event:attr("x").as("Number"));
-      ent:thingsPos := ent:thingsPos.put([event:attr("name"), "y"], event:attr("y").as("Number"));
-      ent:thingsPos := ent:thingsPos.put([event:attr("name"), "w"], event:attr("w").as("Number"));
-      ent:thingsPos := ent:thingsPos.put([event:attr("name"), "h"], event:attr("h").as("Number"));
+      ent:thingsPos := ent:thingsPos{event:attr("name")}.put(["x"], event:attr("x").as("Number"))
+                                                        .put(["y"], event:attr("y").as("Number"))
+                                                        .put(["w"], event:attr("w").as("Number"))
+                                                        .put(["h"], event:attr("h").as("Number"));
     }
   }
 
@@ -123,8 +124,7 @@ ruleset io.picolabs.manifold_pico {
       send_directive("Attempting to color Thing",{"thing":event:attr("dname")})
     }
     fired{
-      ent:thingsPos := ent:thingsPos.defaultsTo({});
-      ent:thingsPos := ent:thingsPos.put([event:attr("dname"), "color"], event:attr("color"));
+      ent:thingsPos := ent:thingsPos.defaultsTo({}).put([event:attr("dname"), "color"], event:attr("color"));
     }else{
       //send_directive("Missing a name for your Thing!")
     }
