@@ -73,7 +73,11 @@ ruleset io.picolabs.manifold_pico {
   rule thingCompleted{
     select when wrangler child_initialized where rs_attrs{"event_type"} == "manifold_create_thing"
     pre{eci = event:attr("eci") }
-      noop()
+      event:send(
+        { "eci": eci,
+          "domain": "wrangler", "type": "autoAcceptConfigUpdate",
+          "attrs": {"variable"    : "Tx_Rx_Type",
+                    "regex_str"   : "Manifold" }})
     always{
       raise wrangler event "subscription" 
         attributes {"rid"         : "io.picolabs.thing",
@@ -81,7 +85,8 @@ ruleset io.picolabs.manifold_pico {
                     "Rx_role"     : "manifold"+";"+"master",
                     "Tx_role"     : "manifold"+";"+"slave",
                     "common_Tx"   : wrangler:skyQuery( eci , "io.picolabs.pico", "channel",{"value" : "common_Rx"}){"channels"}{"id"}/*{["channels","id"]}*/,
-                    "channel_type": "Manifold" };  
+                    "channel_type": "Manifold",
+                    "Tx_Rx_Type"  : "Manifold" };  
       ent:thingsPos := ent:thingsPos.defaultsTo({});
       ent:thingsPos := ent:thingsPos.put([event:attr("name")], {
         "x": 0,
