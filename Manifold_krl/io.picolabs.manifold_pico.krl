@@ -2,13 +2,13 @@ ruleset io.picolabs.manifold_pico {
   meta {
     use module io.picolabs.pico alias wrangler
     use module io.picolabs.Tx_Rx alias subscription
-    shares __testing, getManifoldInfo
-    provides getManifoldInfo
+    shares subscriptionSpanningTree ,__testing, getManifoldInfo
+    provides getManifoldInfo, subscriptionSpanningTree,__testing
   }
   global {
     __testing =
-      { "queries": [ { "name": "__testing", "name":"getManifoldPico" },
-                     { "name": "__testing", "name":"getManifoldInfo" }],
+      { "queries": [ { "name":"getManifoldPico" },
+                     { "name": "subscriptionSpanningTree" }],
         "events": [ { "domain": "manifold", "type": "create_thing",
                       "attrs": [ "name" ] } ] }
 
@@ -21,21 +21,22 @@ ruleset io.picolabs.manifold_pico {
         }
       }
     }
+
     subscriptionSpanningTree = function(){
-      manifold_subs = subscription:buses(["Rx_role"],"manifold;master");
-      span(manifold_subs);
+      manifold_subs = subscription:buses(["Rx_role"],"manifold;master").map(function(bus){bus.values().head(){"Tx"}});
+      Tx_RxS        = manifold_subs.filter(function(Tx){ not Tx.isnull() }).klog("busses");
+      spannedTx     = Tx_RxS.map(function(Tx){ span(Tx) }).reduce(function(a,b){ a.append(b) });
+      Tx_RxS.append(spannedTx).klog("spanning tree.");
     }
 
-    span = function(bus){
-      moreChildren = wrangler:skyQuery(bus{"Tx"}, "io.picolabs.Tx_Rx", "buses",{"collectBy" : ["Rx_role"],"filterValue":"manifold;master"}).klog("Sky query result: ");
+    span = function(Tx){
+      Txs = wrangler:skyQuery(Tx, "io.picolabs.Tx_Rx", "buses",{"collectBy" : ["Rx_role"],"filterValue":"manifold;master"}).map(function(bus){bus.values().head(){"Tx"}}).klog("Sky query result: ");
 
-      gatherbusessbuses = function(bus){
-        arrayOfBusArrays = bus.map(function(sub){ span(sub.klog("bus child: ")) }).klog("More,bus child: ");
-        arrayOfBusArrays.reduce(function(a,b){ a.append(b) });
+      spanSpan = function(Txs){
+        arrayOfTxArrays = Txs.map(function(_Tx){ span(_Tx) }).klog("More,bus child: ");
+        arrayOfTxArrays.reduce(function(a,b){ a.append(b) });
       };
-
-      result = (bus.length() == 0) => [] | bus.append(gatherbusessbuses(bus));
-      result
+       ( (Txs.length() == 0) => [] | Txs.append( spanSpan(Txs) ) );
     }
     
   }
