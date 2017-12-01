@@ -27,23 +27,24 @@ comunication bus structure.
 {
   <name>: {
           "name":"Test",
-          "common_Tx":""}} //only in originating bus
-          "Tx":"",
-          "Rx":"",
-          "Tx_role":"",
-          "Rx_role":"",
-          "status":"",
-          "Tx_host": ""
-} 
+          "common_Tx":""}} //only in originating bus, the original channel on which the two picos are introduced to each other. Pico B's well known receiving identifier
+          "Tx":"", //The channel identifier this pico will send events to
+          "Rx":"", //The channel identifier this pico will be listening and receiving events on
+          "Tx_role":"", //The subscription role or purpose that the pico on the other side of the subscription serves
+          "Rx_role":"", //The role this pico serves, or this picos purpose in relation to the subscription
+          "status":"", //The current state of the subscription acceptance. "Inbound" refers to a pico considering acceptance of
+                       //a subscription. "Outbound" refers to a pico that has sent a request to another, and is awaiting acceptance.
+          "Tx_host": "" //the host location of the other pico if that pico is running on a separate engine
+}
 
       buses([collectBy[, filterValue]]) with no arguments returns the value of ent:Tx_Rx (the subscriptions map)
       parameters:
         collectBy - if filterValue is omitted, the string or hashpath,
           that indexes the subscriptions map values used to collect()
-          each subscription map by. 
+          each subscription map by.
           For example if the subscriptions map is
           {
-            "ns:n1": {
+            "ns:n1": {//??
               "name": "ns:n1",
               "attributes": {
                 "my_role": "peer",
@@ -84,7 +85,7 @@ comunication bus structure.
         })
       }()
     }
-    // this only creates 5 random names; if none are unique keep prepending '_' and trying again
+    // this only creates 5 random names; if none are unique keep appending '_' and try again
     randomName = function(name_base){
         base = name_base.defaultsTo("");
         buses = buses();
@@ -98,14 +99,14 @@ comunication bus structure.
     }
     pending_entry = function(status){
       {
-        "name"         : event:attr("name"),
+        "name"         : event:attr("name"),//does this even work in a function?
         "Rx_role"      : event:attr("Rx_role").defaultsTo("peer", "peer used as Rx_role"),
         "Tx_role"      : event:attr("Tx_role").defaultsTo("peer", "peer used as Tx_role"),
         "Tx_host"      : event:attr("Tx_host"),
         "status"       : status
       }
     }
-    autoAcceptConfig = function(){ 
+    autoAcceptConfig = function(){
       ent:autoAcceptConfig.defaultsTo({})
     }
   }
@@ -121,10 +122,14 @@ comunication bus structure.
       raise Tx_Rx event "common_Rx_created" attributes event:attrs();
     }
     else{
-      raise Tx_Rx event "common_Rx_not_created" attributes event:attrs(); //exists 
+      raise Tx_Rx event "common_Rx_not_created" attributes event:attrs(); //exists
     }
   }
 
+  //START OF A SUBSCRIPTION'S CREATION
+  //For the following comments, consider picoA sending the request to picoB
+
+  //First: check the subscription name for uniqueness in picoA
   rule NameCheck {
     select when wrangler subscription
     if(checkName(event:attr("name") || randomName().klog("random name") )) then noop()
@@ -134,8 +139,11 @@ comunication bus structure.
     else{
       raise wrangler event "duplicate_name_Tx_Rx_failure" attributes  event:attrs() // API event
     }
-  }
+  }//end NameCheck rule
 
+
+
+  //Second: Create a new subscription in picoA with the status "outbound" and add it to the subscriptions list
   rule createMySubscription {
     select when wrangler checked_name_Tx_Rx
     pre {
@@ -145,23 +153,25 @@ comunication bus structure.
     }
     if( not pending_entry{"common_Tx"}.isnull()) // check if we have someone to send a request too
     then every {
-      engine:newChannel(wrangler:myself(){"id"}, event:attr("name") , channel_type) setting(channel); // create Rx
-      //wrangler:createChannel(wrangler:myself(){"id"}, name ,channel_type) setting(channel); // create Rx
+      engine:newChannel(meta:picoId, event:attr("name") , channel_type) setting(channel); // create Rx
+      //wrangler:createChannel(meta:picoId, event:attr("name") ,channel_type) setting(channel); // create Rx
     }
     fired {
       newBus = pending_entry.put(["Rx"],channel{"id"});
-      ent:Tx_Rx := buses().put([newBus{"name"}] , newBus );
+      ent:Tx_Rx := buses().put([newBus{"name"}] , newBus ); //add the new subscription to the subscription list
       raise wrangler event "pending_subscription" attributes event:attrs().put(newBus.put(["channel_type"], channel_type)) // send channel type but dont store in ent:
-    } 
+    }
     else {
       raise wrangler event "no_common_Tx_failure" attributes  event:attrs() // API event
     }
-  }
-  
+  }//end createMySubscription rule
+
+
+
   rule sendSubscribersSubscribe {
     select when wrangler pending_subscription status re#outbound#
       event:send({
-          "eci"   : event:attr("common_Tx").klog(">> sent Tx_Rx request to >>"), 
+          "eci"   : event:attr("common_Tx").klog(">> sent Tx_Rx request to >>"),
           "domain": "wrangler", "type": "pending_subscription",
           "attrs" : event:attrs().put(["status"],"inbound")
                                  .put(["Rx_role"], event:attr("Tx_role"))
@@ -173,9 +183,9 @@ comunication bus structure.
 
  rule addOutboundPendingSubscription {
     select when wrangler pending_subscription status re#outbound#
-    always { 
+    always {
       raise wrangler event "outbound_pending_subscription_added" attributes event:attrs()// API event
-    } 
+    }
   }
 
   rule InboundNameCheck {
@@ -192,7 +202,7 @@ comunication bus structure.
     }
   }
 
-  rule addInboundPendingSubscription { 
+  rule addInboundPendingSubscription {
     select when wrangler checked_name_inbound
    pre {
       pending_entry = pending_entry(event:attr("status"))
@@ -202,23 +212,23 @@ comunication bus structure.
     if( not pending_entry{"Tx"}.isnull()) then
       engine:newChannel(wrangler:myself(){"id"}, pending_entry{"name"} ,event:attr("channel_type").defaultsTo("Tx_Rx","Tx_Rx channel_type used.")) setting(channel) // create Rx
       //wrangler:createChannel(wrangler:myself(){"id"}, name ,channel_type) setting(channel); // create Rx
-    fired { 
+    fired {
       newBus = pending_entry.put(["Rx"],channel{"id"});
       ent:Tx_Rx := buses().put( [newBus{"name"}] , newBus );
       raise wrangler event "inbound_pending_subscription_added" attributes event:attrs(); // API event
-    } 
+    }
     else {
       raise wrangler event "no_Tx_failure" attributes  event:attrs() // API event
     }
   }
 
-  rule approveInboundPendingSubscription { 
+  rule approveInboundPendingSubscription {
     select when wrangler pending_subscription_approval
     pre{ bus = buses(){event:attr("name")} }
       event:send({
           "eci": bus{"Tx"},
           "domain": "wrangler", "type": "pending_subscription_approved",
-          "attrs": {"Tx"     : bus{"Rx"} , 
+          "attrs": {"Tx"     : bus{"Rx"} ,
                     "status" : "outbound",
                     "name"   : bus{"name"} }
           }, bus{"Tx_host"})
@@ -227,10 +237,10 @@ comunication bus structure.
         "name" : bus{"name"},
         "status" : "inbound"
       }
-    } 
+    }
   }
 
-  rule addOutboundSubscription { 
+  rule addOutboundSubscription {
     select when wrangler pending_subscription_approved status re#outbound#
     pre{
       buses      = buses()
@@ -241,10 +251,10 @@ comunication bus structure.
     always{
       ent:Tx_Rx := buses.put([updatedBus{"name"}],updatedBus);
       raise wrangler event "subscription_added" attributes { "bus" : bus }// API event
-    } 
+    }
   }
 
-  rule addInboundSubscription { 
+  rule addInboundSubscription {
     select when wrangler pending_subscription_approved status re#inbound#
     pre{
       buses      = buses()
@@ -274,7 +284,7 @@ comunication bus structure.
     always {
       raise wrangler event "subscription_removal" attributes { "name" : event:attr("name") }
     }
-  } 
+  }
 
   rule removeSubscription {
     select when wrangler subscription_removal
@@ -283,11 +293,11 @@ comunication bus structure.
       bus        = buses{event:attr("name")}
       updatedBus = buses.delete(bus{"name"})
     }
-    engine:removeChannel(bus{"Rx"}) //wrangler:removeChannel ... 
+    engine:removeChannel(bus{"Rx"}) //wrangler:removeChannel ...
     always {
       ent:Tx_Rx := updatedBus;
       raise wrangler event "subscription_removed" attributes { "bus" : bus } // API event
-    } 
+    }
   }
 
   rule autoAccept {
@@ -296,15 +306,15 @@ comunication bus structure.
       /*autoAcceptConfig{
         var : [regex_str,..,..]
       }*/
-      matches = ent:autoAcceptConfig.map(function(regs,k) { 
+      matches = ent:autoAcceptConfig.map(function(regs,k) {
                               var = event:attr(k);
                               matches = not var.isnull() => regs.map(function(regex_str){ var.match(regex_str)}).any( function(bool){ bool == true }) | false;
                               matches }).values().any( function(bool){ bool == true })
     }
     if matches.klog("matches") then noop()
     fired {
-      raise wrangler event "pending_subscription_approval" attributes event:attrs(); //{"name":event:attr("name")}; // only raise event with name ?      
-      raise wrangler event "auto_accepted_Tx_Rx_request" attributes event:attrs(); // API event  
+      raise wrangler event "pending_subscription_approval" attributes event:attrs(); //{"name":event:attr("name")}; // only raise event with name ?
+      raise wrangler event "auto_accepted_Tx_Rx_request" attributes event:attrs(); // API event
     }// else ...
   }
 
