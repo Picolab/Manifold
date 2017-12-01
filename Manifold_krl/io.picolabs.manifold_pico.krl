@@ -1,13 +1,15 @@
 ruleset io.picolabs.manifold_pico {
   meta {
     use module io.picolabs.pico alias wrangler
-    shares __testing, getManifoldInfo
-    provides getManifoldInfo
+    use module io.picolabs.Tx_Rx alias subscription
+    shares subscriptionSpanningTree ,__testing, getManifoldInfo
+    provides getManifoldInfo, subscriptionSpanningTree,__testing
   }
   global {
     __testing =
-      { "queries": [ { "name": "__testing", "name":"getManifoldPico" },
-                     { "name": "__testing", "name":"getManifoldInfo" }],
+      { "queries": [ { "name":"getManifoldPico" },
+                     { "name": "getManifoldInfo" },
+                     { "name": "subscriptionSpanningTree" }],
         "events": [ { "domain": "manifold", "type": "create_thing",
                       "attrs": [ "name" ] } ] }
 
@@ -21,6 +23,24 @@ ruleset io.picolabs.manifold_pico {
         }
       }
     }
+
+    subscriptionSpanningTree = function(){
+      manifold_subs = subscription:buses(["Rx_role"],"manifold;master").map(function(bus){bus.values().head(){"Tx"}});
+      Tx_RxS        = manifold_subs.filter(function(Tx){ not Tx.isnull() }).klog("busses");
+      spannedTx     = Tx_RxS.map(function(Tx){ span(Tx) }).reduce(function(a,b){ a.append(b) });
+      Tx_RxS.append(spannedTx);
+    }
+
+    span = function(Tx){
+      Txs = wrangler:skyQuery(Tx, "io.picolabs.Tx_Rx", "buses",{"collectBy" : ["Rx_role"],"filterValue":"manifold;master"}).map(function(bus){bus.values().head(){"Tx"}}).klog("Sky query result: ");
+
+      spanSpan = function(Txs){
+        arrayOfTxArrays = Txs.map(function(_Tx){ span(_Tx) }).klog("More,bus child: ");
+        arrayOfTxArrays.reduce(function(a,b){ a.append(b) });
+      };
+       ( (Txs.length() == 0) => [] | Txs.append( spanSpan(Txs) ) );
+    }
+    
   }
 
   rule createThing {
@@ -31,7 +51,8 @@ ruleset io.picolabs.manifold_pico {
     }
     fired{
       raise wrangler event "child_creation"
-        attributes event:attrs().put({"event_type": "manifold_create_thing"/*,"rids":"io.manifold.thing;io.manifold.timeline;io.manifold.safeNmind;io.manifold.journal"*/})
+        attributes event:attrs().put({"event_type": "manifold_create_thing"})
+                                .put({"rids":"io.picolabs.thing;io.picolabs.Tx_Rx"})
     }else{
       //send_directive("Missing a name for your Thing!")
     }
@@ -55,12 +76,21 @@ ruleset io.picolabs.manifold_pico {
 
   rule thingCompleted{
     select when wrangler child_initialized where rs_attrs{"event_type"} == "manifold_create_thing"
-    pre{}
-    event:send(
-        { "eci": event:attr("eci"),
-          "domain": "wrangler", "type": "install_rulesets_requested",
-          "attrs": {"rid":"io.picolabs.thing"} })
-    fired{
+    pre{eci = event:attr("eci") }
+      event:send(
+        { "eci": eci,
+          "domain": "wrangler", "type": "autoAcceptConfigUpdate",
+          "attrs": {"variable"    : "Tx_Rx_Type",
+                    "regex_str"   : "Manifold" }})
+    always{
+      raise wrangler event "subscription" 
+        attributes {"rid"         : "io.picolabs.thing",
+                    "name"        : "manifold"+";"+event:attr("name")+";"+time:now(),
+                    "Rx_role"     : "manifold"+";"+"master",
+                    "Tx_role"     : "manifold"+";"+"slave",
+                    "common_Tx"   : wrangler:skyQuery( eci , "io.picolabs.pico", "channel",{"value" : "common_Rx"}){"channels"}{"id"}/*{["channels","id"]}*/,
+                    "channel_type": "Manifold",
+                    "Tx_Rx_Type"  : "Manifold" };  
       ent:thingsUpdate := time:now();
       ent:thingsPos := ent:thingsPos.defaultsTo({}).put([event:attr("name")], {
         "x": 0,
@@ -72,8 +102,8 @@ ruleset io.picolabs.manifold_pico {
         "maxw": 8,
         "maxh": 5
       });
-      ent:thingsColor := ent:thingsColor.defaultsTo({}).put([event:attr("dname")], {
-        "color": event:attr("color")
+      ent:thingsColor := ent:thingsColor.defaultsTo({}).put([event:attr("name")], {
+        "color": "#eceff1"
       });
     }
   }

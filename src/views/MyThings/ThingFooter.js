@@ -20,7 +20,7 @@ class ThingFooter extends Component{
 
 
     return(
-      <div className="card-footer" style={{"background-color": this.props.color, overflow:"hidden",  textAlign: "center", minHeight:"40px"}}>
+      <div className="card-footer" style={{"backgroundColor": this.props.color, overflow:"hidden",  textAlign: "center", minHeight:"40px"}}>
         <span>
           {footerItems}
         </span>
