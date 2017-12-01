@@ -17,25 +17,22 @@ ruleset io.picolabs.Tx_Rx {
                   "events": [ { "domain": "wrangler", "type": "subscription",
                                 "attrs": [ "name","Rx_role","Tx_role","common_Tx","channel_type","wild"] },
                               { "domain": "wrangler", "type": "pending_subscription_approval",
-                                "attrs": [ "name" ] },
+                                "attrs": [ "Rx" ] },
                               { "domain": "wrangler", "type": "autoAcceptConfigUpdate",
                                 "attrs": [ "variable", "regex_str" ] },
                               { "domain": "wrangler", "type": "subscription_cancellation",
                                 "attrs": [ "name" ] } ]}
 /*
 comunication bus structure.
-{
-  <name>: {
-          "name":"Test",
-          "common_Tx":""}} //only in originating bus
+[{
+          "common_Tx":"" //only in originating bus
           "Tx":"",
           "Rx":"",
           "Tx_role":"",
           "Rx_role":"",
           "status":"",
           "Tx_host": ""
-} 
-
+}]
       buses([collectBy[, filterValue]]) with no arguments returns the value of ent:Tx_Rx (the subscriptions map)
       parameters:
         collectBy - if filterValue is omitted, the string or hashpath,
@@ -74,13 +71,12 @@ comunication bus structure.
           returns the array indexed by "peer" above
     */
     buses = function(collectBy, filterValue){
-      subs = ent:Tx_Rx.defaultsTo({});
+      subs = ent:Tx_Rx.defaultsTo([]);
       collectBy.isnull() => subs | function(){
-        subArray = subs.keys().map(function(name){{}.put(name, subs{name})});
-        filterValue.isnull() => subArray.collect(function(sub){
-          sub.values()[0]{collectBy}
-        }) | subArray.filter(function(sub){
-          sub.values()[0]{collectBy} == filterValue
+        filterValue.isnull() => subs.collect(function(sub){
+          sub{collectBy}
+        }) | subs.filter(function(sub){
+          sub{collectBy} == filterValue
         })
       }()
     }
@@ -98,7 +94,6 @@ comunication bus structure.
     }
     pending_entry = function(status){
       {
-        "name"         : event:attr("name"),
         "Rx_role"      : event:attr("Rx_role").defaultsTo("peer", "peer used as Rx_role"),
         "Tx_role"      : event:attr("Tx_role").defaultsTo("peer", "peer used as Tx_role"),
         "Tx_host"      : event:attr("Tx_host"),
@@ -127,9 +122,10 @@ comunication bus structure.
 
   rule NameCheck {
     select when wrangler subscription
-    if(checkName(event:attr("name") || randomName().klog("random name") )) then noop()
+    pre{ name = event:attr("name") || randomName().klog("random name")  }
+    if(checkName(name)) then noop()
     fired{
-      raise wrangler event "checked_name_Tx_Rx" attributes  event:attrs()
+      raise wrangler event "checked_name_Tx_Rx" attributes  event:attrs().put(["name"], name)
     }
     else{
       raise wrangler event "duplicate_name_Tx_Rx_failure" attributes  event:attrs() // API event
@@ -150,7 +146,7 @@ comunication bus structure.
     }
     fired {
       newBus = pending_entry.put(["Rx"],channel{"id"});
-      ent:Tx_Rx := buses().put([newBus{"name"}] , newBus );
+      ent:Tx_Rx := buses().append( newBus );
       raise wrangler event "pending_subscription" attributes event:attrs().put(newBus.put(["channel_type"], channel_type)) // send channel type but dont store in ent:
     } 
     else {
@@ -204,8 +200,8 @@ comunication bus structure.
       //wrangler:createChannel(wrangler:myself(){"id"}, name ,channel_type) setting(channel); // create Rx
     fired { 
       newBus = pending_entry.put(["Rx"],channel{"id"});
-      ent:Tx_Rx := buses().put( [newBus{"name"}] , newBus );
-      raise wrangler event "inbound_pending_subscription_added" attributes event:attrs(); // API event
+      ent:Tx_Rx := buses().append( newBus );
+      raise wrangler event "inbound_pending_subscription_added" attributes event:attrs().put(["Rx"],channel{"id"}); // API event
     } 
     else {
       raise wrangler event "no_Tx_failure" attributes  event:attrs() // API event
@@ -214,7 +210,9 @@ comunication bus structure.
 
   rule approveInboundPendingSubscription { 
     select when wrangler pending_subscription_approval
-    pre{ bus = buses(){event:attr("name")} }
+    pre{ 
+      bus = buses().filter(function(bus){ bus{"Rx"} == event:attr("Rx").defaultsTo(meta:eci) }).head();
+    }
       event:send({
           "eci": bus{"Tx"},
           "domain": "wrangler", "type": "pending_subscription_approved",
@@ -224,7 +222,7 @@ comunication bus structure.
           }, bus{"Tx_host"})
     always {
       raise wrangler event "pending_subscription_approved" attributes {
-        "name" : bus{"name"},
+        "Rx" : event:attr("Rx").defaultsTo(meta:eci),
         "status" : "inbound"
       }
     } 
@@ -233,27 +231,29 @@ comunication bus structure.
   rule addOutboundSubscription { 
     select when wrangler pending_subscription_approved status re#outbound#
     pre{
-      buses      = buses()
-      bus        = buses{event:attr("name")}
-      updatedBus = bus.put({"status" : "established"})
-                      .put({"Tx"     : event:attr("Tx")})
+      updatedBus = buses().map(function(bus){ 
+                              ( bus{"Rx"} == event:attr("Rx").defaultsTo( meta:eci) )         =>  
+                                            bus.put({"status" : "established"})
+                                               .put({"Tx"     : event:attr("Tx")}) | 
+                                            bus })
     }
     always{
-      ent:Tx_Rx := buses.put([updatedBus{"name"}],updatedBus);
-      raise wrangler event "subscription_added" attributes { "bus" : bus }// API event
+      ent:Tx_Rx := updatedBus;
+      raise wrangler event "subscription_added" attributes event:attrs() // API event
     } 
   }
 
   rule addInboundSubscription { 
     select when wrangler pending_subscription_approved status re#inbound#
     pre{
-      buses      = buses()
-      bus        = buses{event:attr("name")}
-      updatedBus = bus.put({"status" : "established"})
+      updatedBus = buses().map(function(bus){ 
+                              ( bus{"Rx"} == event:attr("Rx").defaultsTo(meta:eci) )      =>  
+                                            bus.put({"status" : "established"}) | 
+                                            bus })
     }
     always {
-      ent:Tx_Rx := buses.put([updatedBus{"name"}],updatedBus);
-      raise wrangler event "subscription_added" attributes { "bus" : bus }// API event
+      ent:Tx_Rx := updatedBus;
+      raise wrangler event "subscription_added" attributes event:attrs() // API event
     }
   }
 
@@ -262,7 +262,7 @@ comunication bus structure.
             or  wrangler inbound_subscription_rejection
             or  wrangler outbound_subscription_cancellation
     pre{
-      bus     = buses(){event:attr("name")}
+      bus = buses().filter(function(bus){ bus{"Rx"} == event:attr("Rx").defaultsTo(meta:eci) }).head();
       Tx_host = bus{"Tx_host"}
       Tx      = bus{"Tx"}.defaultsTo(bus{"common_Tx"})
     }
@@ -272,20 +272,26 @@ comunication bus structure.
           "attrs" : { "name": event:attr("name") }
           }, Tx_host)
     always {
-      raise wrangler event "subscription_removal" attributes { "name" : event:attr("name") }
+      raise wrangler event "subscription_removal" attributes event:attrs()
     }
   } 
 
   rule removeSubscription {
     select when wrangler subscription_removal
     pre{
-      buses      = buses()
-      bus        = buses{event:attr("name")}
-      updatedBus = buses.delete(bus{"name"})
+      buses = buses()
+      bus = buses.filter(function(bus){ bus{"Rx"} == event:attr("Rx") }).head();
+      int   = -1 
+      rx = event:attr("Rx").defaultsTo(meta:eci)
+      index = buses.reduce(function(index, bus){
+                              index >= 0 => index | // index found
+                                bus{"Rx"} == rx => -index - 1 | // make index correct (positive) so we can know the index was found
+                                    index - 1 // 'increment' index
+                              }, -1) // start at '0'
     }
-    engine:removeChannel(bus{"Rx"}) //wrangler:removeChannel ... 
+      engine:removeChannel(bus{"Rx"}) //wrangler:removeChannel ... 
     always {
-      ent:Tx_Rx := updatedBus;
+      ent:Tx_Rx := buses.splice(int);
       raise wrangler event "subscription_removed" attributes { "bus" : bus } // API event
     } 
   }
@@ -303,8 +309,8 @@ comunication bus structure.
     }
     if matches.klog("matches") then noop()
     fired {
-      raise wrangler event "pending_subscription_approval" attributes event:attrs(); //{"name":event:attr("name")}; // only raise event with name ?      
-      raise wrangler event "auto_accepted_Tx_Rx_request" attributes event:attrs(); // API event  
+      raise wrangler event "pending_subscription_approval" attributes event:attrs();  
+      raise wrangler event "auto_accepted_Tx_Rx_request" attributes event:attrs();  
     }// else ...
   }
 
