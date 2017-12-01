@@ -155,18 +155,25 @@ MyThings.defaultProps = {
   rowHeight: 100
 };
 
-function addPropsToThings(thingsArray, thingPositions){
-  for (var thing of thingsArray)
-    thing.pos = thingPositions[thing.name] || {"x":0, "y":0, "w":3, "h":2.25, "minW":3, "minH":2.25, "maxW":8, "maxH":5};
-  return thingsArray.map(function(i, key, list) {
-    return {key: key.toString(), x: i.pos.x, y: i.pos.y, w: i.pos.w, h: i.pos.h, minW: i.pos.minw, minH: i.pos.minh, maxW: i.pos.maxw, maxH: i.pos.maxh, color: i.pos.color, name: i.name, id: i.id, eci: i.eci, parent_eci: i.parent_eci};
+function addPropsToThings(thingsArray){
+  for (var thing of thingsArray.things.children) {
+    thing.pos = thingsArray.thingsPosition[thing.name] || {"x":0, "y":0, "w":3, "h":2.25, "minW":3, "minH":2.25, "maxW":8, "maxH":5};
+    thing.color = thingsArray.thingsColor[thing.name] || {"color": "#eceff1"}
+  }
+  return thingsArray.things.children.map(function(i, key, list) {
+    return {
+      key: key.toString(), 
+      x: i.pos.x, y: i.pos.y, w: i.pos.w, h: i.pos.h, 
+      minW: i.pos.minw, minH: i.pos.minh, maxW: i.pos.maxw, maxH: i.pos.maxh, 
+      color: i.color.color, 
+      name: i.name, id: i.id, eci: i.eci, parent_eci: i.parent_eci};
   })
 };
 
 const mapStateToProps = state => {
   if(state.manifoldInfo.things){
     return {
-      things: addPropsToThings(state.manifoldInfo.things.things.children, state.manifoldInfo.things.thingsPosition)
+      things: addPropsToThings(state.manifoldInfo.things)
     }
   }else{
     return {}
