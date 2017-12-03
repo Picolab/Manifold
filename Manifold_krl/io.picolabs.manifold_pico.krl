@@ -8,6 +8,7 @@ ruleset io.picolabs.manifold_pico {
   global {
     __testing =
       { "queries": [ { "name":"getManifoldPico" },
+                     { "name": "getManifoldInfo" },
                      { "name": "subscriptionSpanningTree" }],
         "events": [ { "domain": "manifold", "type": "create_thing",
                       "attrs": [ "name" ] } ] }
@@ -17,6 +18,7 @@ ruleset io.picolabs.manifold_pico {
         "things": {
           "things": wrangler:children(),
           "thingsPosition": ent:thingsPos.defaultsTo({}),
+          "thingsColor": ent:thingsColor.defaultsTo({}),
           "lastUpdated": ent:thingsUpdate.defaultsTo("null")
         }
       }
@@ -64,6 +66,7 @@ ruleset io.picolabs.manifold_pico {
     }
     fired{
       ent:thingsPos := ent:thingsPos.filter(function(v,k){k != event:attr("name")});
+      ent:thingsColor := ent:thingsColor.filter(function(v,k){k != event:attr("name")});
       raise wrangler event "child_deletion"
         attributes event:attrs().put({"event_type": "manifold_remove_thing"})
     }else{
@@ -88,19 +91,20 @@ ruleset io.picolabs.manifold_pico {
                     "common_Tx"   : wrangler:skyQuery( eci , "io.picolabs.pico", "channel",{"value" : "common_Rx"}){"channels"}{"id"}/*{["channels","id"]}*/,
                     "channel_type": "Manifold",
                     "Tx_Rx_Type"  : "Manifold" };  
-      ent:thingsPos := ent:thingsPos.defaultsTo({}).put([event:attr("name")], 
-                          {
-                            "x"   : 0,
-                            "y"   : 0,
-                            "w"   : 3,
-                            "h"   : 2.25,
-                            "minw": 3,
-                            "minh": 2.25,
-                            "maxw": 8,
-                            "maxh": 5,
-                            "color": "#cccccc"
-                            });
       ent:thingsUpdate := time:now();
+      ent:thingsPos := ent:thingsPos.defaultsTo({}).put([event:attr("name")], {
+        "x": 0,
+        "y": 0,
+        "w": 3,
+        "h": 2.25,
+        "minw": 3,
+        "minh": 2.25,
+        "maxw": 8,
+        "maxh": 5
+      });
+      ent:thingsColor := ent:thingsColor.defaultsTo({}).put([event:attr("name")], {
+        "color": "#eceff1"
+      });
     }
   }
 
@@ -109,24 +113,27 @@ ruleset io.picolabs.manifold_pico {
     pre {}
     noop()
     fired {
-      ent:thingsPos := ent:thingsPos.defaultsTo({});
-      ent:thingsPos := ent:thingsPos{event:attr("name")}.put(["x"], event:attr("x").as("Number"))
-                                                        .put(["y"], event:attr("y").as("Number"))
-                                                        .put(["w"], event:attr("w").as("Number"))
-                                                        .put(["h"], event:attr("h").as("Number"));
+      ent:thingsPos := ent:thingsPos.defaultsTo({}).put([event:attr("name")], {
+        "x": event:attr("x").as("Number"),
+        "y": event:attr("y").as("Number"),
+        "w": event:attr("w").as("Number"),
+        "h": event:attr("h").as("Number"),
+        "minw": 3,
+        "minh": 2.25,
+        "maxw": 8,
+        "maxh": 5
+      });
     }
   }
 
   rule colorThing {
     select when manifold color_thing
     pre {}
-    if event:attr("dname") then every {
-      send_directive("Attempting to color Thing",{"thing":event:attr("dname")})
-    }
-    fired{
-      ent:thingsPos := ent:thingsPos.defaultsTo({}).put([event:attr("dname"), "color"], event:attr("color"));
-    }else{
-      //send_directive("Missing a name for your Thing!")
+    noop()
+    fired {
+      ent:thingsColor := ent:thingsColor.defaultsTo({}).put([event:attr("dname")], {
+        "color": event:attr("color")
+      });
     }
   }
 
