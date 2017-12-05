@@ -12,21 +12,25 @@ ruleset io.picolabs.Tx_Rx {
   }
 
  global{
-    __testing = { "queries": [  { "name": "established" },
+    __testing = { "queries": [  { "name": "wellKnown_Rx"} ,
+                                { "name": "established" },
                                 { "name": "outbound"} ,
                                 { "name": "inbound"} ,
-                                { "name": "wellKnown_Rx"} ,
                                 { "name": "autoAcceptConfig"} ],
                   "events": [ { "domain": "wrangler", "type": "subscription",
-                                "attrs": [ "name","Rx_role","Tx_role","wellKnown_Tx","channel_type","wild"] },
+                                "attrs": [ "wellKnown_Tx","Rx_role","Tx_role","name","channel_type","password"] },
                               { "domain": "wrangler", "type": "subscription",
                                 "attrs": [ "wellKnown_Tx","password"] },
                               { "domain": "wrangler", "type": "pending_subscription_approval",
                                 "attrs": [ "Rx" ] },
-                              { "domain": "wrangler", "type": "autoAcceptConfigUpdate",
-                                "attrs": [ "variable", "regex_str" ] },
                               { "domain": "wrangler", "type": "subscription_cancellation",
-                                "attrs": [ "Rx" ] } ]}
+                                "attrs": [ "Rx" ] },
+                              { "domain": "wrangler", "type": "inbound_rejection",
+                                "attrs": [ "Rx" ] },
+                              { "domain": "wrangler", "type": "outbound_cancellation",
+                                "attrs": [ "Rx" ] },
+                              { "domain": "wrangler", "type": "autoAcceptConfigUpdate",
+                                "attrs": [ "variable", "regex_str" ] } ]}
 /*
 ent:inbound [
   {
@@ -74,10 +78,9 @@ ent:established [
     wellKnown_Rx = function(){
       wrangler:channel("wellKnown_Rx"){"channels"}
     }
-      
-    indexOfRx = function(buses) { 
-      eci = event:attr("Rx").defaultsTo(meta:eci);
-      eqaulity = function(bus,eci){ bus{"Rx"} == eci };
+    indexOfRx = function(buses, _eci, _eqaulity) { 
+      eci = _eci.defaultsTo(event:attr("Rx").defaultsTo(meta:eci));
+      eqaulity = _eqaulity.isnull() =>  function(bus,eci){ bus{"Rx"} == eci } | _eqaulity ;
 
       findIndex = function(eqaul, value ,array, i){
         array.length() == 0 => 
@@ -89,19 +92,24 @@ ent:established [
 
       findIndex(eqaulity, eci, buses, 0)
     }
-
     findBus = function(buses){
-      buses.filter( function(bus){ bus{"Rx"} == event:attr("Rx").defaultsTo(meta:eci) }).head();
+      event:attr("Tx").isnull() => buses.filter( function(bus){ bus{"Rx"} == event:attr("Rx").defaultsTo(meta:eci) }).head() |
+                                   buses.filter( function(bus){ bus{"Tx"} == event:attr("Tx") }).head();
     }
     randomName = function(){
       random:word() 
     }
     pending_entry = function(){
-      {
-        "Rx_role"      : event:attr("Rx_role").defaultsTo("peer", "peer used as Rx_role"),
-        "Tx_role"      : event:attr("Tx_role").defaultsTo("peer", "peer used as Tx_role"),
-        "Tx_host"      : event:attr("Tx_host")
-      }
+      event:attr("Tx_host").isnull() => 
+                {
+                  "Rx_role"      : event:attr("Rx_role").defaultsTo("peer", "peer used as Rx_role"),
+                  "Tx_role"      : event:attr("Tx_role").defaultsTo("peer", "peer used as Tx_role")
+                } |
+                {
+                  "Rx_role"      : event:attr("Rx_role").defaultsTo("peer", "peer used as Rx_role"),
+                  "Tx_role"      : event:attr("Tx_role").defaultsTo("peer", "peer used as Tx_role"),
+                  "Tx_host"      : event:attr("Tx_host")
+                }
     }
 
   }
@@ -127,7 +135,7 @@ ent:established [
     pre {
       channel_name  = event:attr("name").defaultsTo(randomName())
       channel_type  = event:attr("channel_type").defaultsTo("Tx_Rx","Tx_Rx channel_type used.")
-      pending_entry = pending_entry().put(["wellKnown_Tx"],event:attr("wellKnown_Tx")) //.klog("pending entry")
+      pending_entry = pending_entry().put(["wellKnown_Tx"],event:attr("wellKnown_Tx")) 
     }
     if( not pending_entry{"wellKnown_Tx"}.isnull() ) then // check if we have someone to send a request too
       engine:newChannel(meta:picoId, channel_name, channel_type) setting(channel); // create Rx
@@ -148,7 +156,7 @@ ent:established [
   rule sendSubscribersSubscribe {
     select when wrangler pending_subscription status re#outbound#
       event:send({
-          "eci"   : event:attr("wellKnown_Tx").klog(">> sent Tx_Rx request to >>"),
+          "eci"   : event:attr("wellKnown_Tx"),
           "domain": "wrangler", "type": "pending_subscription",
           "attrs" : event:attrs().put(["status"],"inbound")
                                  .put(["Rx_role"], event:attr("Tx_role"))
@@ -168,7 +176,7 @@ ent:established [
   rule addInboundPendingSubscription {
     select when wrangler pending_subscription status re#inbound#
    pre {
-      pending_entry = pending_entry().put(["Tx"],event:attr("Tx")) //.klog("pending entry")
+      pending_entry = pending_entry().put(["Tx"],event:attr("Tx")) 
     }
     if( not pending_entry{"Tx"}.isnull()) then
       engine:newChannel(wrangler:myself(){"id"}, pending_entry{"name"} ,event:attr("channel_type").defaultsTo("Tx_Rx","Tx_Rx channel_type used.")) setting(channel) // create Rx
@@ -189,28 +197,25 @@ ent:established [
       event:send({
           "eci": bus{"Tx"},
           "domain": "wrangler", "type": "pending_subscription_approved",
-          "attrs": {"Tx"     : bus{"Rx"} ,
-                    "status" : "outbound",
-                    "name"   : bus{"name"} }
+          "attrs": {"_Tx"     : bus{"Rx"} ,
+                    "status" : "outbound" }
           }, bus{"Tx_host"})
     always {
-      raise wrangler event "pending_subscription_approved" attributes {
-        "Rx" : event:attr("Rx").defaultsTo(meta:eci),
-        "status" : "inbound"
-      }
+      raise wrangler event "pending_subscription_approved" attributes event:attrs().put(["status"],"inbound").put(["bus"],bus)
     }
   }
 
   rule addOutboundSubscription {
     select when wrangler pending_subscription_approved status re#outbound#
     pre{
-      outbound = outbound().klog("outbound")
-      bus      = findBus(outbound)
-      index    = indexOfRx(outbound).klog("index")
+      outbound = outbound()
+      bus      = findBus(outbound).put(["Tx"], event:attr("_Tx"))// tightly coupled attr, smells like bad code......
+                                  .delete(["wellKnown_Tx"])
+      index    = indexOfRx(outbound)
     }
     always{
       ent:established := established().append(bus);
-      ent:outbound    := outbound.splice(index,index + 1 ).klog("0,0");
+      ent:outbound    := outbound.splice(index,1);
       raise wrangler event "subscription_added" attributes event:attrs() // API event
     } 
   }
@@ -219,36 +224,33 @@ ent:established [
     select when wrangler pending_subscription_approved status re#inbound#
     pre{
       inbound = inbound()
-      bus     = findBus(inbound)
       index   = indexOfRx(inbound)
     }
     always {
-      ent:established := established().append(bus);
-      ent:inbound     := inbound.splice(index,index + 1);
+      ent:established := established().append( event:attr("bus") );
+      ent:inbound     := inbound.splice(index,1);
       raise wrangler event "subscription_added" attributes event:attrs() // API event
     }
   }
 
-  rule cancelSubscription {
+  rule cancelEstablished {
     select when wrangler subscription_cancellation
-            //or  wrangler inbound_subscription_rejection
-            //or  wrangler outbound_subscription_cancellation
     pre{
       bus     = findBus(established())
       Tx_host = bus{"Tx_host"}
     }
     event:send({
           "eci"   : bus{"Tx"},
-          "domain": "wrangler", "type": "subscription_removal",
-          "attrs" : { "name": event:attr("name") }
+          "domain": "wrangler", "type": "established_removal",
+          "attrs" : event:attrs().put(["Rx"],bus{"Tx"}) // change perspective
           }, Tx_host)
     always {
-      raise wrangler event "subscription_removal" attributes event:attrs()
+      raise wrangler event "established_removal" attributes event:attrs()
     }
   }
-
-  rule removeSubscription {
-    select when wrangler subscription_removal
+  
+  rule removeEstablished {
+    select when wrangler established_removal
     pre{
       buses = established()
       bus   = findBus(buses)
@@ -256,8 +258,70 @@ ent:established [
     }
       engine:removeChannel(bus{"Rx"}) //wrangler:removeChannel ... 
     always {
-      ent:established := buses.splice(index,index + 1);
+      ent:established := buses.splice(index,1);
       raise wrangler event "subscription_removed" attributes { "bus" : bus } // API event
+    }
+  }
+
+  rule cancelInbound {
+    select when wrangler inbound_rejection
+    pre{
+      bus     = findBus(inbound())
+      Tx_host = bus{"Tx_host"}
+    }
+    event:send({
+          "eci"   : bus{"Tx"},
+          "domain": "wrangler", "type": "outbound_removal",
+          "attrs" : event:attrs().put(["Rx"],bus{"Tx"})
+          }, Tx_host)
+    always {
+      raise wrangler event "inbound_removal" attributes event:attrs()
+    }
+  }
+
+  rule removeInbound {
+    select when wrangler inbound_removal
+    pre{
+      buses = inbound()
+      bus   = findBus(buses)
+      index = indexOfRx(buses,event:attr("Tx"), 
+                        (event:attr("Tx").isnull() => null | 
+                          function(bus,eci){ bus{"Tx"} == eci }))
+    }
+      engine:removeChannel(bus{"Rx"}) //wrangler:removeChannel ... 
+    always {
+      ent:inbound := buses.splice(index,1);
+      raise wrangler event "inbound_bus_removed" attributes { "bus" : bus } // API event
+    }
+  }
+
+  rule cancelOutbound {
+    select when wrangler outbound_cancellation
+    pre{
+      bus     = findBus(outbound())
+      Tx_host = bus{"Tx_host"}
+    }
+    event:send({
+          "eci"   : bus{"wellKnown_Tx"},
+          "domain": "wrangler", "type": "inbound_removal",
+          "attrs" : event:attrs().put(["Tx"],bus{"Rx"})
+          }, Tx_host)
+    always {
+      raise wrangler event "outbound_removal" attributes event:attrs()
+    }
+  }
+
+  rule removeOutbound {
+    select when wrangler outbound_removal
+    pre{
+      buses = outbound()
+      bus   = findBus(buses)
+      index = indexOfRx(buses)
+    }
+      engine:removeChannel(bus{"Rx"}) //wrangler:removeChannel ... 
+    always {
+      ent:outbound := buses.splice(index,1);
+      raise wrangler event "outbound_bus_removed" attributes { "bus" : bus } // API event
     }
   }
 
@@ -272,7 +336,7 @@ ent:established [
                               matches = not var.isnull() => regs.map(function(regex_str){ var.match(regex_str)}).any( function(bool){ bool == true }) | false;
                               matches }).values().any( function(bool){ bool == true })
     }
-    if matches.klog("matches") then noop()
+    if matches then noop()
     fired {
       raise wrangler event "pending_subscription_approval" attributes event:attrs();  
       raise wrangler event "auto_accepted_Tx_Rx_request" attributes event:attrs();  //API event
