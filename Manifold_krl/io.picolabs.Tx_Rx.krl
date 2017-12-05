@@ -13,7 +13,7 @@ ruleset io.picolabs.Tx_Rx {
 
  global{
     __testing = { "queries": [  { "name": "wellKnown_Rx"} ,
-                                { "name": "established" },
+                                { "name": "established" /*,"args":["key","value"]*/},
                                 { "name": "outbound"} ,
                                 { "name": "inbound"} ,
                                 { "name": "autoAcceptConfig"} ],
@@ -68,17 +68,24 @@ ent:established [
     autoAcceptConfig = function(){
       ent:autoAcceptConfig.defaultsTo({})
     }
-    established = function(){
-      ent:established.defaultsTo([])
+    established = function(key,value){
+      established = ent:established.defaultsTo([]);
+      not key.isnull() && not value.isnull() => filterOn(established , key, value) | established
     }
-    outbound = function(){//Tx_Pending
-      ent:outbound.defaultsTo([])
+    outbound = function(key,value){//Tx_Pending
+      outbound = ent:outbound.defaultsTo([]);
+      not key.isnull() && not value.isnull() => filterOn(outbound , key, value) | outbound
     }
-    inbound = function(){//Rx_Pending
-      ent:inbound.defaultsTo([])
+    inbound = function(key,value){//Rx_Pending
+      inbound = ent:inbound.defaultsTo([]);
+      not key.isnull() && not value.isnull() => filterOn(inbound , key, value) | inbound
     }
     wellKnown_Rx = function(){
       wrangler:channel("wellKnown_Rx"){"channels"}
+    }
+    
+    filterOn = function(array,key,value){
+      array.filter(function(bus){ bus{key} == value})
     }
     indexOfRx = function(buses, _eci, _eqaulity) { 
       eci = _eci.defaultsTo(event:attr("Rx").defaultsTo(meta:eci));
