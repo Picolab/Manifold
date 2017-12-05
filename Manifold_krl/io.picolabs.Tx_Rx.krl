@@ -160,7 +160,7 @@ ent:established [
                                  .put(["Rx_role"], event:attr("Tx_role"))
                                  .put(["Tx_role"], event:attr("Rx_role"))
                                  .put(["Tx"]     , event:attr("Rx"))
-                                 .put(["Tx_host"], event:attr("Tx_host").isnull() => null | meta:host)
+                                 .put(["Tx_host"], event:attr("Tx_host").isnull() => null | meta:host) // send our host as Tx_host if Tx_host was provided.
           }, event:attr("Tx_host"));
   }
 
@@ -177,7 +177,7 @@ ent:established [
       pending_entry = pending_entry().put(["Tx"],event:attr("Tx")) 
     }
     if( not pending_entry{"Tx"}.isnull()) then
-      engine:newChannel(wrangler:myself(){"id"}, pending_entry{"name"} ,event:attr("channel_type").defaultsTo("Tx_Rx","Tx_Rx channel_type used.")) setting(channel) // create Rx
+      engine:newChannel(wrangler:myself(){"id"}, event:attr("name") ,event:attr("channel_type").defaultsTo("Tx_Rx","Tx_Rx channel_type used.")) setting(channel) // create Rx
       //wrangler:createChannel(wrangler:myself(){"id"}, name ,channel_type) setting(channel); // create Rx
     fired {
       newBus       = pending_entry.put(["Rx"],channel{"id"});

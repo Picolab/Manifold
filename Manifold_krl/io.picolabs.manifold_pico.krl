@@ -24,21 +24,29 @@ ruleset io.picolabs.manifold_pico {
       }
     }
 
-    subscriptionSpanningTree = function(){
-      manifold_subs = subscription:buses(["Rx_role"],"manifold;master").map(function(bus){bus.values().head(){"Tx"}});
-      Tx_RxS        = manifold_subs.filter(function(Tx){ not Tx.isnull() }).klog("busses");
-      spannedTx     = Tx_RxS.map(function(Tx){ span(Tx) }).reduce(function(a,b){ a.append(b) });
-      Tx_RxS.append(spannedTx);
+    addSelf = function(busses){
+      busses.map(function(bus){ 
+        self = wrangler:skyQuery(bus{"Tx"}, "io.picolabs.pico", "myself");
+        bus.put(self);
+        });
     }
 
-    span = function(Tx){
-      Txs = wrangler:skyQuery(Tx, "io.picolabs.Tx_Rx", "buses",{"collectBy" : ["Rx_role"],"filterValue":"manifold;master"}).map(function(bus){bus.values().head(){"Tx"}}).klog("Sky query result: ");
+    subscriptionSpanningTree = function(){ //at root call all subscriptions
+      manifold_subs = subscription:established().klog("established()").filter(function(bus){ (bus{"Tx_role"} == "manifold_slave")}).klog("filtered subs on manifold_slave");
+      spannedTx     = manifold_subs.map(function(bus){ span(bus) }).reduce(function(a,b){ a.append(b) }); // for all children call established
+      addSelf(manifold_subs.append(spannedTx));
+    }
 
-      spanSpan = function(Txs){
-        arrayOfTxArrays = Txs.map(function(_Tx){ span(_Tx) }).klog("More,bus child: ");
+    span = function(bus){ // on a single subscription
+      //get all subscritpions
+      Txs = wrangler:skyQuery(bus{"Tx"}, "io.picolabs.Tx_Rx", "established").filter(function(bus){bus{"Tx_role"} == "manifold_slave" });
+
+      spanSpan = function(Txs){ // on each subscriptions 
+        arrayOfTxArrays = Txs.map(function(bus){ span( bus ) }); // get all subscritpions
         arrayOfTxArrays.reduce(function(a,b){ a.append(b) });
       };
-       ( (Txs.length() == 0) => [] | Txs.append( spanSpan(Txs) ) );
+      
+      (Txs.length() == 0) => [] | Txs.append( spanSpan(Txs) );
     }
     
   }
@@ -84,11 +92,10 @@ ruleset io.picolabs.manifold_pico {
                     "regex_str"   : "Manifold" }})
     always{
       raise wrangler event "subscription" 
-        attributes {"rid"         : "io.picolabs.thing",
-                    "name"        : "manifold"+";"+event:attr("name")+";"+time:now(),
-                    "Rx_role"     : "manifold"+";"+"master",
-                    "Tx_role"     : "manifold"+";"+"slave",
-                    "common_Tx"   : wrangler:skyQuery( eci , "io.picolabs.pico", "channel",{"value" : "common_Rx"}){"channels"}{"id"}/*{["channels","id"]}*/,
+        attributes {"name"        : event:attr("name"),
+                    "Rx_role"     : "manifold_master",
+                    "Tx_role"     : "manifold_slave",
+                    "wellKnown_Tx"   : wrangler:skyQuery( eci , "io.picolabs.Tx_Rx", "wellKnown_Rx"){"id"},
                     "channel_type": "Manifold",
                     "Tx_Rx_Type"  : "Manifold" };  
       ent:thingsUpdate := time:now();
