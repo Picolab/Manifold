@@ -18,6 +18,8 @@ ruleset io.picolabs.Tx_Rx {
                                 { "name": "inbound"} ,
                                 { "name": "autoAcceptConfig"} ],
                   "events": [ { "domain": "wrangler", "type": "subscription",
+                                "attrs": [ "wellKnown_Tx","Rx_role","Tx_role","name","channel_type","Tx_host","password"] },
+                              { "domain": "wrangler", "type": "subscription",
                                 "attrs": [ "wellKnown_Tx","Rx_role","Tx_role","name","channel_type","password"] },
                               { "domain": "wrangler", "type": "subscription",
                                 "attrs": [ "wellKnown_Tx","password"] },
@@ -100,16 +102,12 @@ ent:established [
       random:word() 
     }
     pending_entry = function(){
+      roles = event:attr("Rx_role").isnull() => {} | {
+                  "Rx_role"      : event:attr("Rx_role"),
+                  "Tx_role"      : event:attr("Tx_role")
+                }; 
       event:attr("Tx_host").isnull() => 
-                {
-                  "Rx_role"      : event:attr("Rx_role").defaultsTo("peer", "peer used as Rx_role"),
-                  "Tx_role"      : event:attr("Tx_role").defaultsTo("peer", "peer used as Tx_role")
-                } |
-                {
-                  "Rx_role"      : event:attr("Rx_role").defaultsTo("peer", "peer used as Rx_role"),
-                  "Tx_role"      : event:attr("Tx_role").defaultsTo("peer", "peer used as Tx_role"),
-                  "Tx_host"      : event:attr("Tx_host")
-                }
+                roles | roles.put(["Tx_host"] , event:attr("Tx_host"))
     }
 
   }
