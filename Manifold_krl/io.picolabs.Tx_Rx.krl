@@ -65,6 +65,9 @@ ent:established [
   },...,...
 ]
 */
+    publicKey = function(_eci){
+      wrangler:channel(_eci){"sovrin"}{"encryptionPublicKey"}
+    }
     autoAcceptConfig = function(){
       ent:autoAcceptConfig.defaultsTo({})
     }
@@ -81,7 +84,7 @@ ent:established [
       not key.isnull() && not value.isnull() => filterOn(inbound , key, value) | inbound
     }
     wellKnown_Rx = function(){
-      wrangler:channel("wellKnown_Rx"){"channels"}
+      wrangler:channel("wellKnown_Rx")
     }
     
     filterOn = function(array,key,value){
@@ -146,12 +149,18 @@ ent:established [
       engine:newChannel(meta:picoId, channel_name, channel_type) setting(channel); // create Rx
       //wrangler:createChannel(meta:picoId, event:attr("name") ,channel_type) setting(channel); // create Rx
     fired {
-      newBus        = pending_entry.put(["Rx"],channel{"id"});
+      newBus        = pending_entry.put({ "Rx"         : channel{"id"}
+                                          //"private_key": channel{"sovrin"}{"verifyKey"},// We should have a look up from eci vs storing keys again.
+                                          //"public_key" : channel{"sovrin"}{"encryptionPublicKey"}
+                                        });
       ent:outbound := outbound().append( newBus );
       raise wrangler event "pending_subscription" 
-        attributes event:attrs().put(newBus.put(["channel_type"], channel_type)
-                                           .put(["channel_name"], channel_name))
-                                           .put(["status"],"outbound") 
+        attributes event:attrs().put(newBus.put({"status"      : "outbound",
+                                                 "channel_name": channel_name,
+                                                 "channel_type": channel_type,
+                                                 //"verify_key" : channel{"sovrin"}{"verifyKey"}, this is a private key? Why should the other pico have it?
+                                                 "public_key"  : channel{"sovrin"}{"encryptionPublicKey"}
+                                                 });
     }
     else {
       raise wrangler event "no_wellKnown_Tx_failure" attributes  event:attrs() // API event
@@ -163,11 +172,12 @@ ent:established [
       event:send({
           "eci"   : event:attr("wellKnown_Tx"),
           "domain": "wrangler", "type": "pending_subscription",
-          "attrs" : event:attrs().put(["status"],"inbound")
-                                 .put(["Rx_role"], event:attr("Tx_role"))
-                                 .put(["Tx_role"], event:attr("Rx_role"))
-                                 .put(["Tx"]     , event:attr("Rx"))
-                                 .put(["Tx_host"], event:attr("Tx_host").isnull() => null | meta:host) // send our host as Tx_host if Tx_host was provided.
+          "attrs" : event:attrs().put("status"       : "inbound",
+                                      "Rx_role"      : event:attr("Tx_role"),
+                                      "Tx_role"      : event:attr("Rx_role"),
+                                      "Tx"           : event:attr("Rx"),
+                                      "Tx_host"      : event:attr("Tx_host").isnull() => null | meta:host, // send our host as Tx_host if Tx_host was provided.
+                                      "Tx_public_key": event:attr("public_key")
           }, event:attr("Tx_host"));
   }
 
@@ -184,10 +194,17 @@ ent:established [
       pending_entry = pending_entry().put(["Tx"],event:attr("Tx")) 
     }
     if( not pending_entry{"Tx"}.isnull()) then
-      engine:newChannel(wrangler:myself(){"id"}, event:attr("name") ,event:attr("channel_type").defaultsTo("Tx_Rx","Tx_Rx channel_type used.")) setting(channel) // create Rx
+      engine:newChannel(wrangler:myself(){"id"},
+                        event:attr("name") ,
+                        event:attr("channel_type")
+                        ) setting(channel) // create Rx
       //wrangler:createChannel(wrangler:myself(){"id"}, name ,channel_type) setting(channel); // create Rx
     fired {
-      newBus       = pending_entry.put(["Rx"],channel{"id"});
+      newBus       = pending_entry.put({"Rx" : channel{"id"},
+                                        //"private_key": channel{"sovrin"}{"verifyKey"},// We should have a look up from eci vs storing keys again.
+                                        //"public_key" : channel{"sovrin"}{"encryptionPublicKey"},
+                                        "Tx_public_key" : event:attr("Tx_public_key")
+                                       });
       ent:inbound := inbound().append( newBus );
       raise wrangler event "inbound_pending_subscription_added" attributes event:attrs().put(["Rx"],channel{"id"}); // API event
     } 
@@ -202,8 +219,9 @@ ent:established [
       event:send({
           "eci": bus{"Tx"},
           "domain": "wrangler", "type": "pending_subscription_approved",
-          "attrs": {"_Tx"     : bus{"Rx"} ,
-                    "status" : "outbound" }
+          "attrs": {"_Tx"           : bus{"Rx"} ,
+                    "_Tx_public_key": publicKey(bus{"Rx"}),
+                    "status"        : "outbound" }
           }, bus{"Tx_host"})
     always {
       raise wrangler event "pending_subscription_approved" attributes event:attrs().put(["status"],"inbound").put(["bus"],bus)
@@ -214,7 +232,9 @@ ent:established [
     select when wrangler pending_subscription_approved status re#outbound#
     pre{
       outbound = outbound()
-      bus      = findBus(outbound).put(["Tx"], event:attr("_Tx"))// tightly coupled attr, smells like bad code......
+      bus      = findBus(outbound).put({"Tx"           : event:attr("_Tx"),
+                                        "Tx_public_key": event:attr("_Tx_public_key")
+                                       })// tightly coupled attr, smells like bad code..
                                   .delete(["wellKnown_Tx"])
       index    = indexOfRx(outbound)
     }
@@ -348,7 +368,7 @@ ent:established [
     }// else ...
   }
 
-  rule autoAcceptConfigUpdate {
+  rule autoAcceptConfigUpdate { // consider single time use password
     select when wrangler autoAcceptConfigUpdate
     pre{ config = autoAcceptConfig() }
     if (event:attr("variable") && event:attr("regex_str") ) then noop()
