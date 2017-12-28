@@ -4,7 +4,7 @@ ruleset io.picolabs.Tx_Rx {
     description <<
       Tx/Rx ruleset for Manifold.
     >>
-    author "Tedrub Modulas"
+    author "Tedrub Modulus"
     use module io.picolabs.pico alias wrangler
     provides established, outbound, inbound, wellKnown_Rx, autoAcceptConfig, __testing
     shares   established, outbound, inbound, wellKnown_Rx, autoAcceptConfig, __testing
@@ -154,7 +154,7 @@ ent:established [
                                                  "channel_type": channel_type,
                                                  "verify_key"  : channel{"sovrin"}{"verifyKey"},
                                                  "public_key"  : channel{"sovrin"}{"encryptionPublicKey"}
-                                                 });
+                                                 }));
     }
     else {
       raise wrangler event "no_wellKnown_Tx_failure" attributes  event:attrs() // API event
@@ -166,13 +166,13 @@ ent:established [
       event:send({
           "eci"   : event:attr("wellKnown_Tx"),
           "domain": "wrangler", "type": "pending_subscription",
-          "attrs" : event:attrs().put("status"       : "inbound",
+          "attrs" : event:attrs().put({"status"       : "inbound",
                                       "Rx_role"      : event:attr("Tx_role"),
                                       "Tx_role"      : event:attr("Rx_role"),
                                       "Tx"           : event:attr("Rx"),
                                       "Tx_host"      : event:attr("Tx_host").isnull() => null | meta:host, // send our host as Tx_host if Tx_host was provided.
                                       "Tx_verify_key": event:attr("verify_key"),
-                                      "Tx_public_key": event:attr("public_key")
+                                      "Tx_public_key": event:attr("public_key")})
           }, event:attr("Tx_host"));
   }
 
@@ -216,7 +216,7 @@ ent:established [
           "eci": bus{"Tx"},
           "domain": "wrangler", "type": "pending_subscription_approved",
           "attrs": {"_Tx"           : bus{"Rx"} ,
-                    "_Tx_verify_key": channel{"sovrin"}{"verifyKey"}),
+                    "_Tx_verify_key": channel{"sovrin"}{"verifyKey"},
                     "_Tx_public_key": channel{"sovrin"}{"encryptionPublicKey"},
                     "status"        : "outbound" }
           }, bus{"Tx_host"})
@@ -230,7 +230,7 @@ ent:established [
     pre{
       outbound = outbound()
       bus      = findBus(outbound).put({"Tx"           : event:attr("_Tx"),
-                                        "Tx_verify_key": event:attr("_Tx_verify_key")
+                                        "Tx_verify_key": event:attr("_Tx_verify_key"),
                                         "Tx_public_key": event:attr("_Tx_public_key")
                                        })// tightly coupled attr, smells like bad code..
                                   .delete(["wellKnown_Tx"])
