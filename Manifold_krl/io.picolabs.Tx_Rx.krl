@@ -65,9 +65,6 @@ ent:established [
   },...,...
 ]
 */
-    publicKey = function(_eci){
-      wrangler:channel(_eci){"sovrin"}{"encryptionPublicKey"}
-    }
     autoAcceptConfig = function(){
       ent:autoAcceptConfig.defaultsTo({})
     }
@@ -149,16 +146,13 @@ ent:established [
       engine:newChannel(meta:picoId, channel_name, channel_type) setting(channel); // create Rx
       //wrangler:createChannel(meta:picoId, event:attr("name") ,channel_type) setting(channel); // create Rx
     fired {
-      newBus        = pending_entry.put({ "Rx"         : channel{"id"}
-                                          //"private_key": channel{"sovrin"}{"verifyKey"},// We should have a look up from eci vs storing keys again.
-                                          //"public_key" : channel{"sovrin"}{"encryptionPublicKey"}
-                                        });
+      newBus        = pending_entry.put({ "Rx" : channel{"id"} });
       ent:outbound := outbound().append( newBus );
       raise wrangler event "pending_subscription" 
         attributes event:attrs().put(newBus.put({"status"      : "outbound",
                                                  "channel_name": channel_name,
                                                  "channel_type": channel_type,
-                                                 //"verify_key" : channel{"sovrin"}{"verifyKey"}, this is a private key? Why should the other pico have it?
+                                                 "verify_key"  : channel{"sovrin"}{"verifyKey"},
                                                  "public_key"  : channel{"sovrin"}{"encryptionPublicKey"}
                                                  });
     }
@@ -177,6 +171,7 @@ ent:established [
                                       "Tx_role"      : event:attr("Rx_role"),
                                       "Tx"           : event:attr("Rx"),
                                       "Tx_host"      : event:attr("Tx_host").isnull() => null | meta:host, // send our host as Tx_host if Tx_host was provided.
+                                      "Tx_verify_key": event:attr("verify_key"),
                                       "Tx_public_key": event:attr("public_key")
           }, event:attr("Tx_host"));
   }
@@ -201,9 +196,8 @@ ent:established [
       //wrangler:createChannel(wrangler:myself(){"id"}, name ,channel_type) setting(channel); // create Rx
     fired {
       newBus       = pending_entry.put({"Rx" : channel{"id"},
-                                        //"private_key": channel{"sovrin"}{"verifyKey"},// We should have a look up from eci vs storing keys again.
-                                        //"public_key" : channel{"sovrin"}{"encryptionPublicKey"},
-                                        "Tx_public_key" : event:attr("Tx_public_key")
+                                        "Tx_verify_key" : channel{"sovrin"}{"verifyKey"},
+                                        "Tx_public_key" : channel{"sovrin"}{"encryptionPublicKey"}
                                        });
       ent:inbound := inbound().append( newBus );
       raise wrangler event "inbound_pending_subscription_added" attributes event:attrs().put(["Rx"],channel{"id"}); // API event
@@ -215,12 +209,15 @@ ent:established [
 
   rule approveInboundPendingSubscription {
     select when wrangler pending_subscription_approval
-    pre{ bus = findBus(inbound()) }
+    pre{ bus     = findBus(inbound()) 
+         channel = wrangler:channel(bus{"Rx"})
+        }
       event:send({
           "eci": bus{"Tx"},
           "domain": "wrangler", "type": "pending_subscription_approved",
           "attrs": {"_Tx"           : bus{"Rx"} ,
-                    "_Tx_public_key": publicKey(bus{"Rx"}),
+                    "_Tx_verify_key": channel{"sovrin"}{"verifyKey"}),
+                    "_Tx_public_key": channel{"sovrin"}{"encryptionPublicKey"},
                     "status"        : "outbound" }
           }, bus{"Tx_host"})
     always {
@@ -233,6 +230,7 @@ ent:established [
     pre{
       outbound = outbound()
       bus      = findBus(outbound).put({"Tx"           : event:attr("_Tx"),
+                                        "Tx_verify_key": event:attr("_Tx_verify_key")
                                         "Tx_public_key": event:attr("_Tx_public_key")
                                        })// tightly coupled attr, smells like bad code..
                                   .delete(["wellKnown_Tx"])
