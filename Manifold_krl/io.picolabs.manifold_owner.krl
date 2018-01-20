@@ -1,6 +1,6 @@
 ruleset io.picolabs.manifold_owner {
   meta {
-    use module io.picolabs.pico alias wrangler
+    use module io.picolabs.wrangler alias wrangler
     shares __testing, getManifoldPico
   }
   global {

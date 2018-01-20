@@ -1,7 +1,7 @@
 ruleset io.picolabs.manifold_pico {
   meta {
-    use module io.picolabs.pico alias wrangler
-    use module io.picolabs.Tx_Rx alias subscription
+    use module io.picolabs.wrangler alias wrangler
+    use module io.picolabs.subscription alias subscription
     shares subscriptionSpanningTree ,__testing, getManifoldInfo
     provides getManifoldInfo, subscriptionSpanningTree,__testing
   }
@@ -26,7 +26,7 @@ ruleset io.picolabs.manifold_pico {
 
     addSelf = function(busses){
       busses.map(function(bus){ 
-        self = wrangler:skyQuery(bus{"Tx"}, "io.picolabs.pico", "myself");
+        self = wrangler:skyQuery(bus{"Tx"}, "io.picolabs.wrangler", "myself");
         bus.put(self);
         });
     }
@@ -39,7 +39,7 @@ ruleset io.picolabs.manifold_pico {
 
     span = function(bus){ // on a single subscription
       //get all subscritpions
-      Txs = wrangler:skyQuery(bus{"Tx"}, "io.picolabs.Tx_Rx", "established").filter(function(bus){bus{"Tx_role"} == "manifold_slave" });
+      Txs = wrangler:skyQuery(bus{"Tx"}, "io.picolabs.subscription", "established").filter(function(bus){bus{"Tx_role"} == "manifold_slave" });
 
       spanSpan = function(Txs){ // on each subscriptions 
         arrayOfTxArrays = Txs.map(function(bus){ span( bus ) }); // get all subscritpions
@@ -60,7 +60,7 @@ ruleset io.picolabs.manifold_pico {
     fired{
       raise wrangler event "child_creation"
         attributes event:attrs().put({"event_type": "manifold_create_thing"})
-                                .put({"rids":"io.picolabs.thing;io.picolabs.Tx_Rx"})
+                                .put({"rids":"io.picolabs.thing;io.picolabs.subscription"})
     }else{
       //send_directive("Missing a name for your Thing!")
     }
@@ -95,7 +95,7 @@ ruleset io.picolabs.manifold_pico {
         attributes {"name"        : event:attr("name"),
                     "Rx_role"     : "manifold_master",
                     "Tx_role"     : "manifold_slave",
-                    "wellKnown_Tx"   : wrangler:skyQuery( eci , "io.picolabs.Tx_Rx", "wellKnown_Rx"){"id"},
+                    "wellKnown_Tx"   : wrangler:skyQuery( eci , "io.picolabs.subscription", "wellKnown_Rx"){"id"},
                     "channel_type": "Manifold",
                     "Tx_Rx_Type"  : "Manifold" };  
       ent:thingsUpdate := time:now();
