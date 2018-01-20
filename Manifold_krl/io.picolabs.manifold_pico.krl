@@ -98,17 +98,51 @@ ruleset io.picolabs.manifold_pico {
                     "wellKnown_Tx"   : wrangler:skyQuery( eci , "io.picolabs.subscription", "wellKnown_Rx"){"id"},
                     "channel_type": "Manifold",
                     "Tx_Rx_Type"  : "Manifold" };  
+      raise manifold event "move_thing"
+        attributes {"name":event:attr("name"),
+                    "x": 0, "y": 0, "w": 3, "h": 2.25};
       ent:thingsUpdate := time:now();
-      ent:thingsPos := ent:thingsPos.defaultsTo({}).put([event:attr("name")], {
-        "x": 0,
-        "y": 0,
-        "w": 3,
-        "h": 2.25,
-        "minw": 3,
-        "minh": 2.25,
-        "maxw": 8,
-        "maxh": 5
+      ent:thingsColor := ent:thingsColor.defaultsTo({}).put([event:attr("name")], {
+        "color": "#eceff1"
       });
+    }
+  }
+
+  rule createCollection {// doubles as a event router
+    select when manifold create_collection
+    pre {}
+    if event:attr("name") then every {
+      send_directive("Attempting to create new collection",{"collection":event:attr("name")})
+    }
+    fired{
+      raise wrangler event "child_creation"
+        attributes event:attrs().put({"event_type": "manifold_create_collection"})
+                                .put({"rids":"io.picolabs.collection;io.picolabs.subscription"})
+    }else{
+      //send_directive("Missing a name for your collection!")
+    }
+  }
+
+  rule collectionCompleted{
+    select when wrangler child_initialized where rs_attrs{"event_type"} == "manifold_create_collection"
+    pre{eci = event:attr("eci") }
+      event:send(
+        { "eci": eci,
+          "domain": "wrangler", "type": "autoAcceptConfigUpdate",
+          "attrs": {"variable"    : "Tx_Rx_Type",
+                    "regex_str"   : "Manifold" }})
+    always{
+      raise wrangler event "subscription" 
+        attributes {"name"        : event:attr("name"),
+                    "Rx_role"     : "manifold_master",
+                    "Tx_role"     : "manifold_slave",
+                    "wellKnown_Tx"   : wrangler:skyQuery( eci , "io.picolabs.subscription", "wellKnown_Rx"){"id"},
+                    "channel_type": "Manifold",
+                    "Tx_Rx_Type"  : "Manifold" };  
+      raise manifold event "move_thing"
+        attributes {"name":event:attr("name"),
+                    "x": 0, "y": 0, "w": 3, "h": 2.25};
+      ent:thingsUpdate := time:now();
       ent:thingsColor := ent:thingsColor.defaultsTo({}).put([event:attr("name")], {
         "color": "#eceff1"
       });
