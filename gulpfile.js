@@ -8,6 +8,7 @@ gulp.task('sass', function () {
   return gulp.src('./scss/style.scss')
   .pipe(sass().on('error', sass.logError))
   .pipe(concat('style.css'))
+  .pipe(concat('manifoldStyle.css'))
   .pipe(gulp.dest('./public/css'))
   .pipe(sass({outputStyle: 'compressed'}))
   .pipe(concat('style.min.css'))

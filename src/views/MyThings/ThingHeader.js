@@ -24,6 +24,13 @@ class ThingHeader extends Component {
       this.props.openRemoveModal()
     }
 
+    openCommunitiesModal(){
+      this.setState({
+        dropdownOpen: !this.state.dropdownOpen
+      });
+      this.props.openCommunitiesModal()
+    }
+
     openInstallModal(){
       this.setState({
         dropdownOpen: !this.state.dropdownOpen
@@ -69,6 +76,11 @@ class ThingHeader extends Component {
               <DropdownItem onClick={this.openColorModal.bind(this)}>
                 Change Color
                 <i className="fa fa-cubes float-right"/>
+              </DropdownItem>
+
+              <DropdownItem onClick={this.openCommunitiesModal.bind(this)}>
+                Communities
+                <i className="fa fa-users float-right"/>
               </DropdownItem>
 
             </DropdownMenu>

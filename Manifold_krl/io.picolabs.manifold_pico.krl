@@ -25,7 +25,7 @@ ruleset io.picolabs.manifold_pico {
     }
 
     addSelf = function(busses){
-      busses.map(function(bus){ 
+      busses.map(function(bus){
         self = wrangler:skyQuery(bus{"Tx"}, "io.picolabs.wrangler", "myself");
         bus.put(self);
         });
@@ -41,14 +41,14 @@ ruleset io.picolabs.manifold_pico {
       //get all subscritpions
       Txs = wrangler:skyQuery(bus{"Tx"}, "io.picolabs.subscription", "established").filter(function(bus){bus{"Tx_role"} == "manifold_slave" });
 
-      spanSpan = function(Txs){ // on each subscriptions 
+      spanSpan = function(Txs){ // on each subscriptions
         arrayOfTxArrays = Txs.map(function(bus){ span( bus ) }); // get all subscritpions
         arrayOfTxArrays.reduce(function(a,b){ a.append(b) });
       };
-      
+
       (Txs.length() == 0) => [] | Txs.append( spanSpan(Txs) );
     }
-    
+
   }
 
   rule createThing {
@@ -91,13 +91,13 @@ ruleset io.picolabs.manifold_pico {
           "attrs": {"variable"    : "Tx_Rx_Type",
                     "regex_str"   : "Manifold" }})
     always{
-      raise wrangler event "subscription" 
+      raise wrangler event "subscription"
         attributes {"name"        : event:attr("name"),
                     "Rx_role"     : "manifold_master",
                     "Tx_role"     : "manifold_slave",
                     "wellKnown_Tx"   : wrangler:skyQuery( eci , "io.picolabs.subscription", "wellKnown_Rx"){"id"},
                     "channel_type": "Manifold",
-                    "Tx_Rx_Type"  : "Manifold" };  
+                    "Tx_Rx_Type"  : "Manifold" };
       raise manifold event "move_thing"
         attributes {"name":event:attr("name"),
                     "x": 0, "y": 0, "w": 3, "h": 2.25};
@@ -132,13 +132,13 @@ ruleset io.picolabs.manifold_pico {
           "attrs": {"variable"    : "Tx_Rx_Type",
                     "regex_str"   : "Manifold" }})
     always{
-      raise wrangler event "subscription" 
+      raise wrangler event "subscription"
         attributes {"name"        : event:attr("name"),
                     "Rx_role"     : "manifold_master",
                     "Tx_role"     : "manifold_slave",
                     "wellKnown_Tx"   : wrangler:skyQuery( eci , "io.picolabs.subscription", "wellKnown_Rx"){"id"},
                     "channel_type": "Manifold",
-                    "Tx_Rx_Type"  : "Manifold" };  
+                    "Tx_Rx_Type"  : "Manifold" };
       raise manifold event "move_thing"
         attributes {"name":event:attr("name"),
                     "x": 0, "y": 0, "w": 3, "h": 2.25};
