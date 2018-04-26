@@ -6,7 +6,7 @@ class ThingFooterItem extends Component {
   }
 
   render(){
-    if(this.props.index == this.props.currentApp){
+    if(this.props.index === this.props.currentApp){
     return(
         <btn className="circle-selected" onClick={this.dotClicked.bind(this, this.props.index)}></btn>
     );

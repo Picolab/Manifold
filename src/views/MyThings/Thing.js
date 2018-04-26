@@ -1,26 +1,12 @@
 import React, { Component } from 'react';
-import uuid from 'uuid';
-import { Col, Dropdown, ButtonDropdownMenu, DropdownMenu, ButtonDropdown, DropdownToggle, DropdownItem, Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
-import { Link } from 'react-router-dom';
-import {logOut} from '../../utils/AuthService';
+import { Col, Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import { Combobox } from 'react-input-enhancements';
-import {createThing,removeThing,updateThing,installApp,colorThing} from '../../utils/manifoldSDK';
+import {removeThing,installApp,colorThing} from '../../utils/manifoldSDK';
 import { connect } from 'react-redux';
-import TestForm from './testForm';
-import InnerHTML from 'dangerously-set-inner-html';
-import Parser from 'html-react-parser';
-import CardReplace from '../../utils/cardReplaceAPI';
-import JsxParser from 'react-jsx-parser';
-import JournalTemplate from '../Templates/journalTemplate';
-import { Chart } from 'react-google-charts';
 import ThingFooter from './ThingFooter';
 import ThingHeader from './ThingHeader';
 import CustomComponentMap from '../Templates/customComponentMap';
 
-const brandPrimary =  '#20a8d8';
-const brandSuccess =  '#4dbd74';
-const brandInfo =     '#63c2de';
-const brandDanger =   '#f86c6b';
 
 class Thing extends Component {
   constructor(props) {
@@ -108,7 +94,7 @@ class Thing extends Component {
   handleInstallRulesetClick(){
     console.log(this.props.eci);
     console.log(this.state.rulesetToInstallName);
-    if (this.state.rulesetToInstallName != null && this.state.rulesetToInstallName != "") {
+    if (this.state.rulesetToInstallName !== null && this.state.rulesetToInstallName !== "") {
       this.props.dispatch({
         type: "command",
         command: installApp,
@@ -305,8 +291,8 @@ class Thing extends Component {
 // PARENT_ECI: {this.props.parent_eci}
 const mapStateToProps = state => {
   if(state.identities){
-    var id = state.manifoldInfo.things.things.children[0].id
-    var thisPicoAppsMetadata = state.identities[id]
+    //var id = state.manifoldInfo.things.things.children[0].id
+    //var thisPicoAppsMetadata = state.identities[id]
     return {
        identities: state.identities,
     }

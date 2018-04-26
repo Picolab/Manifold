@@ -3,16 +3,11 @@ import Autosuggest from 'react-autosuggest';
 import {
   InputGroup,
   InputGroupAddon,
-  InputGroupDropdown,
   Input,
   Button,
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem
  } from 'reactstrap';
 
-class ManifoldSearch extends React.Component {
+class ManifoldSearch extends Component {
   constructor() {
     super();
     this.toggleDropDown = this.toggleDropDown.bind(this);
@@ -51,7 +46,7 @@ class ManifoldSearch extends React.Component {
  }
 
   getSuggestions = value => {
-    if (typeof this.props.searchContent != "undefined") {
+    if (typeof this.props.searchContent !== "undefined") {
       if (this.props.searchContent.length > 0){
         const inputValue = value.trim().toLowerCase();
         const inputLength = inputValue.length;

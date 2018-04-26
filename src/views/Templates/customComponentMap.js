@@ -1,4 +1,3 @@
-import React, { Component } from 'react';
 import JournalTemplate from './journalTemplate';
 import TempTestAppTemplate from './tempTestAppTemplate';
 import HelloWorldTemplate from './helloWorldTemplate';

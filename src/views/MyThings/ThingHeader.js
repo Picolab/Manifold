@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Col, Dropdown, ButtonDropdownMenu, DropdownMenu, ButtonDropdown, DropdownToggle, DropdownItem, Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
+import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem} from 'reactstrap';
 
 
 class ThingHeader extends Component {

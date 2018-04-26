@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
-import { Form, FormGroup, Label, Input, FormText,Dropdown, DropdownMenu, DropdownToggle, DropdownItem, Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
+import { Form, FormGroup, Label, Input, Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import { connect } from 'react-redux';
-import _ from 'lodash';
 import { customEvent } from '../../utils/manifoldSDK';
 
-const brandPrimary =  '#20a8d8';
-const brandSuccess =  '#4dbd74';
-const brandInfo =     '#63c2de';
-const brandDanger =   '#f86c6b';
 
 class TempTestAppTemplate extends Component {
   constructor(props) {
@@ -30,7 +25,7 @@ class TempTestAppTemplate extends Component {
       LogTitle: "", // this will reset the title/entry info when you navigate away from the log modal
       LogEntry: ""
     });//reset everything
-    if(logTitle != "" && logEntry != ""){
+    if(logTitle !== "" && logEntry !== ""){
       this.props.dispatch({
         type: 'command',
         command: customEvent,
