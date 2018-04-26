@@ -30,7 +30,7 @@ ruleset io.picolabs.collection {
       raise wrangler event "subscription" 
         attributes {"Rx_role"     : "manifold_master",
                     "Tx_role"     : "manifold_slave",
-                    "wellKnown_Tx": event:attr("wellKnown_Tx");//wrangler:skyQuery( eci , "io.picolabs.subscription", "wellKnown_Rx"){"id"},
+                    "wellKnown_Tx": event:attr("wellKnown_Tx"),//wrangler:skyQuery( eci , "io.picolabs.subscription", "wellKnown_Rx"){"id"},
                     "channel_type": "Manifold_collection",
                     "Tx_Rx_Type"  : "Manifold" };//auto accepted
     }
@@ -45,6 +45,8 @@ ruleset io.picolabs.collection {
     noop()
     fired{
       raise wrangler event "install_rulesets_requested"
-        attributes event:attrs();
+        attributes event:attrs;
     }
   }
+}
+  

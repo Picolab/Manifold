@@ -2,21 +2,22 @@ ruleset io.picolabs.manifold_pico {
   meta {
     use module io.picolabs.wrangler alias wrangler
     use module io.picolabs.subscription alias subscription
-    shares subscriptionSpanningTree ,__testing, getManifoldInfo
-    provides getManifoldInfo, subscriptionSpanningTree,__testing
+    shares subscriptionSpanningTree ,__testing, getManifoldInfo, span
+    provides getManifoldInfo, subscriptionSpanningTree,__testing, span
   }
   global {
     __testing =
       { "queries": [ { "name":"getManifoldPico" },
                      { "name": "getManifoldInfo" },
-                     { "name": "subscriptionSpanningTree" }],
+                     { "name": "subscriptionSpanningTree" },
+                     { "name": "span" }],
         "events": [ { "domain": "manifold", "type": "create_thing",
                       "attrs": [ "name" ] } ] }
 
     getManifoldInfo = function(){
       {
         "things": {
-          "things": wrangler:children(),
+          "things": subscriptionSpanningTree(), //wrangler:children(),
           "thingsPosition": ent:thingsPos.defaultsTo({}),
           "thingsColor": ent:thingsColor.defaultsTo({}),
           "lastUpdated": ent:thingsUpdate.defaultsTo("null")
@@ -30,23 +31,25 @@ ruleset io.picolabs.manifold_pico {
         bus.put(self);
         });
     }
-
+    // dead code??--
     subscriptionSpanningTree = function(){ //at root call all subscriptions
       manifold_subs = subscription:established().klog("established()").filter(function(bus){ (bus{"Tx_role"} == "manifold_slave")}).klog("filtered subs on manifold_slave");
-      spannedTx     = manifold_subs.map(function(bus){ span(bus) }).reduce(function(a,b){ a.append(b) }); // for all children call established
+      spannedTx     = manifold_subs.map(function(bus){ span(bus) })// for all children call established
+                        .reduce(function(a,b){ a.append(b) }); // combine arrays into a single array
       addSelf(manifold_subs.append(spannedTx));
-    }
+    }//---
 
-    span = function(bus){ // on a single subscription
-      //get all subscritpions
-      Txs = wrangler:skyQuery(bus{"Tx"}, "io.picolabs.subscription", "established").filter(function(bus){bus{"Tx_role"} == "manifold_slave" });
+  span = function(bus , seen =[] ){ // on a single subscription
+      PicoId = wrangler:skyQuery(bus{"Tx"}, "io.picolabs.wrangler", "myself"){"id"};
+      Txs = seen >< picoID => [] | //basecase, pico has been seen 
+        wrangler:skyQuery(bus{"Tx"}, "io.picolabs.subscription", "established")//get all subscritpions
+                .filter(function(bus){bus{"Tx_role"} == "manifold_slave" });
 
-      spanSpan = function(Txs){ // on each subscriptions
-        arrayOfTxArrays = Txs.map(function(bus){ span( bus ) }); // get all subscritpions
+      spanSpan = function(Txs){ // on each subscriptions 
+        arrayOfTxArrays = Txs.map(function(bus){ span( bus, seen.append(PicoId) ) }); // whats the scope of seen? should be passed in?
         arrayOfTxArrays.reduce(function(a,b){ a.append(b) });
       };
-
-      (Txs.length() == 0) => [] | Txs.append( spanSpan(Txs) );
+      (Txs.length() == 0) => [] |  Txs.append( spanSpan(Txs) ); // base case, empty or seen?
     }
 
   }
