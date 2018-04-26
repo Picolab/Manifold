@@ -254,7 +254,7 @@ class Thing extends Component {
   renderColorModal(){
     return (
       <Modal isOpen={this.state.colorModal} className={'modal-info'}>
-        <ModalHeader >Change Thing's Color</ModalHeader>
+        <ModalHeader >Change Color</ModalHeader>
         <ModalBody>
           <label> Select a color: <br/></label>
           <input type="color" defaultValue={this.state.colorChosen} onChange={(element) => this.setState({"colorChosen": element.target.value})}/>
