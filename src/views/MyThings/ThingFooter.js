@@ -13,12 +13,16 @@ class ThingFooter extends Component{
       footerItems = this.props.installedApps.map(app => {
         index+=1
         return(
-          <ThingFooterItem onDotClick={this.handleDotClick.bind(this)} key={app.meta.rid} app={app} index={index} currentApp={this.props.currentApp}/>
+          <ThingFooterItem
+            onDotClick={this.handleDotClick.bind(this)}
+            key={app.meta.rid}
+            app={app}
+            index={index}
+            currentApp={this.props.currentApp}
+          />
         );
       });
     }
-
-
     return(
       <div className="card-footer" style={{"backgroundColor": this.props.color, overflow:"hidden",  textAlign: "center", minHeight:"40px"}}>
         <span>

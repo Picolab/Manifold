@@ -35,9 +35,13 @@ class Thing extends Component {
     this.toggleRemoveModal = this.toggleRemoveModal.bind(this);
     this.toggleInstallRulesetModal = this.toggleInstallRulesetModal.bind(this);
     this.toggleColorModal = this.toggleColorModal.bind(this);
+    this.togglePicoCommunitiesModal = this.togglePicoCommunitiesModal.bind(this);
     // drop downs
     this.toggleInstallRulesetDropdown = this.toggleInstallRulesetDropdown.bind(this);
-    this.injectCode = this.injectCode.bind(this);
+    this.renderPicoContent = this.renderPicoContent.bind(this);
+    // renders
+    this.renderThingHeader = this.renderThingHeader.bind(this);
+    this.renderThingFooter = this.renderThingFooter.bind(this);
 
     //this.appendAppToDotList = this.appendAppToDotList.bind(this);
 
@@ -47,6 +51,7 @@ class Thing extends Component {
       removeModal: false,
       installRulesetModal: false,
       colorModal: false,
+      picoCommunitiesModal: false,
       rulesetToInstallName: "",
       colorChosen: props.color || "#eceff1",
       color: props.color,
@@ -66,6 +71,12 @@ class Thing extends Component {
   toggleRemoveModal(){
     this.setState({
       removeModal: !this.state.removeModal
+    });
+  }
+
+  togglePicoCommunitiesModal(){
+    this.setState({
+      picoCommunitiesModal: !this.state.picoCommunitiesModal
     });
   }
 
@@ -91,6 +102,8 @@ class Thing extends Component {
       query: { type: 'MANIFOLD_INFO' }
     });
   }
+
+
 
   handleInstallRulesetClick(){
     console.log(this.props.eci);
@@ -133,7 +146,7 @@ class Thing extends Component {
     });
   }
 
-  injectCode(){
+  renderPicoContent(){
     const thingIdentity = this.props.identities[this.props.id];
     if(thingIdentity && thingIdentity[this.state.currentApp]){
       const currentAppInfo = thingIdentity[this.state.currentApp];
@@ -186,6 +199,30 @@ class Thing extends Component {
     )
   }
 
+  renderThingHeader(){
+    return(
+      <ThingHeader
+        name={this.props.name}
+        color={this.props.color}
+        openRemoveModal={this.toggleRemoveModal}
+        openInstallModal={this.toggleInstallRulesetModal}
+        openColorModal={this.toggleColorModal}
+        openCommunitiesModal={this.togglePicoCommunitiesModal}
+      />
+    )
+  }
+
+  renderThingFooter(){
+    return(
+      <ThingFooter
+        dotClicked={this.handleCarouselDotClick}
+        color={this.props.color}
+        installedApps={this.props.identities[this.props.id]}
+        currentApp={this.state.currentApp}
+      />
+    )
+  }
+
   renderInstallModal(){
     return (
       <Modal isOpen={this.state.installRulesetModal} className={'modal-info'}>
@@ -217,7 +254,7 @@ class Thing extends Component {
   renderColorModal(){
     return (
       <Modal isOpen={this.state.colorModal} className={'modal-info'}>
-        <ModalHeader >Change Thing's Color</ModalHeader>
+        <ModalHeader >Change Color</ModalHeader>
         <ModalBody>
           <label> Select a color: <br/></label>
           <input type="color" defaultValue={this.state.colorChosen} onChange={(element) => this.setState({"colorChosen": element.target.value})}/>
@@ -230,18 +267,34 @@ class Thing extends Component {
     )
   }
 
+  renderPicoCommunitiesModal(){
+    return (
+      <Modal isOpen={this.state.picoCommunitiesModal} className={'modal-info'}>
+        <ModalHeader >Communities containing {this.props.name}</ModalHeader>
+        <ModalBody>
+
+        </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={this.togglePicoCommunitiesModal}>Close</Button>
+        </ModalFooter>
+      </Modal>
+    )
+  }
+
   render(){
     return (
       <div className={"card"} style={{  height: "inherit", width: "inherit"}}>
-        <ThingHeader name={this.props.name} color={this.props.color} openRemoveModal={this.toggleRemoveModal} openInstallModal={this.toggleInstallRulesetModal} openColorModal={this.toggleColorModal}/>
+        {this.renderThingHeader()}
         {this.renderInstallModal()}
         {this.renderRemoveModal()}
         {this.renderColorModal()}
+        {this.renderPicoCommunitiesModal()}
 
         <div className="card-block" style={{"textOverflow": "clip", overflow: "hidden"}}>
-          {this.injectCode()}
+          {this.renderPicoContent()}
         </div>
-        <ThingFooter dotClicked={this.handleCarouselDotClick} color={this.props.color} installedApps={this.props.identities[this.props.id]} currentApp={this.state.currentApp}/>
+
+        {this.renderThingFooter()}
 
       </div>
     );
