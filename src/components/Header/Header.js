@@ -44,30 +44,30 @@ class Header extends Component {
     return (
       <header className="app-header navbar">
         <button className="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button" onClick={this.mobileSidebarToggle}>&#9776;</button>
-        <a className="navbar-brand" href="#"></a>
+        <a className="navbar-brand" href="/"><span className="hideAria">Manifold information</span></a>
         <ul className="nav navbar-nav d-md-down-none">
           <li className="nav-item">
             <button className="nav-link navbar-toggler sidebar-toggler" type="button" onClick={this.sidebarToggle}>&#9776;</button>
           </li>
           <li className="nav-item px-3">
-            <a className="nav-link" href="#">Dashboard</a>
+            <a className="nav-link" href="/">Dashboard</a>
           </li>
           <li className="nav-item px-3">
-            <a className="nav-link" href="#">Users</a>
+            <a className="nav-link" href="/">Users</a>
           </li>
           <li className="nav-item px-3">
-            <a className="nav-link" href="#">Settings</a>
+            <a className="nav-link" href="/">Settings</a>
           </li>
         </ul>
         <ul className="nav navbar-nav ml-auto">
           <li className="nav-item d-md-down-none">
-            <a className="nav-link" href="#"><i className="icon-bell"></i><span className="badge badge-pill badge-danger">5</span></a>
+            <a className="nav-link" href="/"><i className="icon-bell"></i><span className="badge badge-pill badge-danger">5</span></a>
           </li>
           <li className="nav-item d-md-down-none">
-            <a className="nav-link" href="#"><i className="icon-list"></i></a>
+            <a className="nav-link" href="/"><i className="icon-list"></i></a>
           </li>
           <li className="nav-item d-md-down-none">
-            <a className="nav-link" href="#"><i className="icon-location-pin"></i></a>
+            <a className="nav-link" href="/"><i className="icon-location-pin"></i></a>
           </li>
           <li className="nav-item">
             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>

@@ -10,7 +10,8 @@ export default function(state = "", action){
       console.log("action", action);
       //storeOwnerECI(action.payload.eci);
       //return {...state, action.payload.data };
-      const { access_token, token_type } = action.payload.data;
+      const { access_token } = action.payload.data;
+      //token_type is also provided in the payload data
       if(!access_token){
         alert("Oauth request failed. Please try again.")
         return state;

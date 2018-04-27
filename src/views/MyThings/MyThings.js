@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { createThing, moveThing } from '../../utils/manifoldSDK';
 import { Responsive, WidthProvider } from 'react-grid-layout';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Label, FormGroup, ButtonGroup } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, ButtonGroup } from 'reactstrap';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import Thing from './Thing';
@@ -47,7 +47,8 @@ class MyThings extends Component {
 
   handleSearchSuggestionClick(suggestion){
     console.log("CLICKED TOP LEVEL: ", suggestion)
-    this.setState({searchValue: suggestion}), () => {console.log("SEARCHED")}
+    this.setState({searchValue: suggestion})
+    //, () => {console.log("SEARCHED")}
   }
 
   handleSearchOptionsClick(){
@@ -96,8 +97,8 @@ class MyThings extends Component {
     for (var thing of layout) {
       var comp = this.state.layout[thing.i];
       if (!comp ||
-        thing.x != comp.x || thing.y != comp.y ||
-        thing.w != comp.w || thing.h != comp.h) {
+        thing.x !== comp.x || thing.y !== comp.y ||
+        thing.w !== comp.w || thing.h !== comp.h) {
 
         var thingName = this.props.things[thing.i].name;
         this.props.dispatch({
@@ -112,7 +113,7 @@ class MyThings extends Component {
 
   onLayoutChange(layout) {
     //this.props.onLayoutChange(layout);
-    if (!this.state.layout || this.state.layout.length == 0) {
+    if (!this.state.layout || this.state.layout.length === 0) {
       this.setState({layout: layout});
       return;
     }
@@ -150,9 +151,9 @@ class MyThings extends Component {
     let filteredCardList = [];
     let searchValue = this.state.searchValue;
     if(this.props.things !== undefined){
-      this.props.things.map(function(thing){
-        if(searchValue != ""){
-          if(thing.name == searchValue){
+      this.props.things.foreach(function(thing){
+        if(searchValue !== ""){
+          if(thing.name === searchValue){
             filteredCardList.push(thing);
           }
         }
@@ -160,6 +161,7 @@ class MyThings extends Component {
           filteredCardList.push(thing);
         }
       })
+
       return(
         _.map(filteredCardList,this.renderThing)
       )

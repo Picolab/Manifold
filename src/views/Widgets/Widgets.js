@@ -134,7 +134,7 @@ class Widgets extends Component {
                 <div className="text-muted text-uppercase font-weight-bold font-xs">Income</div>
               </div>
               <div className="card-footer px-3 py-2">
-                <a className="font-weight-bold font-xs btn-block text-muted" href="#">View More <i className="fa fa-angle-right float-right font-lg"></i></a>
+                <a className="font-weight-bold font-xs btn-block text-muted" href="/">View More <i className="fa fa-angle-right float-right font-lg"></i></a>
               </div>
             </div>
           </div>
@@ -146,7 +146,7 @@ class Widgets extends Component {
                 <div className="text-muted text-uppercase font-weight-bold font-xs">Income</div>
               </div>
               <div className="card-footer px-3 py-2">
-                <a className="font-weight-bold font-xs btn-block text-muted" href="#">View More <i className="fa fa-angle-right float-right font-lg"></i></a>
+                <a className="font-weight-bold font-xs btn-block text-muted" href="/">View More <i className="fa fa-angle-right float-right font-lg"></i></a>
               </div>
             </div>
           </div>
@@ -158,7 +158,7 @@ class Widgets extends Component {
                 <div className="text-muted text-uppercase font-weight-bold font-xs">Income</div>
               </div>
               <div className="card-footer px-3 py-2">
-                <a className="font-weight-bold font-xs btn-block text-muted" href="#">View More <i className="fa fa-angle-right float-right font-lg"></i></a>
+                <a className="font-weight-bold font-xs btn-block text-muted" href="/">View More <i className="fa fa-angle-right float-right font-lg"></i></a>
               </div>
             </div>
           </div>
@@ -170,7 +170,7 @@ class Widgets extends Component {
                 <div className="text-muted text-uppercase font-weight-bold font-xs">Income</div>
               </div>
               <div className="card-footer px-3 py-2">
-                <a className="font-weight-bold font-xs btn-block text-muted" href="#">View More <i className="fa fa-angle-right float-right font-lg"></i></a>
+                <a className="font-weight-bold font-xs btn-block text-muted" href="/">View More <i className="fa fa-angle-right float-right font-lg"></i></a>
               </div>
             </div>
           </div>

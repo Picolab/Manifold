@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import { createThing } from '../../utils/manifoldSDK';
 import { Responsive, WidthProvider } from 'react-grid-layout';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import _ from 'lodash';
 import { connect } from 'react-redux';
 import Community from './Community';
 
@@ -35,7 +32,7 @@ class Communities extends Component {
   }
 
   onLayoutChange(layout) {
-    if (!this.state.layout || this.state.layout.length == 0) {
+    if (!this.state.layout || this.state.layout.length === 0) {
       this.setState({layout: layout});
       return;
     }
@@ -54,8 +51,8 @@ class Communities extends Component {
     for (var thing of layout) {
       var comp = this.state.layout[thing.i];
       if (!comp ||
-        thing.x != comp.x || thing.y != comp.y ||
-        thing.w != comp.w || thing.h != comp.h) {
+        thing.x !== comp.x || thing.y !== comp.y ||
+        thing.w !== comp.w || thing.h !== comp.h) {
       }
     }
   }

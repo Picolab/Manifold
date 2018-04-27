@@ -929,9 +929,9 @@ class Forms extends Component {
               <div className="card-header">
                 <i className="fa fa-edit"></i>Form Elements
                 <div className="card-actions">
-                  <a href="#" className="btn-setting"><i className="icon-settings"></i></a>
-                  <a href="#" className="btn-minimize"><i className="icon-arrow-up"></i></a>
-                  <a href="#" className="btn-close"><i className="icon-close"></i></a>
+                  <a href="/" className="btn-setting"><i className="icon-settings"></i></a>
+                  <a href="/" className="btn-minimize"><i className="icon-arrow-up"></i></a>
+                  <a href="/" className="btn-close"><i className="icon-close"></i></a>
                 </div>
               </div>
               <div className="card-block">

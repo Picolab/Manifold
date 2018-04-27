@@ -32,7 +32,7 @@ class Sidebar extends Component {
               UI Elements
             </li>
             <li className={this.activeRoute("/components")}>
-              <a className="nav-link nav-dropdown-toggle" href="#" onClick={this.handleClick.bind(this)}><i className="icon-puzzle"></i> Components</a>
+              <a className="nav-link nav-dropdown-toggle" href="/" onClick={this.handleClick.bind(this)}><i className="icon-puzzle"></i> Components</a>
               <ul className="nav-dropdown-items">
                 <li className="nav-item">
                   <NavLink to={'/components/buttons'} className="nav-link" activeClassName="active"><i className="icon-puzzle"></i> Buttons</NavLink>
@@ -61,7 +61,7 @@ class Sidebar extends Component {
               </ul>
             </li>
             <li className={this.activeRoute("/icons")}>
-              <a className="nav-link nav-dropdown-toggle" href="#" onClick={this.handleClick.bind(this)}><i className="icon-star"></i> Icons</a>
+              <a className="nav-link nav-dropdown-toggle" href="/" onClick={this.handleClick.bind(this)}><i className="icon-star"></i> Icons</a>
               <ul className="nav-dropdown-items">
                 <li className="nav-item">
                   <NavLink to={'/icons/font-awesome'} className="nav-link" activeClassName="active"><i className="icon-star"></i> Font Awesome</NavLink>
@@ -82,7 +82,7 @@ class Sidebar extends Component {
               Extras
             </li>
             <li className="nav-item nav-dropdown">
-              <a className="nav-link nav-dropdown-toggle" href="#" onClick={this.handleClick.bind(this)}><i className="icon-star"></i> Pages</a>
+              <a className="nav-link nav-dropdown-toggle" href="/" onClick={this.handleClick.bind(this)}><i className="icon-star"></i> Pages</a>
               <ul className="nav-dropdown-items">
                 <li className="nav-item">
                   <NavLink to={'/login'} className="nav-link" activeClassName="active"><i className="icon-star"></i> Login</NavLink>
