@@ -2,7 +2,7 @@ ruleset io.picolabs.thing {
   meta {
     use module io.picolabs.wrangler alias wrangler
     shares __testing, getManifoldInfo
-    //provides 
+    //provides
   }
   global {
     __testing =
@@ -28,7 +28,7 @@ ruleset io.picolabs.thing {
     noop()
     fired{
       raise wrangler event "install_rulesets_requested"
-        attributes event:attrs();
+        attributes event:attrs;
     }
   }
 

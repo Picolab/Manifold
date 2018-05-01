@@ -151,7 +151,7 @@ class MyThings extends Component {
     let filteredCardList = [];
     let searchValue = this.state.searchValue;
     if(this.props.things !== undefined){
-      this.props.things.foreach(function(thing){
+      this.props.things.forEach(function(thing){
         if(searchValue !== ""){
           if(thing.name === searchValue){
             filteredCardList.push(thing);
@@ -282,11 +282,11 @@ MyThings.defaultProps = {
 };
 
 function addPropsToThings(thingsArray){
-  for (var thing of thingsArray.things.children) {
+  for (var thing of thingsArray.things) {
     thing.pos = thingsArray.thingsPosition[thing.name] || {"x":0, "y":0, "w":3, "h":2.25, "minW":3, "minH":2.25, "maxW":8, "maxH":5};
     //thing.color = thingsArray.thingsColor[thing.name] || {"color": "#eceff1"}
   }
-  return thingsArray.things.children.map(function(i, key, list) {
+  return thingsArray.things.map(function(i, key, list) {
     return {
       key: key.toString(),
       x: i.pos.x, y: i.pos.y, w: i.pos.w, h: i.pos.h,
