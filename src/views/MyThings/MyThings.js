@@ -4,8 +4,8 @@ import { Responsive, WidthProvider } from 'react-grid-layout';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, ButtonGroup } from 'reactstrap';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import Thing from './Thing';
-import ManifoldSearch from '../ManifoldSearch/ManifoldSearch';
+import Thing from '../../components/ThingCard/Thing';
+import ManifoldSearch from '../../components/ManifoldSearch/ManifoldSearch';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
