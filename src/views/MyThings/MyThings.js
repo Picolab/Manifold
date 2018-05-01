@@ -10,7 +10,7 @@ import ManifoldSearch from '../../components/ManifoldSearch/ManifoldSearch';
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 
-class MyThings extends Component {
+export class MyThings extends Component {
   constructor(props) {
     super(props);
     //console.log("THE PROPS!!!!",props);
@@ -254,8 +254,8 @@ class MyThings extends Component {
     return (
       <div>
         <div style={{height:"30px"}}>
-          <button style={{float:"right"}} className="btn btn-primary" onClick={() => this.toggleAddModal()}>+</button>
-          <button style={{float:"right"}} className="btn btn-warning" onClick={() => this.toggleRegisterRulesetModal()}>R</button>
+          <button style={{float:"right"}} className="btn btn-primary" onClick={this.toggleAddModal}>+</button>
+          <button style={{float:"right"}} className="btn btn-warning" onClick={this.toggleRegisterRulesetModal}>R</button>
         </div>
         {this.renderAddModal()}
         {this.renderRegisterRulesetModal()}
