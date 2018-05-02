@@ -8,8 +8,8 @@ import {
  } from 'reactstrap';
 
 class ManifoldSearch extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.toggleDropDown = this.toggleDropDown.bind(this);
        this.toggleSplit = this.toggleSplit.bind(this);
        this.clearSearch = this.clearSearch.bind(this);
