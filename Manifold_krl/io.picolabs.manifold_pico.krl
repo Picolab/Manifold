@@ -62,7 +62,7 @@ ruleset io.picolabs.manifold_pico {
     }
     fired{
       raise wrangler event "child_creation"
-        attributes event:attrs().put({"event_type": "manifold_create_thing"})
+        attributes event:attrs.put({"event_type": "manifold_create_thing"})
                                 .put({"rids":"io.picolabs.thing;io.picolabs.subscription"})
     }else{
       //send_directive("Missing a name for your Thing!")
@@ -79,7 +79,7 @@ ruleset io.picolabs.manifold_pico {
       ent:thingsPos := ent:thingsPos.filter(function(v,k){k != event:attr("name")});
       ent:thingsColor := ent:thingsColor.filter(function(v,k){k != event:attr("name")});
       raise wrangler event "child_deletion"
-        attributes event:attrs().put({"event_type": "manifold_remove_thing"})
+        attributes event:attrs.put({"event_type": "manifold_remove_thing"})
     }else{
       //send_directive("Missing a name for your Thing!")
     }
@@ -119,7 +119,7 @@ ruleset io.picolabs.manifold_pico {
     }
     fired{
       raise wrangler event "child_creation"
-        attributes event:attrs().put({"event_type": "manifold_create_collection"})
+        attributes event:attrs.put({"event_type": "manifold_create_collection"})
                                 .put({"rids":"io.picolabs.collection;io.picolabs.subscription"})
     }else{
       //send_directive("Missing a name for your collection!")
