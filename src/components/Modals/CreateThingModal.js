@@ -3,38 +3,36 @@ import PropTypes from 'prop-types';
 import { createThing } from '../../utils/manifoldSDK';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { connect } from 'react-redux';
+import { commandAction } from '../../actions/command';
 
-class CreateThingModal extends Component{
+export class CreateThingModal extends Component{
   constructor(props){
-    super(props)
+    super(props);
 
     this.state = {
       name: ""
-    }
+    };
+
+    this.handleAddClick = this.handleAddClick.bind(this);
   }
+
   //this allows the modal to update its state when its props change
   static getDerivedStateFromProps(nextProps, prevState) {
     return {
-      modalOn: nextProps.modalOn,
-      toggleFunc: nextProps.toggleFunc
+      modalOn: nextProps.modalOn
     }
   }
 
-  handleAddClick = () => {
+  handleAddClick() {
     const newName = this.state.name;
-    this.state.toggleFunc();
-    this.props.dispatch({
-      type: "command",
-      command: createThing,
-      params: [newName],
-      query: { type: 'MANIFOLD_INFO'}
-    });
+    this.props.toggleFunc();
+    this.props.createThing(newName);
   }
 
   render(){
     return (
-      <Modal isOpen={this.state.modalOn} toggle={this.state.toggleFunc} className={'modal-primary'}>
-        <ModalHeader toggle={this.state.toggleFunc}>Create a new Thing</ModalHeader>
+      <Modal isOpen={this.state.modalOn} toggle={this.props.toggleFunc} className={'modal-primary'}>
+        <ModalHeader toggle={this.props.toggleFunc}>Create a new Thing</ModalHeader>
         <ModalBody>
           <div className="form-group">
             <label> New Thing's name</label>
@@ -42,8 +40,8 @@ class CreateThingModal extends Component{
           </div>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.handleAddClick}>Create Thing</Button>{' '}
-          <Button color="secondary" onClick={this.state.toggleFunc}>Cancel</Button>
+          <Button id="createButton" color="primary" onClick={this.handleAddClick}>Create Thing</Button>{' '}
+          <Button id="createCancel" color="secondary" onClick={this.props.toggleFunc}>Cancel</Button>
         </ModalFooter>
       </Modal>
     )
@@ -52,8 +50,17 @@ class CreateThingModal extends Component{
 
 CreateThingModal.propTypes = {
   modalOn: PropTypes.bool.isRequired,
-  toggleFunc: PropTypes.func.isRequired
+  toggleFunc: PropTypes.func.isRequired,
+  createThing: PropTypes.func.isRequired
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    createThing: (name) => {
+      dispatch(commandAction(createThing, [name]))
+    }
+  }
 }
 
 //connect to redux store so we can get access to dispatch in the props
-export default connect()(CreateThingModal);
+export default connect(null, mapDispatchToProps)(CreateThingModal);

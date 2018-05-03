@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { MyThings } from './MyThings';
-import { Router } from 'react-router-dom';
 
 //enzyme
 import { shallow } from 'enzyme'
