@@ -1,5 +1,6 @@
 ruleset io.picolabs.manifold_owner {
   meta {
+    use module io.picolabs.subscription alias Subscriptions
     use module io.picolabs.wrangler alias wrangler
     shares __testing, getManifoldPico
   }
@@ -12,7 +13,7 @@ ruleset io.picolabs.manifold_owner {
                       "attrs": [  ] }
                    ] }
 
-    config={"pico_name" : "Manifold", "URI" : ["io.picolabs.manifold_pico.krl"], "rids": ["io.picolabs.manifold_pico"], "channel_type":"App"};
+    config={"pico_name" : "Manifold", "URI" : ["io.picolabs.manifold_pico.krl"], "rids": ["io.picolabs.manifold_pico","io.picolabs.subscription"], "channel_type":"App"};
 
     getManifoldPico = function(){
       child = wrangler:children(config{"pico_name"}).klog("child: ");
@@ -72,8 +73,19 @@ ruleset io.picolabs.manifold_owner {
       //engine:registerRuleset(config{"rids"})
       noop()
     fired {
-      raise wrangler event "child_creation" // HEY HEY!!!! check event api
-        attributes { "name": config{"pico_name"}, "color": "#7FFFD4", "rids": config{"rids"} } // check child creation api
+      raise wrangler event "child_creation" 
+        attributes { "name": config{"pico_name"}, "color": "#7FFFD4", "rids": config{"rids"},"event_type": "manifold_create_owner" }
+    }
+  }
+  rule ownerCompleted{
+    select when wrangler child_initialized where rs_attrs{"event_type"} == "manifold_create_owner"
+    pre{eci = event:attr("eci") }
+    every{
+      event:send(
+        { "eci": eci,
+          "domain": "wrangler", "type": "autoAcceptConfigUpdate",
+          "attrs": {"variable"    : "Tx_Rx_Type",
+                    "regex_str"   : "Manifold" }})
     }
   }
 }
