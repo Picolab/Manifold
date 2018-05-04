@@ -14,6 +14,7 @@ export class CreateThingModal extends Component{
     };
 
     this.handleAddClick = this.handleAddClick.bind(this);
+    this.handleToggle = this.handleToggle.bind(this);
   }
 
   //this allows the modal to update its state when its props change
@@ -25,14 +26,24 @@ export class CreateThingModal extends Component{
 
   handleAddClick() {
     const newName = this.state.name;
-    this.props.toggleFunc();
+    if(!newName || newName === ""){
+      alert('Please enter a name.');
+      return;
+    }
+    this.handleToggle();
     this.props.createThing(newName);
+  }
+
+  handleToggle() {
+    //reset the name state, then toggle
+    this.setState({name: ""});
+    this.props.toggleFunc();
   }
 
   render(){
     return (
-      <Modal isOpen={this.state.modalOn} toggle={this.props.toggleFunc} className={'modal-primary'}>
-        <ModalHeader toggle={this.props.toggleFunc}>Create a new Thing</ModalHeader>
+      <Modal isOpen={this.state.modalOn} toggle={this.handleToggle} className={'modal-primary'}>
+        <ModalHeader toggle={this.handleToggle}>Create a new Thing</ModalHeader>
         <ModalBody>
           <div className="form-group">
             <label> New Thing's name</label>
@@ -41,7 +52,7 @@ export class CreateThingModal extends Component{
         </ModalBody>
         <ModalFooter>
           <Button id="createButton" color="primary" onClick={this.handleAddClick}>Create Thing</Button>{' '}
-          <Button id="createCancel" color="secondary" onClick={this.props.toggleFunc}>Cancel</Button>
+          <Button id="createCancel" color="secondary" onClick={this.handleToggle}>Cancel</Button>
         </ModalFooter>
       </Modal>
     )
