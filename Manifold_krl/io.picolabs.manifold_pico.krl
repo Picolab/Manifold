@@ -2,15 +2,14 @@ ruleset io.picolabs.manifold_pico {
   meta {
     use module io.picolabs.wrangler alias wrangler
     use module io.picolabs.subscription alias subscription
-    shares subscriptionSpanningTree ,__testing, getManifoldInfo, span
-    provides getManifoldInfo, subscriptionSpanningTree,__testing, span
+    shares subscriptionSpanningTree ,__testing, getManifoldInfo
+    provides getManifoldInfo, subscriptionSpanningTree,__testing
   }
   global {
     __testing =
       { "queries": [ { "name":"getManifoldPico" },
                      { "name": "getManifoldInfo" },
-                     { "name": "subscriptionSpanningTree" },
-                     { "name": "span" }],
+                     { "name": "subscriptionSpanningTree" }],
         "events": [ { "domain": "manifold", "type": "create_thing",
                       "attrs": [ "name" ] } ] }
 
@@ -31,25 +30,23 @@ ruleset io.picolabs.manifold_pico {
         bus.put(self);
         });
     }
-    // dead code??--
+
     subscriptionSpanningTree = function(){ //at root call all subscriptions
       manifold_subs = subscription:established().klog("established()").filter(function(bus){ (bus{"Tx_role"} == "manifold_slave")}).klog("filtered subs on manifold_slave");
-      spannedTx     = manifold_subs.map(function(bus){ span(bus) })// for all children call established
-                        .reduce(function(a,b){ a.append(b) }); // combine arrays into a single array
+      spannedTx     = manifold_subs.map(function(bus){ span(bus) }).reduce(function(a,b){ a.append(b) }); // for all children call established
       addSelf(manifold_subs.append(spannedTx));
-    }//---
+    }
 
-  span = function(bus , seen =[] ){ // on a single subscription
-      PicoId = wrangler:skyQuery(bus{"Tx"}, "io.picolabs.wrangler", "myself"){"id"};
-      Txs = seen >< picoID => [] | //basecase, pico has been seen 
-        wrangler:skyQuery(bus{"Tx"}, "io.picolabs.subscription", "established")//get all subscritpions
-                .filter(function(bus){bus{"Tx_role"} == "manifold_slave" });
+    span = function(bus){ // on a single subscription
+      //get all subscritpions
+      Txs = wrangler:skyQuery(bus{"Tx"}, "io.picolabs.subscription", "established").filter(function(bus){bus{"Tx_role"} == "manifold_slave" });
 
-      spanSpan = function(Txs){ // on each subscriptions 
-        arrayOfTxArrays = Txs.map(function(bus){ span( bus, seen.append(PicoId) ) }); // whats the scope of seen? should be passed in?
+      spanSpan = function(Txs){ // on each subscriptions
+        arrayOfTxArrays = Txs.map(function(bus){ span( bus ) }); // get all subscritpions
         arrayOfTxArrays.reduce(function(a,b){ a.append(b) });
       };
-      (Txs.length() == 0) => [] |  Txs.append( spanSpan(Txs) ); // base case, empty or seen?
+
+      (Txs.length() == 0) => [] | Txs.append( spanSpan(Txs) );
     }
 
     initiate_subscription = defaction(eci, channel_name, wellKnown, optionalHost = meta:host){
