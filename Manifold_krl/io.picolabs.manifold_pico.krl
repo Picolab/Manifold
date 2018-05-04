@@ -49,22 +49,6 @@ ruleset io.picolabs.manifold_pico {
       (Txs.length() == 0) => [] | Txs.append( spanSpan(Txs) );
     }
 
-    initiate_subscription = defaction(eci, channel_name, wellKnown, optionalHost = meta:host){
-      every{
-        event:send({
-          "eci": eci, "eid": "subscription",
-          "domain": "wrangler", "type": "subscription",
-          "attrs": {
-                   "name"        : event:attr("name"),
-                   "Rx_role"     : "manifold_thing",
-                   "Tx_role"     : "manifold_owner",
-                   "Tx_Rx_Type"  : "Manifold" , // auto_accept
-                   "channel_type": "Manifold",
-                   "wellKnown_Tx": wellKnown, //this should by best practice be the parent's or the pico being requested's wellknown eci
-                   "Tx_host"     : meta:host } //allow cross engine subscriptions
-        }, host = optionalHost)
-      }
-    }
   }
 
   rule createThing {
@@ -82,21 +66,6 @@ ruleset io.picolabs.manifold_pico {
     }
   }
 
-  rule thingCompleted{
-    select when wrangler child_initialized where rs_attrs{"event_type"} == "manifold_create_thing"
-    pre{eci = event:attr("eci") }
-      initiate_subscription(event:attr("eci"), event:attr("rs_attrs"){"name"}, subscription:wellKnown_Rx(){"id"});
-    always{
-      raise manifold event "move_thing"
-        attributes {"name":event:attr("name"),
-                    "x": 0, "y": 0, "w": 3, "h": 2.25};
-      ent:thingsUpdate := time:now();
-      ent:thingsColor := ent:thingsColor.defaultsTo({}).put([event:attr("name")], {
-        "color": "#eceff1"
-      });
-    }
-  }
-
   rule removeThing {
     select when manifold remove_thing
     pre {}
@@ -110,6 +79,32 @@ ruleset io.picolabs.manifold_pico {
         attributes event:attrs.put({"event_type": "manifold_remove_thing"})
     }else{
       //send_directive("Missing a name for your Thing!")
+    }
+  }
+
+  rule thingCompleted{
+    select when wrangler child_initialized where rs_attrs{"event_type"} == "manifold_create_thing"
+    pre{eci = event:attr("eci") }
+      event:send(
+        { "eci": eci,
+          "domain": "wrangler", "type": "autoAcceptConfigUpdate",
+          "attrs": {"variable"    : "Tx_Rx_Type",
+                    "regex_str"   : "Manifold" }})
+    always{
+      raise wrangler event "subscription"
+        attributes {"name"        : event:attr("name"),
+                    "Rx_role"     : "manifold_master",
+                    "Tx_role"     : "manifold_slave",
+                    "wellKnown_Tx"   : wrangler:skyQuery( eci , "io.picolabs.subscription", "wellKnown_Rx"){"id"},
+                    "channel_type": "Manifold",
+                    "Tx_Rx_Type"  : "Manifold" };
+      raise manifold event "move_thing"
+        attributes {"name":event:attr("name"),
+                    "x": 0, "y": 0, "w": 3, "h": 2.25};
+      ent:thingsUpdate := time:now();
+      ent:thingsColor := ent:thingsColor.defaultsTo({}).put([event:attr("name")], {
+        "color": "#eceff1"
+      });
     }
   }
 
