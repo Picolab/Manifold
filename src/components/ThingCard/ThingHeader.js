@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem} from 'reactstrap';
+import ThingDropdown from '../Dropdowns/ThingDropdown';
+import PropTypes from 'prop-types';
 
 
 class ThingHeader extends Component {
@@ -8,6 +9,8 @@ class ThingHeader extends Component {
       this.state = {
         dropdownOpen : false
       }
+
+      this.toggleSettings = this.toggleSettings.bind(this);
     }
 
     toggleSettings() {
@@ -17,34 +20,6 @@ class ThingHeader extends Component {
       });
     }
 
-    openRemoveModal(){
-      this.setState({
-        dropdownOpen: !this.state.dropdownOpen
-      });
-      this.props.openRemoveModal()
-    }
-
-    openCommunitiesModal(){
-      this.setState({
-        dropdownOpen: !this.state.dropdownOpen
-      });
-      this.props.openCommunitiesModal()
-    }
-
-    openInstallModal(){
-      this.setState({
-        dropdownOpen: !this.state.dropdownOpen
-      });
-      this.props.openInstallModal()
-    }
-
-    openColorModal(){
-      this.setState({
-        dropdownOpen: !this.state.dropdownOpen
-      });
-      this.props.openColorModal()
-    }
-
     render(){
       return(
         <div className="card-header" style={{"backgroundColor": this.props.color}}>
@@ -52,42 +27,17 @@ class ThingHeader extends Component {
             {this.props.name}
           </div>
 
-          <Dropdown className="float-right"  isOpen={this.state.dropdownOpen} toggle={this.toggleSettings.bind(this)} style={{paddingLeft:"125px"}}>
-            <DropdownToggle
-              tag="span"
-              onClick={this.toggleSettings.bind(this)}
-              data-toggle="dropdown"
-              aria-expanded={this.state.dropdownOpen} >
-
-              <i className="fa fa-cogs float-right fa-lg" style={{backgroundColor:"#ddd", padding:"5px", borderStyle:"solid", borderColor:"#aaa"}}/>
-            </DropdownToggle>
-            <DropdownMenu>
-
-              <DropdownItem onClick={this.openRemoveModal.bind(this)} >
-                Delete a Pico
-                <i className="fa fa-trash float-right" />
-              </DropdownItem>
-
-              <DropdownItem onClick={this.openInstallModal.bind(this)}>
-                Install an App
-                <i className="fa fa-cloud-download float-right"/>
-              </DropdownItem>
-
-              <DropdownItem onClick={this.openColorModal.bind(this)}>
-                Change Color
-                <i className="fa fa-cubes float-right"/>
-              </DropdownItem>
-
-              <DropdownItem onClick={this.openCommunitiesModal.bind(this)}>
-                Communities
-                <i className="fa fa-users float-right"/>
-              </DropdownItem>
-
-            </DropdownMenu>
-          </Dropdown>
+          <ThingDropdown isOpen={this.state.dropdownOpen} toggleSettings={this.toggleSettings} name={this.props.name} eci={this.props.eci} currentColor={this.props.color}/>
 
         </div>
-    );
+      );
     }
 }
+
+ThingHeader.propTypes = {
+  name: PropTypes.string.isRequired,
+  color: PropTypes.string.isRequired,
+  eci: PropTypes.string.isRequired
+}
+
 export default ThingHeader;

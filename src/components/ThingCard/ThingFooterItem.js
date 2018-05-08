@@ -1,21 +1,34 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class ThingFooterItem extends Component {
-  dotClicked(index){
-    this.props.onDotClick(index);
+  constructor(props){
+    super(props);
+
+    this.dotClicked = this.dotClicked.bind(this);
+  }
+
+  dotClicked(){
+    this.props.onDotClick(this.props.index);
   }
 
   render(){
     if(this.props.index === this.props.currentApp){
-    return(
-        <btn className="circle-selected" onClick={this.dotClicked.bind(this, this.props.index)}></btn>
-    );
+      return(
+        <btn className="circle-selected" onClick={this.dotClicked}></btn>
+      );
     }else{
       return(
-        <btn className="circle" onClick={this.dotClicked.bind(this, this.props.index)}></btn>
+        <btn className="circle" onClick={this.dotClicked}></btn>
       );
-      }
+    }
   }
+}
+
+ThingFooterItem.propTypes = {
+  onDotClick: PropTypes.func.isRequired,
+  currentApp: PropTypes.number.isRequired,
+  index: PropTypes.number.isRequired
 }
 
 export default ThingFooterItem;

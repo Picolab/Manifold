@@ -53,7 +53,6 @@ class ThingGrid extends Component {
   }
 
   onLayoutChange = (layout) => {
-    console.log("layout", layout);
     if (!this.state.layout || this.state.layout.length === 0) {
       this.setState({layout: layout});
       return;

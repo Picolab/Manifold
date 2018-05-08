@@ -10,7 +10,7 @@ function* fetchEci(delayTime, attemptNum, action) {
    try {
       yield delay(delayTime);
       const result = yield call(retrieveManifoldEci);
-      console.log("result in fetchEci:",result);
+      //console.log("result in fetchEci:",result);
       if(result.data.directives[0].options.eci){
         const payload = result.data.directives[0].options.eci;
         yield put({type: "FETCH_ECI_SUCCEEDED", payload});

@@ -148,6 +148,7 @@ describe('CreateThingModal', () => {
     expect(afterClickName).toEqual('')
   })
 
+  //very similar to the test above
   it('clears the name state after cancelling the modal', () => {
     const wrapper = shallow(<CreateThingModal modalOn={true} toggleFunc={mockToggle} createThing={mockCreateThing}/>);
     wrapper.setState({name: 'FrodoSwaggins'});

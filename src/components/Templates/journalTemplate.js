@@ -44,7 +44,6 @@ class JournalTemplate extends Component {
   }
 
   createEntry(entry, index) {
-    console.log("create entry",entry);
     return(
       <div key={index}>
         {entry.title}: {entry.memo}
@@ -87,9 +86,6 @@ class JournalTemplate extends Component {
   }
 
   render(){
-    console.log("props",
-      this.props
-    );
     return (
       <div>
         <div name="journal-header">
