@@ -1,20 +1,26 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { delay } from 'redux-saga';
+import ActionTypes from '../actions/index';
 
-function* execute(action) {
-  const result = yield call(action.command, ...action.params); // .execute in command pattern
-  if(result.data){//check that the request did not fail.
-    if(action.delay && typeof action.delay === 'number'){
-      console.log("Delaying " + action.delay + " milliseconds");
-      yield delay(action.delay);
+export function* execute(action) {
+  try{
+    const result = yield call(action.command, ...action.params); // .execute in command pattern
+    if(result.data){//check that the request did not fail.
+      if(action.delay && typeof action.delay === 'number'){
+        yield call(delay, action.delay);
+      }
+      if(action.query && action.query.type && action.query.type !== ""){
+        yield put(action.query);
+      }
+    }else{
+      alert("Promise was not rejected, but still missing attribute data from result!");
     }
-    if(action.query && action.query.type && action.query.type !== ""){
-      yield put(action.query);
-    }
-    //yield put({ type: "MANIFOLD_INFO" });
-  }else{
-    alert("Something went wrong. Please try again.");
   }
+  catch(error){
+    yield put({ type: ActionTypes.COMMAND_FAILED, error });
+  }
+
+
 }
 
 export default function* watchCommand() {

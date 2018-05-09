@@ -18,3 +18,10 @@ export function getAccessToken(code){
     payload: request
   };
 }
+
+let ActionTypes = {
+  MANIFOLD_INFO: 'MANIFOLD_INFO',
+  COMMAND_FAILED: 'COMMAND_FAILED'
+}
+
+export default ActionTypes

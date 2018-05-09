@@ -21,6 +21,7 @@ import { mount, shallow } from 'enzyme'
 import { createContext } from '../../utils/testingTools'
 
 /*
+NOTE: jest is a global variable of sorts that we don't need to declare/import ourselves
 jest.fn() is called a spy. It keeps track of anything that happens to these mock functions. The mock function (google jest mock functions)
 can be "implemented" to run some code, but in this case nothing runs when the mock function is called
 */
