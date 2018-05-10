@@ -40,6 +40,14 @@ describe('command saga', () => {
     })
   });
 
+  let mockMalformedFunc = jest.fn(() => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve({ someOtherKey: 'Missing the data key!'})
+      }, 250)
+    })
+  });
+
   beforeEach(() => {
       // Init code
       sagaTester = new SagaTester({ initialState });
@@ -146,6 +154,15 @@ describe('command saga', () => {
     expect(sagaTester.getLatestCalledAction()).toEqual({
       type: ActionTypes.COMMAND_FAILED,
       error: 'something did not work!' //this line specifically is the result from our mock function. A real error would contain an http error response
+    });
+  })
+
+  it('dispatches a MALFORMED_RESPONSE error if the response does not contain data', async () => {
+    sagaTester.dispatch(commandAction(mockMalformedFunc, []));
+    await sagaTester.waitFor(ActionTypes.MALFORMED_RESPONSE);
+    expect(sagaTester.getLatestCalledAction()).toEqual({
+      type: ActionTypes.MALFORMED_RESPONSE,
+      result: { someOtherKey: 'Missing the data key!'}
     });
   })
 });

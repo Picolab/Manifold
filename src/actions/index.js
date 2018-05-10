@@ -21,7 +21,8 @@ export function getAccessToken(code){
 
 let ActionTypes = {
   MANIFOLD_INFO: 'MANIFOLD_INFO',
-  COMMAND_FAILED: 'COMMAND_FAILED'
+  COMMAND_FAILED: 'COMMAND_FAILED',
+  MALFORMED_RESPONSE: 'MALFORMED_RESPONSE'
 }
 
 export default ActionTypes

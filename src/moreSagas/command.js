@@ -13,14 +13,13 @@ export function* execute(action) {
         yield put(action.query);
       }
     }else{
+      yield put({ type: ActionTypes.MALFORMED_RESPONSE, result })
       alert("Promise was not rejected, but still missing attribute data from result!");
     }
   }
   catch(error){
     yield put({ type: ActionTypes.COMMAND_FAILED, error });
   }
-
-
 }
 
 export default function* watchCommand() {
