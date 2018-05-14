@@ -21,7 +21,7 @@ class Thing extends Component {
 
   componentWillMount(){
     //query for the discovery and app info
-    this.props.dispatch({type: 'DISCOVERY', eci: this.props.eci, pico_id: this.props.id});
+    this.props.dispatch({type: 'DISCOVERY', eci: this.props.Rx, pico_id: this.props.id});
   }
 
   handleCarouselDotClick(index) {
@@ -34,7 +34,7 @@ class Thing extends Component {
   renderBody() {
     if(this.props.thingIdentity.length > 0){
       return (
-        <ThingBody eci={this.props.eci} id={this.props.id} appInfo={this.props.thingIdentity[this.state.currentApp]}/>
+        <ThingBody Rx={this.props.Rx} id={this.props.id} appInfo={this.props.thingIdentity[this.state.currentApp]}/>
       )
     }else{
       return (
@@ -49,7 +49,7 @@ class Thing extends Component {
     return (
       <div className="card" style={{  height: "inherit", width: "inherit"}}>
 
-        <ThingHeader name={this.props.name} color={this.props.color} eci={this.props.eci}/>
+        <ThingHeader name={this.props.name} color={this.props.color} Rx={this.props.Rx} sub_id={this.props.sub_id}/>
 
         <div className="card-block" style={{"textOverflow": "clip", overflow: "hidden"}}>
           {this.renderBody()}
@@ -74,9 +74,8 @@ Thing.defaultProps = {
 
 Thing.propTypes = {
   name: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
-  parent_eci: PropTypes.string.isRequired,
-  eci: PropTypes.string.isRequired,
+  sub_id: PropTypes.string.isRequired,
+  Rx: PropTypes.string.isRequired,
   thingIdentity: PropTypes.array.isRequired,
   color: PropTypes.string, //not required
 }

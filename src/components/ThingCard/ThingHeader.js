@@ -27,7 +27,7 @@ class ThingHeader extends Component {
             {this.props.name}
           </div>
 
-          <ThingDropdown isOpen={this.state.dropdownOpen} toggleSettings={this.toggleSettings} name={this.props.name} eci={this.props.eci} currentColor={this.props.color}/>
+          <ThingDropdown isOpen={this.state.dropdownOpen} toggleSettings={this.toggleSettings} name={this.props.name} Rx={this.props.Rx} currentColor={this.props.color} sub_id={this.props.sub_id}/>
 
         </div>
       );
@@ -37,7 +37,8 @@ class ThingHeader extends Component {
 ThingHeader.propTypes = {
   name: PropTypes.string.isRequired,
   color: PropTypes.string.isRequired,
-  eci: PropTypes.string.isRequired
+  Rx: PropTypes.string.isRequired,
+  sub_id: PropTypes.string.isRequired
 }
 
 export default ThingHeader;

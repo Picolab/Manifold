@@ -41,8 +41,8 @@ export class ThingBody extends Component {
 
 ThingBody.propTypes = {
   appInfo: PropTypes.object.isRequired,
-  eci: PropTypes.string.isRequired,
+  Rx: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired
 }
 
-export default ThingBody
+export default ThingBody;

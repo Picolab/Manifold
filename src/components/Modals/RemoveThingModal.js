@@ -27,7 +27,7 @@ export class RemoveThingModal extends Component {
       alert("Internal Error! Missing name in props.")
     }
     this.handleToggle();
-    this.props.removeThing(this.props.name);
+    this.props.removeThing(this.props.name, this.props.sub_id);
   }
 
   handleToggle() {
@@ -54,13 +54,14 @@ RemoveThingModal.propTypes = {
   modalOn: PropTypes.bool.isRequired,
   toggleFunc: PropTypes.func.isRequired,
   removeThing: PropTypes.func.isRequired,
-  name: PropTypes.string.isRequired
+  name: PropTypes.string.isRequired,
+  sub_id: PropTypes.string.isRequired
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    removeThing: (name) => {
-      dispatch(commandAction(removeThing, [name]))
+    removeThing: (name, sub_id) => {
+      dispatch(commandAction(removeThing, [name, sub_id]))
     }
   }
 }

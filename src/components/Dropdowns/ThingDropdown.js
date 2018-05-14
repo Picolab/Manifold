@@ -98,13 +98,13 @@ export class ThingDropdown extends Component {
             Delete a Pico
             <i className="fa fa-trash float-right" />
           </DropdownItem>
-          <RemoveThingModal modalOn={this.state.removeOpen} toggleFunc={this.toggleRemove} name={this.props.name}/>
+          <RemoveThingModal modalOn={this.state.removeOpen} toggleFunc={this.toggleRemove} name={this.props.name} sub_id={this.props.sub_id}/>
 
           <DropdownItem onClick={this.openInstall}>
             Install an App
             <i className="fa fa-cloud-download float-right"/>
           </DropdownItem>
-          <InstallModal modalOn={this.state.installOpen} toggleFunc={this.toggleInstall} eci={this.props.eci}/>
+          <InstallModal modalOn={this.state.installOpen} toggleFunc={this.toggleInstall} Rx={this.props.Rx}/>
 
           <DropdownItem onClick={this.openColor}>
             Change Color
@@ -133,8 +133,9 @@ ThingDropdown.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggleSettings: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired, //the remove modal needs this
-  eci: PropTypes.string.isRequired,
-  currentColor: PropTypes.string.isRequired
+  Rx: PropTypes.string.isRequired,
+  currentColor: PropTypes.string.isRequired,
+  sub_id: PropTypes.string.isRequired
 }
 
 export default ThingDropdown

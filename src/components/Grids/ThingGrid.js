@@ -75,7 +75,7 @@ class ThingGrid extends Component {
     }
     return (
       <div key={index.toString()} data-grid={grid_settings} >
-          <Thing name={thing.name} id={thing.id} color={thing.color} parent_eci={thing.parent_eci} eci={thing.eci} />
+          <Thing name={thing.name} sub_id={thing.Id} color={thing.color} Rx={thing.Rx} />
       </div>
     );
   }

@@ -36,8 +36,8 @@ export function createThing(name){
   return axios.post(`${sky_event(getManifoldECI())}/Create_Thing/manifold/create_thing?name=${name}`);
 }
 
-export function removeThing(name){
-  return axios.post(`${sky_event(getManifoldECI())}/Remove_Thing/manifold/remove_thing?name=${name}`);
+export function removeThing(name, sub_id){
+  return axios.post(`${sky_event(getManifoldECI())}/Remove_Thing/manifold/remove_thing?name=${name}&sub_id=${sub_id}`);
 }
 
 export function colorThing(name, color){
