@@ -15,7 +15,7 @@ ruleset io.picolabs.manifold_pico {
                       "attrs": [ "name" ] } ] }
 
     thingRids = "io.picolabs.thing;io.picolabs.subscription"
-    communityRids = "io.picolabs.collection;io.picolabs.subscription"
+    communityRids = "io.picolabs.community;io.picolabs.subscription"
     thing_role = "manifold_thing"
     community_role = "manifold_community"
 
@@ -27,9 +27,10 @@ ruleset io.picolabs.manifold_pico {
           "thingsColor": ent:thingsColor.defaultsTo({}),
           "lastUpdated": ent:thingsUpdate.defaultsTo("null")
         },
-        "collections": {
-          "collections": subscription:established("Tx_role", "manifold_collection"),
-          "collectionPositions": ent:collectionsPos.defaultsTo({})
+        "communities": {
+          "communities": getCommunities(),
+          "communitiesPosition": ent:communitiesPos.defaultsTo({}),
+          "lastUpdated": ent:communitiesUpdate
         }
       }
     }
@@ -41,6 +42,7 @@ ruleset io.picolabs.manifold_pico {
           "domain": "wrangler", "type": "subscription",
           "attrs": {
                    "name"        : event:attr("name"),
+                   "pico_id"     : event:attr("id"),
                    "Rx_role"     : role_type,
                    "Tx_role"     : "manifold_pico",
                    "Tx_Rx_Type"  : "Manifold" , // auto_accept
@@ -56,7 +58,20 @@ ruleset io.picolabs.manifold_pico {
       sub_info.map(function(sub) {
         things = ent:things.defaultsTo({});
         desired_info = {
-          "name": things{[sub{"Id"}]}{"name"}.defaultsTo("ERROR: Missing name attribute in ent:things.")
+          "name": things{[sub{"Id"}]}{"name"}.defaultsTo("ERROR: Missing name attribute in ent:things."),
+          "pico_id": things{[sub{"Id"}]}{"pico_id"}.defaultsTo("ERROR: missing pico_id attribute in ent:things.")
+        };
+        sub.put(desired_info)
+      })
+    }
+
+    getCommunities = function(){
+      sub_info = subscription:established("Tx_role", community_role);
+      sub_info.map(function(sub) {
+        communities = ent:communities.defaultsTo({});
+        desired_info = {
+          "name": communities{[sub{"Id"}]}{"name"}.defaultsTo("ERROR: Missing name attribute in ent:communities."),
+          "pico_id": communities{[sub{"Id"}]}{"pico_id"}.defaultsTo("ERROR: missing pico_id attribute in ent:communities.")
         };
         sub.put(desired_info)
       })
@@ -84,37 +99,84 @@ ruleset io.picolabs.manifold_pico {
     }
   }
 
-  rule thingCompleted{
+  rule thingCompleted {
     select when wrangler child_initialized where rs_attrs{"event_type"} == "manifold_create_thing"
     pre{eci = event:attr("eci") }
       initiate_subscription(event:attr("eci"), event:attr("rs_attrs"){"name"}, subscription:wellKnown_Rx(){"id"}, thing_role);
     always{
       raise manifold event "move_thing"
-        attributes {"name":event:attr("name"),
+        attributes {"pico_id": event:attr("id"),
                     "x": 0, "y": 0, "w": 3, "h": 2.25};
+    }
+  }
+
+  rule createCommunity {
+    select when manifold create_community
+    pre {}
+    if event:attr("name") then every {
+      send_directive("Attempting to create new Community",{"community":event:attr("name")})
+    }
+    fired{
+      raise wrangler event "child_creation"
+        attributes event:attrs.put({"event_type": "manifold_create_community"})
+                                .put({"rids": communityRids})
+    }
+  }
+
+  rule communityCompleted {
+    select when wrangler child_initialized where rs_attrs{"event_type"} == "manifold_create_community"
+    pre{eci = event:attr("eci") }
+      initiate_subscription(event:attr("eci"), event:attr("rs_attrs"){"name"}, subscription:wellKnown_Rx(){"id"}, community_role);
+    always{
+      raise manifold event "move_community"
+        attributes {"pico_id": event:attr("id"),
+                    "x": 0, "y": 0, "w": 3, "h": 2.25};
+    }
+  }
+
+  rule trackThingSubscription {
+    select when wrangler subscription_added where event:attr("Tx_role") == thing_role
+    pre{
+      sub_id = event:attr("Id");
+      name = event:attr("name");
+      pico_id = event:attr("pico_id");
+      obj_structure = {
+        "name": name,
+        "sub_id": sub_id,
+        "pico_id": pico_id
+      }
+    }
+    if sub_id && name && pico_id then
+      noop()
+    fired{
+      ent:things := ent:things.defaultsTo({}).put([sub_id], obj_structure);
       ent:thingsUpdate := time:now();
-      ent:thingsColor := ent:thingsColor.defaultsTo({}).put([event:attr("name")], {
+      ent:thingsColor := ent:thingsColor.defaultsTo({}).put([pico_id], {
         "color": "#eceff1"
       });
     }
   }
 
-  rule trackSubscriptionCreation {
-    select when wrangler subscription_added
+  rule trackCommSubscription {
+    select when wrangler subscription_added where event:attr("Tx_role") == community_role
     pre{
       sub_id = event:attr("Id");
       name = event:attr("name");
-      Tx_role = event:attr("Tx_role");
+      pico_id = event:attr("pico_id");
       obj_structure = {
         "name": name,
-        "sub_id": sub_id
+        "sub_id": sub_id,
+        "pico_id": pico_id
       }
     }
-    if sub_id && name && Tx_role then
+    if sub_id && name && pico_id then
       noop()
     fired{
-      ent:things := ent:things.defaultsTo({}).put([sub_id], obj_structure) if Tx_role == thing_role;
-      ent:communities := ent:communities.defaultsTo({}).put([sub_id], obj_structure) if Tx_role == community_role
+      ent:communities := ent:communities.defaultsTo({}).put([sub_id], obj_structure);
+      ent:communitiesUpdate := time:now();
+      ent:communitiesColor := ent:communitiesColor.defaultsTo({}).put([pico_id], {
+        "color": "#87cefa"
+      });
     }
   }
 
@@ -191,12 +253,30 @@ ruleset io.picolabs.manifold_pico {
     }
   }
 
-  rule updateLocation {
+  rule updateThingLocation {
     select when manifold move_thing
     pre {}
     noop()
     fired {
-      ent:thingsPos := ent:thingsPos.defaultsTo({}).put([event:attr("name")], {
+      ent:thingsPos := ent:thingsPos.defaultsTo({}).put([event:attr("pico_id")], {
+        "x": event:attr("x").as("Number"),
+        "y": event:attr("y").as("Number"),
+        "w": event:attr("w").as("Number"),
+        "h": event:attr("h").as("Number"),
+        "minw": 3,
+        "minh": 2.25,
+        "maxw": 8,
+        "maxh": 5
+      });
+    }
+  }
+
+  rule updateCommunityLocation {
+    select when manifold move_community
+    pre {}
+    noop()
+    fired {
+      ent:communitiesPos := ent:communitiesPos.defaultsTo({}).put([event:attr("pico_id")], {
         "x": event:attr("x").as("Number"),
         "y": event:attr("y").as("Number"),
         "w": event:attr("w").as("Number"),

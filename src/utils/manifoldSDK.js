@@ -36,6 +36,10 @@ export function createThing(name){
   return axios.post(`${sky_event(getManifoldECI())}/Create_Thing/manifold/create_thing?name=${name}`);
 }
 
+export function createCommunity(name){
+  return axios.post(`${sky_event(getManifoldECI())}/Create_Thing/manifold/create_community?name=${name}`);
+}
+
 export function removeThing(name, sub_id){
   return axios.post(`${sky_event(getManifoldECI())}/Remove_Thing/manifold/remove_thing?name=${name}&sub_id=${sub_id}`);
 }
@@ -44,8 +48,12 @@ export function colorThing(name, color){
   return axios.post(`${sky_event(getManifoldECI())}/colorThing/manifold/color_thing?dname=${name}&color=%23${color.substring(1)}`);
 }
 
-export function moveThing(name, x, y, w, h){
-  return axios.post(`${sky_event(getManifoldECI())}/Move_Thing/manifold/move_thing?name=${name}&x=${x}&y=${y}&w=${w}&h=${h}`);
+export function moveThing(pico_id, x, y, w, h){
+  return axios.post(`${sky_event(getManifoldECI())}/Move_Thing/manifold/move_thing?pico_id=${pico_id}&x=${x}&y=${y}&w=${w}&h=${h}`);
+}
+
+export function moveCommunity(pico_id, x, y, w, h){
+  return axios.post(`${sky_event(getManifoldECI())}/Move_Thing/manifold/move_community?pico_id=${pico_id}&x=${x}&y=${y}&w=${w}&h=${h}`);
 }
 
 export function discovery(eci){
