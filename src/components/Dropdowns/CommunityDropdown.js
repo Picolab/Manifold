@@ -3,10 +3,10 @@ import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem} from 'reactstrap'
 import ColorModal from '../Modals/ColorModal';
 // import CommunitiesModal from '../Modals/CommunitiesModal';
 import InstallModal from '../Modals/InstallModal';
-import RemoveThingModal from '../Modals/RemoveThingModal';
+import RemoveCommunityModal from '../Modals/RemoveCommunityModal';
 import PropTypes from 'prop-types';
 
-export class ThingDropdown extends Component {
+export class CommunityDropdown extends Component {
   constructor(props){
     super(props);
 
@@ -21,12 +21,10 @@ export class ThingDropdown extends Component {
     this.openRemove = this.openRemove.bind(this);
     this.openInstall = this.openInstall.bind(this);
     this.openColor = this.openColor.bind(this);
-    this.openCommunities = this.openRemove.bind(this);
 
     this.toggleRemove = this.toggleRemove.bind(this);
     this.toggleInstall = this.toggleInstall.bind(this);
     this.toggleColor = this.toggleColor.bind(this);
-    this.toggleCommunities = this.toggleCommunities.bind(this);
   }
 
   //this allows the modal to update its state when its props change
@@ -52,11 +50,6 @@ export class ThingDropdown extends Component {
     this.toggleColor();
   }
 
-  openCommunities() {
-    this.props.toggleSettings();
-    this.toggleCommunities();
-  }
-
   toggleRemove() {
     this.setState({
       removeOpen: !this.state.removeOpen
@@ -75,12 +68,6 @@ export class ThingDropdown extends Component {
     })
   }
 
-  toggleCommunities() {
-    this.setState({
-      communitiesOpen: !this.state.communitiesOpen
-    })
-  }
-
   render() {
     return (
       <Dropdown className="float-right"  isOpen={this.state.isOpen} toggle={this.props.toggleSettings} style={{paddingLeft:"125px"}}>
@@ -95,10 +82,10 @@ export class ThingDropdown extends Component {
         <DropdownMenu>
 
           <DropdownItem onClick={this.openRemove} >
-            Remove Thing
+            Remove Community
             <i className="fa fa-trash float-right" />
           </DropdownItem>
-          <RemoveThingModal modalOn={this.state.removeOpen} toggleFunc={this.toggleRemove} name={this.props.name} sub_id={this.props.sub_id}/>
+          <RemoveCommunityModal modalOn={this.state.removeOpen} toggleFunc={this.toggleRemove} name={this.props.name} sub_id={this.props.sub_id}/>
 
           <DropdownItem onClick={this.openInstall}>
             Install an App
@@ -119,17 +106,7 @@ export class ThingDropdown extends Component {
   }
 }
 
-/*
-Since the idea of a community is not yet solidly formed, I'm refraining from adding the modal. This can be readded and fixed once
-we have a good idea what we want a community in Manifold to look like.
-<DropdownItem onClick={this.openCommunities}>
-  Communities
-  <i className="fa fa-users float-right"/>
-</DropdownItem>
-<CommunitiesModal modalOn={this.state.communitiesOpen} toggleFunc={this.openCommunities}/>
-*/
-
-ThingDropdown.propTypes = {
+CommunityDropdown.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggleSettings: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired, //the remove modal needs this
@@ -138,4 +115,4 @@ ThingDropdown.propTypes = {
   sub_id: PropTypes.string.isRequired
 }
 
-export default ThingDropdown
+export default CommunityDropdown;

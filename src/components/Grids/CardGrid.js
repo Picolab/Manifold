@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 import { connect } from 'react-redux';
-import Thing from '../ThingCard/Thing';
+import Card from '../Cards/Card';
 import { moveThing, moveCommunity } from '../../utils/manifoldSDK';
 import { commandAction } from '../../actions/command';
 
@@ -70,7 +70,7 @@ class CardGrid extends Component {
     }
     return (
       <div key={index.toString()} data-grid={grid_settings} >
-          <Thing name={object.name} sub_id={object.Id} color={this.props.objColors[object.pico_id].color} Rx={object.Rx} />
+          <Card name={object.name} sub_id={object.Id} color={this.props.objColors[object.pico_id].color} Rx={object.Rx} cardType={this.props.cardType}/>
       </div>
     );
   }

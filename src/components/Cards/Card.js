@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import ThingFooter from './ThingFooter';
-import ThingHeader from './ThingHeader';
-import ThingBody from './ThingBody';
+import CardFooter from './CardFooter';
+import CardHeader from './CardHeader';
+import CardBody from './CardBody';
 import PropTypes from 'prop-types';
 
 
-class Thing extends Component {
+class Card extends Component {
   constructor(props) {
     super(props);
 
@@ -32,9 +32,9 @@ class Thing extends Component {
   }
 
   renderBody() {
-    if(this.props.thingIdentity.length > 0){
+    if(this.props.cardIdentity.length > 0){
       return (
-        <ThingBody Rx={this.props.Rx} id={this.props.id} appInfo={this.props.thingIdentity[this.state.currentApp]}/>
+        <CardBody Rx={this.props.Rx} id={this.props.id} appInfo={this.props.thingIdentity[this.state.currentApp]}/>
       )
     }else{
       return (
@@ -49,16 +49,16 @@ class Thing extends Component {
     return (
       <div className="card" style={{  height: "inherit", width: "inherit"}}>
 
-        <ThingHeader name={this.props.name} color={this.props.color} Rx={this.props.Rx} sub_id={this.props.sub_id}/>
+        <CardHeader name={this.props.name} color={this.props.color} Rx={this.props.Rx} sub_id={this.props.sub_id} cardType={this.props.cardType}/>
 
         <div className="card-block" style={{"textOverflow": "clip", overflow: "hidden"}}>
           {this.renderBody()}
         </div>
 
         <div className="card-footer" style={{"backgroundColor": this.props.color, overflow:"hidden",  textAlign: "center", minHeight:"40px"}}>
-          <ThingFooter
+          <CardFooter
             dotClicked={this.handleCarouselDotClick}
-            totalApps={this.props.thingIdentity.length}
+            totalApps={this.props.cardIdentity.length}
             currentApp={this.state.currentApp}
           />
         </div>
@@ -68,29 +68,30 @@ class Thing extends Component {
   }
 }
 
-Thing.defaultProps = {
+Card.defaultProps = {
   color: "#eceff1" //light grey
 }
 
-Thing.propTypes = {
+Card.propTypes = {
   name: PropTypes.string.isRequired,
   sub_id: PropTypes.string.isRequired,
   Rx: PropTypes.string.isRequired,
-  thingIdentity: PropTypes.array.isRequired,
+  cardIdentity: PropTypes.array.isRequired,
+  cardType: PropTypes.string.isRequired,
   color: PropTypes.string, //not required
 }
 
 const mapStateToProps = (state, ownProps) => {
   if(state.identities && state.identities[ownProps.id]){
     return {
-       thingIdentity: state.identities[ownProps.id],
+       cardIdentity: state.identities[ownProps.id],
     }
   }else{
     return {
-      thingIdentity: []
+      cardIdentity: []
     }
   }
 }
 
 
-export default connect(mapStateToProps)(Thing);
+export default connect(mapStateToProps)(Card);

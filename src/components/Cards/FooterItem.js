@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-class ThingFooterItem extends Component {
+class FooterItem extends Component {
   constructor(props){
     super(props);
 
@@ -25,10 +25,10 @@ class ThingFooterItem extends Component {
   }
 }
 
-ThingFooterItem.propTypes = {
+FooterItem.propTypes = {
   onDotClick: PropTypes.func.isRequired,
   currentApp: PropTypes.number.isRequired,
   index: PropTypes.number.isRequired
 }
 
-export default ThingFooterItem;
+export default FooterItem;

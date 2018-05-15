@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import CustomComponentMap from '../Templates/customComponentMap';
 import PropTypes from 'prop-types';
 
-export class ThingBody extends Component {
+export class CardBody extends Component {
   render() {
     let appInfo = this.props.appInfo;
     let options = appInfo.options;
@@ -39,10 +39,10 @@ export class ThingBody extends Component {
   }
 }
 
-ThingBody.propTypes = {
+CardBody.propTypes = {
   appInfo: PropTypes.object.isRequired,
   Rx: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired
 }
 
-export default ThingBody;
+export default CardBody;

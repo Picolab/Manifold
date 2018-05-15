@@ -1,8 +1,8 @@
 import React, { Component} from 'react';
-import ThingFooterItem from './ThingFooterItem';
+import FooterItem from './FooterItem';
 import PropTypes from 'prop-types';
 
-class ThingFooter extends Component{
+class CardFooter extends Component{
   constructor(props){
     super(props);
 
@@ -17,7 +17,7 @@ class ThingFooter extends Component{
     let footers = [];
     for(var i = 0; i < this.props.totalApps; i++){
       footers.push(
-        <ThingFooterItem
+        <FooterItem
           onDotClick={this.handleDotClick}
           key={i}
           index={i}
@@ -37,10 +37,10 @@ class ThingFooter extends Component{
   }
 }
 
-ThingFooter.propTypes = {
+CardFooter.propTypes = {
   dotClicked: PropTypes.func.isRequired,
   totalApps: PropTypes.number.isRequired,
   currentApp: PropTypes.number.isRequired
 }
 
-export default ThingFooter;
+export default CardFooter;
