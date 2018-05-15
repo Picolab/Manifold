@@ -51,11 +51,11 @@ class Card extends Component {
 
         <CardHeader name={this.props.name} color={this.props.color} eci={this.props.eci} sub_id={this.props.sub_id} cardType={this.props.cardType}/>
 
-        <div className="card-block" style={{"textOverflow": "clip", overflow: "hidden"}}>
+        <div className="card-block nonDraggable" style={{"textOverflow": "clip", overflow: "hidden"}}>
           {this.renderBody()}
         </div>
 
-        <div className="card-footer" style={{"backgroundColor": this.props.color, overflow:"hidden",  textAlign: "center", minHeight:"40px"}}>
+        <div className="card-footer nonDraggable" style={{"backgroundColor": this.props.color, overflow:"hidden",  textAlign: "center", minHeight:"40px"}}>
           <CardFooter
             dotClicked={this.handleCarouselDotClick}
             totalApps={this.props.cardIdentity.length}

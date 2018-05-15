@@ -85,7 +85,8 @@ class CardGrid extends Component {
     return (
       <ResponsiveReactGridLayout {...this.props}
         onLayoutChange={this.onLayoutChange}
-        onBreakpointChange={this.onBreakpointChange}>
+        onBreakpointChange={this.onBreakpointChange}
+        draggableCancel=".nonDraggable">
           {this.state.objects.map(this.renderObject)}
       </ResponsiveReactGridLayout>
     )
