@@ -11,7 +11,7 @@ export class CardBody extends Component {
       if(options.bindings){
         bindings = options.bindings;
         bindings.eci = this.props.eci;
-        bindings.id = this.props.id;
+        bindings.pico_id = this.props.pico_id;
       }else{
         return (<div>Missing bindings from the pico!</div>)
       }
@@ -41,8 +41,8 @@ export class CardBody extends Component {
 
 CardBody.propTypes = {
   appInfo: PropTypes.object.isRequired,
-  Rx: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired
+  eci: PropTypes.string.isRequired,
+  pico_id: PropTypes.string.isRequired
 }
 
 export default CardBody;

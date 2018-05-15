@@ -11,7 +11,15 @@ ruleset io.picolabs.thing {
         "events": [ { "domain": "manifold", "type": "create_thing",
                       "attrs": [ "name" ] } ] }
 
+    app = {"name":"thing","version":"0.0"/* img: , pre: , ..*/};
+    bindings = function(){
+      {
+        //currently no bindings
+      };
+    }
   }
+
+  rule discovery { select when manifold apps send_directive("app discovered...", {"app": app, "rid": meta:rid, "bindings": bindings()} ); }
 
 
   rule initialization {

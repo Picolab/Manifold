@@ -35,7 +35,7 @@ export class InstallModal extends Component {
       alert("You must choose a ruleset to install before you can perform this action!");
       return;
     }
-    this.props.installRuleset(this.props.Rx, toInstall);
+    this.props.installRuleset(this.props.eci, toInstall);
     this.handleToggle();
   }
 
@@ -79,13 +79,13 @@ InstallModal.propTypes = {
   modalOn: PropTypes.bool.isRequired,
   toggleFunc: PropTypes.func.isRequired,
   installRuleset: PropTypes.func.isRequired,
-  Rx: PropTypes.string.isRequired
+  eci: PropTypes.string.isRequired
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    installRuleset: (Rx, rulesetName) => {
-      dispatch(commandAction(installApp, [Rx, rulesetName]))
+    installRuleset: (eci, rulesetName) => {
+      dispatch(commandAction(installApp, [eci, rulesetName]))
     }
   }
 }

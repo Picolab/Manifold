@@ -24,11 +24,11 @@ class CardHeader extends Component {
     renderDropdown(){
       if(this.props.cardType === 'Thing'){
         return (
-          <ThingDropdown isOpen={this.state.dropdownOpen} toggleSettings={this.toggleSettings} name={this.props.name} Rx={this.props.Rx} currentColor={this.props.color} sub_id={this.props.sub_id}/>
+          <ThingDropdown isOpen={this.state.dropdownOpen} toggleSettings={this.toggleSettings} name={this.props.name} eci={this.props.eci} currentColor={this.props.color} sub_id={this.props.sub_id}/>
         )
       }else if(this.props.cardType === 'Community'){
         return (
-          <CommunityDropdown isOpen={this.state.dropdownOpen} toggleSettings={this.toggleSettings} name={this.props.name} Rx={this.props.Rx} currentColor={this.props.color} sub_id={this.props.sub_id}/>
+          <CommunityDropdown isOpen={this.state.dropdownOpen} toggleSettings={this.toggleSettings} name={this.props.name} eci={this.props.eci} currentColor={this.props.color} sub_id={this.props.sub_id}/>
         )
       }else{
         return (
@@ -54,7 +54,7 @@ class CardHeader extends Component {
 CardHeader.propTypes = {
   name: PropTypes.string.isRequired,
   color: PropTypes.string.isRequired,
-  Rx: PropTypes.string.isRequired,
+  eci: PropTypes.string.isRequired,
   sub_id: PropTypes.string.isRequired,
   cardType: PropTypes.string.isRequired
 }

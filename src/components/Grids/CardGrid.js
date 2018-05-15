@@ -70,7 +70,13 @@ class CardGrid extends Component {
     }
     return (
       <div key={index.toString()} data-grid={grid_settings} >
-          <Card name={object.name} sub_id={object.Id} color={this.props.objColors[object.pico_id].color} Rx={object.Rx} cardType={this.props.cardType}/>
+          <Card
+            name={object.name}
+            sub_id={object.Id}
+            color={this.props.objColors[object.pico_id].color}
+            eci={object.Tx}
+            cardType={this.props.cardType}
+            pico_id={object.pico_id}/>
       </div>
     );
   }

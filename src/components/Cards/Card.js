@@ -21,7 +21,7 @@ class Card extends Component {
 
   componentWillMount(){
     //query for the discovery and app info
-    this.props.dispatch({type: 'DISCOVERY', eci: this.props.Rx, pico_id: this.props.id});
+    this.props.dispatch({type: 'DISCOVERY', eci: this.props.eci, pico_id: this.props.pico_id});
   }
 
   handleCarouselDotClick(index) {
@@ -34,7 +34,7 @@ class Card extends Component {
   renderBody() {
     if(this.props.cardIdentity.length > 0){
       return (
-        <CardBody Rx={this.props.Rx} id={this.props.id} appInfo={this.props.thingIdentity[this.state.currentApp]}/>
+        <CardBody eci={this.props.eci} pico_id={this.props.pico_id} appInfo={this.props.cardIdentity[this.state.currentApp]}/>
       )
     }else{
       return (
@@ -49,7 +49,7 @@ class Card extends Component {
     return (
       <div className="card" style={{  height: "inherit", width: "inherit"}}>
 
-        <CardHeader name={this.props.name} color={this.props.color} Rx={this.props.Rx} sub_id={this.props.sub_id} cardType={this.props.cardType}/>
+        <CardHeader name={this.props.name} color={this.props.color} eci={this.props.eci} sub_id={this.props.sub_id} cardType={this.props.cardType}/>
 
         <div className="card-block" style={{"textOverflow": "clip", overflow: "hidden"}}>
           {this.renderBody()}
@@ -75,16 +75,17 @@ Card.defaultProps = {
 Card.propTypes = {
   name: PropTypes.string.isRequired,
   sub_id: PropTypes.string.isRequired,
-  Rx: PropTypes.string.isRequired,
+  eci: PropTypes.string.isRequired,
   cardIdentity: PropTypes.array.isRequired,
   cardType: PropTypes.string.isRequired,
+  pico_id: PropTypes.string.isRequired,
   color: PropTypes.string, //not required
 }
 
 const mapStateToProps = (state, ownProps) => {
-  if(state.identities && state.identities[ownProps.id]){
+  if(state.identities && state.identities[ownProps.pico_id]){
     return {
-       cardIdentity: state.identities[ownProps.id],
+       cardIdentity: state.identities[ownProps.pico_id],
     }
   }else{
     return {

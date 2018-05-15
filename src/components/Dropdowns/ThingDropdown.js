@@ -104,7 +104,7 @@ export class ThingDropdown extends Component {
             Install an App
             <i className="fa fa-cloud-download float-right"/>
           </DropdownItem>
-          <InstallModal modalOn={this.state.installOpen} toggleFunc={this.toggleInstall} Rx={this.props.Rx}/>
+          <InstallModal modalOn={this.state.installOpen} toggleFunc={this.toggleInstall} eci={this.props.eci}/>
 
           <DropdownItem onClick={this.openColor}>
             Change Color
@@ -133,7 +133,7 @@ ThingDropdown.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggleSettings: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired, //the remove modal needs this
-  Rx: PropTypes.string.isRequired,
+  eci: PropTypes.string.isRequired,
   currentColor: PropTypes.string.isRequired,
   sub_id: PropTypes.string.isRequired
 }

@@ -24,12 +24,13 @@ ruleset io.picolabs.manifold_pico {
         "things": {
           "things": getThings(),
           "thingsPosition": ent:thingsPos.defaultsTo({}),
-          "thingsColor": ent:thingsColor.defaultsTo({}),
+          "thingsColor": ent:thingsColor,
           "lastUpdated": ent:thingsUpdate.defaultsTo("null")
         },
         "communities": {
           "communities": getCommunities(),
           "communitiesPosition": ent:communitiesPos.defaultsTo({}),
+          "communitiesColor": ent:communitiesColor,
           "lastUpdated": ent:communitiesUpdate
         }
       }
