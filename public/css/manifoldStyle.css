@@ -234,7 +234,3 @@
     box-sizing: border-box;
     cursor: se-resize;
 }
-
-.nonDraggable {
-  /* This class exists solely to declare what classes are nonDraggable to react-grid-layout. No actuall css is put here. */
-}

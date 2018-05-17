@@ -4,6 +4,7 @@ import CardFooter from './CardFooter';
 import CardHeader from './CardHeader';
 import CardBody from './CardBody';
 import PropTypes from 'prop-types';
+import cardStyles from './cardStyles.css';
 
 
 class Card extends Component {

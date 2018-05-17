@@ -90,7 +90,7 @@ export class ThingDropdown extends Component {
           data-toggle="dropdown"
           aria-expanded={this.state.isOpen} >
 
-          <i className="fa fa-cogs float-right fa-lg" style={{backgroundColor:"#ddd", padding:"5px", borderStyle:"solid", borderColor:"#aaa"}}/>
+          <i className="fa fa-cogs float-right fa-lg manifoldDropdown" style={{backgroundColor:"#ddd", padding:"5px", borderStyle:"solid", borderColor:"#aaa"}}/>
         </DropdownToggle>
         <DropdownMenu>
 
