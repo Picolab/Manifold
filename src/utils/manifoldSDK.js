@@ -45,7 +45,7 @@ export function removeThing(name, sub_id){
 }
 
 export function removeCommunity(name, sub_id){
-  return axios.post(`${sky_event(getManifoldECI())}/Remove_Thing/manifold/remove_community?name=${name}&sub_id=${sub_id}`);
+  return axios.post(`${sky_event(getManifoldECI())}/Remove_Community/manifold/remove_community?name=${name}&sub_id=${sub_id}`);
 }
 
 export function colorThing(name, color){

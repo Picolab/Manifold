@@ -12,7 +12,9 @@ ruleset io.picolabs.manifold_pico {
                      { "name": "getThings" },
                      { "name": "isAChild", "args": ["name"] }],
         "events": [ { "domain": "manifold", "type": "create_thing",
-                      "attrs": [ "name" ] } ] }
+                      "attrs": [ "name" ] },
+                    { "domain": "manifold", "type": "devReset",
+                      "attrs": [ ] }] }
 
     thingRids = "io.picolabs.thing;io.picolabs.subscription"
     communityRids = "io.picolabs.community;io.picolabs.subscription"
@@ -84,6 +86,12 @@ ruleset io.picolabs.manifold_pico {
         child{"name"}
       });
       childNames >< name
+    }
+
+    picoIdFromSubId = function(sub_id){
+      thing = ent:things.defaultsTo({}){[sub_id]};
+      community = ent:communities.defaultsTo({}){[sub_id]};
+      thing => thing{"pico_id"} | community{"pico_id"}//if undefined is returned, then: (ERROR: Could not find the picoID with the provided sub_id!)
     }
   }//end global
 
@@ -184,15 +192,16 @@ ruleset io.picolabs.manifold_pico {
   rule removeThing {
     select when manifold remove_thing
     pre {
-      sub = subscription:established("Id", event:attr("sub_id"))[0].klog("found sub: ")
+      sub = subscription:established("Id", event:attr("sub_id"))[0].klog("found sub: ");
+      pico_id = picoIdFromSubId(event:attr("sub_id"));
     }
-    if event:attr("name") && event:attr("sub_id") then
-      send_directive("Attempting to remove Thing",{"thing":event:attr("name")})
+    if event:attr("name") && event:attr("sub_id") && pico_id then
+      send_directive("Attempting to cancel subscription to Thing",{"thing":event:attr("name")})
     fired{
-      ent:thingsPos := ent:thingsPos.filter(function(v,k){k != event:attr("name")});
-      ent:thingsColor := ent:thingsColor.filter(function(v,k){k != event:attr("name")});
+      ent:thingsPos := ent:thingsPos.filter(function(v,k){k != pico_id});
+      ent:thingsColor := ent:thingsColor.filter(function(v,k){k != pico_id});
       raise wrangler event "subscription_cancellation"
-        attributes event:attrs.put({"Id": sub{"Id"}})
+        attributes event:attrs.put({"Id": sub{"Id"}, "event_type": "thing_deletion"})
     }else{
       raise manifold event "removeThingFailed"
         attributes event:attrs
@@ -205,11 +214,46 @@ ruleset io.picolabs.manifold_pico {
   }
 
   rule deleteThing {
-    select when wrangler subscription_removed
+    select when wrangler subscription_removed where event:attr("event_type") == "thing_deletion"
     if event:attr("name") && isAChild(event:attr("name")) && event:attr("Id") then
-      send_directive("Attempting to remove Thing",{"thing":event:attr("name")})
+      send_directive("Attempting to remove Thing",{"thing":event:attr("name"), "sub_id": event:attr("Id")})
     fired{
       ent:things := ent:things.filter(function(thing){ thing{"sub_id"} != event:attr("Id")});
+      raise wrangler event "child_deletion"
+        attributes event:attrs.put({"event_type": "manifold_remove_thing"})
+    }
+  }
+
+  rule removeCommunity {
+    select when manifold remove_community
+    pre {
+      sub = subscription:established("Id", event:attr("sub_id"))[0].klog("found sub: ");
+      pico_id = picoIdFromSubId(event:attr("sub_id"));
+    }
+    if event:attr("name") && event:attr("sub_id") then
+      send_directive("Attempting to cancel subscription to Community",{"community":event:attr("name")})
+    fired{
+      ent:communitiesPos := ent:communitiesPos.filter(function(v,k){k != pico_id});
+      ent:communitiesColor := ent:communitiesColor.filter(function(v,k){k != pico_id});
+      raise wrangler event "subscription_cancellation"
+        attributes event:attrs.put({"Id": sub{"Id"}, "event_type": "community_deletion"})
+    }else{
+      raise manifold event "removeCommFailed"
+        attributes event:attrs
+    }
+  }
+
+  rule handleRemoveCommFail{
+    select when manifold removeCommFailed
+    send_directive("removeThingFailed", { "body": "Expected name attr, received " + event:attr("name") + ". Also expected sub_id attr, received " + event:attr("sub_id") + "."})
+  }
+
+  rule deleteCommunity {
+    select when wrangler subscription_removed where event:attr("event_type") == "community_deletion"
+    if event:attr("name") && isAChild(event:attr("name")) && event:attr("Id") then
+      send_directive("Attempting to remove Community",{"community":event:attr("name"), "sub_id": event:attr("Id")})
+    fired{
+      ent:communities := ent:communities.filter(function(thing){ thing{"sub_id"} != event:attr("Id")});
       raise wrangler event "child_deletion"
         attributes event:attrs.put({"event_type": "manifold_remove_thing"})
     }
@@ -298,6 +342,21 @@ ruleset io.picolabs.manifold_pico {
       ent:thingsColor := ent:thingsColor.defaultsTo({}).put([event:attr("dname")], {
         "color": event:attr("color")
       });
+    }
+  }
+
+  rule devReset {
+    select when manifold devReset
+    always{
+      clear ent:things;
+      clear ent:thingsColor;
+      clear ent:thingsUpdate;
+      clear ent:thingsPos;
+
+      clear ent:communities;
+      clear ent:communitiesPos;
+      clear ent:communitiesUpdate;
+      clear ent:communitiesColor
     }
   }
 
