@@ -110,7 +110,6 @@ ruleset io.picolabs.manifold_pico {
 
   rule thingCompleted {
     select when wrangler child_initialized where rs_attrs{"event_type"} == "manifold_create_thing"
-    pre{eci = event:attr("eci") }
       initiate_subscription(event:attr("eci"), event:attr("rs_attrs"){"name"}, subscription:wellKnown_Rx(){"id"}, thing_role);
     always{
       raise manifold event "move_thing"
