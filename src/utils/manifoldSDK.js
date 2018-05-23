@@ -60,6 +60,10 @@ export function moveCommunity(pico_id, x, y, w, h){
   return axios.post(`${sky_event(getManifoldECI())}/Move_Thing/manifold/move_community?pico_id=${pico_id}&x=${x}&y=${y}&w=${w}&h=${h}`);
 }
 
+export function addToCommunity(commEci, toAddEci){
+  return axios.post(`${sky_event(commEci)}/AddToCommunity/community/addToCommunity?toAddEci=${toAddEci}`);
+}
+
 export function discovery(eci){
   return axios.post(`${sky_event(eci)}/DISCOVERY/manifold/apps`);
 }

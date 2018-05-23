@@ -1,0 +1,11 @@
+.commContainer {
+  display: flex;
+}
+
+.commSidebar {
+  width: 20%;
+}
+
+.communities {
+  width: 80%;
+}

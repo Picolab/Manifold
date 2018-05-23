@@ -1,0 +1,25 @@
+.sideBarContainer {
+  display: flex;
+  flex-direction: column;
+  background-color: #263238;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-left: 5px;
+  height: 85vh;
+  overflow: scroll;
+  box-sizing: border-box;
+}
+
+.sideListContainer {
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.sideBarH2 {
+  color: #fff;
+}
+
+.sideBarItem {
+  width: 80%;
+  margin: auto;
+}

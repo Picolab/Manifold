@@ -70,16 +70,16 @@ export class ThingDropdown extends Component {
 
   render() {
     return (
-      <Dropdown className="float-right"  isOpen={this.state.isOpen} toggle={this.props.toggleSettings} style={{paddingLeft:"125px"}}>
+      <Dropdown className="float-right"  isOpen={this.state.isOpen} toggle={this.props.toggleSettings}>
         <DropdownToggle
           tag="span"
           onClick={this.props.toggleSettings}
           data-toggle="dropdown"
           aria-expanded={this.state.isOpen} >
 
-          <i className="fa fa-cogs float-right fa-lg manifoldDropdown" style={{backgroundColor:"#ddd", padding:"5px", borderStyle:"solid", borderColor:"#aaa"}}/>
+          <i className="fa fa-gear float-right fa-lg manifoldDropdown"/>
         </DropdownToggle>
-        <DropdownMenu>
+        <DropdownMenu right>
 
           <DropdownItem onClick={this.openRemove} >
             Remove Thing

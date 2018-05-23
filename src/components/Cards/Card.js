@@ -4,7 +4,7 @@ import CardFooter from './CardFooter';
 import CardHeader from './CardHeader';
 import CardBody from './CardBody';
 import PropTypes from 'prop-types';
-import cardStyles from './cardStyles.css';
+import './cardStyles.css';
 
 
 class Card extends Component {
@@ -63,7 +63,8 @@ class Card extends Component {
             currentApp={this.state.currentApp}
           />
         </div>
-
+        <div className={(this.props.overlay && this.props.overlay.isActive ? "cardOverlay" : "")}>
+        </div>
       </div>
     );
   }
@@ -81,6 +82,10 @@ Card.propTypes = {
   cardType: PropTypes.string.isRequired,
   pico_id: PropTypes.string.isRequired,
   color: PropTypes.string, //not required
+  overlay: PropTypes.shape({
+    isActive: PropTypes.bool.isRequired,
+    color: PropTypes.string //should we provide overlay configs?
+  })
 }
 
 const mapStateToProps = (state, ownProps) => {

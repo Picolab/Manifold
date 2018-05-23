@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Card from '../Cards/Card';
 import { moveThing, moveCommunity } from '../../utils/manifoldSDK';
 import { commandAction } from '../../actions/command';
+import DropTargetCard from '../Cards/DropTargetCard';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
@@ -68,17 +69,28 @@ class CardGrid extends Component {
       x: object.pos.x, y: object.pos.y, w: object.pos.w, h: object.pos.h,
       minW: object.pos.minw, minH: object.pos.minh, maxW: object.pos.maxw, maxH: object.pos.maxh
     }
-    return (
-      <div key={index.toString()} data-grid={grid_settings} >
+    if(this.props.dropTargets){
+      return(
+        <div key={index.toString()} data-grid={grid_settings} >
+          <DropTargetCard
+            cardType={this.props.cardType}
+            object={object}
+            handleDrop={this.props.handleDrop} />
+        </div>
+      )
+    }else{
+      return (
+        <div key={index.toString()} data-grid={grid_settings} >
           <Card
             name={object.name}
             sub_id={object.Id}
-            color={this.props.objColors[object.pico_id].color}
+            color={object.color}
             eci={object.Tx}
             cardType={this.props.cardType}
             pico_id={object.pico_id}/>
-      </div>
-    );
+        </div>
+      );
+    }
   }
 
   render(){
@@ -97,14 +109,22 @@ class CardGrid extends Component {
 CardGrid.defaultProps = {
   className: "layout",
   cols: {lg: 12, md: 10, sm: 6, xs: 4, xxs: 2},
-  rowHeight: 100
+  rowHeight: 100,
+  dropTargets: false
 };
 
 CardGrid.propTypes = {
   objects: PropTypes.array.isRequired,
   objPositions: PropTypes.object.isRequired,
-  objColors: PropTypes.object.isRequired,
-  cardType: PropTypes.string.isRequired //this identifies whether we are displaying Things or Communities
+  cardType: PropTypes.string.isRequired, //this identifies whether we are displaying Things or Communities
+  dropTargets: PropTypes.bool,
+  handleDrop: function(props, propName, componentName) {
+                if ((props['dropTargets'] === true && (props[propName] === undefined || typeof(props[propName]) !== 'function'))) {
+                    return new Error(
+                        `The prop \`${propName}\` is marked as a required function in \`${componentName}\` if the dropTargets boolean is true, but its value is \`${props[propName]}\`.`
+                    );
+                }
+              } //require the handleDrop function if dropTargets is true
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {

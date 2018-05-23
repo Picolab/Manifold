@@ -4,3 +4,52 @@
 .hideAria{
   visibility: hidden;
 }
+
+.nonDraggable {
+  /* This class exists solely to declare what classes are nonDraggable to react-grid-layout. No actuall css is put here. */
+}
+
+.draggable {
+  cursor: -webkit-grab;
+}
+
+.manifoldDropdown {
+  cursor: pointer;
+  padding: 5px;
+  color: $gray;
+}
+
+.manifoldDropdown:hover {
+  color: $gray-dark;
+}
+
+.card-block {
+  overflow: scroll !important;
+}
+
+.card{
+  box-shadow: 8px 8px 10px #888888;
+}
+
+.draggingCard {
+  background-color: $brand-primary;
+  width: 100%;
+  margin: auto;
+  margin-bottom: 1.5rem;
+  height: 250px;
+}
+
+.nonDraggingCard {
+
+}
+
+.dropTargetCard {
+  height: inherit;
+}
+
+.cardOverlay {
+  background-color: rgba(128,128,128,0.3);
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}

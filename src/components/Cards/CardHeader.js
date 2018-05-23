@@ -32,7 +32,7 @@ class CardHeader extends Component {
         )
       }else{
         return (
-          <div>ERROR: Unkonw card type!</div>
+          <div>ERROR: Unknown card type!</div>
         )
       }
     }

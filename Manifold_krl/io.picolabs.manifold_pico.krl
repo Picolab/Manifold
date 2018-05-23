@@ -26,13 +26,11 @@ ruleset io.picolabs.manifold_pico {
         "things": {
           "things": getThings(),
           "thingsPosition": ent:thingsPos.defaultsTo({}),
-          "thingsColor": ent:thingsColor,
           "lastUpdated": ent:thingsUpdate.defaultsTo("null")
         },
         "communities": {
           "communities": getCommunities(),
           "communitiesPosition": ent:communitiesPos.defaultsTo({}),
-          "communitiesColor": ent:communitiesColor,
           "lastUpdated": ent:communitiesUpdate
         }
       }
@@ -62,7 +60,8 @@ ruleset io.picolabs.manifold_pico {
         things = ent:things.defaultsTo({});
         desired_info = {
           "name": things{[sub{"Id"}]}{"name"}.defaultsTo("ERROR: Missing name attribute in ent:things."),
-          "pico_id": things{[sub{"Id"}]}{"pico_id"}.defaultsTo("ERROR: missing pico_id attribute in ent:things.")
+          "pico_id": things{[sub{"Id"}]}{"pico_id"}.defaultsTo("ERROR: missing pico_id attribute in ent:things."),
+          "color": things{[sub{"Id"}]}{"color"}.defaultsTo("ERROR: missing color attribute in ent:things.")
         };
         sub.put(desired_info)
       })
@@ -74,7 +73,8 @@ ruleset io.picolabs.manifold_pico {
         communities = ent:communities.defaultsTo({});
         desired_info = {
           "name": communities{[sub{"Id"}]}{"name"}.defaultsTo("ERROR: Missing name attribute in ent:communities."),
-          "pico_id": communities{[sub{"Id"}]}{"pico_id"}.defaultsTo("ERROR: missing pico_id attribute in ent:communities.")
+          "pico_id": communities{[sub{"Id"}]}{"pico_id"}.defaultsTo("ERROR: missing pico_id attribute in ent:communities."),
+          "color": communities{[sub{"Id"}]}{"color"}.defaultsTo("ERROR: missing color attribute in ent:communities.")
         };
         sub.put(desired_info)
       })
@@ -110,6 +110,7 @@ ruleset io.picolabs.manifold_pico {
 
   rule thingCompleted {
     select when wrangler child_initialized where rs_attrs{"event_type"} == "manifold_create_thing"
+    pre{eci = event:attr("eci") }
       initiate_subscription(event:attr("eci"), event:attr("rs_attrs"){"name"}, subscription:wellKnown_Rx(){"id"}, thing_role);
     always{
       raise manifold event "move_thing"
@@ -133,7 +134,6 @@ ruleset io.picolabs.manifold_pico {
 
   rule communityCompleted {
     select when wrangler child_initialized where rs_attrs{"event_type"} == "manifold_create_community"
-    pre{eci = event:attr("eci") }
       initiate_subscription(event:attr("eci"), event:attr("rs_attrs"){"name"}, subscription:wellKnown_Rx(){"id"}, community_role);
     always{
       raise manifold event "move_community"
@@ -151,7 +151,8 @@ ruleset io.picolabs.manifold_pico {
       obj_structure = {
         "name": name,
         "sub_id": sub_id,
-        "pico_id": pico_id
+        "pico_id": pico_id,
+        "color": "#eceff1"//default color
       }
     }
     if sub_id && name && pico_id then
@@ -159,9 +160,6 @@ ruleset io.picolabs.manifold_pico {
     fired{
       ent:things := ent:things.defaultsTo({}).put([sub_id], obj_structure);
       ent:thingsUpdate := time:now();
-      ent:thingsColor := ent:thingsColor.defaultsTo({}).put([pico_id], {
-        "color": "#eceff1"
-      });
     }
   }
 
@@ -174,7 +172,8 @@ ruleset io.picolabs.manifold_pico {
       obj_structure = {
         "name": name,
         "sub_id": sub_id,
-        "pico_id": pico_id
+        "pico_id": pico_id,
+        "color": "#87cefa" //default community color
       }
     }
     if sub_id && name && pico_id then
@@ -182,9 +181,6 @@ ruleset io.picolabs.manifold_pico {
     fired{
       ent:communities := ent:communities.defaultsTo({}).put([sub_id], obj_structure);
       ent:communitiesUpdate := time:now();
-      ent:communitiesColor := ent:communitiesColor.defaultsTo({}).put([pico_id], {
-        "color": "#87cefa"
-      });
     }
   }
 
@@ -192,13 +188,10 @@ ruleset io.picolabs.manifold_pico {
     select when manifold remove_thing
     pre {
       sub = subscription:established("Id", event:attr("sub_id"))[0].klog("found sub: ");
-      pico_id = picoIdFromSubId(event:attr("sub_id"));
     }
     if event:attr("name") && event:attr("sub_id") && pico_id then
       send_directive("Attempting to cancel subscription to Thing",{"thing":event:attr("name")})
     fired{
-      ent:thingsPos := ent:thingsPos.filter(function(v,k){k != pico_id});
-      ent:thingsColor := ent:thingsColor.filter(function(v,k){k != pico_id});
       raise wrangler event "subscription_cancellation"
         attributes event:attrs.put({"Id": sub{"Id"}, "event_type": "thing_deletion"})
     }else{
@@ -214,9 +207,13 @@ ruleset io.picolabs.manifold_pico {
 
   rule deleteThing {
     select when wrangler subscription_removed where event:attr("event_type") == "thing_deletion"
+    pre{
+      pico_id = picoIdFromSubId(event:attr("Id"));
+    }
     if event:attr("name") && isAChild(event:attr("name")) && event:attr("Id") then
       send_directive("Attempting to remove Thing",{"thing":event:attr("name"), "sub_id": event:attr("Id")})
     fired{
+      ent:thingsPos := ent:thingsPos.filter(function(v,k){k != pico_id});
       ent:things := ent:things.filter(function(thing){ thing{"sub_id"} != event:attr("Id")});
       raise wrangler event "child_deletion"
         attributes event:attrs.put({"event_type": "manifold_remove_thing"})
@@ -227,13 +224,10 @@ ruleset io.picolabs.manifold_pico {
     select when manifold remove_community
     pre {
       sub = subscription:established("Id", event:attr("sub_id"))[0].klog("found sub: ");
-      pico_id = picoIdFromSubId(event:attr("sub_id"));
     }
     if event:attr("name") && event:attr("sub_id") then
       send_directive("Attempting to cancel subscription to Community",{"community":event:attr("name")})
     fired{
-      ent:communitiesPos := ent:communitiesPos.filter(function(v,k){k != pico_id});
-      ent:communitiesColor := ent:communitiesColor.filter(function(v,k){k != pico_id});
       raise wrangler event "subscription_cancellation"
         attributes event:attrs.put({"Id": sub{"Id"}, "event_type": "community_deletion"})
     }else{
@@ -249,9 +243,13 @@ ruleset io.picolabs.manifold_pico {
 
   rule deleteCommunity {
     select when wrangler subscription_removed where event:attr("event_type") == "community_deletion"
+    pre{
+      pico_id = picoIdFromSubId(event:attr("Id"));
+    }
     if event:attr("name") && isAChild(event:attr("name")) && event:attr("Id") then
       send_directive("Attempting to remove Community",{"community":event:attr("name"), "sub_id": event:attr("Id")})
     fired{
+      ent:communitiesPos := ent:communitiesPos.filter(function(v,k){k != pico_id});
       ent:communities := ent:communities.filter(function(thing){ thing{"sub_id"} != event:attr("Id")});
       raise wrangler event "child_deletion"
         attributes event:attrs.put({"event_type": "manifold_remove_thing"})
@@ -291,9 +289,9 @@ ruleset io.picolabs.manifold_pico {
         attributes {"name":event:attr("name"),
                     "x": 0, "y": 0, "w": 3, "h": 2.25};
       ent:thingsUpdate := time:now();
-      ent:thingsColor := ent:thingsColor.defaultsTo({}).put([event:attr("name")], {
-        "color": "#eceff1"
-      });
+      // ent:thingsColor := ent:thingsColor.defaultsTo({}).put([event:attr("name")], {
+      //   "color": "#eceff1"
+      // }); STORE THE COLOR DIRECTLY IN THE OBJECT
     }
   }
 
@@ -338,9 +336,9 @@ ruleset io.picolabs.manifold_pico {
     pre {}
     noop()
     fired {
-      ent:thingsColor := ent:thingsColor.defaultsTo({}).put([event:attr("dname")], {
-        "color": event:attr("color")
-      });
+      // ent:thingsColor := ent:thingsColor.defaultsTo({}).put([event:attr("dname")], {
+      //   "color": event:attr("color")
+      // }); STORE THE COLOR DIRECTLY IN THE OBJECT
     }
   }
 

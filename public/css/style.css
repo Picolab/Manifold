@@ -2880,7 +2880,7 @@ tbody.collapse.show {
   display: flex;
   flex-direction: column;
   background-color: #fff;
-  border: 1px solid #cfd8dc; }
+  border: 0px solid #cfd8dc; }
 
 .card-block {
   flex: 1 1 auto;
@@ -2907,12 +2907,12 @@ tbody.collapse.show {
   padding: 0.75rem 1.25rem;
   margin-bottom: 0;
   background-color: #eceff1;
-  border-bottom: 1px solid #cfd8dc; }
+  border-bottom: 0px solid #cfd8dc; }
 
 .card-footer {
   padding: 0.75rem 1.25rem;
   background-color: #eceff1;
-  border-top: 1px solid #cfd8dc; }
+  border-top: 0px solid #cfd8dc; }
 
 .card-header-tabs {
   margin-right: -0.625rem;
@@ -7075,7 +7075,7 @@ button {
   color: #263238;
   vertical-align: bottom;
   background: transparent;
-  border-right: 1px solid #cfd8dc; }
+  border-right: 0px solid #cfd8dc; }
 
 .card-header .nav.nav-tabs {
   margin-top: -0.75rem;
@@ -7266,7 +7266,7 @@ button {
   margin-right: -15px;
   margin-left: -15px;
   border: 0;
-  border-bottom: 1px solid #cfd8dc; }
+  border-bottom: 0px solid #cfd8dc; }
 
 @media (min-width: 576px) {
   .card-columns.cols-2 {
@@ -8390,7 +8390,7 @@ base-chart.chart {
   margin-bottom: 1.5rem;
   text-align: center;
   background: #fff;
-  border: 1px solid #cfd8dc; }
+  border: 0px solid #cfd8dc; }
   .social-box i {
     display: block;
     margin: -1px -1px 0;
@@ -8570,8 +8570,7 @@ app-root {
 .app-body {
   display: flex;
   flex-direction: row;
-  flex-grow: 1;
-  overflow-x: hidden; }
+  flex-grow: 1; }
   .app-body .main {
     flex: 1;
     min-width: 0; }
@@ -8924,3 +8923,39 @@ hr.transparent {
 
 .hideAria {
   visibility: hidden; }
+
+.nonDraggable {
+  /* This class exists solely to declare what classes are nonDraggable to react-grid-layout. No actuall css is put here. */ }
+
+.draggable {
+  cursor: -webkit-grab; }
+
+.manifoldDropdown {
+  cursor: pointer;
+  padding: 5px;
+  color: #607d8b; }
+
+.manifoldDropdown:hover {
+  color: #263238; }
+
+.card-block {
+  overflow: scroll !important; }
+
+.card {
+  box-shadow: 8px 8px 10px #888888; }
+
+.draggingCard {
+  background-color: #20a8d8;
+  width: 100%;
+  margin: auto;
+  margin-bottom: 1.5rem;
+  height: 250px; }
+
+.dropTargetCard {
+  height: inherit; }
+
+.cardOverlay {
+  background-color: rgba(128, 128, 128, 0.3);
+  position: absolute;
+  height: 100%;
+  width: 100%; }
