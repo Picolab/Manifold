@@ -184,12 +184,12 @@ ruleset io.picolabs.manifold_pico {
     }
   }
 
-  rule removeThing {
+  rule removeThingSubscription {
     select when manifold remove_thing
     pre {
       sub = subscription:established("Id", event:attr("sub_id"))[0].klog("found sub: ");
     }
-    if event:attr("name") && event:attr("sub_id") && pico_id then
+    if event:attr("name") && event:attr("sub_id") then
       send_directive("Attempting to cancel subscription to Thing",{"thing":event:attr("name")})
     fired{
       raise wrangler event "subscription_cancellation"
