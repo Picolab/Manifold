@@ -1,0 +1,373 @@
+ruleset io.picolabs.neighborhood_temps {
+meta {
+    shares __testing, getPeer, randomInt, generate_seen, temp_logs, smart_tracker, reduceTest, string_test, get_process
+
+    use module io.picolabs.subscription alias subscription
+  }
+  global {
+    __testing = { "queries": [ { "name": "__testing" }, { "name": "get_process" }, { "name": "getPeer" }, { "name": "randomInt" }, { "name": "string_test" },  { "name": "generate_seen" }, { "name": "temp_logs" }, { "name": "smart_tracker" }, { "name": "reduceTest" }],
+                  "events": [ {"domain": "gossip", "type": "start_heartbeat"}, {"domain": "gossip", "type": "new_n_value", "attrs": ["n_value"]}, {"domain": "gossip", "type": "process_changed", "attrs": ["new_process"]}] }
+
+    //temp_logs keeps track of all the messages from others, including your own
+    /*
+      {
+        <sensorID>: {//each pico id contains a map where the keys are the messageIDs and the values are the rumor messages
+          <messageID>: {
+              messageID: <sensorID:sequenceNum>,
+              sensorID: <picoid>,
+              temperature: 74,
+              timestamp: <ISO datetime>
+          },
+          ...
+        },
+        ...
+      }
+    */
+    string_test = function(){
+      ent:process.defaultsTo("on") == "on"
+    }
+    get_process = function(){
+      ent:process.defaultsTo("on")
+    }
+    temp_logs = function(){
+      ent:temp_logs.defaultsTo({})
+    }
+
+    randomInt = function(){
+      random:integer(1)
+    }
+
+    reduceTest = function(){
+      array = [1, 2, 3, 4, 5];
+      array.reduce(function(counter, value){
+        counter.append(value)
+      }, [])
+    }
+
+    app = {"name":"Neighborhood Temperature Sharing","version":"0.0"/* img: , pre: , ..*/};
+
+    bindings = function(){
+      {
+
+      };
+    }
+
+    /*
+      The smart tracker keeps track of what information this pico knows that the other picos subscribed to this one contain or likely have seen. This is used to determine what message to send next
+      {
+        <subscription_Tx>: {
+          <pico1id>: <sequenceNum>,
+          <pico2id>: <sequenceNum>,
+          ...
+        },
+        ...
+      }
+    */
+    smart_tracker = function(){
+      ent:smart_tracker.defaultsTo({})
+    }
+
+    //this uses the smart tracker to determine who is missing the most information. If there is a tie between who needs the most, it picks one at random.
+    getPeer = function(message_type){
+      my_seen = generate_seen();
+      subscrs = subscription:established("Tx_role", "node");
+
+      priorities = subscrs.map(function(peer, key){
+        //snag the smart_tracker info for the possible peer
+        peer_info = smart_tracker(){[peer{"Tx"}]}.defaultsTo({});
+
+        //now I want to find the exact number of messages that I have that this peer does not have.
+        peer_priority = my_seen.keys().reduce(function(counter, my_seen_key){
+          //subtract the current sequence number from the peer's sequence number for that node. If the number is positive, then it is missing a value. If it is negative or 0, then they already have all our info
+          missing_num = my_seen{[my_seen_key]} - peer_info{[my_seen_key]}.defaultsTo(-1);//-1 here is for the base case where I have seen node 0, but you don't even know who that is, and so 0 - - 1 gives 1, meaning there is one message I can provide for you.
+          to_add = (missing_num > -1) => missing_num | 0;
+          counter + to_add
+        }, 0);
+
+        peer.put(["priority"], peer_priority)
+      });
+
+      //find the greatest single priority value
+      greatest_priority = priorities.reduce(function(current_max, current_peer){
+        new_max = (current_peer{"priority"} > current_max) => current_peer{"priority"} | current_max;
+        new_max
+      }, 0);
+
+
+      //filter out any peers that don't have the greatest priority value, but ONLY if the message type is a rumor. If it is a seen type, the peer should be random
+      candidates = (message_type == 0) => priorities | priorities.filter(function(current_peer){
+        current_peer{"priority"} == greatest_priority
+      }).klog("Potential Candidates: ");
+
+      //return the node with the greatest priority or a random one from that set candidates.length().klog("Length of candidates") - 1
+      candidates[random:integer(candidates.length() - 1).klog("The random value: ")]
+    }//end getPeer()
+
+    //prepareMessage tailors just the right message for a given peer. It uses the info in the smart_tracker to determine what is appropriate to send if it is a rumor message
+    prepareMessage = function(peer, message_type){
+      //0 is a rumor message and 1 is a seen message
+      message = (message_type == 1) => {"type": "seen", "unique_info": true}.put(generate_seen()).klog("Message type: Seen. Message: ") | prepareRumor(peer).klog("Message type: rumor. Message: ");//the unique_info key will be used to determine whether or not a message should be sent at all
+      message
+    }//end prepareMessage(peer)
+
+    //this actually generates a rumor message to send depending on the peer
+    prepareRumor = function(peer){
+      a = a.klog("Preparing Rumor message. ");
+      my_seen = generate_seen().klog("My seen: ");
+      peer_info = smart_tracker(){[peer{"Tx"}]}.klog("Peer_info extracted from the smart_tracker: ");
+
+      unique_messages = my_seen.filter(function(sequence_num, key){//filter out any picoIDs that this pico does not have new information for
+        (sequence_num - peer_info{[key]}.defaultsTo(-1)) > 0
+      }).klog("Unique Messages for the following picos: ");
+
+      //now actually prepare a specific message randomly from the unique_messages map
+      target_identifier = unique_messages.keys()[random:integer(unique_messages.length() - 1)].klog("Peer's target identifier: ");
+
+
+      message_num = (peer_info{[target_identifier]}.defaultsTo(-1) + 1).klog("The message_number to send: ");//find what the other person has seen,then simply send them the next sequence number message
+
+      messageID = (target_identifier + ":" + message_num).klog("The messageID to send");
+
+      //grab and return the actual rumor_message from the logs
+      rumor_message = ent:temp_logs{[target_identifier, messageID]}.klog("The retrieved rumor from ent:temp_logs: ");
+
+      return = (unique_messages.keys().length() == 0) => {"unique_info" : false} | {"type": "rumor", "unique_info": true}.put(rumor_message);
+      return
+    }
+
+    generate_seen = function(){
+      ent:temp_logs.defaultsTo({}).map(function(rumor_map, key){//rumor_map is the map of rumors, and key is the sensorID
+        sequence_nums = rumor_map.keys().map(function(key){
+          key.split(re#:#)[1].as("Number")//return just the sequence number
+        });
+        //return the highest complete sequence number
+        sorted = sequence_nums.sort("numeric");
+        sorted.filter(function(current_num){//for every number in the sorted array, see if the next value is not in the array. If it is not, then that number is a highest sequence number candidate. Filter returns an array, and the first item in the array is the highest sequence number with this algorithm
+          not (sorted >< (current_num + 1) )
+        })[0]
+      })
+    }
+
+  }//end global
+
+  // ---------- Manifold required API event calls
+  rule discovery { select when manifold apps send_directive("app discovered...", {"app": app, "rid": meta:rid, "bindings": bindings()} ); }
+
+  rule set_process{
+    select when gossip process_changed
+    always{
+      ent:process := event:attr("new_process");
+      //if turning back on, we need to let everyone know what we actually have
+      raise gossip event "seen_catchup_needed" if (event:attr("new_process") == "on")
+    }
+  }
+
+  rule seen_catchup{
+    select when gossip seen_catchup_needed
+    foreach subscription:established("Tx_role", "node") setting (subscr)
+    pre{
+      message = generate_seen();
+    }
+    event:send({
+        "eci": subscr{"Tx"},
+        "domain": "gossip",
+        "type": "seen",
+        "attrs": message
+      }, host = subscr{"Tx_host"}.defaultsTo(meta:host))
+  }
+
+  rule initialize{
+    select when wrangler ruleset_added where meta:rid >< rids
+    always{
+      ent:temp_logs := {};
+      ent:smart_tracker := {}
+    }
+  }
+
+  rule start_heartbeat{
+    select when gossip start_heartbeat
+    always{
+      raise gossip event "heartbeat"
+    }
+  }
+
+  rule change_n_value{
+    select when gossip new_n_value
+    pre{
+      n = event:attr("n_value").as("Number");
+    }
+    if n then
+    noop()
+    fired{
+      ent:n_value := n
+    }
+  }
+
+  rule create_new_log_entry{
+    select when wovyn new_temperature_reading
+    pre{
+      tempF = event:attr("temperature")[0]{"temperatureF"};
+      timestamp = event:attr("time");
+      sensorID = meta:picoId;
+      messageID = sensorID + ":" + ent:counter.defaultsTo(0);
+
+
+      new_message = {
+        "Timestamp": timestamp,
+        "SensorID": sensorID,
+        "MessageID": messageID,
+        "Temperature": tempF
+      }
+    }
+    if tempF && timestamp then
+    noop()
+    fired{
+      ent:counter := ent:counter.defaultsTo(0) + 1;
+      ent:temp_logs := ent:temp_logs.defaultsTo({}).put([sensorID, messageID], new_message)
+    }
+  }
+
+  //this rule is the loop that runs via the gossip algorithm
+  rule heartbeat{
+    select when gossip heartbeat
+    pre{
+      message_type = random:integer(1);//get a random number between 0 and 1. 0 is a rumor message and 1 is a seen message
+      //message_type = 0;//for testing
+      peer = getPeer(message_type).klog("Selected peer: ");
+      message = prepareMessage(peer, message_type).klog("Prepared Message: ");
+    }
+    if message{"unique_info"} && (ent:process.defaultsTo("on").klog("ent:process value: ") == "on").klog("ent:process evaluation in heartbeat: ") then
+      event:send({
+          "eci": peer{"Tx"},
+          "domain": "gossip",
+          "type": message{"type"},
+          "attrs": message.delete(["type"]).delete(["unique_info"])//get rid of the details that are not part of a seen message
+        }, host = peer{"Tx_host"}.defaultsTo(meta:host))
+    fired{
+      raise gossip event "update_needed_rumor"
+        attributes {"peer": peer, "rumor": message} if (message{"type"} == "rumor")
+    }else{
+      a = b.klog("NOTHING TO SEND. THIS PICO MUST NOT HAVE ANY NEW INFO FOR " + peer{"Tx"} + " from this pico's id: " + meta:picoId)
+    }
+
+    finally{
+      //raise the scheduled event again.
+      schedule gossip event "heartbeat" at time:add(time:now(), {"seconds": ent:n_value.defaultsTo(15)});
+      c = d.klog("Scheduling gossip heartbeat event with n: " + ent:n_value.defaultsTo(15))
+    }
+  }
+
+  rule handle_rumor{
+    select when gossip rumor
+    pre{
+      message = {
+        "MessageID": event:attr("MessageID").klog("MessageID: "),
+        "SensorID": event:attr("SensorID").klog("SensorID: "),
+        "Temperature": event:attr("Temperature").klog("Temperature: "),
+        "Timestamp": event:attr("Timestamp").klog("Timestamp: ")
+      };
+      incoming_channel = meta:eci.klog("Finding which peer has sent this rumor");
+      peer = subscription:established("Rx", incoming_channel)[0].klog("Found peer: ");
+    }
+    if message{"MessageID"} && message{"SensorID"} && message{"Temperature"} && message{"Timestamp"} && ent:process.defaultsTo("on") == "on" then
+    noop()
+    fired{
+      ent:temp_logs := ent:temp_logs.defaultsTo({}).put([message{"SensorID"}, message{"MessageID"}], message);
+      raise gossip event "update_needed_rumor"
+        attributes {"peer": peer, "rumor": message}
+    }else{
+      a = a.klog("Missing vital information!! Not storing rumor.")
+    }
+  }
+
+  //when this is received
+  rule handle_seen{
+    select when gossip seen
+    if ent:process.defaultsTo("on") == "on" then
+    noop()
+    fired{
+      raise gossip event "update_needed_seen"
+        attributes {"seen_message": event:attrs};
+      raise gossip event "process_seen"
+        attributes {"my_seen": generate_seen(), "seen_message": event:attrs}
+    }
+  }
+
+  rule process_seen{
+    select when gossip process_seen
+    foreach event:attr("seen_message") setting(sequence_num, sensorID)
+    pre{
+      my_seen = event:attr("my_seen").klog("my_seen in process_seen: ");
+      //find out if I have information that they are missing
+      my_seq_num = my_seen{[sensorID]}.defaultsTo(-1).as("Number").klog("coerced number in process_seen: ");
+      seq_diff = (my_seq_num - sequence_num).klog("seq_diff in process_seen: ");
+
+      //find the peer
+      incoming_channel = meta:eci.klog("Finding peer with incoming_Rx: ");
+      peer = subscription:established("Rx", incoming_channel)[0].klog("Found peer: ");
+
+      rumors_to_send = (seq_diff <= 0) => [] | ent:temp_logs.defaultsTo({}){[sensorID]}.keys().reduce(function(counter, message_key){
+          message = ent:temp_logs{[sensorID, message_key]};
+          message_num = message{"MessageID"}.split(re#:#)[1].as("Number");
+          return = (message_num <= my_seq_num && message_num > sequence_num) => counter.append(message) | counter;
+          return
+      },[]).klog("Rumors to send: ");
+
+    }
+    always{
+      raise gossip event "rumor_send_needed"
+        attributes {"to_send": rumors_to_send, "peer": peer}
+    }
+  }
+
+  //use this rule to send rumor messages to other picos.
+  rule send_rumor{
+    select when gossip rumor_send_needed
+    foreach event:attr("to_send") setting (rumor_message)
+    pre{
+      peer = event:attr("peer");
+    }
+    event:send({
+          "eci": peer{"Tx"},
+          "domain": "gossip",
+          "type": "rumor",
+          "attrs": rumor_message.klog("sending rumor message to " + peer{"Tx"} + " message: ")
+        }, host=peer{"Tx_host"}.defaultsTo(meta:host))
+    fired{
+      raise gossip event "update_needed_rumor"
+        attributes {"peer": peer, "rumor": rumor_message}
+    }
+  }
+
+  //this rule will primarily be used to update the entity variable that keeps track of who has been sent what data.
+  rule update_smart_select_seen_message{
+    select when gossip update_needed_seen
+    pre{
+      seen = event:attr("seen_message");
+      incoming_channel = meta:eci.klog("Finding peer with the follwing Rx: ");
+      peer = subscription:established("Rx", incoming_channel)[0].klog("Peer found with the incoming_Rx channel: ");
+    }
+    if peer then
+    noop()
+    fired{
+      ent:smart_tracker := ent:smart_tracker.defaultsTo({}).put([peer{"Tx"}], seen)
+    }
+  }
+
+  //if the messageID that is being sent to this peer is greater than the smart_select stored number for that specific sensor, then update the smart tracker
+  rule update_smart_select_rumor{
+    select when gossip update_needed_rumor
+    pre{
+      peer = event:attr("peer");
+      rumor = event:attr("rumor");
+      message_seq_num = rumor{"MessageID"}.split(re#:#)[1].as("Number");
+      sensorID = rumor{"SensorID"};
+      highest_seq_num = smart_tracker(){[peer{"Tx"}, sensorID]}.defaultsTo(-1);//the smart_tracker's stored value. If we just sent them something they don't have, then we create the entry
+    }
+    if message_seq_num > highest_seq_num then
+    noop()
+    fired{
+      ent:smart_tracker := ent:smart_tracker.defaultsTo({}).put([peer{"Tx"}, sensorID], message_seq_num)
+    }
+  }
+}
