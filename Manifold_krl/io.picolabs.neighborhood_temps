@@ -124,7 +124,7 @@ meta {
       target_identifier = unique_messages.keys()[random:integer(unique_messages.length() - 1)].klog("Peer's target identifier: ");
 
 
-      message_num = (peer_info{[target_identifier]}.defaultsTo(-1) + 1).klog("The message_number to send: ");//find what the other person has seen,then simply send them the next sequence number message
+      message_num = (peer_info{[target_identifier]}.defaultsTo(-1).as("Number") + 1).klog("The message_number to send: ");//find what the other person has seen,then simply send them the next sequence number message
 
       messageID = (target_identifier + ":" + message_num).klog("The messageID to send");
 
@@ -252,8 +252,8 @@ meta {
 
     finally{
       //raise the scheduled event again.
-      schedule gossip event "heartbeat" at time:add(time:now(), {"seconds": ent:n_value.defaultsTo(15)});
-      c = d.klog("Scheduling gossip heartbeat event with n: " + ent:n_value.defaultsTo(15))
+      schedule gossip event "heartbeat" at time:add(time:now(), {"seconds": ent:n_value.defaultsTo(5)});
+      c = d.klog("Scheduling gossip heartbeat event with n: " + ent:n_value.defaultsTo(5))
     }
   }
 
