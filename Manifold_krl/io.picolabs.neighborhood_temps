@@ -283,13 +283,16 @@ meta {
   //when this is received
   rule handle_seen{
     select when gossip seen
+    pre{
+      seen_message = event:attr("headers") => event:attrs.delete(["headers"]) | event:attrs
+    }
     if ent:process.defaultsTo("on") == "on" then
     noop()
     fired{
       raise gossip event "update_needed_seen"
-        attributes {"seen_message": event:attrs};
+        attributes {"seen_message": seen_message};
       raise gossip event "process_seen"
-        attributes {"my_seen": generate_seen(), "seen_message": event:attrs}
+        attributes {"my_seen": generate_seen(), "seen_message": seen_message}
     }
   }
 
