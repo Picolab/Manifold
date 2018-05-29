@@ -3,6 +3,7 @@ import CustomComponentMap from '../Templates/customComponentMap';
 import PropTypes from 'prop-types';
 
 export class CardBody extends Component {
+
   render() {
     let appInfo = this.props.appInfo;
     let options = appInfo.options;
