@@ -8939,7 +8939,7 @@ hr.transparent {
   color: #263238; }
 
 .card-block {
-  overflow: scroll !important; }
+  overflow: auto !important; }
 
 .card {
   box-shadow: 8px 8px 10px #888888; }

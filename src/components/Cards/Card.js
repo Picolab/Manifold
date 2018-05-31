@@ -14,8 +14,10 @@ class Card extends Component {
     this.handleCarouselDotClick = this.handleCarouselDotClick.bind(this);
 
     this.state = {
-      currentApp: 0
+      currentApp: 0,
     }
+
+    
 
     this.renderBody = this.renderBody.bind(this);
   }
@@ -24,6 +26,7 @@ class Card extends Component {
     //query for the discovery and app info
     this.props.dispatch({type: 'DISCOVERY', eci: this.props.eci, pico_id: this.props.pico_id});
   }
+
 
   handleCarouselDotClick(index) {
     this.setState({
@@ -52,7 +55,7 @@ class Card extends Component {
 
         <CardHeader name={this.props.name} color={this.props.color} eci={this.props.eci} sub_id={this.props.sub_id} cardType={this.props.cardType}/>
 
-        <div className="card-block nonDraggable" style={{"textOverflow": "clip", overflow: "hidden"}}>
+        <div className="card-block nonDraggable" style={{"textOverflow": "clip", overflow: "auto"}}>
           {this.renderBody()}
         </div>
 
