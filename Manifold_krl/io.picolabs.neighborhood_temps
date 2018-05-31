@@ -486,4 +486,18 @@ ruleset io.picolabs.neighborhood_temps {
        schedule gossip event "heartbeat" at time:add(time:now(), {"seconds": ent:heartbeat_interval.defaultsTo(5)})
      }
    }
+   
+   rule install_dependencies {
+     select when wrangler ruleset_added where rids >< meta:rid
+     pre {
+       
+     }
+     noop()
+     fired {
+       raise wrangler event "install_rulesets_requested"
+        attributes {
+          "rids":["io.picolabs.wovyn_base"]
+        }
+     }
+   }
 }
