@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import CustomComponentMap from '../Templates/customComponentMap';
 import PropTypes from 'prop-types';
+import ManifoldApp from '../Apps/ManifoldApp'
 
 export class CardBody extends Component {
 
@@ -8,19 +9,14 @@ export class CardBody extends Component {
     let appInfo = this.props.appInfo;
     let options = appInfo.options;
     if(options){
-      var bindings;
-      if(options.bindings){
-        bindings = options.bindings;
-        bindings.eci = this.props.eci;
-        bindings.pico_id = this.props.pico_id;
-      }else{
+      if(!options.bindings){
         return (<div>Missing bindings from the pico!</div>)
       }
       const CustomComponent = CustomComponentMap[options.rid];
       if(CustomComponent){
         return (
           <div>
-            <CustomComponent {...bindings} />
+            <ManifoldApp developer_component={CustomComponent} bindings={options.bindings} eci={this.props.eci} pico_id={this.props.pico_id} />
           </div>
         )
       }else{

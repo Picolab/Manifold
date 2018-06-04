@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { sky_event } from '../../utils/manifoldSDK';
+import { connect } from 'react-redux';
+import { commandAction } from '../../actions/command';
 
 class NeighborhoodTemps extends Component {
   constructor(props){
@@ -9,6 +11,12 @@ class NeighborhoodTemps extends Component {
     this.state = {
       url: sky_event(this.props.eci)
     }
+
+
+  }
+
+  retrieveData() {
+    
   }
 
   render(){
@@ -25,4 +33,21 @@ NeighborhoodTemps.propTypes = {
   eci: PropTypes.string.isRequired
 }
 
-export default NeighborhoodTemps;
+/*
+CreateThingModal.propTypes = {
+  modalOn: PropTypes.bool.isRequired,
+  toggleFunc: PropTypes.func.isRequired,
+  createThing: PropTypes.func.isRequired
+}
+*/
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    createThing: (name) => {
+      //dispatch(commandAction(createThing, [name]))
+    }
+  }
+}
+
+//connect to redux store so we can get access to dispatch in the props
+export default connect(null, mapDispatchToProps)(NeighborhoodTemps);

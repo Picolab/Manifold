@@ -136,7 +136,7 @@ ruleset io.picolabs.neighborhood_temps {
       thisPicoName = myself{"name"};
       mapResult = ent:picos_temp_logs.map(function(value,key) {
         messageArray = value.values();
-        messageArray <= 5 => message_Array | messageArray.slice(messageArray.length() - 5, messageArray.length() - 1)
+        messageArray.length() <= 5 => message_Array | messageArray.slice(messageArray.length() - 5, messageArray.length() - 1)
       });
       mapResult.keys().collect(function(value) {
         value == thisPicoId.klog("id") => thisPicoName.klog("name") | ent:peers{[value, "name"]} 
@@ -156,8 +156,30 @@ ruleset io.picolabs.neighborhood_temps {
     myself = function() {
       wrangler:myself()
     }
+    
+    // MANIFOLD FUNCTIONS AND VARIABLES
+    app = {"name":"Neighborhood Temperatures","version":"0.0"/* img: , pre: , ..*/};
+    
+    bindings = function(){
+      {
+        "current_temp_logs": get_report()
+      };
+    }
   }
   
+  /*
+     ------------------------ MANIFOLD API ------------------------
+  */
+  
+     
+  rule discovery { 
+    select when manifold apps
+    send_directive("app discovered...", {"app": app, "rid": meta:rid, "bindings": bindings()} ); 
+  }
+  
+  /*
+    ------------------------ END MANIFOLD API------------------------
+  */
   //Update this picos temperature logs every time the sensor sends a new reading
   rule on_wovyn_heartbeat {
     select when wovyn new_temperature_reading
@@ -484,20 +506,6 @@ ruleset io.picolabs.neighborhood_temps {
      noop()
      fired {
        schedule gossip event "heartbeat" at time:add(time:now(), {"seconds": ent:heartbeat_interval.defaultsTo(5)})
-     }
-   }
-   
-   rule install_dependencies {
-     select when wrangler ruleset_added where rids >< meta:rid
-     pre {
-       
-     }
-     noop()
-     fired {
-       raise wrangler event "install_rulesets_requested"
-        attributes {
-          "rids":["io.picolabs.wovyn_base"]
-        }
      }
    }
 }
