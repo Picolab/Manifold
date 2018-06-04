@@ -60,16 +60,18 @@ class Header extends Component {
           </li>
         </ul>
         <ul className="nav navbar-nav ml-auto">
+          {/*
           <li className="nav-item d-md-down-none">
             <a className="nav-link" href="/"><i className="icon-bell"></i><span className="badge badge-pill badge-danger">5</span></a>
           </li>
+          */}
           <li className="nav-item d-md-down-none">
             <a className="nav-link" href="/"><i className="icon-list"></i></a>
           </li>
           <li className="nav-item d-md-down-none">
             <a className="nav-link" href="/"><i className="icon-location-pin"></i></a>
           </li>
-          <li className="nav-item">
+          <li className="nav-item" style={{"padding-right": "20px"}}>
             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
               <DropdownToggle onClick={this.toggle} className="nav-link dropdown-toggle" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded={this.state.dropdownOpen}>
                 <img src={'img/avatars/1.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com"/>
@@ -98,9 +100,11 @@ class Header extends Component {
               </DropdownMenu>
             </Dropdown>
           </li>
+          {/*
           <li className="nav-item d-md-down-none">
             <button className="nav-link navbar-toggler aside-menu-toggler" type="button" onClick={this.asideToggle}>&#9776;</button>
           </li>
+          */}
         </ul>
       </header>
     )
