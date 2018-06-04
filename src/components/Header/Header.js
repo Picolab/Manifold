@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dropdown, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Dropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import {logOut} from '../../utils/AuthService';
 
@@ -71,10 +71,10 @@ class Header extends Component {
           </li>
           <li className="nav-item">
             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-              <button onClick={this.toggle} className="nav-link dropdown-toggle" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded={this.state.dropdownOpen}>
+              <DropdownToggle onClick={this.toggle} className="nav-link dropdown-toggle" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded={this.state.dropdownOpen}>
                 <img src={'img/avatars/1.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com"/>
                 <span className="d-md-down-none">admin</span>
-              </button>
+              </DropdownToggle>
 
               <DropdownMenu className="dropdown-menu-right">
                 <DropdownItem header className="text-center"><strong>Account</strong></DropdownItem>
@@ -85,15 +85,15 @@ class Header extends Component {
                 <DropdownItem><i className="fa fa-comments"></i> Comments<span className="badge badge-warning">42</span></DropdownItem>
 
                 <DropdownItem header className="text-center"><strong>Settings</strong></DropdownItem>
-                <Link to="/profile" style={{ textDecoration: 'none' }}><DropdownItem><i className="fa fa-user"></i> Profile</DropdownItem></Link>
+                {/*<Link to="/profile" style={{ textDecoration: 'none' }}>*/}<DropdownItem><i className="fa fa-user"></i> Profile</DropdownItem>{/*</Link>*/}
                 <DropdownItem><i className="fa fa-wrench"></i> Settings</DropdownItem>
                 <DropdownItem><i className="fa fa-usd"></i> Payments<span className="badge badge-default">42</span></DropdownItem>
                 <DropdownItem><i className="fa fa-file"></i> Projects<span className="badge badge-primary">42</span></DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem><i className="fa fa-shield"></i> Lock Account</DropdownItem>
-                <DropdownItem
+                {/*<DropdownItem
                   onClick = {()=>{logOut()}}>
-                  <i className="fa fa-lock"></i> Logout</DropdownItem>
+                  <i className="fa fa-lock"></i> Logout</DropdownItem>*/}
 
               </DropdownMenu>
             </Dropdown>

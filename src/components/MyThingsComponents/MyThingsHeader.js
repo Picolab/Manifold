@@ -29,7 +29,7 @@ class MyThingsHeader extends Component {
       <div>
         <div style={{height:"30px"}}>
           <button style={{float:"right"}} className="btn btn-primary" onClick={this.toggleAddModal}>+</button>
-          <button style={{float:"right"}} className="btn btn-warning" onClick={this.toggleRegModal}>R</button>
+          {/*<button style={{float:"right"}} className="btn btn-warning" onClick={this.toggleRegModal}>R</button>*/}
         </div>
         <CreateThingModal modalOn={this.state.addModal} toggleFunc={this.toggleAddModal}/>
         <RegisterRulesetModal modalOn={this.state.registerModal} toggleFunc={this.toggleRegModal}/>

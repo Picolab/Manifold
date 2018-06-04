@@ -24,10 +24,11 @@ class Sidebar extends Component {
         <nav className="sidebar-nav">
           <ul className="nav">
             <li className="nav-item">
-              <NavLink to={'/dashboard'} className="nav-link" activeClassName="active"><i className="icon-speedometer"></i> Dashboard </NavLink>
+              {/*<NavLink to={'/dashboard'} className="nav-link" activeClassName="active"><i className="icon-speedometer"></i> Dashboard </NavLink>*/}
               <NavLink to={'/mythings'} className="nav-link" activeClassName="active"><i className="fa fa-space-shuttle"></i>My Things </NavLink>
-              <NavLink to={'/communities'} className="nav-link" activeClassName="active"><i className="fa fa-users"></i>Communities <span className="badge badge-info">NEW</span></NavLink>
+              {/*<NavLink to={'/communities'} className="nav-link" activeClassName="active"><i className="fa fa-users"></i>Communities <span className="badge badge-info">NEW</span></NavLink>*/}
             </li>
+            {/*
             <li className="nav-title">
               UI Elements
             </li>
@@ -98,6 +99,7 @@ class Sidebar extends Component {
                 </li>
               </ul>
             </li>
+            */}
           </ul>
         </nav>
       </div>

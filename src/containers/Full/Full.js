@@ -56,7 +56,7 @@ class Full extends Component {
                 <Route path="/icons/simple-line-icons" name="Simple Line Icons" component={SimpleLineIcons}/>
                 <Route path="/widgets" name="Widgets" component={Widgets}/>
                 <Route path="/charts" name="Charts" component={Charts}/>
-                <Redirect from="/" to="/dashboard"/>
+                <Redirect from="/" to="/mythings"/>
               </Switch>
             </div>
           </main>
