@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Dropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap';
-import { Link } from 'react-router-dom';
-import {logOut} from '../../utils/AuthService';
+// import { Link } from 'react-router-dom';
+// import {logOut} from '../../utils/AuthService';
 
 class Header extends Component {
 
