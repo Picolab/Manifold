@@ -1,6 +1,6 @@
 ruleset io.picolabs.neighborhood_temps {
   meta {
-    shares __testing, retrieve_temperature_logs, generateSeen, getCount,others_seen, getLastMessage, is_enabled, current_heartbeat_interval, get_report, myself
+    shares __testing, retrieve_temperature_logs, generateSeen, getCount,others_seen, getLastMessage, is_enabled, current_heartbeat_interval, get_report, myself, averages_of_report
     use module io.picolabs.wrangler alias wrangler
     use module io.picolabs.subscription alias subscription
   }
@@ -14,7 +14,8 @@ ruleset io.picolabs.neighborhood_temps {
                   {"name":"current_heartbeat_interval"},
                   {"name":"getLastMessage"},
                   {"name":"get_report"},
-                  {"name":"getCount"}
+                  {"name":"getCount"},
+                  {"name":"averages_of_report"}
 //                  {"name":"myself"}
                   ],
                   "events": [ 
@@ -92,7 +93,8 @@ ruleset io.picolabs.neighborhood_temps {
       {
         "message": rumor,
         "destinationPeer": destinationPeer.keys()[0],
-        "type":"rumor"
+        "type":"rumor",
+        "picoName":wrangler:myself(){"name"}
       }
     }
     
@@ -135,10 +137,24 @@ ruleset io.picolabs.neighborhood_temps {
       // check if no logs. if no logs return empty array with this pico, otherwise do further processing and return report
       ent:picos_temp_logs.isnull() => {}.put(thisPicoName, []) |
       mapResult.keys().collect(function(value) {
-        value == thisPicoId.klog("id") => thisPicoName.klog("name") | ent:peers{[value, "name"]} 
+        value == thisPicoId.klog("id") => thisPicoName.klog("name") | ent:recorded_names{[value]}.defaultsTo("Pico Unidentified") 
       }).klog("map result: ").map(function(value, key) {
         mapResult{value}
       })
+    }
+    
+    averages_of_report = function() {
+      report = get_report();
+      report.map(function(value, key) {
+        sum = value.klog("report value").reduce(function(a,b) {
+          (a.klog("a temperature")+b{"temperature"}).klog("b temperature: ")
+        }, 0);
+        sum/(value.length() == 0 => 1 | value.length());
+      })
+    }
+    
+    full_report = function() {
+      [get_report(), averages_of_report()]
     }
     
     getCount = function() {
@@ -185,7 +201,8 @@ ruleset io.picolabs.neighborhood_temps {
       messageContents = {
         "message_id": messageID,
         "temperature":event:attr("temperature"),
-        "timestamp":event:attr("timestamp")
+        "timestamp":event:attr("timestamp"),
+        "picoName":wrangler:myself(){"name"}
       }
     }
     fired {
@@ -464,6 +481,7 @@ ruleset io.picolabs.neighborhood_temps {
       if (relevant_pico && message_id && event:attr("message")) then
       noop()
       fired {
+        ent:recorded_names := ent:recorded_names.defaultsTo({}).put([relevant_pico], event:attr("message"){"picoName"});
         ent:picos_temp_logs := ent:picos_temp_logs.defaultsTo({}).put([relevant_pico, message_id], event:attr("message"))
       }
         
