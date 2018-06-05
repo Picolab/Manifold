@@ -2,19 +2,24 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { commandAction } from '../../actions/command';
 import PropTypes from 'prop-types';
+import {customEvent, customQuery} from '../../utils/manifoldSDK';
 
 
 class ManifoldAppComponent extends Component {
     constructor(props) {
         super(props)
+        this.manifoldQuery = this.manifoldQuery.bind(this);
+    }
 
+    manifoldQuery (query, options) {
+        return customQuery(this.props.eci, query.rid, query.funcName, query.funcArgs);
     }
 
     render() {
         let DeveloperComponent = this.props.developer_component
         return (
             <DeveloperComponent
-                {...(this.props)}
+                {...(this.props)} manifoldQuery={this.manifoldQuery}
             />
         )
     }
@@ -41,7 +46,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             event.domain,
             event.type,
             event.attrs
-        ], options))
+        ], options))  
       }
       
     }
