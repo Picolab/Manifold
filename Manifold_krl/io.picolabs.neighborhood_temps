@@ -35,17 +35,11 @@ ruleset io.picolabs.neighborhood_temps {
                       "domain":"gossip",
                       "type":"update_heartbeat",
                       "attrs":["new_interval"]
-                    }//,
-                    //{
-                      //"eci":destination_eci.klog("DESTINATION ECI"),
-                      //"eid":"gossipin'",
-                      //"domain":"gossip",
-                      //"type":message_type,
-                      //"attrs": {
-                      //  "message":actualMessage.klog("ACTUAL MESSAGE IS: "),
-                      //  "this_pico_id":meta:picoId
-                      //}
-                    //}
+                    },
+                    {
+                      "domain":"gossip",
+                      "type":"clear_prompted"
+                    }
                     ] }
                   
     getPeerForRumor = function(others_seen) {
@@ -129,18 +123,20 @@ ruleset io.picolabs.neighborhood_temps {
       // reports_array |
       // reports_array.slice((reports_array.length() - 5), reports_array.length() - 1)
       
-    //Gets the 5 most recent readings for each pico
+    //Gets the 10 most recent readings for each pico
     get_report = function() {
       myself = wrangler:myself();
       thisPicoId = myself{"id"};
       thisPicoName = myself{"name"};
       mapResult = ent:picos_temp_logs.map(function(value,key) {
         messageArray = value.values();
-        messageArray.length() <= 5 => message_Array | messageArray.slice(messageArray.length() - 5, messageArray.length() - 1)
+        (messageArray.length() <= 10 => messageArray | messageArray.slice(messageArray.length() - 10, messageArray.length() - 1));
       });
+      // check if no logs. if no logs return empty array with this pico, otherwise do further processing and return report
+      ent:picos_temp_logs.isnull() => {}.put(thisPicoName, []) |
       mapResult.keys().collect(function(value) {
         value == thisPicoId.klog("id") => thisPicoName.klog("name") | ent:peers{[value, "name"]} 
-      }).map(function(value, key) {
+      }).klog("map result: ").map(function(value, key) {
         mapResult{value}
       })
     }
@@ -162,7 +158,7 @@ ruleset io.picolabs.neighborhood_temps {
     
     bindings = function(){
       {
-        "current_temp_logs": get_report()
+        "temps": get_report()
       };
     }
   }
@@ -506,6 +502,34 @@ ruleset io.picolabs.neighborhood_temps {
      noop()
      fired {
        schedule gossip event "heartbeat" at time:add(time:now(), {"seconds": ent:heartbeat_interval.defaultsTo(5)})
+     }
+   }
+   
+   rule install_dependencies {
+     select when wrangler ruleset_added where rids >< meta:rid
+     pre {
+       
+     }
+     noop()
+     fired {
+       raise wrangler event "install_rulesets_requested"
+        attributes {
+          "rids":["io.picolabs.wovyn_base"]
+        }
+     }
+   }
+   
+   rule manual_clear {
+     select when gossip clear_prompted
+     pre {
+       
+     }
+     fired {
+       clear ent:picos_temp_logs;
+       clear ent:enabled;
+       clear ent:counter;
+       clear ent:others_seen;
+       clear ent:last_message_sent;
      }
    }
 }
