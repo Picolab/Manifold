@@ -13,8 +13,8 @@ class NeighborhoodTemps extends Component {
        temps: props.bindings.temps,
        tempsKeys: Object.keys(props.bindings.temps)
     }
-
-      this.retrieveData = this.retrieveData.bind(this);
+    this.retrieveData();
+    this.retrieveData = this.retrieveData.bind(this);
   }
 
   componentDidMount() {
@@ -43,6 +43,34 @@ class NeighborhoodTemps extends Component {
     }).catch(error => {
         console.error(error);
     })
+
+  }
+
+  averageComponent() {
+    let temps = this.state.temps;
+    let avgArray = [];
+    Object.keys(temps).forEach((key) => {
+      let sum = temps[key].reduce((a,b) => {
+        return a+b.temperature;
+      }, 0); 
+      let avg = sum / (temps[key].length == 0 ? 1 : temps[key].length);
+      avgArray.push(<tr key={key}>
+                      <td>{key}</td>
+                      <td>{avg.toFixed(2)}</td>
+                    </tr>);
+    })
+    return (<table className="table" style={{"padding":"15px 15px 15px 15px"}}>
+        <thead>
+          <tr>
+            <th scope="col">Sensor Name</th>
+            <th scope="col">Average Temperature °F</th>
+          </tr>
+        </thead>
+        <tbody>
+          {avgArray}
+        </tbody>
+      </table>
+    )
   }
 
   generateRowsArray() {
@@ -92,10 +120,8 @@ class NeighborhoodTemps extends Component {
       return (<div> loading... </div>)
     return (
       <div>
-        <div>
-        Temperature gossip app!
-        </div>
-        <div style={{"height":"400px"}}>
+        <h2 style={{"margin":"auto", "textAlign":"center","paddingBottom":"5px"}}>Neighborhood Temps</h2>
+        <div style={{"height":"400px","paddingBottom":"40px"}}>
           <Chart
             chartType="LineChart"
             rows={this.generateRowsArray()}
@@ -113,10 +139,7 @@ class NeighborhoodTemps extends Component {
           />
         </div>
         <div>
-        
-        <button className="btn-primary" onClick={this.retrieveData}>
-          Test promise
-        </button>
+          {this.averageComponent()}
         </div>
       </div>
     );
@@ -128,21 +151,4 @@ NeighborhoodTemps.propTypes = {
   eci: PropTypes.string.isRequired
 }
 
-/*
-CreateThingModal.propTypes = {
-  modalOn: PropTypes.bool.isRequired,
-  toggleFunc: PropTypes.func.isRequired,
-  createThing: PropTypes.func.isRequired
-}
-*/
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    createThing: (name) => {
-      //dispatch(commandAction(createThing, [name]))
-    }
-  }
-}
-
-//connect to redux store so we can get access to dispatch in the props
-export default connect(null, mapDispatchToProps)(NeighborhoodTemps);
+export default NeighborhoodTemps;
