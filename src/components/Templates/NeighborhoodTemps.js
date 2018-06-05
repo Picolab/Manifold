@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { sky_event } from '../../utils/manifoldSDK';
-import { connect } from 'react-redux';
-import { commandAction } from '../../actions/command';
 import {Chart} from 'react-google-charts';
 
 class NeighborhoodTemps extends Component {
@@ -53,7 +50,7 @@ class NeighborhoodTemps extends Component {
       let sum = temps[key].reduce((a,b) => {
         return a+b.temperature;
       }, 0); 
-      let avg = sum / (temps[key].length == 0 ? 1 : temps[key].length);
+      let avg = sum / (temps[key].length === 0 ? 1 : temps[key].length);
       avgArray.push(<tr key={key}>
                       <td>{key}</td>
                       <td>{avg.toFixed(2)}</td>
