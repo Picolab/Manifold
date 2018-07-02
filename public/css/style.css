@@ -8928,7 +8928,8 @@ hr.transparent {
   /* This class exists solely to declare what classes are nonDraggable to react-grid-layout. No actuall css is put here. */ }
 
 .draggable {
-  cursor: -webkit-grab; }
+  cursor: -webkit-grab;
+  cursor: grab; }
 
 .manifoldDropdown {
   cursor: pointer;

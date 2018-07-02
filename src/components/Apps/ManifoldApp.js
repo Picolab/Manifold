@@ -23,8 +23,6 @@ class ManifoldAppComponent extends Component {
             />
         )
     }
-
-    
 }
 
 ManifoldAppComponent.propTypes = {
@@ -46,18 +44,19 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             event.domain,
             event.type,
             event.attrs
-        ], options))  
+        ], options))
       }
-      
+
     }
 }
 
-export default function ManifoldApp(props) {
-    let ConnectedManifoldApp = connect(mapStateToProps, mapDispatchToProps)(ManifoldAppComponent)
-    return(
-        <ConnectedManifoldApp
-            {...props}
-        />
-    )
-}
+// export default function ManifoldApp(props) {
+//     let ConnectedManifoldApp = connect(mapStateToProps, mapDispatchToProps)(ManifoldAppComponent)
+//     return(
+//         <ConnectedManifoldApp
+//             {...props}
+//         />
+//     )
+// }
 
+export default connect(mapStateToProps, mapDispatchToProps)(ManifoldAppComponent);
