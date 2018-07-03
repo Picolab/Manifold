@@ -29,6 +29,8 @@ import rootSaga from './sagas';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
 
+import SafeAndMine from './components/LandingPages/SafeAndMine';
+
 const sagaMiddleware = createSagaMiddleware();
 const history = createBrowserHistory();
 //const createStoreWithMiddleware = applyMiddleware(promise, sagaMiddleware)(createStore);
@@ -40,6 +42,15 @@ const store = createStore(
 sagaMiddleware.run(rootSaga);
 
 class App extends Component {
+  displayAppLandingPages() {
+    let landingPages = [];
+    //do some dynamic looping or such to figure out how many apps there are
+    landingPages.push(
+      <Route key="dynamic-route-1" path="/picolabs/safeandmine/:tagID" name="Safe and Mine" component={SafeAndMine} />
+    )
+    return landingPages;
+  }
+
   render() {
     return(
       <Provider store={store}>
@@ -50,6 +61,7 @@ class App extends Component {
             <Route exact path="/404" name="Page 404" component={Page404}/>
             <Route exact path="/500" name="Page 500" component={Page500}/>
             <Route path="/code" component={Code}/>
+            {this.displayAppLandingPages()}
             <Route path="/" name="Home" render={requireAuth}/>
           </Switch>
         </HashRouter>
