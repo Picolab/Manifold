@@ -33,7 +33,6 @@
     "reactstrap": "^5.0.0",
     "redux": "^3.7.2",
     "redux-form": "^7.3.0",
-    "redux-promise": "^0.5.3",
     "redux-saga": "^0.15.6",
     "uuid": "^3.2.1"
   },

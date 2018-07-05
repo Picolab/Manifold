@@ -8,9 +8,6 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import reducers from './reducers';
 
-//middleware and backend
-import promise from 'redux-promise';
-
 // Views
 import Login from './views/Pages/Login/'
 import Register from './views/Pages/Register/'
@@ -33,11 +30,10 @@ import SafeAndMine from './components/LandingPages/SafeAndMine';
 
 const sagaMiddleware = createSagaMiddleware();
 const history = createBrowserHistory();
-//const createStoreWithMiddleware = applyMiddleware(promise, sagaMiddleware)(createStore);
 const store = createStore(
   reducers,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-  applyMiddleware(promise, sagaMiddleware)
+  applyMiddleware(sagaMiddleware)
 )
 sagaMiddleware.run(rootSaga);
 

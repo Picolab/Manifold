@@ -1,31 +1,56 @@
 import { Component } from 'react';
-import { getState } from '../../utils/AuthService';
-import { connect } from 'react-redux';
+import { getCallbackURL, getHostname, getClientSecret, getProtocol, getClientId, getState, storeOwnerECI, getManifoldURL } from '../../utils/AuthService';
 import { getAccessToken } from '../../actions';
 import queryString from 'query-string';
+import axios from 'axios';
 
+const requestToken = (code) => {
+  const body = {
+    "grant_type": "authorization_code",
+    "redirect_uri": getCallbackURL(),
+    "client_id": getClientId(),
+    "code": code,
+    "client_secret": getClientSecret()
+  };
+  return axios.post(`${getProtocol()}${getHostname()}/token`,body);
+}
 
 class Code extends Component {
-  handleCodeRoute(){
+
+
+  handleCodeRoute() {
+    //first make sure the state matches what we expect
     const unparsedQuery = this.props.location.search;
     const { code, state } = queryString.parse(unparsedQuery);
-    console.log(code,state);
     const expectedState = getState();
-    console.log("expectedState:", expectedState);
-    if (state !== expectedState) {
+    if(state !== expectedState) {
       console.warn("OAuth Security Warning. Client states do not match. (Expected %d but got %d)", expectedState, state);
       return;
     }
-    this.props.getAccessToken(code);
+
+    //request the access token
+    const tokenPromise = requestToken(code);
+    tokenPromise.then((response) => {
+      const { access_token } = response.data;
+      //token_type is also provided in the response data
+      if(!access_token){
+        alert("Oauth request failed. Please try again.");
+        return;
+      }
+      storeOwnerECI(access_token);
+      window.location.assign(getManifoldURL());
+    }).catch((e) => {
+      console.error(e);
+    });
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.handleCodeRoute();
   }
 
-  render(){
+  render() {
     return null;
   }
 }
 
-export default connect(null, {getAccessToken})(Code); //binds the action function getAccessToken to the redux store/reducers
+export default Code;
