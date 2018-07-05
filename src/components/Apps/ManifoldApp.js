@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { commandAction } from '../../actions/command';
 import PropTypes from 'prop-types';
-import {customEvent, customQuery} from '../../utils/manifoldSDK';
+import { customEvent, customQuery } from '../../utils/manifoldSDK';
+import { getDID } from '../../reducers';
 
 
 class ManifoldAppComponent extends Component {
@@ -12,7 +13,7 @@ class ManifoldAppComponent extends Component {
     }
 
     manifoldQuery (query, options) {
-        return customQuery(this.props.eci, query.rid, query.funcName, query.funcArgs);
+        return customQuery(this.props.DID, query.rid, query.funcName, query.funcArgs);
     }
 
     render() {
@@ -27,20 +28,22 @@ class ManifoldAppComponent extends Component {
 
 ManifoldAppComponent.propTypes = {
     developer_component: PropTypes.func.isRequired,
-    pico_id: PropTypes.string.isRequired,
-    eci: PropTypes.string.isRequired,
+    picoID: PropTypes.string.isRequired,
+    DID: PropTypes.string.isRequired,
     bindings: PropTypes.object.isRequired
 }
 
-function mapStateToProps(state) {
-    return {}
+function mapStateToProps(state, ownProps) {
+    return {
+      DID: getDID(state, ownProps.picoID)
+    }
 }
-//customEvent(eci, domain, type, attributes
+//customEvent(DID, domain, type, attributes
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-      manifoldEvent: (event, options) => {
+      manifoldEvent: (DID, event, options) => {
         dispatch(commandAction(customEvent, [
-            ownProps.eci,
+            DID,
             event.domain,
             event.type,
             event.attrs
@@ -49,14 +52,5 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
     }
 }
-
-// export default function ManifoldApp(props) {
-//     let ConnectedManifoldApp = connect(mapStateToProps, mapDispatchToProps)(ManifoldAppComponent)
-//     return(
-//         <ConnectedManifoldApp
-//             {...props}
-//         />
-//     )
-// }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ManifoldAppComponent);

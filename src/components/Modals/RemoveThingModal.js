@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { commandAction } from '../../actions/command';
 import { removeThing } from '../../utils/manifoldSDK';
+import { getName, getSubID } from '../../reducers';
 
 export class RemoveThingModal extends Component {
   constructor(props){
@@ -27,7 +28,7 @@ export class RemoveThingModal extends Component {
       alert("Internal Error! Missing name in props.")
     }
     this.handleToggle();
-    this.props.removeThing(this.props.name, this.props.sub_id);
+    this.props.removeThing(this.props.name, this.props.subID);
   }
 
   handleToggle() {
@@ -54,17 +55,25 @@ RemoveThingModal.propTypes = {
   modalOn: PropTypes.bool.isRequired,
   toggleFunc: PropTypes.func.isRequired,
   removeThing: PropTypes.func.isRequired,
+  picoID: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  sub_id: PropTypes.string.isRequired
+  subID: PropTypes.string.isRequired
+}
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    name: getName(state, ownProps.picoID),
+    subID: getSubID(state, ownProps.picoID)
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    removeThing: (name, sub_id) => {
-      dispatch(commandAction(removeThing, [name, sub_id]))
+    removeThing: (name, subID) => {
+      dispatch(commandAction(removeThing, [name, subID]))
     }
   }
 }
 
 //connect to redux store so we can get access to dispatch in the props
-export default connect(null, mapDispatchToProps)(RemoveThingModal);
+export default connect(mapStateToProps, mapDispatchToProps)(RemoveThingModal);

@@ -5,6 +5,8 @@ import CardGrid from '../../components/Grids/CardGrid';
 import CardSideBar from '../../components/CardSideBar/CardSideBar';
 import { commandAction } from '../../actions/command';
 import { addToCommunity } from '../../utils/manifoldSDK';
+import PropTypes from 'prop-types';
+import { getCommunitiesIdList } from '../../reducers';
 import './CommStyles.css';
 
 class Communities extends Component {
@@ -22,12 +24,10 @@ class Communities extends Component {
 
   renderGrid(){
     //make sure the communities array really exists before trying to display them
-    if(this.props.communities.communities){
+    if(this.props.communitiesIdList.length > 0){
       return (
         <CardGrid
-          objects={this.props.communities.communities}
-          objPositions={this.props.communities.communitiesPosition}
-          objColors={this.props.communities.communitiesColor}
+          idList={this.props.communitiesIdList}
           cardType="Community"
           dropTargets={true}
           handleDrop={this.handleDrop}/>
@@ -54,15 +54,13 @@ class Communities extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  if(state.manifoldInfo.communities){
-    return {
-      communities: state.manifoldInfo.communities
-    }
-  }else{
-    return {
-      communities: {}
-    }
+Communities.propTypes = {
+  communitiesIdList: PropTypes.array.isRequired
+}
+
+const mapStateToProps = (state) => {
+  return {
+    communitiesIdList: getCommunitiesIdList(state)
   }
 }
 

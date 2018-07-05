@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import ThingDropdown from '../Dropdowns/ThingDropdown';
 import CommunityDropdown from '../Dropdowns/CommunityDropdown';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { getName, getColor } from '../../reducers';
 
 
 class CardHeader extends Component {
@@ -24,11 +26,11 @@ class CardHeader extends Component {
     renderDropdown(){
       if(this.props.cardType === 'Thing'){
         return (
-          <ThingDropdown isOpen={this.state.dropdownOpen} toggleSettings={this.toggleSettings} name={this.props.name} eci={this.props.eci} currentColor={this.props.color} sub_id={this.props.sub_id}/>
+          <ThingDropdown isOpen={this.state.dropdownOpen} toggleSettings={this.toggleSettings} picoID={this.props.picoID}/>
         )
       }else if(this.props.cardType === 'Community'){
         return (
-          <CommunityDropdown isOpen={this.state.dropdownOpen} toggleSettings={this.toggleSettings} name={this.props.name} eci={this.props.eci} currentColor={this.props.color} sub_id={this.props.sub_id}/>
+          <CommunityDropdown isOpen={this.state.dropdownOpen} toggleSettings={this.toggleSettings} picoID={this.props.picoID}/>
         )
       }else{
         return (
@@ -52,11 +54,23 @@ class CardHeader extends Component {
 }
 
 CardHeader.propTypes = {
+  picoID: PropTypes.string.isRequired,
+  cardType: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  color: PropTypes.string.isRequired,
-  eci: PropTypes.string.isRequired,
-  sub_id: PropTypes.string.isRequired,
-  cardType: PropTypes.string.isRequired
+  color: PropTypes.string
 }
 
-export default CardHeader;
+const mapStateToProps = (state, ownProps) => {
+  return {
+    name: getName(state, ownProps.picoID),
+    color: getColor(state, ownProps.picoID)
+  }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CardHeader);

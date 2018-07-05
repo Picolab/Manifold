@@ -15,8 +15,8 @@ const dropCardSpec = {
     }
     const draggedCard = monitor.getItem();
     const thisCard = {
-      cardType: props.cardType,
-      ...(props.object)
+      cardType: props.cardType
+      //...(props.object)
     }
     console.log("successfully dropped!", draggedCard);
     props.handleDrop(thisCard, draggedCard);
@@ -36,12 +36,8 @@ class DropTargetCard extends Component {
     return connectDropTarget(
       <div className={"dropTargetCard " + (isOver ? "hoveredTarget" : "nonHoveredTarget")}>
         <Card
-          name={this.props.object.name}
-          sub_id={this.props.object.Id}
-          color={this.props.object.color}
-          eci={this.props.object.Tx}
           cardType={this.props.cardType}
-          pico_id={this.props.object.pico_id}
+          picoID={this.props.picoID}
           overlay={{ isActive: isOver}}/>
       </div>
     )
@@ -49,13 +45,7 @@ class DropTargetCard extends Component {
 }
 
 DropTargetCard.propTypes = {
-  object: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    Id: PropTypes.string.isRequired,
-    color: PropTypes.string,
-    Tx: PropTypes.string.isRequired,
-    pico_id: PropTypes.string.isRequired,
-  }),
+  picoID: PropTypes.string.isRequired,
   cardType: PropTypes.string.isRequired,
   handleDrop: PropTypes.func.isRequired
 }

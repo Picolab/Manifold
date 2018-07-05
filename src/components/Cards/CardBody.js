@@ -16,7 +16,7 @@ export class CardBody extends Component {
       if(CustomComponent){
         return (
           <div>
-            <ManifoldApp developer_component={CustomComponent} bindings={options.bindings} eci={this.props.eci} pico_id={this.props.pico_id} />
+            <ManifoldApp developer_component={CustomComponent} bindings={options.bindings} picoID={this.props.picoID} />
           </div>
         )
       }else{
@@ -38,8 +38,7 @@ export class CardBody extends Component {
 
 CardBody.propTypes = {
   appInfo: PropTypes.object.isRequired,
-  eci: PropTypes.string.isRequired,
-  pico_id: PropTypes.string.isRequired
+  picoID: PropTypes.string.isRequired
 }
 
 export default CardBody;

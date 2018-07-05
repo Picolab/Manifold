@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { commandAction } from '../../actions/command';
 import { colorThing } from '../../utils/manifoldSDK';
 import PropTypes from 'prop-types';
+import { getName, getColor } from '../../reducers';
 
 export class ColorModal extends Component {
   constructor(props){
@@ -60,9 +61,17 @@ export class ColorModal extends Component {
 ColorModal.propTypes = {
   modalOn: PropTypes.bool.isRequired,
   toggleFunc: PropTypes.func.isRequired,
+  picoID: PropTypes.string.isRequired,
   changeColor: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   currentColor: PropTypes.string.isRequired
+}
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    name: getName(state, ownProps.picoID),
+    currentColor: getColor(state, ownProps.picoID)
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -73,4 +82,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(null, mapDispatchToProps)(ColorModal)
+export default connect(mapStateToProps, mapDispatchToProps)(ColorModal)

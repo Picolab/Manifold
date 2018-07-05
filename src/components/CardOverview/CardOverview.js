@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+//import PropTypes from 'prop-types';
 import { Button, UncontrolledTooltip } from 'reactstrap';
 import AppList from './AppList';
 import './CardOverview.css';

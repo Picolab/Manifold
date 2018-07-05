@@ -3,15 +3,16 @@ import PropTypes from 'prop-types';
 import './SideBarStyles.css';
 import { connect } from 'react-redux';
 import DraggableCard from '../Cards/DraggableCard';
+import { getThingIdList, getCommunitiesIdList } from '../../reducers';
 
 export class CardSideBar extends Component {
   renderCards(objects, cardType) {
     let cards = [];
-    objects.forEach((object) => {
+    objects.forEach((picoID) => {
       cards.push(
-        <div key={object.pico_id} className="sideBarItem">
+        <div key={picoID} className="sideBarItem">
           <DraggableCard
-            object={object}
+            picoID={picoID}
             cardType={cardType}/>
         </div>
       )
@@ -24,9 +25,9 @@ export class CardSideBar extends Component {
       <div className="sideBarContainer">
         <div className="sideListContainer">
           <h2 className="sideBarH2">Things</h2>
-          {this.renderCards(this.props.things, 'Thing')}
+          {this.renderCards(this.props.thingIdList, 'Thing')}
           <h2 className="sideBarH2">Communities</h2>
-          {this.renderCards(this.props.communities, 'Community')}
+          {this.renderCards(this.props.communitiesIdList, 'Community')}
         </div>
       </div>
     )
@@ -34,22 +35,14 @@ export class CardSideBar extends Component {
 }
 
 CardSideBar.propTypes = {
-  things: PropTypes.array.isRequired,
-  communities: PropTypes.array.isRequired
+  thingIdList: PropTypes.array.isRequired,
+  communitiesIdList: PropTypes.array.isRequired
 }
 
 const mapStateToProps = (state) => {
-  let manifoldInfo = state.manifoldInfo;
-  if(manifoldInfo && manifoldInfo.things && manifoldInfo.communities){
-    return {
-       things: manifoldInfo.things.things,
-       communities: manifoldInfo.communities.communities
-    }
-  }else{
-    return {
-      things: [],
-      communities: []
-    }
+  return {
+    thingIdList: getThingIdList(state),
+    communitiesIdList: getCommunitiesIdList(state)
   }
 }
 

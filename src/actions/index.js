@@ -1,6 +1,3 @@
-import axios from 'axios';
-import { getCallbackURL,getHostname,getClientSecret,getProtocol,getClientId } from '../utils/AuthService';
-
 export function discovery(eci, pico_id) {
   return {
     type: ActionTypes.DISCOVERY,

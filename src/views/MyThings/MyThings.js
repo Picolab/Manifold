@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import CardGrid from '../../components/Grids/CardGrid';
 import MyThingsHeader from '../../components/MyThingsComponents/MyThingsHeader';
+import { getThingIdList } from '../../reducers';
 
 export class MyThings extends Component {
   renderGrid(){
     //make sure the things object really exists before trying to display them
-    if(this.props.things.things){
+    if(this.props.thingIdList.length > 0){
       return (
-        <CardGrid objects={this.props.things.things} objPositions={this.props.things.thingsPosition} objColors={this.props.things.thingsColor} cardType="Thing"/>
+        <CardGrid idList={this.props.thingIdList} cardType="Thing"/>
       )
     }else{
       return (
@@ -28,14 +29,8 @@ export class MyThings extends Component {
 }
 
 const mapStateToProps = state => {
-  if(state.manifoldInfo.things){
-    return {
-      things: state.manifoldInfo.things
-    }
-  }else{
-    return {
-      things: {}
-    }
+  return {
+    thingIdList: getThingIdList(state)
   }
 }
 

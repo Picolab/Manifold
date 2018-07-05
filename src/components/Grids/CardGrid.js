@@ -6,55 +6,33 @@ import Card from '../Cards/Card';
 import { moveThing, moveCommunity } from '../../utils/manifoldSDK';
 import { commandAction } from '../../actions/command';
 import DropTargetCard from '../Cards/DropTargetCard';
+import { getPositionArray } from '../../reducers';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
-//this function assigns a position to a tile if one doesn't exist
-function givePosition(objects, positions){
-  if(objects === undefined){
-    return [];
-  }
-  for (var object of objects) {
-    object.pos = positions[object.pico_id] || {"x":0, "y":0, "w":3, "h":2.25, "minW":3, "minH":2.25, "maxW":8, "maxH":5};
-  }
-  return objects;
-};
-
 class CardGrid extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      objects: givePosition(props.objects, props.objPositions)
-    }
-  }
-
-  //this allows rerendering of component if the props (passed in from the parent) change
-  static getDerivedStateFromProps(nextProps, prevState) {
-    return {
-      objects: givePosition(nextProps.objects, nextProps.objPositions)
-    }
-  }
+  state = {}
 
   updateLayout = (layout) => {
-    for (var object of layout) {
-      var comp = this.state.layout[object.i];
-      if (!comp ||
-        object.x !== comp.x || object.y !== comp.y ||
-        object.w !== comp.w || object.h !== comp.h) {
-
-        var pico_id = this.state.objects[object.i].pico_id;
-        this.props.savePosition(pico_id, object.x, object.y, object.w, object.h)
+    for (var newPos of layout) {
+      var prevPos = this.state.layout[newPos.i];
+      if (!prevPos ||
+        newPos.x !== prevPos.x || newPos.y !== prevPos.y ||
+        newPos.w !== prevPos.w || newPos.h !== prevPos.h) {
+        let index = newPos.i.substr(8);//the id here is "cardGrid" + <indexInArray>, so we just want the index
+        let picoID = this.props.idList[index];
+        this.props.savePosition(picoID, newPos.x, newPos.y, newPos.w, newPos.h)
       }
     }
   }
 
   onLayoutChange = (layout) => {
     if (!this.state.layout || this.state.layout.length === 0) {
-      this.setState({layout: layout});
+      this.setState({ layout });
       return;
     }
     this.updateLayout(layout);
-    this.setState({layout: layout});
+    this.setState({ layout });
   }
 
   onBreakpointChange = (breakpoint, cols) => {
@@ -64,33 +42,29 @@ class CardGrid extends Component {
     });
   }
 
-  renderObject = (object, index) => {
-    let grid_settings = {
-      x: object.pos.x, y: object.pos.y, w: object.pos.w, h: object.pos.h,
-      minW: object.pos.minw, minH: object.pos.minh, maxW: object.pos.maxw, maxH: object.pos.maxh
-    }
-    if(this.props.dropTargets){
-      return(
-        <div key={index.toString()} data-grid={grid_settings} >
-          <DropTargetCard
-            cardType={this.props.cardType}
-            object={object}
-            handleDrop={this.props.handleDrop} />
-        </div>
-      )
-    }else{
-      return (
-        <div key={index.toString()} data-grid={grid_settings} >
-          <Card
-            name={object.name}
-            sub_id={object.Id}
-            color={object.color}
-            eci={object.Tx}
-            cardType={this.props.cardType}
-            pico_id={object.pico_id}/>
-        </div>
-      );
-    }
+  renderCard = (picoID, index) => {
+    let pos = this.props.positionArray[index];
+    let gridSettings = {};
+    gridSettings.x = pos.x || 0;
+    gridSettings.y = pos.y || 0;
+    gridSettings.w = pos.w || 3;
+    gridSettings.h = pos.h || 2.25;
+    gridSettings.minW = pos.minw || 3;
+    gridSettings.minH = pos.minh || 2.25;
+    gridSettings.maxW = pos.maxw || 8;
+    gridSettings.maxH = pos.maxh || 5;
+    return(
+      <div key={"gridCard" + index.toString()} data-grid={gridSettings} >
+
+        {this.props.dropTargets && <DropTargetCard
+                                    cardType={this.props.cardType}
+                                    picoID={picoID}
+                                    handleDrop={this.props.handleDrop} />}
+        {!this.props.dropTargets && <Card
+                                      cardType={this.props.cardType}
+                                      picoID={picoID}/>}
+      </div>
+    )
   }
 
   render(){
@@ -99,7 +73,7 @@ class CardGrid extends Component {
         onLayoutChange={this.onLayoutChange}
         onBreakpointChange={this.onBreakpointChange}
         draggableCancel=".nonDraggable">
-          {this.state.objects.map(this.renderObject)}
+          {this.props.idList.map(this.renderCard)}
       </ResponsiveReactGridLayout>
     )
   }
@@ -114,8 +88,7 @@ CardGrid.defaultProps = {
 };
 
 CardGrid.propTypes = {
-  objects: PropTypes.array.isRequired,
-  objPositions: PropTypes.object.isRequired,
+  idList: PropTypes.array.isRequired,
   cardType: PropTypes.string.isRequired, //this identifies whether we are displaying Things or Communities
   dropTargets: PropTypes.bool,
   handleDrop: function(props, propName, componentName) {
@@ -127,13 +100,19 @@ CardGrid.propTypes = {
               } //require the handleDrop function if dropTargets is true
 }
 
+const mapStateToProps = (state, ownProps) => {
+  return {
+    positionArray: getPositionArray(state, ownProps.idList)
+  }
+}
+
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    savePosition: (pico_id, x, y, w, h) => {
+    savePosition: (picoID, x, y, w, h) => {
       if(ownProps.cardType === 'Thing'){
-        dispatch(commandAction(moveThing, [pico_id, x, y, w, h]));
+        dispatch(commandAction(moveThing, [picoID, x, y, w, h]));
       }else if(ownProps.cardType === 'Community'){
-        dispatch(commandAction(moveCommunity, [pico_id, x, y, w, h]));
+        dispatch(commandAction(moveCommunity, [picoID, x, y, w, h]));
       }else{
         console.error("UNKNOWN CARD TYPE WHEN TRYING TO SAVE POSITION!");
       }
@@ -141,4 +120,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 }
 
-export default connect(null, mapDispatchToProps)(CardGrid);
+export default connect(mapStateToProps, mapDispatchToProps)(CardGrid);

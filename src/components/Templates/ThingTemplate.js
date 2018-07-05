@@ -7,7 +7,7 @@ class ThingTemplate extends Component {
     super(props);
 
     this.state = {
-      url: sky_event(this.props.eci)
+      url: sky_event(this.props.DID)
     }
   }
 
@@ -15,8 +15,8 @@ class ThingTemplate extends Component {
     return (
       <div>
         <h4>General Information</h4>
-        <p>Thing Id: {this.props.pico_id}</p>
-        <p>Thing eci: {this.props.eci}</p>
+        <p>Thing Id: {this.props.picoID}</p>
+        <p>Thing DID: {this.props.DID}</p>
         <p>URL to your Thing: {this.state.url}</p>
       </div>
     );
@@ -24,8 +24,8 @@ class ThingTemplate extends Component {
 }
 
 ThingTemplate.propTypes = {
-  pico_id: PropTypes.string.isRequired,
-  eci: PropTypes.string.isRequired
+  picoID: PropTypes.string.isRequired,
+  DID: PropTypes.string.isRequired
 }
 
 export default ThingTemplate;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Card, CardText, CardBody, CardTitle, CardSubtitle, CardLink } from 'reactstrap';
+//import PropTypes from 'prop-types';
+import { Card, CardText, CardBody, CardTitle, CardLink } from 'reactstrap';
 import { isLoggedIn } from '../../utils/AuthService';
 import { Link } from 'react-router-dom';
 import './SafeAndMine.css';

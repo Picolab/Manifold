@@ -6,6 +6,7 @@ import CardBody from './CardBody';
 import PropTypes from 'prop-types';
 import './cardStyles.css';
 import { discovery } from '../../actions';
+import { getCardIdentity, getDID, getColor } from '../../reducers';
 
 
 class Card extends Component {
@@ -23,7 +24,7 @@ class Card extends Component {
 
   componentWillMount(){
     //query for the discovery and app info
-    this.props.dispatch(discovery(this.props.eci, this.props.pico_id));
+    this.props.dispatch(discovery(this.props.DID, this.props.picoID));
   }
 
 
@@ -37,7 +38,7 @@ class Card extends Component {
   renderBody() {
     if(this.props.cardIdentity.length > 0){
       return (
-        <CardBody eci={this.props.eci} pico_id={this.props.pico_id} appInfo={this.props.cardIdentity[this.state.currentApp]}/>
+        <CardBody picoID={this.props.picoID} appInfo={this.props.cardIdentity[this.state.currentApp]}/>
       )
     }else{
       return (
@@ -52,7 +53,7 @@ class Card extends Component {
     return (
       <div className="card" style={{  height: "inherit", width: "inherit"}}>
 
-        <CardHeader name={this.props.name} color={this.props.color} eci={this.props.eci} sub_id={this.props.sub_id} cardType={this.props.cardType}/>
+        <CardHeader picoID={this.props.picoID} cardType={this.props.cardType}/>
 
         <div className="card-block nonDraggable" style={{"textOverflow": "clip", overflow: "auto"}}>
           {this.renderBody()}
@@ -77,28 +78,22 @@ Card.defaultProps = {
 }
 
 Card.propTypes = {
-  name: PropTypes.string.isRequired,
-  sub_id: PropTypes.string.isRequired,
-  eci: PropTypes.string.isRequired,
-  cardIdentity: PropTypes.array.isRequired,
+  picoID: PropTypes.string.isRequired,
   cardType: PropTypes.string.isRequired,
-  pico_id: PropTypes.string.isRequired,
-  color: PropTypes.string, //not required
   overlay: PropTypes.shape({
     isActive: PropTypes.bool.isRequired,
     color: PropTypes.string //should we provide overlay configs?
-  })
+  }),
+  DID: PropTypes.string.isRequired,
+  cardIdentity: PropTypes.array.isRequired,
+  color: PropTypes.string
 }
 
 const mapStateToProps = (state, ownProps) => {
-  if(state.identities && state.identities[ownProps.pico_id]){
-    return {
-       cardIdentity: state.identities[ownProps.pico_id],
-    }
-  }else{
-    return {
-      cardIdentity: []
-    }
+  return {
+    DID: getDID(state, ownProps.picoID),
+    cardIdentity: getCardIdentity(state, ownProps.picoID),
+    color: getColor(state, ownProps.picoID)
   }
 }
 

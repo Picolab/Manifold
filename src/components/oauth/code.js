@@ -1,6 +1,5 @@
 import { Component } from 'react';
 import { getCallbackURL, getHostname, getClientSecret, getProtocol, getClientId, getState, storeOwnerECI, getManifoldURL } from '../../utils/AuthService';
-import { getAccessToken } from '../../actions';
 import queryString from 'query-string';
 import axios from 'axios';
 

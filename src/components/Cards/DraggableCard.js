@@ -11,8 +11,8 @@ import './cardStyles.css';
 const cardSpec = {
   beginDrag(props){
     return {
-      cardType: props.cardType,
-      ...(props.object)
+      cardType: props.cardType
+      //...(props.object)
     }
   }
 }
@@ -31,12 +31,8 @@ class DraggableCard extends Component {
       <div>
         {isDragging ? <div className="draggingCard"/> :
             <Card
-              name={this.props.object.name}
-              sub_id={this.props.object.Id}
-              color={this.props.object.color}
-              eci={this.props.object.Tx}
               cardType={this.props.cardType}
-              pico_id={this.props.object.pico_id}/>
+              picoID={this.props.picoID}/>
         }
       </div>
     )
@@ -44,13 +40,7 @@ class DraggableCard extends Component {
 }
 
 DraggableCard.propTypes = {
-  object: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    Id: PropTypes.string.isRequired,
-    color: PropTypes.string,
-    Tx: PropTypes.string.isRequired,
-    pico_id: PropTypes.string.isRequired,
-  }),
+  picoID: PropTypes.string.isRequired,
   cardType: PropTypes.string.isRequired
 }
 

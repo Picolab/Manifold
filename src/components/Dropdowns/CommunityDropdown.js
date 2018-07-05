@@ -85,19 +85,19 @@ export class CommunityDropdown extends Component {
             Remove Community
             <i className="fa fa-trash float-right" />
           </DropdownItem>
-          <RemoveCommunityModal modalOn={this.state.removeOpen} toggleFunc={this.toggleRemove} name={this.props.name} sub_id={this.props.sub_id}/>
+          <RemoveCommunityModal modalOn={this.state.removeOpen} toggleFunc={this.toggleRemove} picoID={this.props.picoID}/>
 
           <DropdownItem onClick={this.openInstall}>
             Install an App
             <i className="fa fa-cloud-download float-right"/>
           </DropdownItem>
-          <InstallModal modalOn={this.state.installOpen} toggleFunc={this.toggleInstall} eci={this.props.eci}/>
+          <InstallModal modalOn={this.state.installOpen} toggleFunc={this.toggleInstall} picoID={this.props.picoID}/>
 
           <DropdownItem onClick={this.openColor}>
             Change Color
             <i className="fa fa-cubes float-right"/>
           </DropdownItem>
-          <ColorModal modalOn={this.state.colorOpen} toggleFunc={this.toggleColor} currentColor={this.props.currentColor} name={this.props.name}/>
+          <ColorModal modalOn={this.state.colorOpen} toggleFunc={this.toggleColor} picoID={this.props.picoID}/>
 
         </DropdownMenu>
 
@@ -109,10 +109,7 @@ export class CommunityDropdown extends Component {
 CommunityDropdown.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggleSettings: PropTypes.func.isRequired,
-  name: PropTypes.string.isRequired, //the remove modal needs this
-  eci: PropTypes.string.isRequired,
-  currentColor: PropTypes.string.isRequired,
-  sub_id: PropTypes.string.isRequired
+  picoID: PropTypes.string.isRequired
 }
 
 export default CommunityDropdown;

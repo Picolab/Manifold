@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { commandAction } from '../../actions/command';
 import { installApp } from '../../utils/manifoldSDK';
 import PropTypes from 'prop-types';
+import { getDID } from '../../reducers';
 
 export class InstallModal extends Component {
   constructor(props){
@@ -35,7 +36,7 @@ export class InstallModal extends Component {
       alert("You must choose a ruleset to install before you can perform this action!");
       return;
     }
-    this.props.installRuleset(this.props.eci, toInstall);
+    this.props.installRuleset(this.props.DID, toInstall);
     this.handleToggle();
   }
 
@@ -79,15 +80,22 @@ InstallModal.propTypes = {
   modalOn: PropTypes.bool.isRequired,
   toggleFunc: PropTypes.func.isRequired,
   installRuleset: PropTypes.func.isRequired,
-  eci: PropTypes.string.isRequired
+  picoID: PropTypes.string.isRequired,
+  DID: PropTypes.string.isRequired
+}
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    DID: getDID(state, ownProps.picoID)
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    installRuleset: (eci, rulesetName) => {
-      dispatch(commandAction(installApp, [eci, rulesetName]))
+    installRuleset: (DID, rulesetName) => {
+      dispatch(commandAction(installApp, [DID, rulesetName]))
     }
   }
 }
 
-export default connect(null, mapDispatchToProps)(InstallModal)
+export default connect(mapStateToProps, mapDispatchToProps)(InstallModal)
