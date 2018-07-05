@@ -20,23 +20,25 @@ const getPaths = (pathname) => {
 };
 
 const BreadcrumbsItem = ({ match, ...rest }) => {
-  const routeName = findRouteName(match.url);
-  if (routeName) {
-    return (
-      match.isExact ?
-      (
-        <BreadcrumbItem active>{routeName}</BreadcrumbItem>
-      ) :
-      (
-        <BreadcrumbItem>
-          <Link to={match.url || ''}>
-            {routeName}
-          </Link>
-        </BreadcrumbItem>
-      )
-    );
+  let routeName = findRouteName(match.url);
+  if(!routeName) {
+    //if not defined in our routes map, just use whatever is in the url
+    const currentURLArray = match.url.split("/");
+    routeName = currentURLArray[currentURLArray.length - 1];
   }
-  return null;
+  return (
+    match.isExact ?
+    (
+      <BreadcrumbItem active>{routeName}</BreadcrumbItem>
+    ) :
+    (
+      <BreadcrumbItem>
+        <Link to={match.url || ''}>
+          {routeName}
+        </Link>
+      </BreadcrumbItem>
+    )
+  );
 };
 
 const Breadcrumbs = ({ location : { pathname }, match, ...rest }) => {

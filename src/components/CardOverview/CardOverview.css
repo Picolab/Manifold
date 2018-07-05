@@ -1,0 +1,26 @@
+.centered {
+  text-align: center;
+}
+
+.overviewHeader {
+  display: inline-block;
+}
+
+.appAddButton {
+  float: right;
+}
+
+.overviewUnderline {
+  margin-top: 0;
+}
+
+.appIcon {
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
+}
+
+.appListContainer {
+  display: flex;
+  flex-wrap: wrap;
+}

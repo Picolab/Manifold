@@ -17,8 +17,6 @@ class Card extends Component {
       currentApp: 0,
     }
 
-    
-
     this.renderBody = this.renderBody.bind(this);
   }
 

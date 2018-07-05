@@ -5,6 +5,8 @@ import Sidebar from '../../components/Sidebar/';
 import Breadcrumb from '../../components/Breadcrumb/';
 import Aside from '../../components/Aside/';
 import Footer from '../../components/Footer/';
+import CardOverview from '../../components/CardOverview/CardOverview';
+import CardAppView from '../../components/CardAppView/CardAppView';
 
 import Dashboard from '../../views/Dashboard/'
 import MyThings from '../../views/MyThings/'
@@ -41,6 +43,8 @@ class Full extends Component {
             <div className="container-fluid">
               <Switch>
                 <Route path="/dashboard" name="Dashboard" component={Dashboard}/>
+                <Route path="/mythings/:pico_id/:app" name="Thing App View" component={CardAppView}/>
+                <Route path="/mythings/:pico_id" name="Card Overview" component={CardOverview}/>
                 <Route path="/mythings" name="My Things" component={MyThings}/>
                 <Route path="/communities" name="Communities" component={Communities}/>
                 <Route path="/profile" name="Profile" component={Profile}/>
