@@ -6,7 +6,7 @@ export default function(state = {}, action){
       //var newState = _.mapValues(state, function(o){ return o; })//make a copy of the original object
       var newState = JSON.parse(JSON.stringify(state));
       const apps = action.payload.data.directives;
-      newState[action.pico_id] = apps
+      newState[action.picoID] = apps
       return newState;
     default:
       return state;

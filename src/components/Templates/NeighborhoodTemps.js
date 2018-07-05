@@ -144,7 +144,7 @@ class NeighborhoodTemps extends Component {
 }
 
 NeighborhoodTemps.propTypes = {
-  pico_id: PropTypes.string.isRequired,
+  picoID: PropTypes.string.isRequired,
   eci: PropTypes.string.isRequired
 }
 

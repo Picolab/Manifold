@@ -15,7 +15,7 @@ export default rootReducer;
 {
   manifoldInfo: {
     things: {
-      <pico_id>: {
+      <picoID>: {
         Rx_role: <Rx_role>,
         Tx_role: <Tx_role>,
         Tx_host: <host location of form "http://<host and port>">,
@@ -23,7 +23,7 @@ export default rootReducer;
         Tx: <Tx>,
         Rx: <Rx>,
         name: <pico's name>,
-        pico_id: <pico_id>,
+        picoID: <picoID>,
         color: <string of form "#ABCDEF">,
         pos: {
           x: <number>,
@@ -45,7 +45,7 @@ export default rootReducer;
         Tx: <Tx>,
         Rx: <Rx>,
         name: <pico's name>,
-        pico_id: <pico_id>,
+        picoID: <picoID>,
         color: <string of form "#ABCDEF">,
         pos: {
           x: <number>,
@@ -60,7 +60,7 @@ export default rootReducer;
     }
   },
   identities: {
-    <pico_id>: {
+    <picoID>: {
       <rid>: {
         rid: <string of form "io.picolabs.safeandmine">,
         bindings: {
@@ -81,14 +81,14 @@ export default rootReducer;
 export function getThingIdList(state) {
   const things = getThingsArray(state);
   return things.map((item) => {
-    return item.pico_id;
+    return item.picoID;
   });
 }
 
 export function getCommunitiesIdList(state) {
   const communities = getCommunitiesArray(state);
   return communities.map((item) => {
-    return item.pico_id;
+    return item.picoID;
   })
 }
 
@@ -134,7 +134,7 @@ export function getName(state, picoID) {
   const toLoop = things.concat(communities);
   for(let index in toLoop) {
     let obj = toLoop[index];
-    if(obj.pico_id === picoID) {
+    if(obj.picoID === picoID) {
       return obj.name;
     }
   }
@@ -147,7 +147,7 @@ export function getSubID(state, picoID) {
   const toLoop = things.concat(communities);
   for(let index in toLoop) {
     let obj = toLoop[index];
-    if(obj.pico_id === picoID) {
+    if(obj.picoID === picoID) {
       return obj.Id;
     }
   }
@@ -160,7 +160,7 @@ export function getDID(state, picoID) {
   const toLoop = things.concat(communities);
   for(let index in toLoop) {
     let obj = toLoop[index];
-    if(obj.pico_id === picoID) {
+    if(obj.picoID === picoID) {
       return obj.Tx;
     }
   }
@@ -173,7 +173,7 @@ export function getColor(state, picoID) {
   const toLoop = things.concat(communities);
   for(let index in toLoop) {
     let obj = toLoop[index];
-    if(obj.pico_id === picoID) {
+    if(obj.picoID === picoID) {
       return obj.color;
     }
   }

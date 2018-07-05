@@ -52,12 +52,12 @@ export function colorThing(name, color){
   return axios.post(`${sky_event(getManifoldECI())}/colorThing/manifold/color_thing?dname=${name}&color=%23${color.substring(1)}`);
 }
 
-export function moveThing(pico_id, x, y, w, h){
-  return axios.post(`${sky_event(getManifoldECI())}/Move_Thing/manifold/move_thing?pico_id=${pico_id}&x=${x}&y=${y}&w=${w}&h=${h}`);
+export function moveThing(picoID, x, y, w, h){
+  return axios.post(`${sky_event(getManifoldECI())}/Move_Thing/manifold/move_thing?picoID=${picoID}&x=${x}&y=${y}&w=${w}&h=${h}`);
 }
 
-export function moveCommunity(pico_id, x, y, w, h){
-  return axios.post(`${sky_event(getManifoldECI())}/Move_Thing/manifold/move_community?pico_id=${pico_id}&x=${x}&y=${y}&w=${w}&h=${h}`);
+export function moveCommunity(picoID, x, y, w, h){
+  return axios.post(`${sky_event(getManifoldECI())}/Move_Thing/manifold/move_community?picoID=${picoID}&x=${x}&y=${y}&w=${w}&h=${h}`);
 }
 
 export function addToCommunity(commEci, toAddEci){

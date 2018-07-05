@@ -218,12 +218,12 @@ ruleset io.picolabs.neighborhood_temps {
     select when gossip heartbeat where ent:enabled
     pre{
       message_vehicle = prepareMessage(ent:others_seen.klog("OTHERS SEEN WHEN CALLED"))
-      destination_pico_id = message_vehicle{"destinationPeer"}.klog("MESSAGE_VEHICLE: ")
+      destination_picoID = message_vehicle{"destinationPeer"}.klog("MESSAGE_VEHICLE: ")
       actualMessage = message_vehicle{"message"}.klog("ACTUAL MESSAGE: ")
       message_type = message_vehicle{"type"}
       message_number = actualMessage{"message_id"}.klog("BEFORE SPLIT MESSAGE ID").split(":")[1].klog("SPLIT FOR MESSAGE NUMBER: ")
-      destination_eci = ent:peers{[destination_pico_id, "Tx"]}
-      destination_host = ent:peers{[destination_pico_id, "host"]}.defaultsTo(meta:host).klog("HOST IS: ")
+      destination_eci = ent:peers{[destination_picoID, "Tx"]}
+      destination_host = ent:peers{[destination_picoID, "host"]}.defaultsTo(meta:host).klog("HOST IS: ")
     } if actualMessage && ent:enabled.defaultsTo(true) then
       event:send({
         "eci":destination_eci.klog("DESTINATION ECI"),
@@ -232,12 +232,12 @@ ruleset io.picolabs.neighborhood_temps {
         "type":message_type,
         "attrs": {
           "message":actualMessage.klog("ACTUAL MESSAGE IS: "),
-          "this_pico_id":meta:picoId
+          "this_picoID":meta:picoId
         }
       }, destination_host)
     fired {
       raise gossip event "update_state" attributes {
-        "pico_id":destination_pico_id,
+        "picoID":destination_picoID,
         "type":message_type,
         "message_number":message_number,
         "original_pico":actualMessage{"message_id"}.split(":")[0]
@@ -253,15 +253,15 @@ ruleset io.picolabs.neighborhood_temps {
     select when gossip update_state
     pre {
       message_type = event:attr("type")
-      pico_id = event:attr("pico_id")
+      picoID = event:attr("picoID")
       message_sent_number = event:attr("message_number").klog("MESSAGE NUMBER FOR UPDATE STATE WAS:")
-      current_message = ent:others_seen{[pico_id,meta:picoId]}.defaultsTo(-1);
+      current_message = ent:others_seen{[picoID,meta:picoId]}.defaultsTo(-1);
       original_pico = event:attr("original_pico")
     }
     if (message_type == "rumor" && current_message < message_sent_number && original_pico == meta:picoId) then
     noop();
     fired {
-      ent:others_seen := ent:others_seen.defaultsTo({}).put([pico_id,meta:picoId], message_sent_number.as("Number"))
+      ent:others_seen := ent:others_seen.defaultsTo({}).put([picoID,meta:picoId], message_sent_number.as("Number"))
     }
     
   }
@@ -309,7 +309,7 @@ ruleset io.picolabs.neighborhood_temps {
     }
   }
   
-  rule send_pico_id {
+  rule send_picoID {
     select when gossip get_peer_id
     pre {
       id = meta:picoId;
@@ -336,16 +336,16 @@ ruleset io.picolabs.neighborhood_temps {
   rule record_new_peer_tx {
     select when gossip new_peer_info
     pre {
-    other_pico_id = event:attr("id")
+    other_picoID = event:attr("id")
     other_pico_tx = event:attr("channel")
     other_pico_host = event:attr("host").klog("OTHER PICO HOST IS: ")
     other_pico_name = event:attr("name")
     }
     noop();
     fired {
-      ent:peers := ent:peers.defaultsTo({}).put([other_pico_id], {"Tx":other_pico_tx, "host":other_pico_host,"name":other_pico_name});
-      //ent:others_seen{[other_pico_id, meta:picoId]} := -1
-      ent:others_seen := ent:others_seen.defaultsTo({}).put([other_pico_id,meta:picoId], -1)
+      ent:peers := ent:peers.defaultsTo({}).put([other_picoID], {"Tx":other_pico_tx, "host":other_pico_host,"name":other_pico_name});
+      //ent:others_seen{[other_picoID, meta:picoId]} := -1
+      ent:others_seen := ent:others_seen.defaultsTo({}).put([other_picoID,meta:picoId], -1)
     }
   }
   /*
@@ -416,13 +416,13 @@ ruleset io.picolabs.neighborhood_temps {
           });
           
           raise gossip event "send_rumor" attributes {
-            "destination_pico":event:attr("this_pico_id"),
+            "destination_pico":event:attr("this_picoID"),
             "messages":messages_to_send.klog("MESSAGES TO SEND")
           };
           //messageNumbersToSend.map(function(value,))
           
           raise gossip event "update_others_seen" attributes {
-            "original_pico_id":event:attr("this_pico_id"),
+            "original_picoID":event:attr("this_picoID"),
             "number_of_pico_messages_seen":thatPicoSeen,
             "relevant_pico":pico
           }
@@ -434,14 +434,14 @@ ruleset io.picolabs.neighborhood_temps {
    rule update_others_seen {
      select when gossip update_others_seen
      pre {
-       pico_id = event:attr("original_pico_id")
+       picoID = event:attr("original_picoID")
        num_messages = event:attr("number_of_pico_messages_seen")
        relevant_pico = event:attr("relevant_pico")
      }
-     if ent:others_seen{[pico_id,relevant_pico]}.defaultsTo(-1) < num_messages then
+     if ent:others_seen{[picoID,relevant_pico]}.defaultsTo(-1) < num_messages then
      noop()
      fired {
-       ent:others_seen := ent:others_seen.defaultsTo({}).put([pico_id, relevant_pico], num_messages.as("Number"))
+       ent:others_seen := ent:others_seen.defaultsTo({}).put([picoID, relevant_pico], num_messages.as("Number"))
      }
    }
    
@@ -449,7 +449,7 @@ ruleset io.picolabs.neighborhood_temps {
      select when gossip send_rumor
        foreach event:attr("messages") setting (value, key)
          pre {
-           destination_pico_id = event:attr("destination_pico")
+           destination_picoID = event:attr("destination_pico")
            tx = ent:peers{[event:attr("destination_pico"), "Tx"]}
            txhost = ent:peers{[event:attr("destination_pico"), "host"]}
          }
@@ -464,7 +464,7 @@ ruleset io.picolabs.neighborhood_temps {
       }, txhost)
       fired {
         raise gossip event "update_state" attributes {
-          "pico_id":event:attr("destination_pico"),
+          "picoID":event:attr("destination_pico"),
           "type":"rumor",
           "message_number":key.split(":")[1],
           "original_pico":key.split(":")[0]

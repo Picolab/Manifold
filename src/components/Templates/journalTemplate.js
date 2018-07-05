@@ -30,7 +30,7 @@ class JournalTemplate extends Component {
         type: ActionTypes.COMMAND,
         command: customEvent,
         params: [this.props.eci, "journal", "new_entry", {"title": logTitle, "memo": logEntry}],
-        query: { type: ActionTypes.DISCOVERY, eci: this.props.eci, pico_id: this.props.id },
+        query: { type: ActionTypes.DISCOVERY, eci: this.props.eci, picoID: this.props.id },
         delay: "500" //wait a half second
       });
     }

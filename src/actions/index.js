@@ -1,8 +1,8 @@
-export function discovery(eci, pico_id) {
+export function discovery(eci, picoID) {
   return {
     type: ActionTypes.DISCOVERY,
     eci,
-    pico_id
+    picoID
   }
 }
 

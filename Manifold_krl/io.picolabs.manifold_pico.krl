@@ -43,7 +43,7 @@ ruleset io.picolabs.manifold_pico {
           "domain": "wrangler", "type": "subscription",
           "attrs": {
                    "name"        : event:attr("name"),
-                   "pico_id"     : event:attr("id"),
+                   "picoID"     : event:attr("id"),
                    "Rx_role"     : role_type,
                    "Tx_role"     : "manifold_pico",
                    "Tx_Rx_Type"  : "Manifold" , // auto_accept
@@ -60,7 +60,7 @@ ruleset io.picolabs.manifold_pico {
         things = ent:things.defaultsTo({});
         desired_info = {
           "name": things{[sub{"Id"}]}{"name"}.defaultsTo("ERROR: Missing name attribute in ent:things."),
-          "pico_id": things{[sub{"Id"}]}{"pico_id"}.defaultsTo("ERROR: missing pico_id attribute in ent:things."),
+          "picoID": things{[sub{"Id"}]}{"picoID"}.defaultsTo("ERROR: missing picoID attribute in ent:things."),
           "color": things{[sub{"Id"}]}{"color"}.defaultsTo("ERROR: missing color attribute in ent:things.")
         };
         sub.put(desired_info)
@@ -73,7 +73,7 @@ ruleset io.picolabs.manifold_pico {
         communities = ent:communities.defaultsTo({});
         desired_info = {
           "name": communities{[sub{"Id"}]}{"name"}.defaultsTo("ERROR: Missing name attribute in ent:communities."),
-          "pico_id": communities{[sub{"Id"}]}{"pico_id"}.defaultsTo("ERROR: missing pico_id attribute in ent:communities."),
+          "picoID": communities{[sub{"Id"}]}{"picoID"}.defaultsTo("ERROR: missing picoID attribute in ent:communities."),
           "color": communities{[sub{"Id"}]}{"color"}.defaultsTo("ERROR: missing color attribute in ent:communities.")
         };
         sub.put(desired_info)
@@ -91,7 +91,7 @@ ruleset io.picolabs.manifold_pico {
     picoIdFromSubId = function(sub_id){
       thing = ent:things.defaultsTo({}){[sub_id]};
       community = ent:communities.defaultsTo({}){[sub_id]};
-      thing => thing{"pico_id"} | community{"pico_id"}//if undefined is returned, then: (ERROR: Could not find the picoID with the provided sub_id!)
+      thing => thing{"picoID"} | community{"picoID"}//if undefined is returned, then: (ERROR: Could not find the picoID with the provided sub_id!)
     }
   }//end global
 
@@ -114,7 +114,7 @@ ruleset io.picolabs.manifold_pico {
       initiate_subscription(event:attr("eci"), event:attr("rs_attrs"){"name"}, subscription:wellKnown_Rx(){"id"}, thing_role);
     always{
       raise manifold event "move_thing"
-        attributes {"pico_id": event:attr("id"),
+        attributes {"picoID": event:attr("id"),
                     "x": 0, "y": 0, "w": 3, "h": 2.25};
     }
   }
@@ -137,7 +137,7 @@ ruleset io.picolabs.manifold_pico {
       initiate_subscription(event:attr("eci"), event:attr("rs_attrs"){"name"}, subscription:wellKnown_Rx(){"id"}, community_role);
     always{
       raise manifold event "move_community"
-        attributes {"pico_id": event:attr("id"),
+        attributes {"picoID": event:attr("id"),
                     "x": 0, "y": 0, "w": 3, "h": 2.25};
     }
   }
@@ -147,15 +147,15 @@ ruleset io.picolabs.manifold_pico {
     pre{
       sub_id = event:attr("Id");
       name = event:attr("name");
-      pico_id = event:attr("pico_id");
+      picoID = event:attr("picoID");
       obj_structure = {
         "name": name,
         "sub_id": sub_id,
-        "pico_id": pico_id,
+        "picoID": picoID,
         "color": "#eceff1"//default color
       }
     }
-    if sub_id && name && pico_id then
+    if sub_id && name && picoID then
       noop()
     fired{
       ent:things := ent:things.defaultsTo({}).put([sub_id], obj_structure);
@@ -168,15 +168,15 @@ ruleset io.picolabs.manifold_pico {
     pre{
       sub_id = event:attr("Id");
       name = event:attr("name");
-      pico_id = event:attr("pico_id");
+      picoID = event:attr("picoID");
       obj_structure = {
         "name": name,
         "sub_id": sub_id,
-        "pico_id": pico_id,
+        "picoID": picoID,
         "color": "#87cefa" //default community color
       }
     }
-    if sub_id && name && pico_id then
+    if sub_id && name && picoID then
       noop()
     fired{
       ent:communities := ent:communities.defaultsTo({}).put([sub_id], obj_structure);
@@ -208,12 +208,12 @@ ruleset io.picolabs.manifold_pico {
   rule deleteThing {
     select when wrangler subscription_removed where event:attr("event_type") == "thing_deletion"
     pre{
-      pico_id = picoIdFromSubId(event:attr("Id"));
+      picoID = picoIdFromSubId(event:attr("Id"));
     }
     if event:attr("name") && isAChild(event:attr("name")) && event:attr("Id") then
       send_directive("Attempting to remove Thing",{"thing":event:attr("name"), "sub_id": event:attr("Id")})
     fired{
-      ent:thingsPos := ent:thingsPos.filter(function(v,k){k != pico_id});
+      ent:thingsPos := ent:thingsPos.filter(function(v,k){k != picoID});
       ent:things := ent:things.filter(function(thing){ thing{"sub_id"} != event:attr("Id")});
       raise wrangler event "child_deletion"
         attributes event:attrs.put({"event_type": "manifold_remove_thing"})
@@ -244,12 +244,12 @@ ruleset io.picolabs.manifold_pico {
   rule deleteCommunity {
     select when wrangler subscription_removed where event:attr("event_type") == "community_deletion"
     pre{
-      pico_id = picoIdFromSubId(event:attr("Id"));
+      picoID = picoIdFromSubId(event:attr("Id"));
     }
     if event:attr("name") && isAChild(event:attr("name")) && event:attr("Id") then
       send_directive("Attempting to remove Community",{"community":event:attr("name"), "sub_id": event:attr("Id")})
     fired{
-      ent:communitiesPos := ent:communitiesPos.filter(function(v,k){k != pico_id});
+      ent:communitiesPos := ent:communitiesPos.filter(function(v,k){k != picoID});
       ent:communities := ent:communities.filter(function(thing){ thing{"sub_id"} != event:attr("Id")});
       raise wrangler event "child_deletion"
         attributes event:attrs.put({"event_type": "manifold_remove_thing"})
@@ -300,7 +300,7 @@ ruleset io.picolabs.manifold_pico {
     pre {}
     noop()
     fired {
-      ent:thingsPos := ent:thingsPos.defaultsTo({}).put([event:attr("pico_id")], {
+      ent:thingsPos := ent:thingsPos.defaultsTo({}).put([event:attr("picoID")], {
         "x": event:attr("x").as("Number"),
         "y": event:attr("y").as("Number"),
         "w": event:attr("w").as("Number"),
@@ -318,7 +318,7 @@ ruleset io.picolabs.manifold_pico {
     pre {}
     noop()
     fired {
-      ent:communitiesPos := ent:communitiesPos.defaultsTo({}).put([event:attr("pico_id")], {
+      ent:communitiesPos := ent:communitiesPos.defaultsTo({}).put([event:attr("picoID")], {
         "x": event:attr("x").as("Number"),
         "y": event:attr("y").as("Number"),
         "w": event:attr("w").as("Number"),
