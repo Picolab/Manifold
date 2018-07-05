@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Form, FormGroup, Label, Input, Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import { connect } from 'react-redux';
 import { customEvent } from '../../utils/manifoldSDK';
-
+import ActionTypes from '../../actions';
 
 class TempTestAppTemplate extends Component {
   constructor(props) {
@@ -27,10 +27,10 @@ class TempTestAppTemplate extends Component {
     });//reset everything
     if(logTitle !== "" && logEntry !== ""){
       this.props.dispatch({
-        type: 'command',
+        type: ActionTypes.COMMAND,
         command: customEvent,
         params: [this.props.eci, "journal", "new_entry", {"title": logTitle, "memo": logEntry}],
-        query: { type: 'DISCOVERY', eci: this.props.eci, pico_id: this.props.id },
+        query: { type: ActionTypes.DISCOVERY, eci: this.props.eci, pico_id: this.props.id },
         delay: "500" //wait a half second
       });
     }

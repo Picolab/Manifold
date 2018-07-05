@@ -2,15 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ConnectedModal, { CreateThingModal } from './CreateThingModal';
 import { createThing } from '../../utils/manifoldSDK';
+import ActionTypes from '../../actions';
 import uuid4 from 'uuid/v4';
 
 //import stuff needed to mock the store
-import configureStore from 'redux-mock-store'
-import promise from 'redux-promise'
-import createSagaMiddleware from 'redux-saga'
-const sagaMiddleware = createSagaMiddleware()
-const middlewares = [promise, sagaMiddleware]
-const mockStore = configureStore(middlewares)
+import configureStore from 'redux-mock-store';
+import createSagaMiddleware from 'redux-saga';
+const sagaMiddleware = createSagaMiddleware();
+const middlewares = [sagaMiddleware];
+const mockStore = configureStore(middlewares);
 
 //we are not running the saga watchers, because we don't actually want the sagas to execute here.
 
@@ -117,10 +117,10 @@ describe('CreateThingModal', () => {
     requires a knowledge of how the component is supposed to behave.
     */
     expect(actions[0]).toEqual({
-      type: "command",
+      type: ActionTypes.COMMAND,
       command: createThing,
       params: [randomName],
-      query: { type: 'MANIFOLD_INFO'}
+      query: { type: ActionTypes.MANIFOLD_INFO }
     });
   })
 

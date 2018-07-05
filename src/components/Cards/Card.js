@@ -5,6 +5,7 @@ import CardHeader from './CardHeader';
 import CardBody from './CardBody';
 import PropTypes from 'prop-types';
 import './cardStyles.css';
+import { discovery } from '../../actions';
 
 
 class Card extends Component {
@@ -22,7 +23,7 @@ class Card extends Component {
 
   componentWillMount(){
     //query for the discovery and app info
-    this.props.dispatch({type: 'DISCOVERY', eci: this.props.eci, pico_id: this.props.pico_id});
+    this.props.dispatch(discovery(this.props.eci, this.props.pico_id));
   }
 
 

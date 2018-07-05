@@ -3,7 +3,7 @@ import ActionTypes from './index.js';
 export function commandAction(commandFunc, paramsArray, options = {}) {
   options.queryType = options.queryType || ActionTypes.MANIFOLD_INFO;
   let action = {
-    type: "command",
+    type: ActionTypes.COMMAND,
     command: commandFunc,
     params: paramsArray,
     query: { type: options.queryType}

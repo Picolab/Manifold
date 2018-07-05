@@ -26,11 +26,12 @@ import FontAwesome from '../../views/Icons/FontAwesome/'
 import SimpleLineIcons from '../../views/Icons/SimpleLineIcons/'
 
 import { connect } from 'react-redux';
+import ActionTypes from '../../actions';
 
 
 class Full extends Component {
   componentWillMount(){
-    this.props.dispatch({type: "FETCH_ECI"}); //the saga will fetch the eci
+    this.props.dispatch({type: ActionTypes.FETCH_ECI}); //the saga will fetch the eci
   }
   render() {
     return (

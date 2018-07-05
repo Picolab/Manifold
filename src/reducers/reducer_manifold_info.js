@@ -1,9 +1,8 @@
-import { MANIFOLD_INFO } from '../actions';
+import ActionTypes from '../actions';
 
 export default function(state = {}, action){
   switch (action.type) {
-    case MANIFOLD_INFO:
-      //console.log("action.payload.data in reducer_manifold_info:",action.result.data);
+    case ActionTypes.MANIFOLD_INFO_RETRIEVED:
       return action.result.data;
     default:
       return state;

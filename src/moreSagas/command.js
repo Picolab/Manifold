@@ -23,5 +23,5 @@ export function* execute(action) {
 }
 
 export default function* watchCommand() {
-  yield takeLatest("command", execute);
+  yield takeLatest(ActionTypes.COMMAND, execute);
 }
