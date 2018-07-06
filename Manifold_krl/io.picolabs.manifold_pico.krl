@@ -88,10 +88,10 @@ ruleset io.picolabs.manifold_pico {
       childNames >< name
     }
 
-    picoIdFromSubId = function(sub_id){
-      thing = ent:things.defaultsTo({}){[sub_id]};
-      community = ent:communities.defaultsTo({}){[sub_id]};
-      thing => thing{"picoID"} | community{"picoID"}//if undefined is returned, then: (ERROR: Could not find the picoID with the provided sub_id!)
+    picoIdFromSubId = function(subID){
+      thing = ent:things.defaultsTo({}){[subID]};
+      community = ent:communities.defaultsTo({}){[subID]};
+      thing => thing{"picoID"} | community{"picoID"}//if undefined is returned, then: (ERROR: Could not find the picoID with the provided subID!)
     }
   }//end global
 
@@ -145,20 +145,20 @@ ruleset io.picolabs.manifold_pico {
   rule trackThingSubscription {
     select when wrangler subscription_added where event:attr("Tx_role") == thing_role
     pre{
-      sub_id = event:attr("Id");
+      subID = event:attr("Id");
       name = event:attr("name");
       picoID = event:attr("picoID");
       obj_structure = {
         "name": name,
-        "sub_id": sub_id,
+        "subID": subID,
         "picoID": picoID,
         "color": "#eceff1"//default color
       }
     }
-    if sub_id && name && picoID then
+    if subID && name && picoID then
       noop()
     fired{
-      ent:things := ent:things.defaultsTo({}).put([sub_id], obj_structure);
+      ent:things := ent:things.defaultsTo({}).put([subID], obj_structure);
       ent:thingsUpdate := time:now();
     }
   }
@@ -166,20 +166,20 @@ ruleset io.picolabs.manifold_pico {
   rule trackCommSubscription {
     select when wrangler subscription_added where event:attr("Tx_role") == community_role
     pre{
-      sub_id = event:attr("Id");
+      subID = event:attr("Id");
       name = event:attr("name");
       picoID = event:attr("picoID");
       obj_structure = {
         "name": name,
-        "sub_id": sub_id,
+        "subID": subID,
         "picoID": picoID,
         "color": "#87cefa" //default community color
       }
     }
-    if sub_id && name && picoID then
+    if subID && name && picoID then
       noop()
     fired{
-      ent:communities := ent:communities.defaultsTo({}).put([sub_id], obj_structure);
+      ent:communities := ent:communities.defaultsTo({}).put([subID], obj_structure);
       ent:communitiesUpdate := time:now();
     }
   }
@@ -187,9 +187,9 @@ ruleset io.picolabs.manifold_pico {
   rule removeThingSubscription {
     select when manifold remove_thing
     pre {
-      sub = subscription:established("Id", event:attr("sub_id"))[0].klog("found sub: ");
+      sub = subscription:established("Id", event:attr("subID"))[0].klog("found sub: ");
     }
-    if event:attr("name") && event:attr("sub_id") then
+    if event:attr("name") && event:attr("subID") then
       send_directive("Attempting to cancel subscription to Thing",{"thing":event:attr("name")})
     fired{
       raise wrangler event "subscription_cancellation"
@@ -202,7 +202,7 @@ ruleset io.picolabs.manifold_pico {
 
   rule handleRemoveFail{
     select when manifold removeThingFailed
-    send_directive("removeThingFailed", { "body": "Expected name attr, received " + event:attr("name") + ". Also expected sub_id attr, received " + event:attr("sub_id") + "."})
+    send_directive("removeThingFailed", { "body": "Expected name attr, received " + event:attr("name") + ". Also expected subID attr, received " + event:attr("subID") + "."})
   }
 
   rule deleteThing {
@@ -211,10 +211,10 @@ ruleset io.picolabs.manifold_pico {
       picoID = picoIdFromSubId(event:attr("Id"));
     }
     if event:attr("name") && isAChild(event:attr("name")) && event:attr("Id") then
-      send_directive("Attempting to remove Thing",{"thing":event:attr("name"), "sub_id": event:attr("Id")})
+      send_directive("Attempting to remove Thing",{"thing":event:attr("name"), "subID": event:attr("Id")})
     fired{
       ent:thingsPos := ent:thingsPos.filter(function(v,k){k != picoID});
-      ent:things := ent:things.filter(function(thing){ thing{"sub_id"} != event:attr("Id")});
+      ent:things := ent:things.filter(function(thing){ thing{"subID"} != event:attr("Id")});
       raise wrangler event "child_deletion"
         attributes event:attrs.put({"event_type": "manifold_remove_thing"})
     }
@@ -223,9 +223,9 @@ ruleset io.picolabs.manifold_pico {
   rule removeCommunity {
     select when manifold remove_community
     pre {
-      sub = subscription:established("Id", event:attr("sub_id"))[0].klog("found sub: ");
+      sub = subscription:established("Id", event:attr("subID"))[0].klog("found sub: ");
     }
-    if event:attr("name") && event:attr("sub_id") then
+    if event:attr("name") && event:attr("subID") then
       send_directive("Attempting to cancel subscription to Community",{"community":event:attr("name")})
     fired{
       raise wrangler event "subscription_cancellation"
@@ -238,7 +238,7 @@ ruleset io.picolabs.manifold_pico {
 
   rule handleRemoveCommFail{
     select when manifold removeCommFailed
-    send_directive("removeThingFailed", { "body": "Expected name attr, received " + event:attr("name") + ". Also expected sub_id attr, received " + event:attr("sub_id") + "."})
+    send_directive("removeThingFailed", { "body": "Expected name attr, received " + event:attr("name") + ". Also expected subID attr, received " + event:attr("subID") + "."})
   }
 
   rule deleteCommunity {
@@ -247,10 +247,10 @@ ruleset io.picolabs.manifold_pico {
       picoID = picoIdFromSubId(event:attr("Id"));
     }
     if event:attr("name") && isAChild(event:attr("name")) && event:attr("Id") then
-      send_directive("Attempting to remove Community",{"community":event:attr("name"), "sub_id": event:attr("Id")})
+      send_directive("Attempting to remove Community",{"community":event:attr("name"), "subID": event:attr("Id")})
     fired{
       ent:communitiesPos := ent:communitiesPos.filter(function(v,k){k != picoID});
-      ent:communities := ent:communities.filter(function(thing){ thing{"sub_id"} != event:attr("Id")});
+      ent:communities := ent:communities.filter(function(thing){ thing{"subID"} != event:attr("Id")});
       raise wrangler event "child_deletion"
         attributes event:attrs.put({"event_type": "manifold_remove_thing"})
     }

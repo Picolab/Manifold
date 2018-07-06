@@ -5,7 +5,7 @@ ruleset io.picolabs.neighborhood_temps {
     use module io.picolabs.subscription alias subscription
   }
   global {
-    __testing = { "queries": [ 
+    __testing = { "queries": [
                   { "name": "__testing" },
                   {"name":"retrieve_temperature_logs"},
                   {"name":"generateSeen"},
@@ -18,7 +18,7 @@ ruleset io.picolabs.neighborhood_temps {
                   {"name":"averages_of_report"}
 //                  {"name":"myself"}
                   ],
-                  "events": [ 
+                  "events": [
                     {
                       "domain":"gossip",
                       "type":"friendly_node_subscription",
@@ -42,7 +42,7 @@ ruleset io.picolabs.neighborhood_temps {
                       "type":"clear_prompted"
                     }
                     ] }
-                  
+
     getPeerForRumor = function(others_seen) {
       //thisPicoSeen = generateSeen();
       mapToThisPicosNumber = others_seen.klog("OTHERS SEEN").map(function(value,key){
@@ -53,17 +53,17 @@ ruleset io.picolabs.neighborhood_temps {
         value == mostNeededPeer
       })
     }
-    
+
     getPeerForSeen = function() {
       //seen = generateSeen();
       numberOthers = ent:peers.keys().klog("PEERS KEYS").length().klog("SEEN LENGTH");
       ent:peers.keys()[random:integer(numberOthers - 1)]
     }
-    
+
     prepareMessage = function(others_seen) {
       random:integer(1) => prepareSeenMessage(others_seen) | prepareRumorMessage(others_seen)
     }
-    
+
     prepareSeenMessage = function(others_seen) {
       {
       "message":generateSeen(),
@@ -71,21 +71,21 @@ ruleset io.picolabs.neighborhood_temps {
       "type":"seen"
       }.klog("PREPARE SEEN MESSAGE RETURNED")
     }
-    
+
     generateSeen = function() {
       ent:picos_temp_logs.map(function(value,key) {
         getHighestSequence(value)
       })
     }
-    
+
     getHighestSequence = function(messageMap) {
       messageNumbers = messageMap.keys().map(function(value) {value.split(":")[1].as("Number")}).sort("numeric").klog("MESSAGE NUMBERS: ");
-      messageNumbers[0].as("Number") == 0 => 
+      messageNumbers[0].as("Number") == 0 =>
       messageNumbers.filter(function(value) {
         (not (messageNumbers >< (value + 1)))
       })[0] | -1
     }
-    
+
     prepareRumorMessage = function(others_seen) {
       peerId = getPeerForRumor(others_seen);
       destinationPeer = peerId.klog("PEER FOR RUMOR RETURNED");
@@ -97,34 +97,34 @@ ruleset io.picolabs.neighborhood_temps {
         "picoName":wrangler:myself(){"name"}
       }
     }
-    
+
     generateRumor = function(messageNumberToSend) {
       picoMessageIndex = (meta:picoId + ":" + (messageNumberToSend.as("Number") + 1)).klog("MESSAGE INDEX");
       ent:picos_temp_logs{[meta:picoId, picoMessageIndex]}.klog("RETURNED FROM GENERATE RUMOR: ")
     }
-    
+
     retrieve_temperature_logs = function() {
       ent:picos_temp_logs.klog("picos temp logs: ")
     }
-    
+
     others_seen = function() {
       ent:others_seen
     }
-    
+
     is_enabled = function() {
       ent:enabled == true => "Enabled" | "Disabled"
     }
-    
+
     current_heartbeat_interval = function() {
       ent:heartbeat_interval.defaultsTo(5)
     }
-    
-    
+
+
       // reports_array = ent:reports.values();
       // (reports_array.length()) <= 5 =>
       // reports_array |
       // reports_array.slice((reports_array.length() - 5), reports_array.length() - 1)
-      
+
     //Gets the 10 most recent readings for each pico
     get_report = function() {
       myself = wrangler:myself();
@@ -137,12 +137,12 @@ ruleset io.picolabs.neighborhood_temps {
       // check if no logs. if no logs return empty array with this pico, otherwise do further processing and return report
       ent:picos_temp_logs.isnull() => {}.put(thisPicoName, []) |
       mapResult.keys().collect(function(value) {
-        value == thisPicoId.klog("id") => thisPicoName.klog("name") | ent:recorded_names{[value]}.defaultsTo("Pico Unidentified") 
+        value == thisPicoId.klog("id") => thisPicoName.klog("name") | ent:recorded_names{[value]}.defaultsTo("Pico Unidentified")
       }).klog("map result: ").map(function(value, key) {
         mapResult{value}
       })
     }
-    
+
     averages_of_report = function() {
       report = get_report();
       report.map(function(value, key) {
@@ -152,43 +152,43 @@ ruleset io.picolabs.neighborhood_temps {
         sum/(value.length() == 0 => 1 | value.length());
       })
     }
-    
+
     full_report = function() {
       [get_report(), averages_of_report()]
     }
-    
+
     getCount = function() {
       ent:counter
     }
-    
+
     getLastMessage = function() {
       ent:last_message_sent
     }
-    
+
     myself = function() {
       wrangler:myself()
     }
-    
+
     // MANIFOLD FUNCTIONS AND VARIABLES
     app = {"name":"Neighborhood Temperatures","version":"0.0"/* img: , pre: , ..*/};
-    
+
     bindings = function(){
       {
         "temps": get_report()
       };
     }
   }
-  
+
   /*
      ------------------------ MANIFOLD API ------------------------
   */
-  
-     
-  rule discovery { 
+
+
+  rule discovery {
     select when manifold apps
-    send_directive("app discovered...", {"app": app, "rid": meta:rid, "bindings": bindings()} ); 
+    send_directive("app discovered...", {"app": app, "rid": meta:rid, "bindings": bindings()} );
   }
-  
+
   /*
     ------------------------ END MANIFOLD API------------------------
   */
@@ -197,7 +197,7 @@ ruleset io.picolabs.neighborhood_temps {
     select when wovyn new_temperature_reading
     pre {
       messageID = meta:picoId + ":" + ent:counter.defaultsTo(0)
-     
+
       messageContents = {
         "message_id": messageID,
         "temperature":event:attr("temperature"),
@@ -211,8 +211,8 @@ ruleset io.picolabs.neighborhood_temps {
       ent:counter := ent:counter.defaultsTo(0) + 1
     }
   }
-  
-  
+
+
   //Rules to handle sending rumors and seen messages
   rule gossip_heartbeat {
     select when gossip heartbeat where ent:enabled
@@ -248,7 +248,7 @@ ruleset io.picolabs.neighborhood_temps {
       schedule gossip event "heartbeat" at time:add(time:now(), {"seconds": ent:heartbeat_interval.defaultsTo(5)})
     }
   }
-  
+
   rule update_state_from_message_type {
     select when gossip update_state
     pre {
@@ -263,17 +263,17 @@ ruleset io.picolabs.neighborhood_temps {
     fired {
       ent:others_seen := ent:others_seen.defaultsTo({}).put([picoID,meta:picoId], message_sent_number.as("Number"))
     }
-    
+
   }
 
 //Rules for adding new peers
 
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
   rule auto_accept {
     select when wrangler inbound_pending_subscription_added
     pre {
@@ -283,11 +283,11 @@ ruleset io.picolabs.neighborhood_temps {
       ent:subscription_inbound := event:attrs;
       raise wrangler event "pending_subscription_approval"
         attributes attributes//.put(wrangler:myself{"name"});=
-        
-    
+
+
     }
   }
-  
+
   rule get_peer_ids {
     select when wrangler subscription_added
     foreach subscription:established() setting (subscription)
@@ -308,7 +308,7 @@ ruleset io.picolabs.neighborhood_temps {
       ent:subscription_result := event:attrs
     }
   }
-  
+
   rule send_picoID {
     select when gossip get_peer_id
     pre {
@@ -332,7 +332,7 @@ ruleset io.picolabs.neighborhood_temps {
       }
     }, relevant_subscription{"Tx_host"}.klog("GET_PEER_ID SENDING NEW_PEER_INFO TO HOST: "))
   }
-  
+
   rule record_new_peer_tx {
     select when gossip new_peer_info
     pre {
@@ -352,14 +352,14 @@ ruleset io.picolabs.neighborhood_temps {
   rule record_subscription_id {
     select when wrangler pending_subscription
     pre {
-      sub_id = event:attr("Id")
+      subID = event:attr("Id")
       //sensor_type = event:attr("sensor_type")
       name = event:attr("name").replace(re#TempSensor #, "")
       //substr(11) == "TempSensor " => event:attr("name").substr(11) | event:attr("name")
     }
     noop()//send_directive("PENDING_SUB", event:attrs.klog("EVENT ATTRIBUTES"))
     always {
-      ent:sensors{[name, "subscription_id"]} := sub_id;
+      ent:sensors{[name, "subscription_id"]} := subID;
       //ent:sensors{[name,"sensor_type"]} := sensor_type
     }
   }
@@ -389,24 +389,24 @@ ruleset io.picolabs.neighborhood_temps {
         "sensor_role":sensor_role,
         "Tx_host":host
         }
-        
+
     }
   }
-  
+
   /**
    * Rules for receiving gossip events
-   * 
-   * 
+   *
+   *
    *
    * */
-   
+
    rule react_to_seen {
      select when gossip seen
        foreach generateSeen() setting (number, pico)
         pre {
           message = event:attr("message");
           thatPicoSeen = message{[pico]}.defaultsTo(-1);
-          
+
         }
         if number >= thatPicoSeen then
         noop()
@@ -414,23 +414,23 @@ ruleset io.picolabs.neighborhood_temps {
           messages_to_send = ent:picos_temp_logs{[pico]}.filter(function(value, key) {
             key.split(":")[1] > thatPicoSeen
           });
-          
+
           raise gossip event "send_rumor" attributes {
             "destination_pico":event:attr("this_picoID"),
             "messages":messages_to_send.klog("MESSAGES TO SEND")
           };
           //messageNumbersToSend.map(function(value,))
-          
+
           raise gossip event "update_others_seen" attributes {
             "original_picoID":event:attr("this_picoID"),
             "number_of_pico_messages_seen":thatPicoSeen,
             "relevant_pico":pico
           }
-          
+
         }
-        
+
    }
-   
+
    rule update_others_seen {
      select when gossip update_others_seen
      pre {
@@ -444,7 +444,7 @@ ruleset io.picolabs.neighborhood_temps {
        ent:others_seen := ent:others_seen.defaultsTo({}).put([picoID, relevant_pico], num_messages.as("Number"))
      }
    }
-   
+
    rule send_rumors_from_seen {
      select when gossip send_rumor
        foreach event:attr("messages") setting (value, key)
@@ -471,7 +471,7 @@ ruleset io.picolabs.neighborhood_temps {
         }
       }
    }
-   
+
    rule react_to_rumor {
      select when gossip rumor
       pre {
@@ -484,9 +484,9 @@ ruleset io.picolabs.neighborhood_temps {
         ent:recorded_names := ent:recorded_names.defaultsTo({}).put([relevant_pico], event:attr("message"){"picoName"});
         ent:picos_temp_logs := ent:picos_temp_logs.defaultsTo({}).put([relevant_pico, message_id], event:attr("message"))
       }
-        
+
    }
-   
+
    rule update_heartbeat_interval {
      select when gossip update_heartbeat
      pre {
@@ -498,11 +498,11 @@ ruleset io.picolabs.neighborhood_temps {
        ent:heartbeat_interval := new_interval
      }
    }
-   
+
    rule toggle_heartbeat {
      select when gossip toggle_heartbeat
      pre {
-     
+
      }
      send_directive("Heartbeat Toggle: " , {"body": "Heartbeat Toggle: " + not ent:enabled })
      fired {
@@ -510,7 +510,7 @@ ruleset io.picolabs.neighborhood_temps {
        raise gossip event "heartbeat_toggled"
      }
    }
-   
+
    rule start_heartbeat_if_enable {
      select when gossip heartbeat_toggled
      pre {
@@ -522,11 +522,11 @@ ruleset io.picolabs.neighborhood_temps {
        schedule gossip event "heartbeat" at time:add(time:now(), {"seconds": ent:heartbeat_interval.defaultsTo(5)})
      }
    }
-   
+
    rule install_dependencies {
      select when wrangler ruleset_added where rids >< meta:rid
      pre {
-       
+
      }
      noop()
      fired {
@@ -536,11 +536,11 @@ ruleset io.picolabs.neighborhood_temps {
         }
      }
    }
-   
+
    rule manual_clear {
      select when gossip clear_prompted
      pre {
-       
+
      }
      fired {
        clear ent:picos_temp_logs;
