@@ -5,7 +5,7 @@ import { createBrowserHistory } from 'history';
 
 //redux and react-redux
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import reducers from './reducers';
 
 // Views
@@ -26,14 +26,26 @@ import rootSaga from './sagas';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
 
+import { fromJS } from 'immutable';
+
 import SafeAndMine from './components/LandingPages/SafeAndMine';
+
+const initialState = fromJS({
+  manifoldInfo: {
+    things: {},
+    communities: {}
+  },
+  identities: {}
+});
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const sagaMiddleware = createSagaMiddleware();
 const history = createBrowserHistory();
 const store = createStore(
   reducers,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-  applyMiddleware(sagaMiddleware)
+  initialState,
+  composeEnhancers(applyMiddleware(sagaMiddleware))
 )
 sagaMiddleware.run(rootSaga);
 

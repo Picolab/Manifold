@@ -1,8 +1,20 @@
-export function discovery(eci, picoID) {
+export function discovery(DID, picoID) {
   return {
     type: ActionTypes.DISCOVERY,
-    eci,
-    picoID
+    payload: {
+      DID,
+      picoID
+    }
+  }
+}
+
+export function discoverySuccess(result, picoID) {
+  return {
+    type: ActionTypes.DISCOVERY_SUCCESS,
+    payload: result,
+    meta: {
+      picoID
+    }
   }
 }
 

@@ -6,7 +6,7 @@ import CardBody from './CardBody';
 import PropTypes from 'prop-types';
 import './cardStyles.css';
 import { discovery } from '../../actions';
-import { getCardIdentity, getDID, getColor } from '../../reducers';
+import { getInstalledApps, getDID, getColor } from '../../reducers';
 
 
 class Card extends Component {
@@ -36,9 +36,9 @@ class Card extends Component {
   }
 
   renderBody() {
-    if(this.props.cardIdentity.length > 0){
+    if(this.props.installedApps.length > 0){
       return (
-        <CardBody picoID={this.props.picoID} appInfo={this.props.cardIdentity[this.state.currentApp]}/>
+        <CardBody picoID={this.props.picoID} appInfo={this.props.installedApps[this.state.currentApp]}/>
       )
     }else{
       return (
@@ -62,7 +62,7 @@ class Card extends Component {
         <div className="card-footer nonDraggable" style={{"backgroundColor": this.props.color, overflow:"hidden",  textAlign: "center", minHeight:"40px"}}>
           <CardFooter
             dotClicked={this.handleCarouselDotClick}
-            totalApps={this.props.cardIdentity.length}
+            totalApps={this.props.installedApps.length}
             currentApp={this.state.currentApp}
           />
         </div>
@@ -85,14 +85,14 @@ Card.propTypes = {
     color: PropTypes.string //should we provide overlay configs?
   }),
   DID: PropTypes.string.isRequired,
-  cardIdentity: PropTypes.array.isRequired,
+  installedApps: PropTypes.array.isRequired,
   color: PropTypes.string
 }
 
 const mapStateToProps = (state, ownProps) => {
   return {
     DID: getDID(state, ownProps.picoID),
-    cardIdentity: getCardIdentity(state, ownProps.picoID),
+    installedApps: getInstalledApps(state, ownProps.picoID),
     color: getColor(state, ownProps.picoID)
   }
 }

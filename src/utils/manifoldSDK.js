@@ -40,14 +40,15 @@ export function createCommunity(name){
   return axios.post(`${sky_event(getManifoldECI())}/Create_Thing/manifold/create_community?name=${name}`);
 }
 
-export function removeThing(name, subID){
-  return axios.post(`${sky_event(getManifoldECI())}/Remove_Thing/manifold/remove_thing?name=${name}&subID=${subID}`);
+export function removeThing(name, picoID){
+  return axios.post(`${sky_event(getManifoldECI())}/Remove_Thing/manifold/remove_thing?name=${name}&picoID=${picoID}`);
 }
 
-export function removeCommunity(name, subID){
-  return axios.post(`${sky_event(getManifoldECI())}/Remove_Community/manifold/remove_community?name=${name}&subID=${subID}`);
+export function removeCommunity(name, picoID){
+  return axios.post(`${sky_event(getManifoldECI())}/Remove_Community/manifold/remove_community?name=${name}&picoID=${picoID}`);
 }
 
+//not implemented in the krl
 export function colorThing(name, color){
   return axios.post(`${sky_event(getManifoldECI())}/colorThing/manifold/color_thing?dname=${name}&color=%23${color.substring(1)}`);
 }

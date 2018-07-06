@@ -7,29 +7,20 @@ export class CardBody extends Component {
 
   render() {
     let appInfo = this.props.appInfo;
-    let options = appInfo.options;
-    if(options){
-      if(!options.bindings){
-        return (<div>Missing bindings from the pico!</div>)
-      }
-      const CustomComponent = CustomComponentMap[options.rid];
-      if(CustomComponent){
-        return (
-          <div>
-            <ManifoldApp developer_component={CustomComponent} bindings={options.bindings} picoID={this.props.picoID} />
-          </div>
-        )
-      }else{
-        return (
-          <div>
-            Error loading the custom component!
-          </div>
-        )
-      }
+    if(!appInfo.bindings){
+      return (<div>Missing bindings from the pico!</div>)
+    }
+    const CustomComponent = CustomComponentMap[appInfo.rid];
+    if(CustomComponent){
+      return (
+        <div>
+          <ManifoldApp developer_component={CustomComponent} bindings={appInfo.bindings} picoID={this.props.picoID} />
+        </div>
+      )
     }else{
       return (
         <div>
-          Error! Missing options in appInfo
+          Error loading the custom component!
         </div>
       )
     }

@@ -1,9 +1,10 @@
 import ActionTypes from '../actions';
+import { fromJS, Map } from 'immutable';
 
-export default function(state = {}, action){
+export default function(state = Map({}), action){
   switch (action.type) {
     case ActionTypes.MANIFOLD_INFO_RETRIEVED:
-      return action.result.data;
+      return fromJS(action.result.data);
     default:
       return state;
   }

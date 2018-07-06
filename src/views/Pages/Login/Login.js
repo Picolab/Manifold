@@ -1,19 +1,37 @@
 import React, { Component } from 'react';
-import { Field, reduxForm } from 'redux-form';
 import { getOauthURI } from '../../../utils/AuthService';
 
 class Login extends Component {
-  onSubmit(values) {
-    const { hostname, client_secret,client_id } = values;
-    console.log("client_id", client_id);
-    console.log("values", values);
+  constructor(props) {
+    super(props);
+    this.state = {
+      hostname: "",
+      clientID: "",
+      clientSecret: ""
+    }
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  onSubmit(e) {
+    e.preventDefault()
+    const { hostname, clientSecret, clientID } = this.state;
+    console.log("client_id", clientID);
+    console.log("state", this.state);
     console.log("hostname", hostname);
-    console.log("URL", getOauthURI(hostname, client_secret));
-    window.location.assign(getOauthURI(hostname, client_secret, client_id));
+    console.log("URL", getOauthURI(hostname, clientSecret));
+    window.location.assign(getOauthURI(hostname, clientSecret, clientID));
+  }
+
+  onChange(stateKey) {
+    return (event) => {
+      this.setState({
+        [stateKey]: event.target.value
+      })
+    }
   }
 
   render() {
-    const { handleSubmit } = this.props;
     return (
       <div className="app flex-row align-items-center">
         <div className="container">
@@ -22,20 +40,20 @@ class Login extends Component {
               <div className="card-group mb-0">
 
                 <div className="card p-4">
-                  <form className="card-block" onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+                  <form className="card-block" onSubmit={this.onSubmit}>
                     <h1>Authorize</h1>
                     <p className="text-muted">Enter your servers information</p>
                     <div className="input-group mb-3">
                       <span className="input-group-addon"><i className="icon-globe"></i></span>
-                      <Field type="text" className="form-control" placeholder="Hostname" name="hostname" component="input"/>
+                      <input type="text" className="form-control" placeholder="Hostname" name="hostname" value={this.state.hostname} onChange={this.onChange('hostname')}/>
                     </div>
                     <div className="input-group mb-3">
                       <span className="input-group-addon"><i className="icon-user"></i></span>
-                      <Field type="text" className="form-control" placeholder="Client ID" name="client_id" component="input"/>
+                      <input type="text" className="form-control" placeholder="Client ID" name="clientID" value={this.state.clientID} onChange={this.onChange('clientID')}/>
                     </div>
                     <div className="input-group mb-4">
                       <span className="input-group-addon"><i className="icon-key"></i></span>
-                      <Field type="password" className="form-control" placeholder="Client Secret" name="client_secret" component="input"/>
+                      <input type="password" className="form-control" placeholder="Client Secret" name="clientSecret" value={this.state.clientSecret} onChange={this.onChange('clientSecret')}/>
                     </div>
                     <div className="row">
                       <div className="col-6">
@@ -71,6 +89,4 @@ class Login extends Component {
   }
 }
 
-export default reduxForm({
-  form: "login"
-})(Login);
+export default Login;

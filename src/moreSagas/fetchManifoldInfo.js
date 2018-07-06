@@ -4,7 +4,7 @@ import ActionTypes from '../actions';
 
 function* fetchManifoldInfo(action) {
   const result = yield call(getManifoldInfo);
-  if(result.data && result.data.things && result.data.things.things){
+  if(result.data && result.data.things && result.data.communities){
     yield put({ type: ActionTypes.MANIFOLD_INFO_RETRIEVED, result })
   }
 }

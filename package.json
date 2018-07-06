@@ -17,6 +17,7 @@
     "axios": "^0.16.2",
     "chart.js": "^2.7.2",
     "history": "^4.7.2",
+    "immutable": "^3.8.2",
     "prop-types": "^15.6.1",
     "query-string": "^5.1.1",
     "react": "^16.3.2",
@@ -32,7 +33,7 @@
     "react-router-dom": "^4.2.2",
     "reactstrap": "^5.0.0",
     "redux": "^3.7.2",
-    "redux-form": "^7.3.0",
+    "redux-immutable": "^4.0.0",
     "redux-saga": "^0.15.6",
     "uuid": "^3.2.1"
   },

@@ -1,13 +1,13 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { discovery } from '../utils/manifoldSDK';
-import ActionTypes from '../actions';
+import ActionTypes, { discoverySuccess } from '../actions';
 
 function* execute(action) {
-  if(action.eci && action.eci !== ""){
-    const result = yield call(discovery, action.eci);
-    yield put({type: ActionTypes.DISCOVERY_SUCCESS, payload: result, picoID: action.picoID});
+  if(action.payload && action.payload.DID && action.payload.picoID && action.payload.DID !== ""){
+    const result = yield call(discovery, action.payload.DID);
+    yield put(discoverySuccess(result, action.payload.picoID));
   }else{
-    console.error("ECI missing in discovery call!")
+    console.error("DID missing in discovery call!")
   }
 }
 

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { commandAction } from '../../actions/command';
 import { removeCommunity } from '../../utils/manifoldSDK';
-import { getName, getSubID } from '../../reducers';
+import { getName } from '../../reducers';
 
 export class RemoveThingModal extends Component {
   constructor(props){
@@ -28,7 +28,7 @@ export class RemoveThingModal extends Component {
       alert("Internal Error! Missing name in props.")
     }
     this.handleToggle();
-    this.props.removeCommunity(this.props.name, this.props.subID);
+    this.props.removeCommunity(this.props.name, this.props.picoID);
   }
 
   handleToggle() {
@@ -56,21 +56,19 @@ RemoveThingModal.propTypes = {
   toggleFunc: PropTypes.func.isRequired,
   removeCommunity: PropTypes.func.isRequired,
   picoID: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  subID: PropTypes.string.isRequired
+  name: PropTypes.string.isRequired
 }
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    name: getName(state, ownProps.picoID),
-    subID: getSubID(state, ownProps.picoID)
+    name: getName(state, ownProps.picoID)
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    removeCommunity: (name, subID) => {
-      dispatch(commandAction(removeCommunity, [name, subID]))
+    removeCommunity: (name, picoID) => {
+      dispatch(commandAction(removeCommunity, [name, picoID]))
     }
   }
 }

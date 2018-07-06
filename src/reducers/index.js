@@ -1,12 +1,11 @@
-import { combineReducers } from 'redux';
+import { combineReducers } from 'redux-immutable';
 import manifoldInfoReducer from './reducer_manifold_info';
-import identitiesReducer from './reducer_identities'
-import { reducer as formReducer } from 'redux-form';
+import identitiesReducer from './reducer_identities';
+import { List, Map } from 'immutable';
 
 const rootReducer = combineReducers({
   manifoldInfo: manifoldInfoReducer,
-  identities: identitiesReducer,
-  form: formReducer //this is used in the login process only.
+  identities: identitiesReducer
 });
 
 export default rootReducer;
@@ -42,6 +41,7 @@ export default rootReducer;
         Tx_role: <Tx_role>,
         Tx_host: <host location of form "http://<host and port>">,
         Id: <subscription_id>,
+        subID: <subscription_id>, //alias for Id. In krl, Id is used by the subscription ruleset, and subID is used by the manifold_pico ruleset
         Tx: <Tx>,
         Rx: <Rx>,
         name: <pico's name>,
@@ -78,113 +78,113 @@ export default rootReducer;
 */
 
 //manifoldInfo selectors
+
+//returns an array of all Thing picoID's
 export function getThingIdList(state) {
-  const things = getThingsArray(state);
-  return things.map((item) => {
-    return item.picoID;
-  });
+  const things = getThings(state);
+  return things.keySeq().toArray(); //toArray is a shallow copy, which is fine for the keys, because they are just strings
 }
 
 export function getCommunitiesIdList(state) {
-  const communities = getCommunitiesArray(state);
-  return communities.map((item) => {
-    return item.picoID;
-  })
+  const communities = getCommunities(state);
+  return communities.keySeq().toArray(); //toArray is a shallow copy, which is fine for the keys, because they are just strings
 }
 
 //Given an array of picoID's, returns an array of position objects. If the picoID you are
 //interested in is at position 0 when passed into this function, then the return value
-//will have that pico's position also at index 0 in the returned position array
+//will have that pico's position also at index 0 in the returned position array. If the
+//pico doesn't have any position yet, then an empty object will be placed at its index
+//If an id doesn't exist in the state structure, then that id's spot will be null
 export function getPositionArray(state, picoIDArray) {
-  const thingsPosition = state.manifoldInfo.things.thingsPosition;
-  const communitiesPosition = state.manifoldInfo.communities.communitiesPosition;
-  return picoIDArray.map((picoID) => {
-    let thingPos = thingsPosition[picoID];
-    let commPos = communitiesPosition[picoID];
-    if(thingPos) {
-      return thingPos;
-    }else if(commPos) {
-      return commPos;
-    }else {
-      console.warn("There is no position recorded for this pico");
-      return null;
+  const things = getThings(state);
+  const communities = getCommunities(state);
+  let toReturn = List([]);
+  picoIDArray.forEach((picoID) => {
+    if(things.get(picoID)) {
+      let pos = things.getIn([picoID, "pos"]) || Map({});
+      toReturn = toReturn.push(pos);
+    }else if(communities.get(picoID)) {
+      let pos = communities.getIn([picoID, "pos"]) || Map({});
+      toReturn = toReturn.push(pos);
+    }else{
+      toReturn = toReturn.push(null);
     }
-  })
-}
-
-export function getThingsArray(state) {
-  if(state.manifoldInfo.things && state.manifoldInfo.things.things) {
-    return state.manifoldInfo.things.things;
-  }else{
-    return [];
-  }
-}
-
-export function getCommunitiesArray(state) {
-  if(state.manifoldInfo.communities && state.manifoldInfo.communities.communities) {
-    return state.manifoldInfo.communities.communities;
-  }else {
-    return [];
-  }
+  });
+  return toReturn.toJS();
 }
 
 export function getName(state, picoID) {
-  const things = getThingsArray(state);
-  const communities = getCommunitiesArray(state);
-  const toLoop = things.concat(communities);
-  for(let index in toLoop) {
-    let obj = toLoop[index];
-    if(obj.picoID === picoID) {
-      return obj.name;
-    }
+  const things = getThings(state);
+  const communities = getCommunities(state);
+  if(things.get(picoID)){
+    return things.getIn([picoID, "name"]);
+  } else if(communities.get(picoID)) {
+    return communities.getIn([picoID, "name"]);
+  } else{
+    return null;
   }
-  return null;
 }
 
 export function getSubID(state, picoID) {
-  const things = getThingsArray(state);
-  const communities = getCommunitiesArray(state);
-  const toLoop = things.concat(communities);
-  for(let index in toLoop) {
-    let obj = toLoop[index];
-    if(obj.picoID === picoID) {
-      return obj.Id;
-    }
+  const things = getThings(state);
+  const communities = getCommunities(state);
+  if(things.get(picoID)){
+    return things.getIn([picoID, "subID"]);
+  } else if(communities.get(picoID)) {
+    return communities.getIn([picoID, "subID"]);
+  } else{
+    return null;
   }
-  return null;
 }
 
 export function getDID(state, picoID) {
-  const things = getThingsArray(state);
-  const communities = getCommunitiesArray(state);
-  const toLoop = things.concat(communities);
-  for(let index in toLoop) {
-    let obj = toLoop[index];
-    if(obj.picoID === picoID) {
-      return obj.Tx;
-    }
+  const things = getThings(state);
+  const communities = getCommunities(state);
+  if(things.get(picoID)){
+    return things.getIn([picoID, "Tx"]);
+  } else if(communities.get(picoID)) {
+    return communities.getIn([picoID, "Tx"]);
+  } else{
+    return null;
   }
-  return null;
 }
 
 export function getColor(state, picoID) {
-  const things = getThingsArray(state);
-  const communities = getCommunitiesArray(state);
-  const toLoop = things.concat(communities);
-  for(let index in toLoop) {
-    let obj = toLoop[index];
-    if(obj.picoID === picoID) {
-      return obj.color;
-    }
+  const things = getThings(state);
+  const communities = getCommunities(state);
+  if(things.get(picoID)){
+    return things.getIn([picoID, "color"]);
+  } else if(communities.get(picoID)) {
+    return communities.getIn([picoID, "color"]);
+  } else{
+    return null;
   }
-  return null;
+}
+
+//returns an immutable Map
+export function getThings(state) {
+  return state.getIn(["manifoldInfo", "things"]);
+}
+
+//returns an immutable Map
+export function getCommunities(state) {
+  return state.getIn(["manifoldInfo", "communities"]);
 }
 
 //identities selectors
 export function getCardIdentity(state, picoID) {
-  if(state.identities && state.identities[picoID]){
-    return state.identities[picoID];
-  }else{
+  return state.getIn(["identities", picoID]);
+}
+
+//returns an array of apps
+export function getInstalledApps(state, picoID) {
+  const cardIdentity = getCardIdentity(state, picoID);
+  if(!cardIdentity) { //then no apps are installed
     return [];
   }
+  let toReturn = [];
+  cardIdentity.forEach((value, key) => {
+    toReturn.push(value.toJS());
+  });
+  return toReturn;
 }
