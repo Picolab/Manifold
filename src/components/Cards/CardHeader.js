@@ -4,7 +4,8 @@ import CommunityDropdown from '../Dropdowns/CommunityDropdown';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getName, getColor } from '../../reducers';
-
+import { UncontrolledTooltip } from 'reactstrap';
+import { Link } from 'react-router-dom';
 
 class CardHeader extends Component {
     constructor(props) {
@@ -23,7 +24,7 @@ class CardHeader extends Component {
       });
     }
 
-    renderDropdown(){
+    renderDropdown() {
       if(this.props.cardType === 'Thing'){
         return (
           <ThingDropdown isOpen={this.state.dropdownOpen} toggleSettings={this.toggleSettings} picoID={this.props.picoID}/>
@@ -39,15 +40,20 @@ class CardHeader extends Component {
       }
     }
 
-    render(){
+    render() {
+      const viewMoreID = "ViewThing" + this.props.picoID;
       return(
         <div className="card-header draggable" style={{"backgroundColor": this.props.color}}>
           <div style={{float: "left", "maxWidth":"85%", "overflow":"hidden", "textOverflow": "ellipsis"}}>
             {this.props.name}
           </div>
-
           {this.renderDropdown()}
-
+          <Link to={"/mythings/" + this.props.picoID}>
+            <i id={viewMoreID} className="fa fa-sign-in float-right fa-lg manifoldDropdown" />
+          </Link>
+          <UncontrolledTooltip placement="bottom" delay={300} target={viewMoreID}>
+            Open Card
+          </UncontrolledTooltip>
         </div>
       );
     }

@@ -42,7 +42,8 @@ class AppList extends Component {
 //pass in an array of apps that meet a certain criteria in order to display everything.
 //This could be passed in from the parent, or better yet, from the redux store
 AppList.propTypes = {
-  apps: PropTypes.array.isRequired
+  //picoID: PropTypes.string.isRequired,
+  //apps: PropTypes.array.isRequired
 }
 
 const mapStateToProps = (state, ownProps) => {

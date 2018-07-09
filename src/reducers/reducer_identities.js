@@ -4,7 +4,6 @@ import { fromJS, Map } from 'immutable';
 export default function(state = Map({}), action){
   switch (action.type) {
     case ActionTypes.DISCOVERY_SUCCESS:
-      console.log(action);
       const picoID = action.meta.picoID;
       const directives = action.payload.data.directives;
       let identity = {};

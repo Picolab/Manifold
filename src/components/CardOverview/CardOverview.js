@@ -23,6 +23,7 @@ class CardOverview extends Component {
 }
 
 CardOverview.propTypes = {
+
 }
 
 const mapStateToProps = (state, ownProps) => {
