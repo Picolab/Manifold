@@ -77,10 +77,12 @@ export class InstallModal extends Component {
 }
 
 InstallModal.propTypes = {
+  //parent provides these
+  picoID: PropTypes.string.isRequired,
   modalOn: PropTypes.bool.isRequired,
   toggleFunc: PropTypes.func.isRequired,
+  //no need to provide the following
   installRuleset: PropTypes.func.isRequired,
-  picoID: PropTypes.string.isRequired,
   DID: PropTypes.string.isRequired
 }
 
