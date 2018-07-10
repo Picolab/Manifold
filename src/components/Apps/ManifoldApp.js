@@ -17,7 +17,7 @@ class ManifoldAppComponent extends Component {
     }
 
     render() {
-        let DeveloperComponent = this.props.developer_component
+        let DeveloperComponent = this.props.developerComponent
         return (
             <DeveloperComponent
                 {...(this.props)} manifoldQuery={this.manifoldQuery}
@@ -27,16 +27,16 @@ class ManifoldAppComponent extends Component {
 }
 
 ManifoldAppComponent.propTypes = {
-    developer_component: PropTypes.func.isRequired,
+    developerComponent: PropTypes.func.isRequired,
     picoID: PropTypes.string.isRequired,
     DID: PropTypes.string.isRequired,
     bindings: PropTypes.object.isRequired
 }
 
 function mapStateToProps(state, ownProps) {
-    return {
-      DID: getDID(state, ownProps.picoID)
-    }
+  return {
+    DID: getDID(state, ownProps.picoID)
+  }
 }
 //customEvent(DID, domain, type, attributes
 const mapDispatchToProps = (dispatch, ownProps) => {

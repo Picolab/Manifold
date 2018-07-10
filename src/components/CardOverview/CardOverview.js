@@ -16,18 +16,18 @@ class CardOverview extends Component {
           Install An App
         </UncontrolledTooltip>
         <hr className="overviewUnderline"></hr>
-        <AppList />
+        <AppList picoID={this.props.match.params.picoID}/>
       </div>
     );
   }
 }
 
 CardOverview.propTypes = {
-
 }
 
 const mapStateToProps = (state, ownProps) => {
-  return {}
+  return {
+  }
 }
 
 

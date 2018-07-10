@@ -9,12 +9,13 @@ export default function(state = Map({}), action){
       let identity = {};
       directives.forEach((directive) => {
         const rid = directive.meta.rid;
-        const { bindings, app } = directive.options;
+        const { bindings, app, iconURL } = directive.options;
         const { name } = app;
         identity[rid] = {
           rid,
           bindings,
-          name
+          name,
+          iconURL
         }
       });
       return state.setIn([picoID], fromJS(identity));

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Route, Link } from 'react-router-dom';
 import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import { connect } from 'react-redux';
+import { getName } from '../../reducers';
 import routes from '../../routes';
 
 const findRouteName = url => routes[url];
@@ -19,27 +21,35 @@ const getPaths = (pathname) => {
   return paths;
 };
 
-const BreadcrumbsItem = ({ match, ...rest }) => {
-  let routeName = findRouteName(match.url);
+const mapStateToProps = (state, ownProps) => {
+  let routeName = findRouteName(ownProps.match.url);
   if(!routeName) {
     //if not defined in our routes map, just use whatever is in the url
-    const currentURLArray = match.url.split("/");
+    const currentURLArray = ownProps.match.url.split("/");
     routeName = currentURLArray[currentURLArray.length - 1];
   }
+  return {
+    routeName,
+    picoName: getName(state, routeName)
+  }
+};
+
+const BreadcrumbsItem = connect(mapStateToProps)(({ routeName, picoName, match, ...rest }) => {
+  const displayName = picoName || routeName;
   return (
     match.isExact ?
     (
-      <BreadcrumbItem active>{routeName}</BreadcrumbItem>
+      <BreadcrumbItem active>{displayName}</BreadcrumbItem>
     ) :
     (
       <BreadcrumbItem>
         <Link to={match.url || ''}>
-          {routeName}
+          {displayName}
         </Link>
       </BreadcrumbItem>
     )
   );
-};
+});
 
 const Breadcrumbs = ({ location : { pathname }, match, ...rest }) => {
   const paths = getPaths(pathname);
