@@ -129,14 +129,16 @@ export class SafeAndMineApp extends Component {
     return(
       <div>
         <h1>Safe and Mine</h1>
-        <p className="shortenedWidth">Use safe and mine to help find lost things! Attach a tag to anything you want to keep safe. If you lose that item and someone scans the tag, they will see a custom message just from you. Below is a preview of what your message looks like. You can modify this message below.</p>
+        <p className="shortenedWidth">Use safe and mine to help find lost things! Attach a tag to anything you want to keep safe. If you lose that item and some good samaritan scans the tag, they will see a custom message just from you. You have the option to provide your name, phone number, email, and a custom message in any combination. If you don't want to provide a piece, no problem! Just share what you feel comfortable giving out to whoever finds your thing. You can modify these below. Modifying a piece of information will immediately alter the view that those who scan tags will see.</p>
 
         <h3>Current Settings:</h3>
-        <p>Name: {this.state.savedName}</p>
-        <p>Email: {this.state.savedEmail}</p>
-        <p>Phone: {this.state.savedPhone}</p>
-        <p>Message: {this.state.savedMessage}</p>
-
+        <ListGroup className="shortenedWidth">
+          <ListGroupItem><b>Name:</b> {this.state.savedName}</ListGroupItem>
+          <ListGroupItem><b>Email:</b> {this.state.savedEmail}</ListGroupItem>
+          <ListGroupItem><b>Phone:</b> {this.state.savedPhone}</ListGroupItem>
+          <ListGroupItem><b>Message:</b> {this.state.savedMessage}</ListGroupItem>
+        </ListGroup>
+        <br></br>
         <h3>Update Settings:</h3>
         <Form onSubmit={this.updateData} className="shortenedWidth">
           <FormGroup>
