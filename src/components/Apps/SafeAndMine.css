@@ -1,0 +1,8 @@
+.tagImage {
+  width: 20px;
+  height: 20px;
+}
+
+.shortenedWidth {
+  max-width: 500px;
+}

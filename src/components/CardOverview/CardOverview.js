@@ -29,7 +29,7 @@ class CardOverview extends Component {
     })
   }
 
-  render(){
+  render() {
     return (
       <div>
         <h1 className="centered">
