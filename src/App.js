@@ -52,7 +52,7 @@ class App extends Component {
     let landingPages = [];
     //do some dynamic looping or such to figure out how many apps there are
     landingPages.push(
-      <Route key="dynamic-route-1" path="/picolabs/safeandmine/:tagID" name="Safe and Mine" component={SafeAndMine} />
+      <Route key="dynamic-route-1" path="/picolabs/safeandmine" name="Safe and Mine" component={SafeAndMine} />
     )
     return landingPages;
   }
