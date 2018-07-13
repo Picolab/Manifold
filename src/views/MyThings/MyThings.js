@@ -7,7 +7,7 @@ import { getThingIdList } from '../../reducers';
 export class MyThings extends Component {
   renderGrid(){
     //make sure the things object really exists before trying to display them
-    if(this.props.thingIdList.length > 0){
+    if(this.props.thingIdList.length > 0) {
       return (
         <CardGrid idList={this.props.thingIdList} cardType="Thing"/>
       )
