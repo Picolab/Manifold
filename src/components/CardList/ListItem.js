@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ListGroupItem } from 'reactstrap';
 import { getName } from '../../reducers';
-import OpenCardButton from '../Buttons/OpenCardButton';
 import ThingDropdown from '../Dropdowns/ThingDropdown';
+import { Link } from 'react-router-dom';
 
 class ListItem extends Component {
   constructor(props) {
@@ -25,11 +25,12 @@ class ListItem extends Component {
 
   render(){
     return(
-      <ListGroupItem>
-        {this.props.name}
-        <ThingDropdown isOpen={this.state.dropdownOpen} toggleSettings={this.toggleSettings} picoID={this.props.picoID}/>
-        <OpenCardButton picoID={this.props.picoID} />
-      </ListGroupItem>
+      <Link to={"/mythings/" + this.props.picoID}>
+        <ListGroupItem tag="button" action>
+          {this.props.name}
+          {/*<ThingDropdown isOpen={this.state.dropdownOpen} toggleSettings={this.toggleSettings} picoID={this.props.picoID} />*/}
+        </ListGroupItem>
+      </Link>
     );
   }
 }

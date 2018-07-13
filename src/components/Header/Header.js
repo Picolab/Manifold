@@ -49,7 +49,7 @@ class Header extends Component {
           <li className="nav-item">
             <button className="nav-link navbar-toggler sidebar-toggler" type="button" onClick={this.sidebarToggle}>&#9776;</button>
           </li>
-          <li className="nav-item px-3">
+          {/*<li className="nav-item px-3">
             <a className="nav-link" href="/">Dashboard</a>
           </li>
           <li className="nav-item px-3">
@@ -57,7 +57,7 @@ class Header extends Component {
           </li>
           <li className="nav-item px-3">
             <a className="nav-link" href="/">Settings</a>
-          </li>
+          </li>*/}
         </ul>
         <ul className="nav navbar-nav ml-auto">
           <li className="nav-item d-md-down-none">
