@@ -28,7 +28,7 @@ class AppList extends Component {
         )
       });
     }
-    return icons
+    return icons;
   }
 
   render(){

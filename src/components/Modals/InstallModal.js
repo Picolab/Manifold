@@ -14,7 +14,7 @@ export class InstallModal extends Component {
     this.state = {
       modalOn: props.modalOn,
       //we should consider dynamic option discovery over hardcoding
-      appOptions: ["io.picolabs.journal", "io.picolabs.safeandmine"],
+      appOptions: ["io.picolabs.safeandmine"],
       value: "DEFAULT INPUT VAL",
       rulesetToInstall: ""
     };
