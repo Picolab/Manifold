@@ -25,12 +25,14 @@ class ListItem extends Component {
 
   render(){
     return(
-      <Link to={"/mythings/" + this.props.picoID}>
-        <ListGroupItem tag="button" action>
-          {this.props.name}
-          {/*<ThingDropdown isOpen={this.state.dropdownOpen} toggleSettings={this.toggleSettings} picoID={this.props.picoID} />*/}
+        <ListGroupItem action>
+          <Link to={"/mythings/" + this.props.picoID}>
+            <div style={{'width':'80%','float':'left'}}>
+              {this.props.name}
+            </div>
+          </Link>
+          <ThingDropdown isOpen={this.state.dropdownOpen} toggleSettings={this.toggleSettings} picoID={this.props.picoID} />
         </ListGroupItem>
-      </Link>
     );
   }
 }
