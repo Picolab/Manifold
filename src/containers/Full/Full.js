@@ -12,6 +12,7 @@ import Dashboard from '../../views/Dashboard/'
 import MyThings from '../../views/MyThings/'
 import Communities from '../../views/Communities/Communities'
 import Profile from '../../views/Profile/Profile'
+import Feedback from '../../views/Feedback/Feedback'
 import Charts from '../../views/Charts/'
 import Widgets from '../../views/Widgets/'
 import Buttons from '../../views/Components/Buttons/'
@@ -49,6 +50,7 @@ class Full extends Component {
                 <Route path="/mythings" name="My Things" component={MyThings}/>
                 <Route path="/communities" name="Communities" component={Communities}/>
                 <Route path="/profile" name="Profile" component={Profile}/>
+                <Route path="/feedback" name="Feedback" component={Feedback}/>
                 <Route path="/components/buttons" name="Buttons" component={Buttons}/>
                 <Route path="/components/cards" name="Cards" component={Cards}/>
                 <Route path="/components/forms" name="Forms" component={Forms}/>
@@ -65,7 +67,6 @@ class Full extends Component {
               </Switch>
             </div>
           </main>
-          <Aside />
         </div>
         <Footer />
       </div>
