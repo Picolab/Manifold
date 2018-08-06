@@ -6,3 +6,20 @@
 .shortenedWidth {
   max-width: 500px;
 }
+
+
+.greenPlaceholder::-webkit-input-placeholder {
+color: green !important;
+}
+
+.greenPlaceholder:-moz-placeholder { /* Firefox 18- */
+color: green !important;
+}
+
+.greenPlaceholder::-moz-placeholder {  /* Firefox 19+ */
+color: green !important;
+}
+
+.greenPlaceholder:-ms-input-placeholder {
+color: green !important;
+}

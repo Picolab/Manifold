@@ -23,30 +23,34 @@ export class SafeAndMine extends Component {
     }
   }
   componentDidMount() {
+    console.log("TAGID", this.state.tagID);
     const promise = customQuery(this.state.DID, "io.picolabs.safeandmine", "getInformation");
     promise.then((resp) => {
-      const { name = "", email = "", phone = "", message = "" } =  resp.data;
+      const { name = "", email = "", phone = "", message = "", shareName = false, shareEmail = false, sharePhone = false} =  resp.data;
       this.setState({
         name,
         email,
         phone,
-        message
+        message,
+        shareName,
+        shareEmail,
+        sharePhone
       });
     }).catch((e) => {
       console.error(e);
     });
   }
   displayCard() {
-    const { name, phone, email, message } = this.state;
+    const { name, phone, email, message, shareName, sharePhone, shareEmail } = this.state;
     const loggedIn = isLoggedIn();
-    const noPublicInfo = (!name && !phone && !email && !message);
+    const noPublicInfo = (!shareName && !sharePhone && !shareEmail && !message);
     if(this.state.DID) {
       return(
         <div>
           {noPublicInfo && <CardText>The owner of this tag has not provided any public information...</CardText>}
-          {name && <CardText><b>Owner:</b> {name}</CardText>}
-          {phone && <CardText><b>Phone Number:</b> {phone}</CardText>}
-          {email && <CardText><b>Email:</b> {email}</CardText>}
+          {shareName && name && <CardText><b>Owner:</b> {name}</CardText>}
+          {sharePhone && phone && <CardText><b>Phone Number:</b> {phone}</CardText>}
+          {shareEmail && email && <CardText><b>Email:</b> {email}</CardText>}
           {message && <CardText><b>Owner's Public Message:</b> {message}</CardText>}
           {loggedIn && <CardLink tag={Link} to="/">Return home</CardLink>}
           {!loggedIn && <CardLink tag={Link} to="/login">Sign up</CardLink>}
