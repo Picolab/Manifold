@@ -81,7 +81,7 @@ class Header extends Component {
               </DropdownToggle>
 
 
-              <DropdownMenu left>
+              <DropdownMenu>
                 <Link to="/profile" style={{ textDecoration: 'none' }}><DropdownItem className="dropdown-item"><i className="fa fa-user"></i> Profile</DropdownItem></Link>
                 <DropdownItem className="dropdown-item"><i className="fa fa-wrench"></i> Settings</DropdownItem>
                 <DropdownItem className="dropdown-item"
