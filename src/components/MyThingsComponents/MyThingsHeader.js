@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import CreateThingModal from '../Modals/CreateThingModal';
-import RegisterRulesetModal from '../Modals/RegisterRulesetModal';
+// import RegisterRulesetModal from '../Modals/RegisterRulesetModal';
 
 
 class MyThingsHeader extends Component {
