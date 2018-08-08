@@ -41,6 +41,7 @@ ruleset io.picolabs.google_signin {
       valid_code = resp{"status_code"} == 200;
       content = resp{"content"}.decode();
     }
+    //still need to validate the "aud" attribute and make sure this validated token was meant for our application, and is not some token id for a different app...
     if id_token && valid_code && content{"aud"} == APPLICATION_ID then
        noop()
     fired {
@@ -49,6 +50,54 @@ ruleset io.picolabs.google_signin {
     }else {
       raise google event "validation_failure"
         attributes event:attrs
+    }
+  }
+
+  //we need to raise the owner eci_requested in the account_management ruleset
+  rule signalForOwnerID {
+    select when google validation_success
+    pre {
+      account_id = event:attr("resp_content"){"sub"}; //not really sure why google called it sub...
+    }
+    if account_id then
+      noop()
+    fired {
+      raise owner event "eci_requested"
+        attributes event:attrs.put({
+          "owner_id": account_id,
+          "request_type": "google_signin"
+        })
+    }
+  }
+
+  rule generateOwnerDID {
+    select when owner login_attempt where event:attr("request_type") == "google_signin"
+    pre {
+      pico_id = event:attr("eci") => engine:getPicoIDByECI(event:attr("eci").klog("eci"))
+               | null;
+    }
+    if pico_id then every {
+      engine:newChannel(pico_id, time:now(), "google_signin") setting(new_channel);
+      send_directive("Returning google_signin DID", {"DID": new_channel{"id"}});
+    }
+    fired {
+      // schedule owner event "authenticate_channel_expired" at time:add(time:now(), {"minutes": 120})
+      //   attributes {"eci": new_channel{"id"}};
+    }
+  }
+
+  rule requestNewOwnerPico {
+    select when owner no_such_owner_id
+    pre {
+      account_id = event:attr("resp_content"){"sub"}; //not really sure why google called it sub...
+    }
+    always {
+      raise owner event "creation"
+        attributes {
+          "method": "did",
+          "name": account_id,
+          "rids": "io.picolabs.manifold_owner"
+        }
     }
   }
 }
