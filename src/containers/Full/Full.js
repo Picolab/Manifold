@@ -3,7 +3,7 @@ import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import Header from '../../components/Header/';
 import Sidebar from '../../components/Sidebar/';
 import Breadcrumb from '../../components/Breadcrumb/';
-import Aside from '../../components/Aside/';
+//import Aside from '../../components/Aside/';
 import Footer from '../../components/Footer/';
 import CardOverview from '../../components/CardOverview/CardOverview';
 import CardAppView from '../../components/CardAppView/CardAppView';

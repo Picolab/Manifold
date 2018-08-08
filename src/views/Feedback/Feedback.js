@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Button, NavLink} from 'reactstrap';
+import { Button } from 'reactstrap';
 
 //const brandPrimary =  '#20a8d8';
 //const brandSuccess =  '#4dbd74';
@@ -14,7 +14,7 @@ class Feedback extends Component {
         }
     }
 
-    
+
   render(){
     return (
         <div style={{"maxWidth":"550px"}}>

@@ -22,6 +22,7 @@ export function getOwnerECI(){
 export function storeOwnerECI(eci){
   window.localStorage.setItem(OWNER_ECI_KEY, eci.toString());
 }
+
 export function getManifoldECI(){
   return localStorage.getItem(MANIFOLD_ECI_KEY);
 }
@@ -29,11 +30,13 @@ export function getManifoldECI(){
 export function storeManifoldECI(eci){
   window.localStorage.setItem(MANIFOLD_ECI_KEY, eci.toString());
 }
+
 export function createState(){
   const new_state = Math.floor(Math.random() * 9999999);
   window.localStorage.setItem(CLIENT_STATE_KEY, new_state.toString());
   return new_state;
 }
+
 export function getState(){
   return localStorage.getItem(CLIENT_STATE_KEY);
 }
@@ -85,9 +88,14 @@ export function getOauthURI(hostname = HOST, client_secret = CLIENT_SECRET,clien
   const url = `${getProtocol()}${getHostname()}/authorize?response_type=code&redirect_uri=${encodedCallback}&client_id=${getClientId()}&state=${newState}`;
   return url;
 }
-
+/* global gapi */
 export function logOut(){
-    window.localStorage.removeItem(OWNER_ECI_KEY);
-    window.localStorage.removeItem(MANIFOLD_ECI_KEY);
-    window.location.assign(getManifoldURL());
+  let auth2 = gapi.auth2.getAuthInstance();
+  auth2.signOut().then(function () {
+    console.log('User signed out.');
+  });
+
+  window.localStorage.removeItem(OWNER_ECI_KEY);
+  window.localStorage.removeItem(MANIFOLD_ECI_KEY);
+  window.location.assign(getManifoldURL());
 }

@@ -9,9 +9,8 @@ export const CLIENT_KEY_KEY = "client_key";
 export const CALLBACK_URL_KEY = "callback_url";
 export const EVENT_PATH = "sky/event";
 export const FUNCTION_PATH = "sky/cloud";
-export const HOST= "b67fa6a2.ngrok.io";//default host;
-export const CLIENT_SECRET= "cj5vc7tr8000aoeop9dog3c4g"; //default .....
-export const HTTP_PROTOCOL= "http://";
-export const PROTOCOL_KEY= "http_protocol";
-//variables
-//export var CALLBACK_URL = window.localStorage.getItem( CALLBACK_URL_key ) || "https://picolab.github.io/ManifoldRewrite/#/code";
+export const HOST = "18.204.29.142:8080";
+export const CLIENT_SECRET = "";
+export const HTTP_PROTOCOL = "http://";
+export const PROTOCOL_KEY = "http_protocol";
+export const ROOT_SECURED_DID = "VwvGB9gKoJmnG8LRLsRvzB"; //this is the secured DID to the google ruleset on the root pico
