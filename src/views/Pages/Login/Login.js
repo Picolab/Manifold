@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { getOauthURI } from '../../../utils/AuthService';
-import { GoogleLogin } from 'react-google-login';
-import GImg from './g-logo.png';
 
 class Login extends Component {
   constructor(props) {
@@ -79,14 +77,6 @@ class Login extends Component {
                         onClick = {()=>{window.location.assign(getOauthURI())}}
                         >
                         Authorize</button>
-                        <br></br>
-                        <GoogleLogin
-                          className="btn btn-primary active mt-3"
-                          style={{"padding-left":0, "padding-top":0, "padding-bottom":0}}
-                          clientId="">
-                          <img src={GImg} width={40} style={{"display": "inline-block"}} />
-                          <div style={{"display": "inline-block","padding-left":20}}>Sign in with Google</div>
-                        </GoogleLogin>
                     </div>
                   </div>
                 </div>

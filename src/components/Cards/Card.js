@@ -34,7 +34,6 @@ class Card extends Component {
     this.setState({
       currentApp: index
     });
-    console.log("HELLO FROM DOT: " + index );
   }
 
   renderBody() {

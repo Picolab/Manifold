@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 //import PropTypes from 'prop-types';
 import { Button, Form, FormGroup, Label, Input, Media, ListGroup, ListGroupItem, Container, Row, Col } from 'reactstrap';
+import DeleteButton from './DeleteButton';
 import tag from './tag.png';
 import './SafeAndMine.css';
 
@@ -29,6 +30,7 @@ export class SafeAndMineApp extends Component {
     this.registerTag = this.registerTag.bind(this);
     this.onChange = this.onChange.bind(this);
     this.retrieveInformation = this.retrieveInformation.bind(this);
+    this.retrieveTags = this.retrieveTags.bind(this);
   }
 
   componentDidMount() {
@@ -134,6 +136,7 @@ export class SafeAndMineApp extends Component {
     }
   }
 
+
   displayTagList() {
     let toDisplay = [];
     this.state.registeredTags.forEach((tagID) => {
@@ -141,6 +144,7 @@ export class SafeAndMineApp extends Component {
         <ListGroupItem key={tagID}>
           <Media object src={tag} className="tagImage"></Media>
           {"  " + tagID}
+          <DeleteButton signalEvent={this.props.signalEvent} tagID={tagID} retrieveTags={this.retrieveTags} />
         </ListGroupItem>
       );
     })

@@ -32,6 +32,7 @@ export class CreateThingModal extends Component{
     }
     this.handleToggle();
     this.props.createThing(newName);
+
   }
 
   handleToggle() {
@@ -68,7 +69,7 @@ CreateThingModal.propTypes = {
 const mapDispatchToProps = (dispatch) => {
   return {
     createThing: (name) => {
-      dispatch(commandAction(createThing, [name]))
+      dispatch(commandAction(createThing, [name], {delay : 500} ))
     }
   }
 }
