@@ -24,7 +24,9 @@ class Card extends Component {
 
   componentWillMount(){
     //query for the discovery and app info
-    this.props.dispatch(discovery(this.props.DID, this.props.picoID));
+    if(!this.props.installedApps) { //if we haven't retrieved it yet
+      this.props.dispatch(discovery(this.props.DID, this.props.picoID));
+    }
   }
 
 
@@ -32,7 +34,6 @@ class Card extends Component {
     this.setState({
       currentApp: index
     });
-    console.log("HELLO FROM DOT: " + index );
   }
 
   renderBody() {
@@ -56,18 +57,18 @@ class Card extends Component {
         <CardHeader picoID={this.props.picoID} cardType={this.props.cardType}/>
 
         <div className="card-block nonDraggable" style={{"textOverflow": "clip", overflow: "auto"}}>
-          {this.renderBody()}
+          { this.props.installedApps && this.renderBody() }
+          {!this.props.installedApps && <div>Loading...</div>}
         </div>
 
         <div className="card-footer nonDraggable" style={{"backgroundColor": this.props.color, overflow:"hidden",  textAlign: "center", minHeight:"40px"}}>
-          <CardFooter
-            dotClicked={this.handleCarouselDotClick}
-            totalApps={this.props.installedApps.length}
-            currentApp={this.state.currentApp}
-          />
+          {this.props.installedApps && <CardFooter
+                                          dotClicked={this.handleCarouselDotClick}
+                                          totalApps={this.props.installedApps.length}
+                                          currentApp={this.state.currentApp}
+                                        />}
         </div>
-        <div className={(this.props.overlay && this.props.overlay.isActive ? "cardOverlay" : "")}>
-        </div>
+        <div className={(this.props.overlay && this.props.overlay.isActive ? "cardOverlay" : "")}></div>
       </div>
     );
   }
@@ -85,7 +86,7 @@ Card.propTypes = {
     color: PropTypes.string //should we provide overlay configs?
   }),
   DID: PropTypes.string.isRequired,
-  installedApps: PropTypes.array.isRequired,
+  installedApps: PropTypes.array,
   color: PropTypes.string
 }
 

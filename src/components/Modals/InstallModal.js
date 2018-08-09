@@ -14,7 +14,7 @@ export class InstallModal extends Component {
     this.state = {
       modalOn: props.modalOn,
       //we should consider dynamic option discovery over hardcoding
-      appOptions: ["io.picolabs.journal", "io.picolabs.neighborhood_temps"],
+      appOptions: ["io.picolabs.safeandmine"],
       value: "DEFAULT INPUT VAL",
       rulesetToInstall: ""
     };
@@ -77,10 +77,12 @@ export class InstallModal extends Component {
 }
 
 InstallModal.propTypes = {
+  //parent provides these
+  picoID: PropTypes.string.isRequired,
   modalOn: PropTypes.bool.isRequired,
   toggleFunc: PropTypes.func.isRequired,
+  //no need to provide the following
   installRuleset: PropTypes.func.isRequired,
-  picoID: PropTypes.string.isRequired,
   DID: PropTypes.string.isRequired
 }
 

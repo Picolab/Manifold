@@ -66,7 +66,8 @@ export default rootReducer;
         bindings: {
           //any props defined by the app ruleset
         },
-        name: <string>
+        name: <string>,
+        iconURL: <string>
       }
     }
     ...
@@ -179,8 +180,8 @@ export function getCardIdentity(state, picoID) {
 //returns an array of apps
 export function getInstalledApps(state, picoID) {
   const cardIdentity = getCardIdentity(state, picoID);
-  if(!cardIdentity) { //then no apps are installed
-    return [];
+  if(!cardIdentity) { //We have no recordings for installed apps
+    return null;
   }
   let toReturn = [];
   cardIdentity.forEach((value, key) => {

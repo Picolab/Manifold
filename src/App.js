@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import { HashRouter, Route, Switch } from 'react-router-dom'
-import { createBrowserHistory } from 'history';
 
 //redux and react-redux
 import { Provider } from 'react-redux';
@@ -41,7 +40,6 @@ const initialState = fromJS({
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const sagaMiddleware = createSagaMiddleware();
-const history = createBrowserHistory();
 const store = createStore(
   reducers,
   initialState,
@@ -54,7 +52,7 @@ class App extends Component {
     let landingPages = [];
     //do some dynamic looping or such to figure out how many apps there are
     landingPages.push(
-      <Route key="dynamic-route-1" path="/picolabs/safeandmine/:tagID" name="Safe and Mine" component={SafeAndMine} />
+      <Route key="dynamic-route-1" path="/picolabs/safeandmine" name="Safe and Mine" component={SafeAndMine} />
     )
     return landingPages;
   }
@@ -62,7 +60,7 @@ class App extends Component {
   render() {
     return(
       <Provider store={store}>
-        <HashRouter history={history}>
+        <HashRouter>
           <Switch>
             <Route exact path="/login" name="Login Page" component={Login}/>
             <Route exact path="/register" name="Register Page" component={Register}/>

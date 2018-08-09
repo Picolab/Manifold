@@ -6,3 +6,11 @@
   padding: 20px;
   transform: translate(-50%, -50%);
 }
+
+@media screen and (max-width: 760px) {
+    .centered-card {
+      top: 50%;
+      left: 0;
+      transform: translate(0%,-50%);
+    }
+}

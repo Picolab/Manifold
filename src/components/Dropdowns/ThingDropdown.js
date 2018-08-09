@@ -14,17 +14,17 @@ export class ThingDropdown extends Component {
       isOpen: props.isOpen,
       removeOpen: false,
       installOpen: false,
-      colorOpen: false,
+      //colorOpen: false,
       communitiesOpen: false
     }
 
     this.openRemove = this.openRemove.bind(this);
     this.openInstall = this.openInstall.bind(this);
-    this.openColor = this.openColor.bind(this);
+    //this.openColor = this.openColor.bind(this);
 
     this.toggleRemove = this.toggleRemove.bind(this);
     this.toggleInstall = this.toggleInstall.bind(this);
-    this.toggleColor = this.toggleColor.bind(this);
+    //this.toggleColor = this.toggleColor.bind(this);
   }
 
   //this allows the modal to update its state when its props change
@@ -45,10 +45,10 @@ export class ThingDropdown extends Component {
     this.toggleInstall();
   }
 
-  openColor() {
+  /*openColor() {
     this.props.toggleSettings();
     this.toggleColor();
-  }
+  }*/
 
   toggleRemove() {
     this.setState({
@@ -62,11 +62,11 @@ export class ThingDropdown extends Component {
     })
   }
 
-  toggleColor() {
-    this.setState({
-      colorOpen: !this.state.colorOpen
-    })
-  }
+  // toggleColor() {
+  //   this.setState({
+  //     colorOpen: !this.state.colorOpen
+  //   })
+  // }
 
   render() {
     return (
@@ -93,12 +93,12 @@ export class ThingDropdown extends Component {
           </DropdownItem>
           <InstallModal modalOn={this.state.installOpen} toggleFunc={this.toggleInstall} picoID={this.props.picoID}/>
 
-          <DropdownItem onClick={this.openColor}>
+          {/*<DropdownItem onClick={this.openColor}>
             Change Color
             <i className="fa fa-cubes float-right"/>
           </DropdownItem>
-          <ColorModal modalOn={this.state.colorOpen} toggleFunc={this.toggleColor} picoID={this.props.picoID}/>
-
+          <ColorModal modalOn={this.state.colorOpen} toggleFunc={this.toggleColor} picoID={this.props.picoID}/>*/
+        }
         </DropdownMenu>
 
       </Dropdown>

@@ -68,7 +68,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     removeThing: (name, picoID) => {
-      dispatch(commandAction(removeThing, [name, picoID]))
+      dispatch(commandAction(removeThing, [name, picoID], { delay : 500 }))
     }
   }
 }
