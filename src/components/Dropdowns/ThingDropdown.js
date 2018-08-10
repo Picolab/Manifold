@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem} from 'reactstrap';
-import ColorModal from '../Modals/ColorModal';
+//import ColorModal from '../Modals/ColorModal';
 // import CommunitiesModal from '../Modals/CommunitiesModal';
 import InstallModal from '../Modals/InstallModal';
 import RemoveThingModal from '../Modals/RemoveThingModal';

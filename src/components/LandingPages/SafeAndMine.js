@@ -60,6 +60,8 @@ export class SafeAndMine extends Component {
       return (
         <div>
           <CardText>This tag has not yet been registered! Register this tag to see a message.</CardText>
+          {loggedIn && <CardLink tag={Link} to="/">Return home</CardLink>}
+          {!loggedIn && <CardLink tag={Link} to="/login">Sign up</CardLink>}
         </div>
       );
     }

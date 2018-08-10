@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dropdown, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Dropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import {logOut} from '../../utils/AuthService';
 
@@ -60,47 +60,42 @@ class Header extends Component {
           </li>*/}
         </ul>
         <ul className="nav navbar-nav ml-auto">
-          <li className="nav-item d-md-down-none">
-            <a className="nav-link" href="/"><i className="icon-bell"></i><span className="badge badge-pill badge-danger">5</span></a>
-          </li>
+          {/*
           <li className="nav-item d-md-down-none">
             <a className="nav-link" href="/"><i className="icon-list"></i></a>
           </li>
           <li className="nav-item d-md-down-none">
             <a className="nav-link" href="/"><i className="icon-location-pin"></i></a>
           </li>
+          */}
+          <li className="nav-item d-md-down-none">
+            <a className="nav-link" href="/"><i className="icon-bell"></i>{/*<span className="badge badge-pill badge-danger">5</span>*/}</a>
+          </li>
           <li className="nav-item">
-            <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-              <button onClick={this.toggle} className="nav-link dropdown-toggle" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded={this.state.dropdownOpen}>
-                <img src={'img/avatars/1.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com"/>
-                <span className="d-md-down-none">admin</span>
-              </button>
+            <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} >
+              <DropdownToggle style={{border:0, paddingLeft:"0px"}}>
+              <div className="nav-link dropdown-toggle" data-toggle="dropdown">
+                <img src={'img/avatars/1.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com"/> {/*Change based on what service they used to sign in?*/}
+                <span className="d-md-down-none">Signed in as: </span>
+              </div>
+              </DropdownToggle>
 
-              <DropdownMenu className="dropdown-menu-right">
-                <DropdownItem header className="text-center"><strong>Account</strong></DropdownItem>
 
-                <DropdownItem><i className="fa fa-bell-o"></i> Updates<span className="badge badge-info">42</span></DropdownItem>
-                <DropdownItem><i className="fa fa-envelope-o"></i> Messages<span className="badge badge-success">42</span></DropdownItem>
-                <DropdownItem><i className="fa fa-tasks"></i> Tasks<span className="badge badge-danger">42</span></DropdownItem>
-                <DropdownItem><i className="fa fa-comments"></i> Comments<span className="badge badge-warning">42</span></DropdownItem>
-
-                <DropdownItem header className="text-center"><strong>Settings</strong></DropdownItem>
-                <Link to="/profile" style={{ textDecoration: 'none' }}><DropdownItem><i className="fa fa-user"></i> Profile</DropdownItem></Link>
-                <DropdownItem><i className="fa fa-wrench"></i> Settings</DropdownItem>
-                <DropdownItem><i className="fa fa-usd"></i> Payments<span className="badge badge-default">42</span></DropdownItem>
-                <DropdownItem><i className="fa fa-file"></i> Projects<span className="badge badge-primary">42</span></DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem><i className="fa fa-shield"></i> Lock Account</DropdownItem>
-                <DropdownItem
+              <DropdownMenu>
+                <Link to="/profile" style={{ textDecoration: 'none' }}><DropdownItem className="dropdown-item"><i className="fa fa-user"></i> Profile</DropdownItem></Link>
+                <DropdownItem className="dropdown-item"><i className="fa fa-wrench"></i> Settings</DropdownItem>
+                <DropdownItem className="dropdown-item"
                   onClick = {()=>{logOut()}}>
                   <i className="fa fa-lock"></i> Logout</DropdownItem>
 
               </DropdownMenu>
             </Dropdown>
-          </li>
-          <li className="nav-item d-md-down-none">
-            <button className="nav-link navbar-toggler aside-menu-toggler" type="button" onClick={this.asideToggle}>&#9776;</button>
-          </li>
+        </li>
+        {/*
+        <li className="nav-item d-md-down-none">
+          <button className="nav-link navbar-toggler aside-menu-toggler" type="button" onClick={this.asideToggle}>&#9776;</button>
+        </li>
+        */}
         </ul>
       </header>
     )

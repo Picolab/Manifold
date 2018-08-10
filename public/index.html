@@ -7,6 +7,8 @@
     <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
     <meta name="author" content="Łukasz Holeczek">
     <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,AngularJS,Angular,Angular2,Angular 2,Angular4,Angular 4,jQuery,CSS,HTML,RWD,Dashboard,React,React.js,Vue,Vue.js">
+    <meta name="google-signin-client_id" content="548552688547-i40k0nigeafm0vjnqgmoj2oldddgbjqi.apps.googleusercontent.com">
+
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.png">
     <!--
       Notice the use of %PUBLIC_URL% in the tag above.
@@ -31,6 +33,22 @@
     <!-- Gridlayout stylesheets -->
     <link href="/node_modules/react-grid-layout/css/styles.css" rel="stylesheet">
     <link href="/node_modules/react-resizable/css/styles.css" rel="stylesheet">
+
+    <!-- Load google sign in -->
+    <script>
+      function init() {
+        gapi.load('auth2', function() {
+          console.log("google auth loaded!");
+          let googlePromise = gapi.auth2.init({
+            client_id: "548552688547-i40k0nigeafm0vjnqgmoj2oldddgbjqi.apps.googleusercontent.com"
+          });
+          googlePromise.then((googleAuth) => {
+            console.log("googleAuth", googleAuth);
+          });
+        });
+      }
+    </script>
+    <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
 
   </head>
 

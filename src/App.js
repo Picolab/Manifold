@@ -8,10 +8,10 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import reducers from './reducers';
 
 // Views
-import Login from './views/Pages/Login/'
-import Register from './views/Pages/Register/'
-import Page404 from './views/Pages/Page404/'
-import Page500 from './views/Pages/Page500/'
+import Login from './views/Pages/Login/ManifoldLogin';
+import Register from './views/Pages/Register/';
+import Page404 from './views/Pages/Page404/';
+import Page500 from './views/Pages/Page500/';
 
 //Oauth
 import Code from './components/oauth/code';

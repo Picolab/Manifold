@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { getHostname, getOwnerECI ,getManifoldECI} from './AuthService';
+import { HTTP_PROTOCOL, ROOT_SECURED_DID } from './config.js';
 
-export function sky_cloud(eci){ return `http://${getHostname()}/sky/cloud/${eci}`};
-export function sky_event(eci) { return `http://${getHostname()}/sky/event/${eci}`};
+export function sky_cloud(eci){ return `${HTTP_PROTOCOL}${getHostname()}/sky/cloud/${eci}`};
+export function sky_event(eci) { return `${HTTP_PROTOCOL}${getHostname()}/sky/event/${eci}`};
 
 
 function encodeQueryData(data) {
@@ -28,6 +29,11 @@ export function getManifoldInfo(){
   return axios.get(`${sky_cloud(getManifoldECI())}/io.picolabs.manifold_pico/getManifoldInfo`);
 }
 
+export function retrieveOwnerDID(attrs) {
+  const eventAttrs = encodeQueryData(attrs);
+  return axios.post(`${sky_event(ROOT_SECURED_DID)}/eid/google/owner_did_requested?${eventAttrs}`);
+}
+
 export function retrieveManifoldEci(){
   return axios.post(`${sky_event(getOwnerECI())}/eid/manifold/channel_needed`);
 }
@@ -48,7 +54,6 @@ export function removeCommunity(name, picoID){
   return axios.post(`${sky_event(getManifoldECI())}/Remove_Community/manifold/remove_community?name=${name}&picoID=${picoID}`);
 }
 
-//not implemented in the krl
 export function colorThing(name, color){
   return axios.post(`${sky_event(getManifoldECI())}/colorThing/manifold/color_thing?dname=${name}&color=%23${color.substring(1)}`);
 }

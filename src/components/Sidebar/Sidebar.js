@@ -28,6 +28,9 @@ class Sidebar extends Component {
               <NavLink to={'/mythings'} className="nav-link" activeClassName="active"><i className="fa fa-space-shuttle"></i>My Things </NavLink>
               {/*<NavLink to={'/communities'} className="nav-link" activeClassName="active"><i className="fa fa-users"></i>Communities <span className="badge badge-info">NEW</span></NavLink>*/}
             </li>
+            <li className="nav-item">
+              <NavLink to={'/feedback'} className="nav-link" activeClassName="active"><i className="fa fa-envelope"></i>Feedback </NavLink>
+            </li>
             {/*<li className="nav-title">
               UI Elements
             </li>
