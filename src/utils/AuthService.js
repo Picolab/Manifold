@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { OWNER_ECI_KEY,MANIFOLD_ECI_KEY, CLIENT_KEY, CLIENT_SECRET_KEY, CLIENT_STATE_KEY, CLIENT_HOST_KEY,PROTOCOL_KEY,CLIENT_KEY_KEY,
-   HOST, CLIENT_SECRET,CALLBACK_URL_KEY,HTTP_PROTOCOL } from './config';
+   HOST, MANIFOLD_HOST, CLIENT_SECRET,CALLBACK_URL_KEY,HTTP_PROTOCOL } from './config';
 import Full from '../containers/Full/Full';
 
 export function requireAuth(){
@@ -51,7 +51,7 @@ export function getCallbackURL(){
   return window.localStorage.getItem( CALLBACK_URL_KEY ) + "#/code" ;// window.location.origin + "/#/code";
 }
 export function getManifoldURL(){
-  return window.localStorage.getItem( CALLBACK_URL_KEY );// window.location.origin + "/#/code";
+  return `${HTTP_PROTOCOL}${MANIFOLD_HOST}`;
 }
 export function storeCallbackURL(url = window.location.origin + window.location.pathname ){
   window.localStorage.setItem(CALLBACK_URL_KEY, url.toString());

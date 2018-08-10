@@ -10,6 +10,7 @@ export const CALLBACK_URL_KEY = "callback_url";
 export const EVENT_PATH = "sky/event";
 export const FUNCTION_PATH = "sky/cloud";
 export const HOST = "manifold.picolabs.io:9090";
+export const MANIFOLD_HOST = "manifold.picolabs.io";
 export const CLIENT_SECRET = "";
 export const HTTP_PROTOCOL = "https://";
 export const PROTOCOL_KEY = "http_protocol";

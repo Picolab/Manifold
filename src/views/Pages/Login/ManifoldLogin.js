@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 //import PropTypes from 'prop-types';
 import { Card, CardBody } from 'reactstrap';
 import { retrieveOwnerDID } from '../../../utils/manifoldSDK';
-import { storeOwnerECI } from '../../../utils/AuthService';
+import { storeOwnerECI, getManifoldURL } from '../../../utils/AuthService';
 
 /* global gapi */
 
@@ -45,7 +45,7 @@ export class ManifoldLogin extends Component {
           const ownerDID = directives[index].options.DID;
           if(ownerDID) {
             storeOwnerECI(ownerDID);
-            window.location.assign("manifold.picolabs.io");
+            window.location.assign(getManifoldURL());
           }else{
             console.error("Uh oh! Something went wrong! 😭");
           }
