@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 //import PropTypes from 'prop-types';
-import { Card, CardBody } from 'reactstrap';
+import { Card, CardBody, Jumbotron, Media, Container, Row, Col, ListGroup } from 'reactstrap';
 import { retrieveOwnerDID } from '../../../utils/manifoldSDK';
 import { storeOwnerECI, getManifoldURL } from '../../../utils/AuthService';
+import manifoldImg from '../../../images/manifold_logo.png';
+import IconInfo from './IconInfo';
+import './loginStyles.css';
+
 
 /* global gapi */
 
@@ -93,13 +97,55 @@ export class ManifoldLogin extends Component {
     }
   }
 
+  // <Card className="centered-card">
+  //   <CardBody>
+  //     <div id="g-signin2"></div>
+  //   </CardBody>
+  // </Card>
+
   render() {
     return(
-      <Card className="centered-card">
-        <CardBody>
-          <div id="g-signin2"></div>
-        </CardBody>
-      </Card>
+      <div>
+        <Jumbotron fluid className="loginJumbo">
+          <Media object src={manifoldImg} alt="Manifold Image" className="loginLogo"/>
+        </Jumbotron>
+        <Container className="loginContainer">
+          <Row className="centerRow">
+            <Col className="iconContainer">
+              <ListGroup>
+                <IconInfo
+                  faIcon="fa-feed"
+                  msg="Manifold is a platform that allows you to connect and interact with your things"/>
+                <IconInfo
+                  faIcon="fa-cogs"
+                  msg="From car keys to smarthome devices, Manifold offers control"/>
+                  <IconInfo
+                    faIcon="fa-compass"
+                    msg="Discover new ways to make your things smart"/>
+              </ListGroup>
+            </Col>
+          </Row>
+          <Row className="centerRow">
+            <p className="loginDevInfo">Manifold is currently under heavy development. Manifold apps and features are still forthcoming.</p>
+            <hr style={{width: "100%", marginTop: "0.5rem"}}/>
+          </Row>
+          <Row>
+            <Col sm="4">
+              <p>test</p>
+            </Col>
+            <Col sm="8">
+              <p>another test</p>
+            </Col>
+          </Row>
+          <Row>
+            <hr style={{width: "100%"}}/>
+            <p>In order for Google sign in to work, you MUST enable popups on your browser</p>
+          </Row>
+          <Row className="oauthRow">
+            <div id="g-signin2"></div>
+          </Row>
+        </Container>
+      </div>
     )
   }
 }

@@ -1,0 +1,53 @@
+.loginJumbo {
+  background-color: white;
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.loginLogo {
+  max-width: 100%;
+}
+
+.oauthRow {
+  text-align: center;
+  justify-content: center;
+}
+
+.loginContainer {
+  text-align: center;
+}
+
+.loginDevInfo {
+    margin-bottom: 0;
+    margin-top: 1rem;
+    font-size: 12px;
+    color: rgb(15, 134, 193);
+}
+
+.loginIcon {
+  color: rgb(15, 134, 193, 0.7);
+}
+
+.iconContainer {
+  text-align: left;
+  max-width: 500px;
+}
+
+.centerRow {
+  justify-content: center;
+}
+
+.iconInfo {
+  background-color: inherit;
+  border: none;
+  padding: .5rem 1.25rem;
+}
+
+.iconMsg {
+  display: inline-block;
+  vertical-align: middle;
+  width: 80%;
+  padding-left: 5px;
+  font-size: 16px;
+  height: 100%;
+}
