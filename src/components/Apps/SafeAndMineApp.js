@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 //import PropTypes from 'prop-types';
-import { Button, Form, FormGroup, Label, Input, Media, ListGroup, ListGroupItem, Container, Row, Col } from 'reactstrap';
+import { Button, Form, FormGroup, FormFeedback, Label, Input, Media, ListGroup, ListGroupItem, Container, Row, Col } from 'reactstrap';
 import DeleteButton from './DeleteButton';
 import tag from './tag.png';
 import './SafeAndMine.css';
+const TAG_CHAR_LENGTH = 6;
 
 export class SafeAndMineApp extends Component {
+
   constructor(props) {
     super(props);
 
@@ -28,7 +30,8 @@ export class SafeAndMineApp extends Component {
 
       // component state
 
-      messageLength: 0
+      messageLength: 0,
+      validTagId: true
     }
 
     this.updateData = this.updateData.bind(this);
@@ -111,6 +114,14 @@ export class SafeAndMineApp extends Component {
 
   registerTag(e) {
     e.preventDefault();
+    if (this.state.tagID.length != TAG_CHAR_LENGTH) {
+      this.setState({
+        validTagId: false
+      })
+      return;
+    } else {
+      this.setState({validTagId: true})
+    }
     const promise = this.props.signalEvent({
       domain: "safeandmine",
       type: "new_tag",
@@ -245,7 +256,7 @@ export class SafeAndMineApp extends Component {
                     <FormGroup>
                       <Input className="greenPlaceholder" type="textarea" name="message" id="Message"  placeholder={this.state.savedMessage} value={this.state.message} onChange={this.onChange('message')} />
                     </FormGroup>
-                    <p style={{}}> {this.state.messageLength}/250 characters </p>
+                    <p style={{"fontSize": 12}}> {this.state.messageLength}/250 characters </p>
                   </Col>
                 </Row>
               </Container>
@@ -266,6 +277,7 @@ export class SafeAndMineApp extends Component {
           <FormGroup>
             <Label for="Message">Enter New TagID</Label>
             <Input type="text" name="tagID" id="tagID" placeholder="ABCDEF" value={this.state.tagID} onChange={this.onChange('tagID')} />
+            {this.state.validTagId ? "" : <FormFeedback> Tag ID must be {TAG_CHAR_LENGTH} characters</FormFeedback>}
           </FormGroup>
           <Button>Register Tag</Button>
         </Form>
