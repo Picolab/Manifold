@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Card, CardBody, Container, Row, Col, ListGroup } from 'reactstrap';
 import IconInfo from './IconInfo';
 import GoogleSignIn from './GoogleSignIn';
+import MeetTheTeam from './MeetTheTeam';
 
 class LoginBody extends Component {
   render() {
@@ -26,19 +27,12 @@ class LoginBody extends Component {
           <p className="loginDevInfo">Manifold is currently under heavy development. Many apps and features are still forthcoming.</p>
           <hr style={{width: "100%", marginTop: "0.5rem"}}/>
         </Row>
-        <Row>
-          <Col sm="4">
-            <p>test</p>
-          </Col>
-          <Col sm="8">
-            <p>another test</p>
-          </Col>
-        </Row>
-        <Row>
+        <MeetTheTeam />
+        <Row className="centerRow">
           <hr style={{width: "100%"}}/>
-          <p>In order for Google sign in to work, you MUST enable popups on your browser</p>
+          <p>In order for Google sign in to work, you <b>MUST</b> enable popups on your browser</p>
         </Row>
-        <Row className="oauthRow">
+        <Row className="centerRow">
           <GoogleSignIn />
         </Row>
       </Container>
