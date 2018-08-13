@@ -4,8 +4,12 @@ import { Button, Form, FormGroup, Label, Input, Media, ListGroup, ListGroupItem,
 import DeleteButton from './DeleteButton';
 import tag from './tag.png';
 import './SafeAndMine.css';
+const TAG_CHAR_LENGTH = 6;
+const MAIN_MESSAGE_CHAR_LENGTH = 250;
+const META_FIELD_CHAR_LENGTH = 100;
 
 export class SafeAndMineApp extends Component {
+
   constructor(props) {
     super(props);
 
@@ -22,8 +26,14 @@ export class SafeAndMineApp extends Component {
       shareEmail: false,
       sharePhone: false,
 
+
       tagID: "",
-      registeredTags: []
+      registeredTags: [],
+
+      // component state
+
+      messageLength: 0,
+      validTagId: true
     }
 
     this.updateData = this.updateData.bind(this);
@@ -53,7 +63,7 @@ export class SafeAndMineApp extends Component {
         savedMessage: message,
         shareName,
         sharePhone,
-        shareEmail
+        shareEmail,
       })
     }).catch((e) => {
       console.error("Error loading safeandmine information", e);
@@ -120,6 +130,13 @@ export class SafeAndMineApp extends Component {
 
   registerTag(e) {
     e.preventDefault();
+    if (this.state.tagID.length !== TAG_CHAR_LENGTH) {
+      this.setState({
+        validTagId: false
+      })
+      return;
+    }
+    this.setState({validTagId: true})
     const promise = this.props.signalEvent({
       domain: "safeandmine",
       type: "new_tag",
@@ -140,8 +157,17 @@ export class SafeAndMineApp extends Component {
 
   onChange(stateKey) {
     return (event) => {
+      let value = event.target.value
+      if (stateKey === "message") {
+        if (value.length > MAIN_MESSAGE_CHAR_LENGTH)
+          value = this.state.message  
+        else
+          this.setState({messageLength: value.length})
+      } else if (event.target.value.length > META_FIELD_CHAR_LENGTH) {
+        value = this.state[stateKey]
+      }
       this.setState({
-        [stateKey]: event.target.value
+        [stateKey]: value
       })
     }
   }
@@ -252,6 +278,7 @@ export class SafeAndMineApp extends Component {
                     <FormGroup>
                       <Input className="greenPlaceholder" type="textarea" name="message" id="Message" style={{height: '150px'}} placeholder={this.state.savedMessage} onClick={this.setTextEditable('message', this.state.savedMessage)} value={this.state.message} onChange={this.onChange('message')} />
                     </FormGroup>
+                    <p style={{"fontSize": 12}}> {this.state.messageLength}/{MAIN_MESSAGE_CHAR_LENGTH} characters </p>
                   </Col>
                 </Row>
               </Container>
@@ -272,6 +299,7 @@ export class SafeAndMineApp extends Component {
           <FormGroup>
             <Label for="Message">Enter New TagID</Label>
             <Input type="text" name="tagID" id="tagID" placeholder="ABCDEF" value={this.state.tagID} onChange={this.onChange('tagID')} />
+            {this.state.validTagId ? "" : <i style={{"color":"rgb(213, 99, 71)"}}> Tag ID must be {TAG_CHAR_LENGTH} characters</i>}
           </FormGroup>
           <Button>Register Tag</Button>
         </Form>

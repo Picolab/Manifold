@@ -7,12 +7,6 @@
 .loginLogo {
   max-width: 100%;
 }
-
-.oauthRow {
-  text-align: center;
-  justify-content: center;
-}
-
 .loginContainer {
   text-align: center;
 }
@@ -50,4 +44,32 @@
   padding-left: 5px;
   font-size: 16px;
   height: 100%;
+}
+
+.teamMemberName {
+  margin-bottom: 0px;
+}
+
+.teamMemberTitle {
+  color: rgb(15, 134, 193);
+  font-size: 12px;
+  margin-bottom: 0px;
+}
+
+.teamMemberItem {
+  width: 50%;
+}
+
+.teamMemberContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.teamMemberPic {
+  max-width: 100%;
+}
+
+.teamDescr {
+  max-width: 700px;
 }
