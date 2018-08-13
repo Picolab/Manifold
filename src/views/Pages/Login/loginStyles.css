@@ -69,3 +69,7 @@
 .teamMemberPic {
   max-width: 100%;
 }
+
+.teamDescr {
+  max-width: 700px;
+}
