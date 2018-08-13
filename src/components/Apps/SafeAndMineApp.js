@@ -119,9 +119,8 @@ export class SafeAndMineApp extends Component {
         validTagId: false
       })
       return;
-    } else {
-      this.setState({validTagId: true})
     }
+    this.setState({validTagId: true})
     const promise = this.props.signalEvent({
       domain: "safeandmine",
       type: "new_tag",
@@ -277,7 +276,7 @@ export class SafeAndMineApp extends Component {
           <FormGroup>
             <Label for="Message">Enter New TagID</Label>
             <Input type="text" name="tagID" id="tagID" placeholder="ABCDEF" value={this.state.tagID} onChange={this.onChange('tagID')} />
-            {this.state.validTagId ? "" : <FormFeedback> Tag ID must be {TAG_CHAR_LENGTH} characters</FormFeedback>}
+            {this.state.validTagId ? "" : <i style={{"color":"rgb(213, 99, 71)"}}> Tag ID must be {TAG_CHAR_LENGTH} characters</i>}
           </FormGroup>
           <Button>Register Tag</Button>
         </Form>
