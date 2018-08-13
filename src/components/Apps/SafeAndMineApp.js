@@ -22,8 +22,13 @@ export class SafeAndMineApp extends Component {
       shareEmail: false,
       sharePhone: false,
 
+
       tagID: "",
-      registeredTags: []
+      registeredTags: [],
+
+      // component state
+
+      messageLength: 0
     }
 
     this.updateData = this.updateData.bind(this);
@@ -53,7 +58,7 @@ export class SafeAndMineApp extends Component {
         savedMessage: message,
         shareName,
         sharePhone,
-        shareEmail
+        shareEmail,
       })
     }).catch((e) => {
       console.error("Error loading safeandmine information", e);
@@ -122,8 +127,17 @@ export class SafeAndMineApp extends Component {
 
   onChange(stateKey) {
     return (event) => {
+      let value = event.target.value
+      if (stateKey == "message") {
+        if (value.length > 250)
+          value = this.state.message  
+        else
+          this.setState({messageLength: value.length})
+      } else if (event.target.value.length > 100) {
+        value = this.state[stateKey]
+      }
       this.setState({
-        [stateKey]: event.target.value
+        [stateKey]: value
       })
     }
   }
@@ -231,6 +245,7 @@ export class SafeAndMineApp extends Component {
                     <FormGroup>
                       <Input className="greenPlaceholder" type="textarea" name="message" id="Message"  placeholder={this.state.savedMessage} value={this.state.message} onChange={this.onChange('message')} />
                     </FormGroup>
+                    <p style={{}}> {this.state.messageLength}/250 characters </p>
                   </Col>
                 </Row>
               </Container>
