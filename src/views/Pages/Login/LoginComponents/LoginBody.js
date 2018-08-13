@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, CardBody, Container, Row, Col, ListGroup } from 'reactstrap';
+import {Container, Row, Col, ListGroup} from 'reactstrap';
 import IconInfo from './IconInfo';
 import GoogleSignIn from './GoogleSignIn';
 

@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 //import PropTypes from 'prop-types';
-import { Button, Form, FormGroup, FormFeedback, Label, Input, Media, ListGroup, ListGroupItem, Container, Row, Col } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input, Media, ListGroup, ListGroupItem, Container, Row, Col } from 'reactstrap';
 import DeleteButton from './DeleteButton';
 import tag from './tag.png';
 import './SafeAndMine.css';
 const TAG_CHAR_LENGTH = 6;
+const MAIN_MESSAGE_CHAR_LENGTH = 250;
+const META_FIELD_CHAR_LENGTH = 100;
 
 export class SafeAndMineApp extends Component {
 
@@ -114,7 +116,7 @@ export class SafeAndMineApp extends Component {
 
   registerTag(e) {
     e.preventDefault();
-    if (this.state.tagID.length != TAG_CHAR_LENGTH) {
+    if (this.state.tagID.length !== TAG_CHAR_LENGTH) {
       this.setState({
         validTagId: false
       })
@@ -138,12 +140,12 @@ export class SafeAndMineApp extends Component {
   onChange(stateKey) {
     return (event) => {
       let value = event.target.value
-      if (stateKey == "message") {
-        if (value.length > 250)
+      if (stateKey === "message") {
+        if (value.length > MAIN_MESSAGE_CHAR_LENGTH)
           value = this.state.message  
         else
           this.setState({messageLength: value.length})
-      } else if (event.target.value.length > 100) {
+      } else if (event.target.value.length > META_FIELD_CHAR_LENGTH) {
         value = this.state[stateKey]
       }
       this.setState({
@@ -255,7 +257,7 @@ export class SafeAndMineApp extends Component {
                     <FormGroup>
                       <Input className="greenPlaceholder" type="textarea" name="message" id="Message"  placeholder={this.state.savedMessage} value={this.state.message} onChange={this.onChange('message')} />
                     </FormGroup>
-                    <p style={{"fontSize": 12}}> {this.state.messageLength}/250 characters </p>
+                    <p style={{"fontSize": 12}}> {this.state.messageLength}/{MAIN_MESSAGE_CHAR_LENGTH} characters </p>
                   </Col>
                 </Row>
               </Container>
