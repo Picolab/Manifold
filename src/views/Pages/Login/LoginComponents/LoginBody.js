@@ -23,18 +23,17 @@ class LoginBody extends Component {
             </ListGroup>
           </Col>
         </Row>
+        <Row className="centerRow" style={{ paddingTop: "10px" }}>
+          <GoogleSignIn />
+        </Row>
+        <Row className="centerRow">
+          <p className="popUpWarning">In order for Google sign in to work, you <b>MUST</b> enable popups on your browser</p>
+        </Row>
         <Row className="centerRow">
           <p className="loginDevInfo">Manifold is currently under heavy development. Many apps and features are still forthcoming.</p>
           <hr style={{width: "100%", marginTop: "0.5rem"}}/>
         </Row>
         <MeetTheTeam />
-        <Row className="centerRow">
-          <hr style={{width: "100%"}}/>
-          <p>In order for Google sign in to work, you <b>MUST</b> enable popups on your browser</p>
-        </Row>
-        <Row className="centerRow">
-          <GoogleSignIn />
-        </Row>
       </Container>
     )
   }
