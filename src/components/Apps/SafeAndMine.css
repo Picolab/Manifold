@@ -23,3 +23,14 @@ color: green !important;
 .greenPlaceholder:-ms-input-placeholder {
 color: green !important;
 }
+
+.noOutline {
+  border : none !important;
+  height: 30px !important;
+  margin-bottom: 0px !important;
+  padding-top: 0px !important;
+}
+
+.lessPadding {
+  padding-bottom: 0 !important;
+}

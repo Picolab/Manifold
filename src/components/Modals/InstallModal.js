@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { Col, Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import { Combobox } from 'react-input-enhancements';
 import { connect } from 'react-redux';
-import { commandAction } from '../../actions/command';
 import { installApp } from '../../utils/manifoldSDK';
 import PropTypes from 'prop-types';
 import { getDID } from '../../reducers';
+import { discovery } from '../../actions';
 
 export class InstallModal extends Component {
   constructor(props){
@@ -36,7 +36,7 @@ export class InstallModal extends Component {
       alert("You must choose a ruleset to install before you can perform this action!");
       return;
     }
-    this.props.installRuleset(this.props.DID, toInstall);
+    this.props.installRuleset(this.props.DID, toInstall, this.props.picoID);
     this.handleToggle();
   }
 
@@ -94,8 +94,13 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    installRuleset: (DID, rulesetName) => {
-      dispatch(commandAction(installApp, [DID, rulesetName]))
+    installRuleset: (DID, rulesetName, picoID) => {
+        const promise = installApp(DID, rulesetName);
+        promise.then(() => {
+          dispatch(discovery(DID, picoID));
+        }).catch((e) => {
+          console.error("Failure to install app", e);
+        });
     }
   }
 }

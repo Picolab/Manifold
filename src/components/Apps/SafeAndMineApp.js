@@ -4,8 +4,12 @@ import { Button, Form, FormGroup, Label, Input, Media, ListGroup, ListGroupItem,
 import DeleteButton from './DeleteButton';
 import tag from './tag.png';
 import './SafeAndMine.css';
+const TAG_CHAR_LENGTH = 6;
+const MAIN_MESSAGE_CHAR_LENGTH = 250;
+const META_FIELD_CHAR_LENGTH = 100;
 
 export class SafeAndMineApp extends Component {
+
   constructor(props) {
     super(props);
 
@@ -22,8 +26,14 @@ export class SafeAndMineApp extends Component {
       shareEmail: false,
       sharePhone: false,
 
+
       tagID: "",
-      registeredTags: []
+      registeredTags: [],
+
+      // component state
+
+      messageLength: 0,
+      validTagId: true
     }
 
     this.updateData = this.updateData.bind(this);
@@ -53,7 +63,7 @@ export class SafeAndMineApp extends Component {
         savedMessage: message,
         shareName,
         sharePhone,
-        shareEmail
+        shareEmail,
       })
     }).catch((e) => {
       console.error("Error loading safeandmine information", e);
@@ -90,6 +100,20 @@ export class SafeAndMineApp extends Component {
     })
   }
 
+  setTextEditable(stateKey, stateKey2) {
+  if (this.state[stateKey] === "") {
+    return (event) => {
+      this.setState({
+        [stateKey]: stateKey2
+      })
+    }
+  }
+
+  else {
+    return () => {}
+  }
+  }
+
   retrieveTags() {
     const promise = this.props.manifoldQuery({
       rid: "io.picolabs.safeandmine",
@@ -106,6 +130,13 @@ export class SafeAndMineApp extends Component {
 
   registerTag(e) {
     e.preventDefault();
+    if (this.state.tagID.length !== TAG_CHAR_LENGTH) {
+      this.setState({
+        validTagId: false
+      })
+      return;
+    }
+    this.setState({validTagId: true})
     const promise = this.props.signalEvent({
       domain: "safeandmine",
       type: "new_tag",
@@ -118,12 +149,25 @@ export class SafeAndMineApp extends Component {
     }).catch((e) => {
       console.error(e);
     })
+
+    this.setState({
+      tagID : ""
+    })
   }
 
   onChange(stateKey) {
     return (event) => {
+      let value = event.target.value
+      if (stateKey === "message") {
+        if (value.length > MAIN_MESSAGE_CHAR_LENGTH)
+          value = this.state.message  
+        else
+          this.setState({messageLength: value.length})
+      } else if (event.target.value.length > META_FIELD_CHAR_LENGTH) {
+        value = this.state[stateKey]
+      }
       this.setState({
-        [stateKey]: event.target.value
+        [stateKey]: value
       })
     }
   }
@@ -157,11 +201,13 @@ export class SafeAndMineApp extends Component {
         <h1>Safe and Mine</h1>
         <p className="shortenedWidth">Use safe and mine to help find lost things! Attach a tag to anything you want to keep safe. If you lose that item and some good samaritan scans the tag, they will see a custom message just from you. You have the option to provide your name, phone number, email, and a custom message in any combination. If you dont want to provide a piece, no problem! Just share what you feel comfortable giving out to whoever finds your thing. You can modify these below. Modifying a piece of information will immediately alter the view that those who scan tags will see.</p>
 
+        <br></br>
+
         <h2>My Information</h2>
 
         <ListGroup className="shortenedWidth">
           <Form onSubmit={this.updateData}>
-            <ListGroupItem>
+            <ListGroupItem className="lessPadding">
               <Container>
                 <Row>
                   <Col xs="2">
@@ -169,7 +215,7 @@ export class SafeAndMineApp extends Component {
                   </Col>
                   <Col xs="8">
                     <FormGroup>
-                      <Input className="greenPlaceholder" type="text" name="name" id="Name" style={{"border" : "none", "height" : 5}} placeholder={this.state.savedName} value={this.state.name} onChange={this.onChange('name')} />
+                      <Input className="greenPlaceholder noOutline" type="text" name="name" id="Name" placeholder={this.state.savedName} onClick={this.setTextEditable('name', this.state.savedName)} value={this.state.name} onChange={this.onChange('name')} />
                     </FormGroup>
                   </Col>
                   <Col xs="2">
@@ -181,7 +227,8 @@ export class SafeAndMineApp extends Component {
               </Container>
             </ListGroupItem>
 
-            <ListGroupItem>
+
+            <ListGroupItem className="lessPadding">
               <Container>
                 <Row>
                   <Col xs="2">
@@ -189,7 +236,7 @@ export class SafeAndMineApp extends Component {
                   </Col>
                   <Col xs="8">
                     <FormGroup>
-                      <Input className="greenPlaceholder" type="text" name="email" id="Email" style={{"border" : "none", "height" : 5}} placeholder={this.state.savedEmail} value={this.state.email} onChange={this.onChange('email')} />
+                      <Input className="greenPlaceholder noOutline" type="text" name="email" id="Email" placeholder={this.state.savedEmail} onClick={this.setTextEditable('email', this.state.savedEmail)} value={this.state.email} onChange={this.onChange('email')} />
                     </FormGroup>
                   </Col>
                   <Col xs="2">
@@ -201,7 +248,7 @@ export class SafeAndMineApp extends Component {
               </Container>
             </ListGroupItem>
 
-            <ListGroupItem>
+            <ListGroupItem className="lessPadding">
               <Container>
                 <Row>
                   <Col xs="2">
@@ -209,7 +256,7 @@ export class SafeAndMineApp extends Component {
                   </Col>
                   <Col xs="8">
                     <FormGroup>
-                      <Input className="greenPlaceholder" type="text" name="phone" id="Phone" style={{"border" : "none", "height" : 5}} placeholder={this.state.savedPhone} value={this.state.phone} onChange={this.onChange('phone')} />
+                      <Input className="greenPlaceholder noOutline" type="text" name="phone" id="Phone" placeholder={this.state.savedPhone} onClick={this.setTextEditable('phone', this.state.savedPhone)} value={this.state.phone} onChange={this.onChange('phone')} />
                     </FormGroup>
                   </Col>
                   <Col xs="2">
@@ -229,8 +276,9 @@ export class SafeAndMineApp extends Component {
                   </Col>
                   <Col xs="12">
                     <FormGroup>
-                      <Input className="greenPlaceholder" type="textarea" name="message" id="Message"  placeholder={this.state.savedMessage} value={this.state.message} onChange={this.onChange('message')} />
+                      <Input className="greenPlaceholder" type="textarea" name="message" id="Message" style={{height: '150px'}} placeholder={this.state.savedMessage} onClick={this.setTextEditable('message', this.state.savedMessage)} value={this.state.message} onChange={this.onChange('message')} />
                     </FormGroup>
+                    <p style={{"fontSize": 12}}> {this.state.messageLength}/{MAIN_MESSAGE_CHAR_LENGTH} characters </p>
                   </Col>
                 </Row>
               </Container>
@@ -241,7 +289,7 @@ export class SafeAndMineApp extends Component {
           </Form>
         </ListGroup>
 
-        <br></br>
+        <br></br><br></br>
         <h3>Registered Tags</h3>
         <ListGroup className="shortenedWidth">
           {this.displayTagList()}
@@ -251,6 +299,7 @@ export class SafeAndMineApp extends Component {
           <FormGroup>
             <Label for="Message">Enter New TagID</Label>
             <Input type="text" name="tagID" id="tagID" placeholder="ABCDEF" value={this.state.tagID} onChange={this.onChange('tagID')} />
+            {this.state.validTagId ? "" : <i style={{"color":"rgb(213, 99, 71)"}}> Tag ID must be {TAG_CHAR_LENGTH} characters</i>}
           </FormGroup>
           <Button>Register Tag</Button>
         </Form>
