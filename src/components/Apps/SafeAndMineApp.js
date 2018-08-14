@@ -160,7 +160,7 @@ export class SafeAndMineApp extends Component {
       let value = event.target.value
       if (stateKey === "message") {
         if (value.length > MAIN_MESSAGE_CHAR_LENGTH)
-          value = this.state.message  
+          value = this.state.message
         else
           this.setState({messageLength: value.length})
       } else if (event.target.value.length > META_FIELD_CHAR_LENGTH) {
@@ -210,12 +210,12 @@ export class SafeAndMineApp extends Component {
             <ListGroupItem className="lessPadding">
               <Container>
                 <Row>
-                  <Col xs="2">
+                  <Col className="colPadding" xs="2">
                     <b>Name:</b>
                   </Col>
                   <Col xs="8">
                     <FormGroup>
-                      <Input className="greenPlaceholder noOutline" type="text" name="name" id="Name" placeholder={this.state.savedName} onClick={this.setTextEditable('name', this.state.savedName)} value={this.state.name} onChange={this.onChange('name')} />
+                      <Input className="greenPlaceholder noOutline colPadding" type="text" name="name" id="Name" placeholder={this.state.savedName} onClick={this.setTextEditable('name', this.state.savedName)} value={this.state.name} onChange={this.onChange('name')} />
                     </FormGroup>
                   </Col>
                   <Col xs="2">
@@ -231,12 +231,12 @@ export class SafeAndMineApp extends Component {
             <ListGroupItem className="lessPadding">
               <Container>
                 <Row>
-                  <Col xs="2">
+                  <Col className="colPadding" xs="2">
                     <b>Email:</b>
                   </Col>
                   <Col xs="8">
                     <FormGroup>
-                      <Input className="greenPlaceholder noOutline" type="text" name="email" id="Email" placeholder={this.state.savedEmail} onClick={this.setTextEditable('email', this.state.savedEmail)} value={this.state.email} onChange={this.onChange('email')} />
+                      <Input className="greenPlaceholder noOutline colPadding" type="text" name="email" id="Email" placeholder={this.state.savedEmail} onClick={this.setTextEditable('email', this.state.savedEmail)} value={this.state.email} onChange={this.onChange('email')} />
                     </FormGroup>
                   </Col>
                   <Col xs="2">
@@ -251,12 +251,12 @@ export class SafeAndMineApp extends Component {
             <ListGroupItem className="lessPadding">
               <Container>
                 <Row>
-                  <Col xs="2">
+                  <Col className="colPadding" xs="2">
                     <b>Phone:</b>
                   </Col>
                   <Col xs="8">
                     <FormGroup>
-                      <Input className="greenPlaceholder noOutline" type="text" name="phone" id="Phone" placeholder={this.state.savedPhone} onClick={this.setTextEditable('phone', this.state.savedPhone)} value={this.state.phone} onChange={this.onChange('phone')} />
+                      <Input className="greenPlaceholder noOutline colPadding" type="text" name="phone" id="Phone" placeholder={this.state.savedPhone} onClick={this.setTextEditable('phone', this.state.savedPhone)} value={this.state.phone} onChange={this.onChange('phone')} />
                     </FormGroup>
                   </Col>
                   <Col xs="2">
@@ -270,10 +270,12 @@ export class SafeAndMineApp extends Component {
 
             <ListGroupItem>
               <Container>
-                <Row>
-                  <Col xs="2">
+                <Row style={{"margin-bottom" : "5px"}}>
+                  <Col className="colPadding" xs="2">
                     <b>Message:</b>
                   </Col>
+                </Row>
+                <Row>
                   <Col xs="12">
                     <FormGroup>
                       <Input className="greenPlaceholder" type="textarea" name="message" id="Message" style={{height: '150px'}} placeholder={this.state.savedMessage} onClick={this.setTextEditable('message', this.state.savedMessage)} value={this.state.message} onChange={this.onChange('message')} />

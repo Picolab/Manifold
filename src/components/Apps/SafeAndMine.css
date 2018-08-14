@@ -34,3 +34,7 @@ color: green !important;
 .lessPadding {
   padding-bottom: 0 !important;
 }
+
+.colPadding {
+  padding-left: 5px !important;
+}
