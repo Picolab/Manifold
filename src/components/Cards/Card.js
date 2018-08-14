@@ -44,7 +44,7 @@ class Card extends Component {
     }else{
       return (
         <div>
-          There are no apps currently installed on this Thing!
+          To install an app, either click on the wheel at the top of this card, or open the card and do it from the next page. Try out our Safe and Mine app!
         </div>
       )
     }

@@ -17,7 +17,6 @@ class ThingTemplate extends Component {
         <h4>General Information</h4>
         <p>Thing Id: {this.props.picoID}</p>
         <p>Thing DID: {this.props.DID}</p>
-        <p>URL to your Thing: {this.state.url}</p>
       </div>
     );
   }
