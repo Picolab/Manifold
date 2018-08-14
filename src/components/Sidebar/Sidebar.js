@@ -31,6 +31,9 @@ class Sidebar extends Component {
             <li className="nav-item">
               <NavLink to={'/feedback'} className="nav-link" activeClassName="active"><i className="fa fa-envelope"></i>Feedback </NavLink>
             </li>
+            <li className="nav-item">
+              <NavLink to={'/privacy'} className="nav-link" activeClassName="active"><i className="fa fa-lock"></i>Privacy Policy </NavLink>
+            </li>
             {/*<li className="nav-title">
               UI Elements
             </li>
