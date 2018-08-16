@@ -307,7 +307,7 @@ export class SafeAndMineApp extends Component {
         </Form>
         <br></br><br></br><br></br>
         <h5>Disclaimer:</h5>
-        <p className="shortenedWidth">Picolabs is not for any lost or stolen items. SafeAndMine is a tool designed to help find lost items, but it does not guarantee that all lost items will be safely returned.</p>
+        <p className="shortenedWidth">Picolabs is not responsible for any lost or stolen items. SafeAndMine is a tool designed to help find lost items, but it does not guarantee that all lost items will be safely returned.</p>
       </div>
     )
   }
