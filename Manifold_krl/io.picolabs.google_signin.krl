@@ -37,6 +37,7 @@ ruleset io.picolabs.google_signin {
     select when google owner_did_requested
     pre {
       id_token = event:attr("id_token");
+      profile = event:attr("profile").decode();
       resp = id_token => http:get("https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=" + id_token) | "";
       valid_code = resp{"status_code"} == 200;
       content = resp{"content"}.decode();
@@ -46,7 +47,7 @@ ruleset io.picolabs.google_signin {
        noop()
     fired {
       raise google event "validation_success"
-        attributes event:attrs.put({ "resp_content": content })
+        attributes event:attrs.put({ "resp_content": content }).put({"profile":profile})
     }else {
       raise google event "validation_failure"
         attributes event:attrs
@@ -78,11 +79,23 @@ ruleset io.picolabs.google_signin {
     }
     if pico_id then every {
       engine:newChannel(pico_id, time:now(), "google_signin") setting(new_channel);
+      event:send({"eci":new_channel{"id"}, "domain":"profile", "type":"google_profile_save", "attrs":{"profile":event:attr("profile").klog("PROFILE")}})
       send_directive("Returning google_signin DID", {"DID": new_channel{"id"}});
     }
     fired {
-      // schedule owner event "authenticate_channel_expired" at time:add(time:now(), {"minutes": 120})
+      // schedule owner event "authenticate_channel_expired" at time:add(time:now(), {"minutes": 1})
       //   attributes {"eci": new_channel{"id"}};
+    }
+  }
+  
+  rule manifoldPicoChannelExpiration {
+    select when owner authenticate_channel_expired
+    pre {
+      channel = event:attr("eci")
+    }
+    if channel then noop()
+    fired {
+      engine:removeChannel(channel)
     }
   }
 

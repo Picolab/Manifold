@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Dropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import {logOut} from '../../utils/AuthService';
+import {logOut, getOwnerECI} from '../../utils/AuthService';
+import { customQuery } from '../../utils/manifoldSDK';
 
 class Header extends Component {
 
@@ -9,7 +10,11 @@ class Header extends Component {
     super(props);
 
     this.toggle = this.toggle.bind(this);
+    this.getProfileInfo = this.getProfileInfo.bind(this);
+
     this.state = {
+      displayName: "No User Found",
+      imgURL: "",
       dropdownOpen: false
     };
   }
@@ -38,6 +43,25 @@ class Header extends Component {
   asideToggle(e) {
     e.preventDefault();
     document.body.classList.toggle('aside-menu-hidden');
+  }
+
+  componentWillMount() {
+    this.getProfileInfo();
+  }
+
+  getProfileInfo() {
+    const profileGetPromise = customQuery(getOwnerECI(), "io.picolabs.profile", "getProfile");
+    profileGetPromise.then((resp) => {
+      const profile = resp.data;
+      if (profile.google) {
+        this.setState({
+          displayName: profile.google.displayName,
+          imgURL: profile.google.profileImgURL
+        })
+      }
+    }).catch((e) => {
+      console.error(e);
+    });
   }
 
   render() {
@@ -75,8 +99,8 @@ class Header extends Component {
             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} >
               <DropdownToggle style={{border:0, paddingLeft:"0px"}}>
               <div className="nav-link dropdown-toggle" data-toggle="dropdown">
-                <img src={'img/avatars/1.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com"/> {/*Change based on what service they used to sign in?*/}
-                <span className="d-md-down-none">Signed in as: </span>
+                <img src={this.state.imgURL} className="img-avatar" alt="Avatar Image"/> {/*Change based on what service they used to sign in?*/}
+                <span className="d-md-down-none">{this.state.displayName} </span>
               </div>
               </DropdownToggle>
 

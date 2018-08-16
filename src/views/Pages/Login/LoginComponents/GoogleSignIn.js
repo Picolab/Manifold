@@ -22,16 +22,19 @@ class GoogleSignIn extends Component {
     this.onFailure = this.onFailure.bind(this);
   }
 
-  pollForOwnerDID(id_token, attemptNum) {
+  pollForOwnerDID(id_token, attemptNum, profile) {
     if(attemptNum > 2) {
       console.error("Last attempt to retrieve owner DID failed 😭");
       return;
     }
     //exponential backoff... wait for a calculated number of milliseconds depending on which attempt this is.
     setTimeout(() => {
+      
       const ownerDIDPromise = retrieveOwnerDID({
-        id_token
+        id_token,
+        profile
       });
+      console.log(profile);
       ownerDIDPromise.then((resp) => {
         const { directives } = resp.data;
         console.log("ownerDID directives:", directives);
@@ -49,7 +52,7 @@ class GoogleSignIn extends Component {
           }
         }else {
           //we need to try again
-          this.pollForOwnerDID(id_token, attemptNum + 1);
+          this.pollForOwnerDID(id_token, attemptNum + 1, profile);
         }
       }).catch((e) => {
         console.error(e);
@@ -65,7 +68,7 @@ class GoogleSignIn extends Component {
     console.log('Name: ' + profile.getName());
     console.log('Image URL: ' + profile.getImageUrl());
     console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-    this.pollForOwnerDID(id_token, 0);
+    this.pollForOwnerDID(id_token, 0, JSON.stringify(profile));
   }
 
   onFailure(e) {
