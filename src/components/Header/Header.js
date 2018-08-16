@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Dropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import {logOut, getOwnerECI} from '../../utils/AuthService';
-import { customQuery } from '../../utils/manifoldSDK';
+import { retrieveOwnerProfile } from '../../utils/manifoldSDK';
 
 class Header extends Component {
 
@@ -50,7 +50,7 @@ class Header extends Component {
   }
 
   getProfileInfo() {
-    const profileGetPromise = customQuery(getOwnerECI(), "io.picolabs.profile", "getProfile");
+    const profileGetPromise = retrieveOwnerProfile();
     profileGetPromise.then((resp) => {
       const profile = resp.data;
       if (profile.google) {

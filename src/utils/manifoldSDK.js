@@ -38,6 +38,10 @@ export function retrieveManifoldEci(){
   return axios.post(`${sky_event(getOwnerECI())}/eid/manifold/channel_needed`);
 }
 
+export function retrieveOwnerProfile() {
+  return customQuery(getOwnerECI(), "io.picolabs.profile", "getProfile");
+}
+
 export function createThing(name){
   return axios.post(`${sky_event(getManifoldECI())}/Create_Thing/manifold/create_thing?name=${name}`);
 }
