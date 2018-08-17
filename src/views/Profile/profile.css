@@ -1,8 +1,16 @@
-.profileRow {
-    margin: 20px;
+.profileRowText {
+    font-size: x-large;
+}
+
+.serviceHeader {
+    font-size: xx-large;
 }
 
 .profileServiceSection {
     padding-top: 20px;
     padding-bottom: 20px;
+}
+
+.avatarImg {
+    size: 50px;
 }

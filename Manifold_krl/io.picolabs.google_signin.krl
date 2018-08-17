@@ -109,7 +109,7 @@ ruleset io.picolabs.google_signin {
         attributes {
           "method": "did",
           "name": account_id,
-          "rids": "io.picolabs.manifold_owner"
+          "rids": "io.picolabs.manifold_owner;io.picolabs.profile"
         }
     }
   }

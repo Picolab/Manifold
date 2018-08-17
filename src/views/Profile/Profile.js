@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { retrieveOwnerProfile } from '../../../src/utils/manifoldSDK'
+import {Table} from 'reactstrap';
+import { retrieveOwnerProfile } from '../../../src/utils/manifoldSDK';
+import './Profile.css';
 
 //const brandPrimary =  '#20a8d8';
 //const brandSuccess =  '#4dbd74';
@@ -18,6 +20,7 @@ class Profile extends Component {
     this.getProfileInfo = this.getProfileInfo.bind(this);
     this.renderService = this.renderService.bind(this);
     this.renderProfileRow = this.renderProfileRow.bind(this);
+    this.renderServices = this.renderServices.bind(this);
   }
 
   componentWillMount() {
@@ -28,11 +31,9 @@ class Profile extends Component {
     const profileGetPromise = retrieveOwnerProfile();
     profileGetPromise.then((resp) => {
       const profile = resp.data;
-      if (profile.google) {
+      if (profile) {
         this.setState({
-          profile: {
-            "google":profile.google
-          }
+          profile
         })
       }
     }).catch((e) => {
@@ -40,10 +41,10 @@ class Profile extends Component {
     });
   }
 
-  renderService(service) {
+  renderService(service, serviceName) {
     if (!service)
       return;
-    let serviceName = "Google" //service.charAt(0).toUpperCase() + service.substr(1);
+    let formattedServiceName = serviceName.charAt(0).toUpperCase() + serviceName.substr(1);
     let avatarImg = service.profileImgURL
     let displayName = service.displayName
     let firstName = service.firstName
@@ -51,25 +52,40 @@ class Profile extends Component {
     let email = service.email
     
     return (
-      <div>
-        <h2> {serviceName} </h2>
-        {this.renderProfileRow("Display Name: ", displayName, false)}
+      <div key={serviceName} className="profileServiceSection">
+        <h2 className="serviceHeader"> {formattedServiceName} </h2>
+        <Table>
+          <tbody>
+            {this.renderProfileRow("Avatar", avatarImg, true)}
+            {this.renderProfileRow("Display Name", displayName)}
+            {this.renderProfileRow("First Name", firstName)}
+            {this.renderProfileRow("Last Name", lastName)}
+            {this.renderProfileRow("Email", email)}
+          </tbody>
+        </Table>
       </div>
     )
   }
 
   renderProfileRow(descriptor, content, image) {
     if (image === true) {
-      content = <img src={content} className="img-avatar" alt="Avatar Image"/>
-    } else {
-      content = <p style={{"fontSize":"large"}}> {content} </p>
+      content = <img src={content} className="avatarImg" alt="Avatar"/>
     }
+    if (!content)
+      return;
     return (
-      <div className="profileRow">
-        <h3> {descriptor}: </h3>
-        {content}
-      </div>
+      <tr className="profileRowText">
+        <td> {descriptor} </td><td> {content} </td>
+      </tr>
     )
+  }
+
+  renderServices() {
+    let services = [];
+    Object.getOwnPropertyNames(this.state.profile).forEach(element => {
+      services.push(this.renderService(this.state.profile[element], element))
+    })
+    return services;
   }
 
 
@@ -78,8 +94,8 @@ class Profile extends Component {
       <div style={{"maxWidth":"550px"}}>
         <h1> Profile</h1>
         <hr className="my-2" style={{"paddingBottom":"5px"}}/>
-        {this.renderService(this.state.profile.google)}
-      </div>
+          {this.renderServices()}
+        </div>
     );
   }
 }

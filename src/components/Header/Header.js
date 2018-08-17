@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Dropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import {logOut, getOwnerECI} from '../../utils/AuthService';
+import {logOut} from '../../utils/AuthService';
 import { retrieveOwnerProfile } from '../../utils/manifoldSDK';
 
 class Header extends Component {
@@ -99,7 +99,7 @@ class Header extends Component {
             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} >
               <DropdownToggle style={{border:0, paddingLeft:"0px"}}>
               <div className="nav-link dropdown-toggle" data-toggle="dropdown">
-                <img src={this.state.imgURL} className="img-avatar" alt="Avatar Image"/> {/*Change based on what service they used to sign in?*/}
+                <img src={this.state.imgURL} className="img-avatar" alt="Avatar"/> {/*Change based on what service they used to sign in?*/}
                 <span className="d-md-down-none">{this.state.displayName} </span>
               </div>
               </DropdownToggle>
