@@ -79,7 +79,7 @@ ruleset io.picolabs.google_signin {
     }
     if pico_id then every {
       engine:newChannel(pico_id, time:now(), "google_signin") setting(new_channel);
-      event:send({"eci":new_channel{"id"}, "domain":"profile", "type":"google_profile_save", "attrs":{"profile":event:attr("profile").klog("PROFILE")}})
+      event:send({"eci":new_channel{"id"}, "domain":"profile", "type":"google_profile_save", "attrs":{"profile":event:attr("profile")}})
       send_directive("Returning google_signin DID", {"DID": new_channel{"id"}});
     }
     fired {
