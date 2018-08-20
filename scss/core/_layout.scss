@@ -326,5 +326,9 @@ app-root {
       margin-right: - $mobile-sidebar-width !important;
       margin-left: $mobile-sidebar-width !important;
     }
+
+    .app-footer {
+      margin-left: $mobile-sidebar-width !important;
+    }
   }
 }
