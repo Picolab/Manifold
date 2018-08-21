@@ -1,15 +1,19 @@
 .profileRowText {
-    font-size: x-large;
+    font-size: 1.5em;
 }
 
 .serviceHeader {
-    font-size: xx-large;
+    font-size: 2em;
 }
 
 .profileServiceSection {
     padding-top: 20px;
     padding-bottom: 20px;
 }
+
+.shortenedWidth {
+    max-width: 500px;
+  }
 
 .avatarImg {
     size: 50px;

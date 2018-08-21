@@ -91,7 +91,7 @@ class Profile extends Component {
 
   render(){
     return (
-      <div style={{"maxWidth":"550px"}}>
+      <div style={{"maxWidth":"500px"}}>
         <h1> Profile</h1>
         <hr className="my-2" style={{"paddingBottom":"5px"}}/>
           {this.renderServices()}
