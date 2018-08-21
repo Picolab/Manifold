@@ -6,6 +6,7 @@ import ThingTemplate from './ThingTemplate';
 import CommunityTemplate from './CommunityTemplate';
 import NeighborhoodTemps from './NeighborhoodTemps';
 import SafeAndMineApp from '../Apps/SafeAndMineApp';
+import JournalApp from '../Apps/Journal/JournalApp';
 
 /*
 In the future, consider abandoning this mapping of a string to a component with the Webpack Externals.
@@ -15,7 +16,8 @@ issues for when someone at a remote location creates a component that accesses t
 See https://webpack.js.org/configuration/externals/ for more information.
 */
 export default {
-  'io.picolabs.journal': JournalTemplate,
+  //'io.picolabs.journal': JournalTemplate,
+  'io.picolabs.journal': JournalApp,
   'io.picolabs.tempTestApp': TempTestAppTemplate,
   'io.picolabs.helloWorld': HelloWorldTemplate,
   'io.picolabs.wovyn_device': WovynDeviceTemplate,

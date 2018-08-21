@@ -270,7 +270,7 @@ export class SafeAndMineApp extends Component {
 
             <ListGroupItem>
               <Container>
-                <Row style={{"margin-bottom" : "5px"}}>
+                <Row style={{"marginBottom" : "5px"}}>
                   <Col className="colPadding" xs="2">
                     <b>Message:</b>
                   </Col>

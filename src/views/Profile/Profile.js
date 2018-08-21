@@ -50,7 +50,7 @@ class Profile extends Component {
     let firstName = service.firstName
     let lastName = service.lastName
     let email = service.email
-    
+
     return (
       <div key={serviceName} className="profileServiceSection">
         <h2 className="serviceHeader"> {formattedServiceName} </h2>

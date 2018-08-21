@@ -17,7 +17,7 @@ export const HOST = "manifold.picolabs.io:9090";
 export const MANIFOLD_HOST = "manifold.picolabs.io";
 
 //Development
-// export const ROOT_SECURED_DID = ""; //this is the secured DID to the google ruleset on the root pico
-// export const HTTP_PROTOCOL = "http://";
-// export const HOST = "localhost:8080";
-// export const MANIFOLD_HOST = "localhost:3000";
+//export const ROOT_SECURED_DID = "NcuxBotwtUDUM25CWvMatL"; //this is the secured DID to the google ruleset on the root pico
+//export const HTTP_PROTOCOL = "http://";
+//export const HOST = "localhost:8080";
+//export const MANIFOLD_HOST = "localhost:3000";

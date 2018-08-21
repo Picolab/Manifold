@@ -1,0 +1,17 @@
+.shortenedWidth {
+  max-width: 500px;
+}
+
+.title {
+  margin: 0px;
+}
+
+.timestamp {
+  font-size: 12px;
+  color: gray;
+  margin-bottom: 5px;
+}
+
+.content {
+  font-size: 15px;
+}
