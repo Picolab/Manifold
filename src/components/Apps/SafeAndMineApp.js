@@ -55,7 +55,7 @@ export class SafeAndMineApp extends Component {
     });
 
     promise.then((resp) => {
-      const { name = "", email = "", phone = "", message = "", shareName = false, shareEmail = false, sharePhone = false} = resp.data;
+      const { name = "", email = "", phone = "", message = "", shareName = false, shareEmail = false, sharePhone = false } = resp.data;
       this.setState({
         savedName: name,
         savedEmail: email,

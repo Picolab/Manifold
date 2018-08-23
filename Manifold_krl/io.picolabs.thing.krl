@@ -27,6 +27,10 @@ ruleset io.picolabs.thing {
     pre{}
     noop()
     fired{
+      raise wrangler event "install_rulesets_requested"
+      attributes {
+        "rid" : "io.picolabs.safeandmine"
+      }
     }
   }
 
