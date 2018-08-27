@@ -66,6 +66,10 @@ export function moveThing(picoID, x, y, w, h){
   return axios.post(`${sky_event(getManifoldECI())}/Move_Thing/manifold/move_thing?picoID=${picoID}&x=${x}&y=${y}&w=${w}&h=${h}`);
 }
 
+export function renameThing(picoID, changedName) {
+  return axios.post(`${sky_event(getManifoldECI())}/Change_Thing_Name/manifold/change_thing_name?picoID=${picoID}&changedName=${changedName}`);
+}
+
 export function moveCommunity(picoID, x, y, w, h){
   return axios.post(`${sky_event(getManifoldECI())}/Move_Thing/manifold/move_community?picoID=${picoID}&x=${x}&y=${y}&w=${w}&h=${h}`);
 }

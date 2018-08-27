@@ -3,6 +3,7 @@ import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem} from 'reactstrap'
 //import ColorModal from '../Modals/ColorModal';
 // import CommunitiesModal from '../Modals/CommunitiesModal';
 import InstallModal from '../Modals/InstallModal';
+import RenameModal from '../Modals/RenameModal';
 import RemoveThingModal from '../Modals/RemoveThingModal';
 import PropTypes from 'prop-types';
 
@@ -14,16 +15,19 @@ export class ThingDropdown extends Component {
       isOpen: props.isOpen,
       removeOpen: false,
       installOpen: false,
+      renameOpen:false,
       //colorOpen: false,
       communitiesOpen: false
     }
 
     this.openRemove = this.openRemove.bind(this);
     this.openInstall = this.openInstall.bind(this);
+    this.openRename = this.openRename.bind(this);
     //this.openColor = this.openColor.bind(this);
 
     this.toggleRemove = this.toggleRemove.bind(this);
     this.toggleInstall = this.toggleInstall.bind(this);
+    this.toggleRename = this.toggleRename.bind(this);
     //this.toggleColor = this.toggleColor.bind(this);
   }
 
@@ -45,6 +49,11 @@ export class ThingDropdown extends Component {
     this.toggleInstall();
   }
 
+  openRename() {
+    this.props.toggleSettings();
+    this.toggleRename();
+  }
+
   /*openColor() {
     this.props.toggleSettings();
     this.toggleColor();
@@ -59,6 +68,12 @@ export class ThingDropdown extends Component {
   toggleInstall() {
     this.setState({
       installOpen: !this.state.installOpen
+    })
+  }
+
+  toggleRename() {
+    this.setState({
+      renameOpen: !this.state.renameOpen
     })
   }
 
@@ -80,6 +95,11 @@ export class ThingDropdown extends Component {
           <i className="fa fa-gear float-right fa-lg manifoldDropdown"/>
         </DropdownToggle>
         <DropdownMenu right>
+
+        <DropdownItem onClick={this.openRename}>
+          Rename Thing
+        </DropdownItem>
+        <RenameModal modalOn={this.state.renameOpen} toggleFunc={this.toggleRename} picoID={this.props.picoID}/>
 
           <DropdownItem onClick={this.openRemove} >
             Remove Thing

@@ -260,4 +260,20 @@ ruleset io.picolabs.manifold_pico {
       clear ent:communities;
     }
   }
+
+  rule changeThingName {
+    select when manifold change_thing_name
+
+    pre {
+      picoID = event:attr("picoID");
+      changedName = event:attr("changedName");
+    }
+
+    if not (picoID.isnull() || changedName.isnull()) then
+      noop();
+
+    fired {
+      ent:things := ent:things.put([picoID, "name"], changedName);
+    }
+  }
 }//end ruleset
