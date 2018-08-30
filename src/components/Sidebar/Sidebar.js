@@ -62,7 +62,7 @@ class Sidebar extends Component {
               <NavLink to={'/privacy'} className="nav-link" activeClassName="active"><div onClick={this.closeSidebar}><i className="fa fa-lock"></i>Privacy Policy </div></NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to={'/#'} className="nav-link" activeClassName="active"><div onClick={this.helpClick}><i className="fa fa-info-circle"></i>Help </div></NavLink>
+              <NavLink to={'/#'} className="nav-link" activeClassName="active"><div onClick={this.helpClick}><i className="fa fa-info-circle"></i>Tutorial </div></NavLink>
               <TutorialModal modalOn={this.state.tutorialOpen} toggleFunc={this.toggleTutorial} />
             </li>
             {/*<li className="nav-title">
