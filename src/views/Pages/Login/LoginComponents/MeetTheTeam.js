@@ -17,11 +17,11 @@ class MeetTheTeam extends Component {
           <Col>
             <Media className="teamMemberPic" object src={theTeam} alt="The Picolabs Team"/>
               <div className="teamMemberContainer">
-                <TeamMember name="Bruce Conrad" title="Lead KRL developer" bio="Writes code to prove concepts"/>
-                <TeamMember name="Thomas Lewis" title="Co-Lead Manifold Developer" bio="Kale mid"/>
-                <TeamMember name="Connor Grimm" title="Lead Manifold Developer" bio="Enjoys movies, the occasional anime, and casual volleyball"/>
-                <TeamMember name="Jace Kandare" title="Marketing Manager and Lead Safe And Mine Developer" bio="No bio"/>
-                <TeamMember name="Brandon Bingham" title="Assistant to the Marketing Manager" bio="No bio"/>
+                <TeamMember name="Bruce Conrad" title="Lead KRL developer" bio="I've driven this herd of programmers for miles"/>
+                <TeamMember name="Thomas Lewis" title="Co-Lead Manifold Developer" bio="I play video games and work on creative projects"/>
+                <TeamMember name="Connor Grimm" title="Lead Manifold Developer" bio="I enjoy movies, the occasional anime, and casual volleyball"/>
+                <TeamMember name="Jace Kandare" title="Marketing Manager and Lead Safe And Mine Developer" bio="Unlike some people, I like programming"/>
+                <TeamMember name="Brandon Bingham" title="Assistant to the Lead KRL developer" bio="Likes: robotics, blacksmithing, Iaido, swimming, running, cooking, painting, etc. Dislikes: Programming."/>
               </div>
           </Col>
         </Row>
