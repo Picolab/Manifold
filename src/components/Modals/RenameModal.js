@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, InputGroup, Input } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, InputGroup, Input } from 'reactstrap';
 import { connect } from 'react-redux';
-import { renameThing, getManifoldInfo } from '../../utils/manifoldSDK';
+import { renameThing } from '../../utils/manifoldSDK';
 import ActionTypes from '../../actions/index';
 import PropTypes from 'prop-types';
 
 
-export class InstallModal extends Component {
+export class RenameModal extends Component {
   constructor(props){
     super(props);
 
@@ -41,7 +41,7 @@ export class InstallModal extends Component {
         <ModalHeader toggle={this.handleToggle}>Rename Thing</ModalHeader>
         <ModalBody>
           <InputGroup>
-            <Input placeholder="test" value={this.state.changedName} onChange={this.textChange} />
+            <Input placeholder="Enter a new name" value={this.state.changedName} onChange={this.textChange} />
           </InputGroup>
         </ModalBody>
         <ModalFooter>
@@ -53,7 +53,7 @@ export class InstallModal extends Component {
   }
 }
 
-InstallModal.propTypes = {
+RenameModal.propTypes = {
   //parent provides these
   picoID: PropTypes.string.isRequired,
   modalOn: PropTypes.bool.isRequired,
@@ -79,4 +79,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(InstallModal)
+export default connect(mapStateToProps, mapDispatchToProps)(RenameModal)

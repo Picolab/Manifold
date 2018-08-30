@@ -1,7 +1,25 @@
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom';
+import TutorialModal from '../Modals/TutorialModal';
 
 class Sidebar extends Component {
+
+  constructor(props){
+    super(props);
+
+    this.state = {
+      tutorialOpen : false
+    }
+
+    this.toggleTutorial = this.toggleTutorial.bind(this);
+    this.helpClick = this.helpClick.bind(this);
+  }
+
+  toggleTutorial() {
+    this.setState({
+      tutorialOpen : !this.state.tutorialOpen
+    })
+  }
 
   handleClick(e) {
     e.preventDefault();
@@ -17,6 +35,15 @@ class Sidebar extends Component {
   // secondLevelActive(routeName) {
   //   return this.props.location.pathname.indexOf(routeName) > -1 ? "nav nav-second-level collapse in" : "nav nav-second-level collapse";
   // }
+  closeSidebar() {
+    //this one toggles desktop version: document.body.classList.toggle('sidebar-hidden');
+    document.body.classList.toggle('sidebar-mobile-show');
+  }
+
+  helpClick(){
+    this.closeSidebar();
+    this.toggleTutorial();
+  }
 
   render() {
     return (
@@ -25,14 +52,18 @@ class Sidebar extends Component {
           <ul className="nav">
             <li className="nav-item">
               {/*<NavLink to={'/dashboard'} className="nav-link" activeClassName="active"><i className="icon-speedometer"></i> Dashboard </NavLink>*/}
-              <NavLink to={'/mythings'} className="nav-link" activeClassName="active"><i className="fa fa-space-shuttle"></i>My Things </NavLink>
+              <NavLink to={'/mythings'} className="nav-link" activeClassName="active"><div onClick={this.closeSidebar}><i className="fa fa-space-shuttle"></i>My Things </div></NavLink>
               {/*<NavLink to={'/communities'} className="nav-link" activeClassName="active"><i className="fa fa-users"></i>Communities <span className="badge badge-info">NEW</span></NavLink>*/}
             </li>
             <li className="nav-item">
-              <NavLink to={'/feedback'} className="nav-link" activeClassName="active"><i className="fa fa-envelope"></i>Feedback </NavLink>
+              <NavLink to={'/feedback'} className="nav-link" activeClassName="active"><div onClick={this.closeSidebar}><i className="fa fa-envelope"></i>Feedback </div></NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to={'/privacy'} className="nav-link" activeClassName="active"><i className="fa fa-lock"></i>Privacy Policy </NavLink>
+              <NavLink to={'/privacy'} className="nav-link" activeClassName="active"><div onClick={this.closeSidebar}><i className="fa fa-lock"></i>Privacy Policy </div></NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink to={'/#'} className="nav-link" activeClassName="active"><div onClick={this.helpClick}><i className="fa fa-info-circle"></i>Help </div></NavLink>
+              <TutorialModal modalOn={this.state.tutorialOpen} toggleFunc={this.toggleTutorial} />
             </li>
             {/*<li className="nav-title">
               UI Elements

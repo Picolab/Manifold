@@ -6,6 +6,7 @@ const routes = {
   '/feedback': "Feedback",
   '/profile': 'Profile',
   '/privacy': 'Privacy',
+  '/help' : 'Help',
   '/components': 'Components',
   '/charts': 'Charts',
   '/components/buttons': 'Buttons',

@@ -11,6 +11,7 @@ class Header extends Component {
 
     this.toggle = this.toggle.bind(this);
     this.getProfileInfo = this.getProfileInfo.bind(this);
+    this.sidebarToggle = this.sidebarToggle.bind(this);
 
     this.state = {
       displayName: "No User Found",
