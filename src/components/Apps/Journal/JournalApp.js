@@ -97,6 +97,7 @@ export default class JournalApp extends Component {
             );
           })}
         </ListGroup>
+        <p className="shortenedWidth">Icon made by <a href="https://www.flaticon.com/authors/freepik">Freepik</a> from www.flaticon.com</p>
       </div>
     );
   }
