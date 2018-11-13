@@ -56,7 +56,7 @@ export default class Entry extends Component {
       case "09":
         month = "September";
         break;
-      case "010":
+      case "10":
         month = "October";
         break;
       case "11":

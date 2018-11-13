@@ -49,16 +49,16 @@ export class TutorialModal extends Component {
 
 TutorialModal.propTypes = {
   //parent provides these
-  picoID: PropTypes.string.isRequired,
   modalOn: PropTypes.bool.isRequired,
   toggleFunc: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state, ownProps) => {
-
+  return {}
 }
 
 const mapDispatchToProps = (dispatch) => {
+  return {}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TutorialModal)

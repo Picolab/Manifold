@@ -13,6 +13,7 @@ export default rootReducer;
 /* The store structure (everything is an Immutable JS List or Map)
 {
   manifoldInfo: {
+    hasTutorial : <boolean>
     things: {
       <picoID>: {
         Rx_role: <Rx_role>,

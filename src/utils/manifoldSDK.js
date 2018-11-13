@@ -29,6 +29,10 @@ export function getManifoldInfo(){
   return axios.get(`${sky_cloud(getManifoldECI())}/io.picolabs.manifold_pico/getManifoldInfo`);
 }
 
+export function hasTutorial() {
+  return axios.get(`${sky_cloud(getManifoldECI())}/io.picolabs.manifold_pico/hasTutorial`);
+}
+
 export function retrieveOwnerDID(attrs) {
   const eventAttrs = encodeQueryData(attrs);
   return axios.post(`${sky_event(ROOT_SECURED_DID)}/eid/google/owner_did_requested?${eventAttrs}`);

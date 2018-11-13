@@ -7,6 +7,8 @@ class Sidebar extends Component {
   constructor(props){
     super(props);
 
+    console.log("SIDEBAR PROPS: ", this.props);
+
     this.state = {
       tutorialOpen : false
     }
@@ -40,7 +42,8 @@ class Sidebar extends Component {
     document.body.classList.toggle('sidebar-mobile-show');
   }
 
-  helpClick(){
+  helpClick(e){
+    e.preventDefault();
     this.closeSidebar();
     this.toggleTutorial();
   }
@@ -62,7 +65,7 @@ class Sidebar extends Component {
               <NavLink to={'/privacy'} className="nav-link" activeClassName="active"><div onClick={this.closeSidebar}><i className="fa fa-lock"></i>Privacy Policy </div></NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to={'/#'} className="nav-link" activeClassName="active"><div onClick={this.helpClick}><i className="fa fa-info-circle"></i>Tutorial </div></NavLink>
+              <div onClick={this.helpClick} className="nav-link"><i className="fa fa-info-circle"></i>Tutorial </div>
               <TutorialModal modalOn={this.state.tutorialOpen} toggleFunc={this.toggleTutorial} />
             </li>
             {/*<li className="nav-title">
