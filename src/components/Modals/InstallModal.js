@@ -6,6 +6,11 @@ import { installApp } from '../../utils/manifoldSDK';
 import PropTypes from 'prop-types';
 import { getDID } from '../../reducers';
 import { discovery } from '../../actions';
+import AppMap from '../Apps/AppMap';
+
+const createAppOptions = () => {
+  return Object.keys(AppMap);
+}
 
 export class InstallModal extends Component {
   constructor(props){
@@ -14,7 +19,7 @@ export class InstallModal extends Component {
     this.state = {
       modalOn: props.modalOn,
       //we should consider dynamic option discovery over hardcoding
-      appOptions: ["io.picolabs.safeandmine", "io.picolabs.journal"],
+      appOptions: createAppOptions(),
       value: "DEFAULT INPUT VAL",
       rulesetToInstall: ""
     };

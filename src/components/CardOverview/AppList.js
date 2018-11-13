@@ -18,7 +18,7 @@ class AppList extends Component {
         const mediaID = "iconMedia" + index;
         icons.push(
           <div key={"appList" + index}>
-            <Link to={"/mythings/" + this.props.picoID + "/" + app.name}>
+            <Link to={"/mythings/" + this.props.picoID + "/" + app.rid}>
               <Media style={{"margin" : "5px"}} className="appIcon" id={mediaID} object src={app.iconURL} alt="App Icon" />
             </Link>
             <UncontrolledTooltip placement="bottom" delay={300} target={mediaID}>

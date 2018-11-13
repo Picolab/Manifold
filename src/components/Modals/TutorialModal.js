@@ -53,12 +53,4 @@ TutorialModal.propTypes = {
   toggleFunc: PropTypes.func.isRequired
 }
 
-const mapStateToProps = (state, ownProps) => {
-  return {}
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {}
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(TutorialModal)
+export default connect()(TutorialModal)

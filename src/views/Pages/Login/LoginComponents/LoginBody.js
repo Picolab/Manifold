@@ -59,7 +59,7 @@ class LoginBody extends Component {
           <p className="loginDevInfo">Manifold is currently under heavy development. Many apps and features are still forthcoming.</p>
           <hr style={{width: "100%", marginTop: "0.5rem"}}/>
         </Row>
-        <MeetTheTeam />
+        {/*<MeetTheTeam />*/}
       </Container>
     )
   }

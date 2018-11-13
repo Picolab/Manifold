@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import CustomComponentMap from '../Templates/customComponentMap';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react'
+import AppMap from '../Apps/AppMap'
+import PropTypes from 'prop-types'
 import ManifoldApp from '../Apps/ManifoldApp'
 
 export class CardBody extends Component {
@@ -8,9 +8,9 @@ export class CardBody extends Component {
   render() {
     let appInfo = this.props.appInfo;
     if(!appInfo.bindings){
-      return (<div>Missing bindings from the pico!</div>)
+      appInfo.bindings = {}; //default to an empty object
     }
-    const CustomComponent = CustomComponentMap[appInfo.rid];
+    const CustomComponent = AppMap[appInfo.rid];
     if(CustomComponent){
       return (
         <div>

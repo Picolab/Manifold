@@ -7,12 +7,12 @@ import AppMap from '../Apps/AppMap';
 
 class CardAppView extends Component {
   render() {
-    const { app, picoID } = this.props.match.params;
-    const AppView = AppMap[app];
+    const { appRid, picoID } = this.props.match.params;
+    const AppView = AppMap[appRid];
     return (
       <div>
         {AppView && <ManifoldApp picoID={picoID} developerComponent={AppView} bindings={{}}/>}
-        {!AppView && <div>Error! App for {app} not found...</div>}
+        {!AppView && <div>Error! App for {appRid} not found...</div>}
       </div>
     );
   }

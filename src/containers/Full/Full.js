@@ -47,7 +47,7 @@ class Full extends Component {
             <div className="container-fluid">
               <Switch>
                 <Route path="/dashboard" name="Dashboard" component={Dashboard}/>
-                <Route path="/mythings/:picoID/:app" name="Thing App View" component={CardAppView}/>
+                <Route path="/mythings/:picoID/:appRid" name="Thing App View" component={CardAppView}/>
                 <Route path="/mythings/:picoID" name="Card Overview" component={CardOverview}/>
                 <Route path="/mythings" name="My Things" component={MyThings}/>
                 <Route path="/communities" name="Communities" component={Communities}/>
