@@ -3,6 +3,7 @@ import {Container, Row, Col, ListGroup} from 'reactstrap';
 import IconInfo from './IconInfo';
 import GoogleSignIn from './GoogleSignIn';
 import MeetTheTeam from './MeetTheTeam';
+import GithubButton from './GithubButton';
 import '../loginStyles.css';
 
 class LoginBody extends Component {
@@ -51,12 +52,14 @@ class LoginBody extends Component {
         </Row>
         <Row className="centerRow" style={{ paddingTop: "10px" }}>
           <GoogleSignIn />
+          <div style={{width: "10px"}}></div>
+          <GithubButton />
         </Row>
         <Row className="centerRow">
-          <p className="popUpWarning">In order for Google sign in to work, you <b>MUST</b> enable popups on your browser</p>
+          <p className="popUpWarning">Not working? Try enabling popups on your browser</p>
         </Row>
         <Row className="centerRow">
-          <p className="loginDevInfo">Manifold is currently under heavy development. Many apps and features are still forthcoming.</p>
+          <p className="loginDevInfo">Manifold is currently under heavy development. Many apps and features are still forthcoming</p>
           <hr style={{width: "100%", marginTop: "0.5rem"}}/>
         </Row>
         {/*<MeetTheTeam />*/}
