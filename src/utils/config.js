@@ -12,7 +12,7 @@ export const CLIENT_SECRET = "";
 export const PROTOCOL_KEY = "http_protocol";
 //Production
 export const GOOGLE_ROOT_SECURED_DID = "VwvGB9gKoJmnG8LRLsRvzB"; //this is the secured DID to the google ruleset on the root pico
-export const GITHUB_ROOT_SECURED_DID = ""; //this is the secured DID to the github ruleset on the root pico
+export const GITHUB_ROOT_SECURED_DID = "8eWs4NYHiy3SqDEW4Jf1kU"; //this is the secured DID to the github ruleset on the root pico
 export const HTTP_PROTOCOL = "https://";
 export const HOST = "manifold.picolabs.io:9090";
 export const MANIFOLD_HOST = "manifold.picolabs.io";
