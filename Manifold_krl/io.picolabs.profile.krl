@@ -35,14 +35,15 @@ ruleset io.picolabs.profile {
     }
   }
 
+
   rule save_github_profile {
     select when profile github_profile_save
     pre {
       profile = event:attrs{"profile"}
       githubProfile = {
-        "displayName": profile["login"],
+        "displayName": profile["displayName"],
         "name": profile["name"],
-        "profileImgURL": profile["avatar_url"],
+        "profileImgURL": profile["profileImgURL"],
         "email": profile["email"]
       }
     }
