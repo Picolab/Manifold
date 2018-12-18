@@ -105,7 +105,7 @@ ruleset io.picolabs.github_signin {
       uuid = random:uuid()
     }
     if isValid && newContent then
-      send_directive("_redirect", { "url": <<http://localhost:3000/#/github/authsuccess/#{uuid}>> })
+      send_directive("_redirect", { "url": <<http://manifold.picolabs.io/#/github/authsuccess/#{uuid}>> })
     fired {
       raise owner event "creation"
         attributes {
