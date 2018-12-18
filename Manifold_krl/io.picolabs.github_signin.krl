@@ -18,7 +18,8 @@ ruleset io.picolabs.github_signin {
         "name": "only allow github authorized_user events",
         "event": {
             "allow": [
-                { "domain": "github", "type": "authorized_user"}
+                { "domain": "github", "type": "authorized_user"},
+                { "domain": "github", "type": "clear_uuid"}
             ]
         }
     }
@@ -118,7 +119,16 @@ ruleset io.picolabs.github_signin {
         "owner_id": newContent{"id"}.as("String"),
         "new_content": newContent,
         "githubProfile": githubProfile
-      }
+      };
+      schedule github event "clear_uuid" at time:add(time:now(), {"minutes": 1})
+        attributes { "uuid": uuid }
+    }
+  }
+
+  rule clearUUID {
+    select when github clear_uuid
+    always {
+      clear ent:pollData{[event:attr("uuid")]}
     }
   }
 
