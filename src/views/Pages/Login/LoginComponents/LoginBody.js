@@ -4,6 +4,7 @@ import IconInfo from './IconInfo';
 import GoogleSignIn from './GoogleSignIn';
 import MeetTheTeam from './MeetTheTeam';
 import GithubButton from './GithubButton';
+import { GITHUB_DEFINED } from '../../../../utils/config';
 import '../loginStyles.css';
 
 class LoginBody extends Component {
@@ -52,8 +53,8 @@ class LoginBody extends Component {
         </Row>
         <Row className="centerRow" style={{ paddingTop: "10px" }}>
           <GoogleSignIn />
-          <div style={{width: "10px"}}></div>
-          <GithubButton />
+          {GITHUB_DEFINED && <div style={{width: "10px"}}></div>}
+          {GITHUB_DEFINED && <GithubButton />}
         </Row>
         <Row className="centerRow">
           <p className="popUpWarning">Not working? Try enabling popups on your browser</p>
