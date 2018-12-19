@@ -13,12 +13,14 @@ export const PROTOCOL_KEY = "http_protocol";
 //Production
 export const GOOGLE_ROOT_SECURED_DID = "VwvGB9gKoJmnG8LRLsRvzB"; //this is the secured DID to the google ruleset on the root pico
 export const GITHUB_ROOT_SECURED_DID = "NBVihL6RPyLGDsKPBpMNgA"; //this is the secured DID to the github ruleset on the root pico
+export const GITHUB_DEFINED = true;
 export const HTTP_PROTOCOL = "https://";
 export const HOST = "manifold.picolabs.io:9090";
 export const MANIFOLD_HOST = "manifold.picolabs.io";
 
 //Development
 // export const GOOGLE_ROOT_SECURED_DID = "3PosMBtioarYrwdYFo6SG9"; //this is the secured DID to the google ruleset on the root pico
+// export const GITHUB_DEFINED = false;
 // export const GITHUB_ROOT_SECURED_DID = "NgzRKFXKYqG9gTeq3j9aNQ"; //this is the secured DID to the github ruleset on the root pico
 // export const HTTP_PROTOCOL = "http://";
 // export const HOST = "localhost:8080";
