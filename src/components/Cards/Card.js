@@ -66,6 +66,7 @@ class Card extends Component {
                                           dotClicked={this.handleCarouselDotClick}
                                           totalApps={this.props.installedApps.length}
                                           currentApp={this.state.currentApp}
+                                          allApps={this.props.installedApps}
                                         />}
         </div>
         <div className={(this.props.overlay && this.props.overlay.isActive ? "cardOverlay" : "")}></div>

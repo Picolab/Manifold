@@ -5,5 +5,5 @@ import HelloWorld from './Picolabs/HelloWorld/HelloWorld';
 export default {
   "io.picolabs.safeandmine" : SafeAndMineApp,
   "io.picolabs.journal" : JournalApp,
-  "io.picolabs.hello_world": HelloWorld
+  "io.picolabs.connor_tutorial": HelloWorld
 }
