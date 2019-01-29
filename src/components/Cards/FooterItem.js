@@ -19,7 +19,7 @@ class FooterItem extends Component {
       return(
         <btn className="circle-selected" id={mediaID} onClick={this.dotClicked}>
           <img src={this.props.allApps[this.props.index].iconURL} />
-          <UncontrolledTooltip placement="bottom" delay={500} target={mediaID}>
+          <UncontrolledTooltip placement="bottom" delay={800} target={mediaID}>
             {this.props.allApps[this.props.index].name}
           </UncontrolledTooltip>
         </btn>
@@ -28,7 +28,7 @@ class FooterItem extends Component {
       return(
         <btn className="circle" id={mediaID} onClick={this.dotClicked}>
           <img src={this.props.allApps[this.props.index].iconURL} />
-          <UncontrolledTooltip placement="bottom" delay={500} target={mediaID}>
+          <UncontrolledTooltip placement="bottom" delay={800} target={mediaID}>
             {this.props.allApps[this.props.index].name}
           </UncontrolledTooltip>
         </btn>
