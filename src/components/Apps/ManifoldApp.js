@@ -23,6 +23,8 @@ class ManifoldAppComponent extends Component {
     return customEvent(this.props.DID, event.domain, event.type, event.attrs, eid);
   }
 
+
+
   render() {
     let DeveloperComponent = this.props.developerComponent
     if(this.props.DID) {
