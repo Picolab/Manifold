@@ -11,12 +11,12 @@ ruleset io.picolabs.profile {
       //, { "domain": "d2", "type": "t2", "attrs": [ "a1", "a2" ] }
       ]
     }
-    
+
     getProfile = function() {
       ent:profile
     }
   }
-  
+
   rule save_google_profile {
     select when profile google_profile_save
     pre {
@@ -31,7 +31,25 @@ ruleset io.picolabs.profile {
     }
     if event:attr("profile") then noop();
     fired {
-      ent:profile := {}.put("google", googleProfile);
+      ent:profile := ent:profile.defaultsTo({}).put("google", googleProfile);
+    }
+  }
+
+
+  rule save_github_profile {
+    select when profile github_profile_save
+    pre {
+      profile = event:attrs{"profile"}
+      githubProfile = {
+        "displayName": profile["displayName"],
+        "name": profile["name"],
+        "profileImgURL": profile["profileImgURL"],
+        "email": profile["email"]
+      }
+    }
+    if event:attrs{"profile"} then noop()
+    fired {
+      ent:profile := ent:profile.defaultsTo({}).put("github", githubProfile);
     }
   }
 }

@@ -88,3 +88,33 @@
   margin-top: 8px;
   margin-left: 10px;
 }
+
+.githubBtn {
+  width: 240px;
+  height: 50px;
+  background-color: rgb(36, 41, 46);
+  color: #757575;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .25);
+  cursor: pointer;
+}
+
+.githubBtn:hover {
+  box-shadow: 0 0 3px 3px rgba(66,133,244,.3);
+  transition: background-color .218s, border-color .218s, box-shadow .218s;
+}
+
+.githubIcon {
+  float: left;
+  padding: 15px;
+  font-size: 22px;
+  color: white;
+}
+
+.githubText {
+  line-height: 48px;
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: .21px;
+  font-family: Roboto, arial, sans-serif;
+  color: white;
+}

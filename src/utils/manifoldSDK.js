@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { getHostname, getOwnerECI ,getManifoldECI} from './AuthService';
-import { HTTP_PROTOCOL, ROOT_SECURED_DID } from './config.js';
+import { HTTP_PROTOCOL, GOOGLE_ROOT_SECURED_DID, GITHUB_ROOT_SECURED_DID } from './config.js';
 
 export function sky_cloud(eci){ return `${HTTP_PROTOCOL}${getHostname()}/sky/cloud/${eci}`};
 export function sky_event(eci) { return `${HTTP_PROTOCOL}${getHostname()}/sky/event/${eci}`};
@@ -29,9 +29,18 @@ export function getManifoldInfo(){
   return axios.get(`${sky_cloud(getManifoldECI())}/io.picolabs.manifold_pico/getManifoldInfo`);
 }
 
+export function hasTutorial() {
+  return axios.get(`${sky_cloud(getManifoldECI())}/io.picolabs.manifold_pico/hasTutorial`);
+}
+
 export function retrieveOwnerDID(attrs) {
   const eventAttrs = encodeQueryData(attrs);
-  return axios.post(`${sky_event(ROOT_SECURED_DID)}/eid/google/owner_did_requested?${eventAttrs}`);
+  return axios.post(`${sky_event(GOOGLE_ROOT_SECURED_DID)}/eid/google/owner_did_requested?${eventAttrs}`);
+}
+
+export function retrieveGithubOwnerDID(attrs) {
+  const eventAttrs = encodeQueryData(attrs);
+  return axios.post(`${sky_event(GITHUB_ROOT_SECURED_DID)}/eid/github/owner_DID_requested?${eventAttrs}`);
 }
 
 export function retrieveManifoldEci(){
@@ -84,4 +93,39 @@ export function discovery(eci){
 
 export function installApp(eci,rid){
   return axios.post(`${sky_event(eci)}/Apps/manifold/installapp?rid=${rid}`);
+}
+
+//returns true if attemptNum is a number, eventFunction is a function, and eventAttrs is an object, else false
+function backoffParamsAreOK(attemptNum, eventFunction, eventAttrs) {
+  return false;
+}
+
+function linearBackoffHelper(attemptNum, eventFunction, eventAttrs) {
+  if(!backoffParamsAreOK(attemptNum, eventFunction, eventAttrs)) {
+    return;
+  }
+  if(attemptNum > 2) {
+    console.error("Last attempt to retrieve owner DID failed 😭");
+    return;
+  }
+  //linear backoff... wait for a calculated number of milliseconds depending on which attempt this is.
+  setTimeout(() => {
+
+    const eventPromise = eventFunction(eventAttrs);
+    eventPromise.then((resp) => {
+      const successfull_response = false;
+      if(successfull_response) {
+
+      }else {
+        //we need to try again
+        this.linearBackoffHelper(attemptNum + 1, eventFunction, eventAttrs);
+      }
+    }).catch((e) => {
+      console.error(e);
+    });
+  }, attemptNum * 1000);
+}
+
+export function linearEventBackoff(eventFunction, eventAttrs) {
+  return linearBackoffHelper(0, eventFunction, eventAttrs)
 }

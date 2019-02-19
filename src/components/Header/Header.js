@@ -59,6 +59,11 @@ class Header extends Component {
           displayName: profile.google.displayName,
           imgURL: profile.google.profileImgURL
         })
+      } else if(profile.github) {
+        this.setState({
+          displayName: profile.github.displayName,
+          imgURL: profile.github.profileImgURL
+        })
       }
     }).catch((e) => {
       console.error(e);

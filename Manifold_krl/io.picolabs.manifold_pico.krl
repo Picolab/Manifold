@@ -14,13 +14,15 @@ ruleset io.picolabs.manifold_pico {
         "events": [ { "domain": "manifold", "type": "create_thing",
                       "attrs": [ "name" ] },
                     { "domain": "manifold", "type": "devReset",
-                      "attrs": [ ] }] }
+                      "attrs": [ ] }
+                      ,{ "domain": "manifold", "type": "change_thing_name",
+                      "attrs": [ "picoID", "changedName" ] }] }
 
     thingRids = "io.picolabs.thing;io.picolabs.subscription"
     communityRids = "io.picolabs.community;io.picolabs.subscription"
     thing_role = "manifold_thing"
     community_role = "manifold_community"
-    max_picos = 30
+    max_picos = 100
 
     getManifoldInfo = function() {
       {
@@ -34,6 +36,10 @@ ruleset io.picolabs.manifold_pico {
         sub = subscription:established("Id", value{"subID"})[0];
         sub.put(value)
       })
+    }
+
+    hasTutorial = function() {
+      ent:tutorial.defaultsTo(false);
     }
 
     getCommunities = function() {
@@ -84,7 +90,7 @@ ruleset io.picolabs.manifold_pico {
 
   rule createThing {
     select when manifold create_thing
-    if event:attr("name") && wrangler:children().length() <= 30 then
+    if event:attr("name") && wrangler:children().length() < max_picos then
       send_directive("Attempting to create new Thing", { "thing":event:attr("name") })
     fired {
       raise wrangler event "new_child_request"
@@ -152,23 +158,23 @@ ruleset io.picolabs.manifold_pico {
   }
 
   rule removeThingSubscription {
-      select when manifold remove_thing
-      pre {
-        picoID = event:attr("picoID");
-        subID = subIDFromPicoID(picoID, ent:things).klog("found subID: ");
-        sub = subscription:established("Id", subID)[0].klog("found sub: ");
-      }
-
-      if picoID && subID && sub then
-        every {
-          event:send({ "eci" : sub{"Tx"}, "domain" : "apps", "type" : "cleanup", "attrs" : {} }); //Jace added this event send to allow each app a chance to clean up.
-          send_directive("Attempting to cancel subscription to Thing", { "thing": ent:things{[picoID, "name"]} })
-        }
-      fired {
-        raise wrangler event "subscription_cancellation"
-          attributes {"Id": sub{"Id"}, "picoID": picoID, "event_type": "thing_deletion"}
-      }
+    select when manifold remove_thing
+    pre {
+      picoID = event:attr("picoID");
+      subID = subIDFromPicoID(picoID, ent:things).klog("found subID: ");
+      sub = subscription:established("Id", subID)[0].klog("found sub: ");
     }
+
+    if picoID && subID && sub then
+      every {
+        event:send({ "eci" : sub{"Tx"}, "domain" : "apps", "type" : "cleanup", "attrs" : {} }); //Jace added this event send to allow each app a chance to clean up.
+        send_directive("Attempting to cancel subscription to Thing", { "thing": ent:things{[picoID, "name"]} })
+      }
+    fired {
+      raise wrangler event "subscription_cancellation"
+        attributes {"Id": sub{"Id"}, "picoID": picoID, "event_type": "thing_deletion"}
+    }
+  }
   rule deleteThing {
     select when wrangler subscription_removed where event:attr("event_type") == "thing_deletion"
     pre {
@@ -270,7 +276,7 @@ ruleset io.picolabs.manifold_pico {
     }
 
     if not (picoID.isnull() || changedName.isnull()) then
-      noop();
+      send_directive("THINGS", { "things list" : ent:things });
 
     fired {
       ent:things := ent:things.put([picoID, "name"], changedName);

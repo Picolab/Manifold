@@ -87,7 +87,7 @@ ruleset io.picolabs.google_signin {
       //   attributes {"eci": new_channel{"id"}};
     }
   }
-  
+
   rule manifoldPicoChannelExpiration {
     select when owner authenticate_channel_expired
     pre {
@@ -100,7 +100,7 @@ ruleset io.picolabs.google_signin {
   }
 
   rule requestNewOwnerPico {
-    select when owner no_such_owner_id
+    select when owner no_such_owner_id where event:attr("request_type") == "google_signin"
     pre {
       account_id = event:attr("resp_content"){"sub"}; //not really sure why google called it sub...
     }

@@ -48,6 +48,7 @@ export class TutorialModal extends Component {
 }
 
 TutorialModal.propTypes = {
+  //parent provides these
   modalOn: PropTypes.bool.isRequired,
   toggleFunc: PropTypes.func.isRequired
 }

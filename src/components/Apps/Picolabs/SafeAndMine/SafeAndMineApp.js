@@ -130,12 +130,12 @@ export class SafeAndMineApp extends Component {
 
   registerTag(e) {
     e.preventDefault();
-    if (this.state.tagID.length !== TAG_CHAR_LENGTH) {
+    /*if (this.state.tagID.length !== TAG_CHAR_LENGTH) {
       this.setState({
         validTagId: false
       })
       return;
-    }
+    }*/
     this.setState({validTagId: true})
     const promise = this.props.signalEvent({
       domain: "safeandmine",
