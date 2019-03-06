@@ -95,6 +95,12 @@ export function installApp(eci,rid){
   return axios.post(`${sky_event(eci)}/Apps/manifold/installapp?rid=${rid}`);
 }
 
+export function getCookie(name) {
+  var value = "; " + document.cookie;
+  var parts = value.split("; " + name + "=");
+  if (parts.length == 2) return parts.pop().split(";").shift();
+}
+
 //returns true if attemptNum is a number, eventFunction is a function, and eventAttrs is an object, else false
 function backoffParamsAreOK(attemptNum, eventFunction, eventAttrs) {
   return false;

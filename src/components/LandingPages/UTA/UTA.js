@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import SearchBar from './SearchBar';
 import RouteList from './RouteList';
 import GMap from './GMap';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { customQuery, customEvent } from '../../../utils/manifoldSDK';
 import queryString from 'query-string';
+import RegistryModal from './RegistryModal';
 import './UTA.css';
 
 class UTA extends Component {
@@ -24,11 +24,7 @@ class UTA extends Component {
     this.searchStop(this.state.stopCode);
   }
 
-  getCookie(name) {
-    var value = "; " + document.cookie;
-    var parts = value.split("; " + name + "=");
-    if (parts.length == 2) return parts.pop().split(";").shift();
-  }
+
 
   searchStop(sCode) {
 /*
@@ -62,13 +58,14 @@ class UTA extends Component {
   render() {
     return (
       <div className='shortenedWidth'>
+      <RegistryModal />
         {this.state.stopInfo.name && <h3>{this.camelCase(this.state.stopInfo.name)}</h3>}
 
         {this.state.stopInfo.lat && this.state.stopInfo.lon && <GMap
           lat={parseFloat(this.state.stopInfo.lat)}
           lon={parseFloat(this.state.stopInfo.lon)}
           isMarkerShown
-          googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUqjy3Fl507TdKgyAydFwsrqqB-k6E6vg&v=3.exp&libraries=geometry,drawing,places"
+          googleMapURL="https://maps.googleapis.com/maps/api/js?key=&v=3.exp&libraries=geometry,drawing,places"
           loadingElement={<div style={{ height: `100%` }} />}
           containerElement={<div style={{ height: `300px` }} />}
           mapElement={<div style={{ height: `100%` }} />}/>}
