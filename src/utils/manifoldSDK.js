@@ -22,7 +22,7 @@ export function customEvent(eci, domain, type, attributes, eid){
 
 export function customQuery(eci, ruleset, funcName, params){
   const parameters = encodeQueryData(params);
-  return axios.get(`${sky_cloud(eci)}/${ruleset}/${funcName}/${parameters}`);
+  return axios.get(`${sky_cloud(eci)}/${ruleset}/${funcName}/?${parameters}`);
 }
 
 export function getManifoldInfo(){
