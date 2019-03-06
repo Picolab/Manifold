@@ -7,7 +7,7 @@ import DominosPizzaApp from './Picolabs/DominosPizza/DominosPizzaApp';
 export default {
   "io.picolabs.safeandmine" : SafeAndMineApp,
   "io.picolabs.journal" : JournalApp,
-  "io.picolabs.uta": UTA
+  "io.picolabs.uta": UTA,
   "io.picolabs.score_tracker": ScoreTracker,
   "io.picolabs.pizza": DominosPizzaApp
 }
