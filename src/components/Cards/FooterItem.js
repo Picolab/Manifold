@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { UncontrolledTooltip } from 'reactstrap';
 
 class FooterItem extends Component {
   constructor(props){
@@ -13,13 +14,24 @@ class FooterItem extends Component {
   }
 
   render(){
+    const mediaID = "iconMedia" + this.props.index;
     if(this.props.index === this.props.currentApp){
       return(
-        <btn className="circle-selected" onClick={this.dotClicked}></btn>
+        <btn className="circle-selected" id={mediaID} onClick={this.dotClicked}>
+          <img src={this.props.allApps[this.props.index].iconURL} style= {{width: 30}} />
+          <UncontrolledTooltip placement="bottom" delay={800} target={mediaID}>
+            {this.props.allApps[this.props.index].name}
+          </UncontrolledTooltip>
+        </btn>
       );
     }else{
       return(
-        <btn className="circle" onClick={this.dotClicked}></btn>
+        <btn className="circle" id={mediaID} onClick={this.dotClicked}>
+          <img src={this.props.allApps[this.props.index].iconURL} style= {{width: 25}} />
+          <UncontrolledTooltip placement="bottom" delay={800} target={mediaID}>
+            {this.props.allApps[this.props.index].name}
+          </UncontrolledTooltip>
+        </btn>
       );
     }
   }

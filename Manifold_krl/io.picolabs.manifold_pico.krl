@@ -22,7 +22,7 @@ ruleset io.picolabs.manifold_pico {
     communityRids = "io.picolabs.community;io.picolabs.subscription"
     thing_role = "manifold_thing"
     community_role = "manifold_community"
-    max_picos = 30
+    max_picos = 100
 
     getManifoldInfo = function() {
       {
@@ -90,7 +90,7 @@ ruleset io.picolabs.manifold_pico {
 
   rule createThing {
     select when manifold create_thing
-    if event:attr("name") && wrangler:children().length() <= 30 then
+    if event:attr("name") && wrangler:children().length() < max_picos then
       send_directive("Attempting to create new Thing", { "thing":event:attr("name") })
     fired {
       raise wrangler event "new_child_request"

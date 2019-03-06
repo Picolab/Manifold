@@ -5,6 +5,7 @@ import CardHeader from './CardHeader';
 import CardBody from './CardBody';
 import PropTypes from 'prop-types';
 import './cardStyles.css';
+import './cardsStyle.css';
 import { discovery } from '../../actions';
 import { getInstalledApps, getDID, getColor } from '../../reducers';
 
@@ -66,6 +67,7 @@ class Card extends Component {
                                           dotClicked={this.handleCarouselDotClick}
                                           totalApps={this.props.installedApps.length}
                                           currentApp={this.state.currentApp}
+                                          allApps={this.props.installedApps}
                                         />}
         </div>
         <div className={(this.props.overlay && this.props.overlay.isActive ? "cardOverlay" : "")}></div>

@@ -12,11 +12,32 @@ class ManifoldAppComponent extends Component {
     this.signalEvent = this.signalEvent.bind(this);
   }
 
+  /*
+  query looks like this:
+  {
+    funcArgs: {
+      key1: value1 //put key value argument pairings here
+    }, OPTIONAL
+    rid: <string>,
+    funcName: <string>
+  }
+  */
   manifoldQuery(query, options) {
     const funcArgs = query.funcArgs || {};
     return customQuery(this.props.DID, query.rid, query.funcName, funcArgs);
   }
 
+  /*
+  event looks like this:
+  {
+    domain: <string>,
+    type: <string>,
+    attrs: {
+      key/value pairs here
+    },
+    eid: <string> OPTIONAL
+  }
+  */
   signalEvent(event) {
     const eid = event.eid || "CustomEvent";
     //provide checks to make sure everything valid is provided

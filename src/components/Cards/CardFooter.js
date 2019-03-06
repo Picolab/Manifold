@@ -22,6 +22,7 @@ class CardFooter extends Component{
           key={i}
           index={i}
           currentApp={this.props.currentApp}
+          allApps={this.props.allApps}
         />
       )
     }

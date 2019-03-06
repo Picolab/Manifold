@@ -6,27 +6,70 @@ import MyThingsHeader from '../../components/MyThingsComponents/MyThingsHeader';
 import { getThingIdList } from '../../reducers';
 import MediaQuery from 'react-responsive';
 import PropTypes from 'prop-types';
+import Header from '../../components/Header/Header';
+import { Dropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap';
 
 export class MyThings extends Component {
+  state = { thingsSize: 'Grid', dropdownOpen: false};
   renderGrid(){
+    this.toggle = this.toggle.bind(this);
     //make sure the things object really exists before trying to display them
     if(this.props.thingIdList.length > 0) {
-      return (
-        <div>
-          <MediaQuery minWidth={1224}>
-            <CardGrid idList={this.props.thingIdList} cardType="Thing"/>
-          </MediaQuery>
-
-          <MediaQuery maxWidth={1223}>
-            <CardList idList={this.props.thingIdList}/>
-          </MediaQuery>
-        </div>
-      )
+        if(this.state.thingsSize === 'List') {
+          return (
+            <div>
+              {this.loadDropdown()}
+              <CardList idList={this.props.thingIdList}/>
+            </div>
+          );
+        }else{
+          return (
+            <div>
+              <MediaQuery minWidth={1224}>
+                {this.loadDropdown()}
+                <CardGrid idList={this.props.thingIdList} cardType="Thing"/>
+              </MediaQuery>
+              <MediaQuery maxWidth={1223}>
+                <CardList idList={this.props.thingIdList}/>
+              </MediaQuery>
+            </div>
+          );
+        }
     }else{
       return (
         <div></div>
       )
     }
+  }
+
+  loadDropdown() {
+    return (
+      <div>
+        <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+        <DropdownToggle caret>
+          {this.state.thingsSize} View
+        </DropdownToggle>
+        <DropdownMenu>
+          <DropdownItem onClick={this.changeThingsSize}>{this.state.thingsSize === 'Grid' ? 'List' : 'Grid'}</DropdownItem>
+        </DropdownMenu>
+        </Dropdown>
+      </div>
+    );
+  }
+
+  changeThingsSize = () => {
+    if(this.state.thingsSize === 'Grid') {
+      this.setState({thingsSize: 'List'});
+    }
+    else if(this.state.thingsSize === 'List') {
+      this.setState({thingsSize: 'Grid'});
+    }
+  }
+
+  toggle() {
+    this.setState(prevState => ({
+      dropdownOpen: !prevState.dropdownOpen
+    }));
   }
 
   render(){

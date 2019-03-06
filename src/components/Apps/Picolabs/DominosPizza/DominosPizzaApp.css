@@ -1,0 +1,18 @@
+.logoImage {
+  margin-left: 150px;
+  width: 200px;
+  height: auto;
+}
+
+.stickOutText {
+  color:black;
+  font-weight:bold;
+}
+
+.shortenedWidth {
+  max-width: 500px;
+}
+
+.select {
+  width:100px;
+}
