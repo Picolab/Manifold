@@ -58,8 +58,14 @@ class RegistryModal extends Component {
     if(!this.state.recoveryCode) {
       return; //missing attributes...
     }
-    this.setState({open: (getTracker()) ? false : true});
-    console.log(this.state.recoveryCode);
+    var promise = customEvent("Er4b4f7hSZLrvQ72tCK85T", "score", "recovery_needed", {first: this.state.first, last: this.state.last, recoveryCode: this.state.recoveryCode}, "recover")
+
+    promise.then((resp) => {
+      let cookie = resp.data.directives[0].options.cookie;
+      window.localStorage.setItem("scoreTracker", cookie.split(";")[0].split("=")[1]);
+      this.setState({open : (getTracker()) ? false : true});
+    });
+
   }
 
   switchViews() {
@@ -115,6 +121,14 @@ class RegistryModal extends Component {
       <ModalBody>
         <Form>
           <FormGroup>
+            <Label for="first">First Name</Label>
+            <Input type="text" name="firstName" id="first" placeholder="ex. John" onChange={this.onChange('first')} value={this.state.first}/>
+          </FormGroup>
+          <FormGroup>
+            <Label for="last">Last Name</Label>
+            <Input type="text" name="lastName" id="last" placeholder="ex. Smith" onChange={this.onChange('last')} value={this.state.last}/>
+          </FormGroup>
+          <FormGroup>
             <Label for="recoveryCode">Recovery Code</Label>
             <Input type="text" name="recoveryCode" id="recoveryCode" placeholder="xxxx-xxxxx-xxxxx" value={this.state.recoveryCode} onChange={this.onChange('recoveryCode')}/>
           </FormGroup>
@@ -131,11 +145,9 @@ class RegistryModal extends Component {
   render() {
     return(
       <div>
-
         <Modal isOpen={this.state.open} >
-        {this.modal()}
+          {this.modal()}
         </Modal>
-
       </div>
     );
   }
