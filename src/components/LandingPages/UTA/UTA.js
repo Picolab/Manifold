@@ -6,6 +6,7 @@ import { customQuery, customEvent } from '../../../utils/manifoldSDK';
 import queryString from 'query-string';
 import RegistryModal from './RegistryModal';
 import './UTA.css';
+import { GOOGLE_MAP_KEY } from '../../../utils/config';
 
 class UTA extends Component {
   constructor(props) {
@@ -56,6 +57,7 @@ class UTA extends Component {
   }
 
   render() {
+    const url = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAP_KEY}&v=3.exp&libraries=geometry,drawing,places`;
     return (
       <div className='shortenedWidth'>
       <RegistryModal />
@@ -65,12 +67,12 @@ class UTA extends Component {
           lat={parseFloat(this.state.stopInfo.lat)}
           lon={parseFloat(this.state.stopInfo.lon)}
           isMarkerShown
-          googleMapURL="https://maps.googleapis.com/maps/api/js?key=&v=3.exp&libraries=geometry,drawing,places"
+          googleMapURL={url}
           loadingElement={<div style={{ height: `100%` }} />}
           containerElement={<div style={{ height: `300px` }} />}
           mapElement={<div style={{ height: `100%` }} />}/>}
 
-        {this.state.stopInfo.routes_array && <br></br> && <RouteList Routes={this.state.stopInfo.routes_array} />}
+        {this.state.stopInfo.routes_array && <br></br> && <RouteList Routes={this.state.stopInfo.routes_array} className='listGroup' />}
         <br></br>
         <SearchBar search={this.searchStop}/>
 

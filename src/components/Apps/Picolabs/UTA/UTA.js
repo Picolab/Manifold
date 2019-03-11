@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import SearchBar from './SearchBar';
 import RouteList from './RouteList';
 import GMap from './GMap';
+import { GOOGLE_MAP_KEY } from '../../../../utils/config';
 import './UTA.css';
 
 class UTA extends Component {
@@ -42,6 +43,7 @@ class UTA extends Component {
   }
 
   render() {
+    const url = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAP_KEY}&v=3.exp&libraries=geometry,drawing,places`;
     return (
       <div className='shortenedWidth'>
         {this.state.stopInfo.name && <h3>{this.camelCase(this.state.stopInfo.name)}</h3>}
@@ -50,7 +52,7 @@ class UTA extends Component {
           lat={parseFloat(this.state.stopInfo.lat)}
           lon={parseFloat(this.state.stopInfo.lon)}
           isMarkerShown
-          googleMapURL="https://maps.googleapis.com/maps/api/js?key=&v=3.exp&libraries=geometry,drawing,places"
+          googleMapURL={url}
           loadingElement={<div style={{ height: `100%` }} />}
           containerElement={<div style={{ height: `300px` }} />}
           mapElement={<div style={{ height: `100%` }} />}/>}
