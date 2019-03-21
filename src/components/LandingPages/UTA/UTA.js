@@ -8,6 +8,8 @@ import RegistryModal from './RegistryModal';
 import './UTA.css';
 import { GOOGLE_MAP_KEY } from '../../../utils/config';
 
+const BUS_DID = "Gie2vVXqrzEpdhznYcS8f2";
+
 class UTA extends Component {
   constructor(props) {
     super(props);
@@ -29,7 +31,7 @@ class UTA extends Component {
   }
 
   getStanding() {
-    const promise = customQuery("Er4b4f7hSZLrvQ72tCK85T", "io.picolabs.score_wrapper", "currentStanding", { scoreTracker: window.localStorage.getItem("scoreTracker") });
+    const promise = customQuery(BUS_DID, "io.picolabs.score_wrapper", "currentStanding", { scoreTracker: window.localStorage.getItem("scoreTracker") });
 
     promise.then((resp) => {this.setState({player : resp.data});}).catch((e) => {
       console.error("Error loading player info: ", e);
@@ -47,7 +49,7 @@ class UTA extends Component {
       });
       */
 
-    const promise = customEvent("Er4b4f7hSZLrvQ72tCK85T", "uta", "get_times", { stop_code : sCode}, "get_times").then((resp) => {
+    const promise = customEvent(BUS_DID, "uta", "get_times", { stop_code : sCode}, "get_times").then((resp) => {
       this.setState({stopInfo : resp.data.directives[0].options, stopCode : sCode });
     }).catch((e) => {
       console.error("Error loading uta: ", e);

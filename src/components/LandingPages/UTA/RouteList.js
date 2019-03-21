@@ -3,6 +3,8 @@ import { Collapse, ListGroup, ListGroupItem, Button } from 'reactstrap';
 import { customEvent } from '../../../utils/manifoldSDK';
 import './UTA.css';
 
+const SCORE_WRAPPER_DID = "NoTRseQdso3LeRSQUXiQ6y";
+
 class RouteList extends Component {
   constructor (props) {
     super(props);
@@ -45,7 +47,7 @@ class RouteList extends Component {
   }
 
   takeBus() {
-    let promise = customEvent("XoX1STRX5b1QzYZKLzKTxc", "score_wrapper", "new_points", { scoreTracker: window.localStorage.getItem("scoreTracker"), points : 1, descr : this.props.stopCode }, "take_bus");
+    let promise = customEvent(SCORE_WRAPPER_DID, "score_wrapper", "new_points", { scoreTracker: window.localStorage.getItem("scoreTracker"), points : 1, descr : this.props.stopCode }, "take_bus");
     promise.then((resp) => {
       console.log("score recorded")
       this.setState({disabled: true});
