@@ -8,7 +8,7 @@ import RegistryModal from './RegistryModal';
 import './UTA.css';
 import { GOOGLE_MAP_KEY } from '../../../utils/config';
 
-const BUS_DID = "Gie2vVXqrzEpdhznYcS8f2";
+const BUS_DID = "NoTRseQdso3LeRSQUXiQ6y";
 
 class UTA extends Component {
   constructor(props) {
