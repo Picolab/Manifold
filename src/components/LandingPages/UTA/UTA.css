@@ -8,13 +8,24 @@
 }
 
 .eta {
-  margin-bottom: 0px;
-  padding-top: 0px;
-  padding-bottom: 0px;
+  margin-top: 5px;
+  margin-right: 10px;
   float:right;
+  padding: 7px;
+
 }
 
 .minimize {
   display: inline;
   margin-right: 2px;
+}
+
+.listItems {
+  padding: 0px;
+  height: 45px;
+}
+
+.insideItem {
+  margin: 10px;
+  display: inline-block;
 }

@@ -45,12 +45,13 @@ class RegistryModal extends Component {
     if(!this.state.first || !this.state.last || !this.state.phoneNum) {
       return; //missing attributes...
     }
-    var promise = customEvent("Er4b4f7hSZLrvQ72tCK85T", "score", "new_participant", {first: this.state.first, last: this.state.last, phoneNum: this.state.phoneNum}, "register")
+    var promise = customEvent("XoX1STRX5b1QzYZKLzKTxc", "score_wrapper", "new_participant", {first: this.state.first, last: this.state.last, phoneNum: this.state.phoneNum}, "register")
 
     promise.then((resp) => {
       let cookie = resp.data.directives[0].options.cookie;
       window.localStorage.setItem("scoreTracker", cookie.split(";")[0].split("=")[1]);
       this.setState({open : (getTracker()) ? false : true});
+      this.props.getStanding();
     });
   }
 
@@ -58,7 +59,7 @@ class RegistryModal extends Component {
     if(!this.state.recoveryCode) {
       return; //missing attributes...
     }
-    var promise = customEvent("Er4b4f7hSZLrvQ72tCK85T", "score", "recovery_needed", {first: this.state.first, last: this.state.last, recoveryCode: this.state.recoveryCode}, "recover")
+    var promise = customEvent("XoX1STRX5b1QzYZKLzKTxc", "score_wrapper", "recovery_needed", {first: this.state.first, last: this.state.last, recoveryCode: this.state.recoveryCode}, "recover")
 
     promise.then((resp) => {
       let cookie = resp.data.directives[0].options.cookie;
