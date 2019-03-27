@@ -9,6 +9,7 @@ import './UTA.css';
 import { GOOGLE_MAP_KEY } from '../../../utils/config';
 
 const BUS_DID = "NoTRseQdso3LeRSQUXiQ6y";
+const SCORE_WRAPPER_DID = "E9wYHmbefPCKrecyj5wToE";
 
 class UTA extends Component {
   constructor(props) {
@@ -31,7 +32,7 @@ class UTA extends Component {
   }
 
   getStanding() {
-    const promise = customQuery(BUS_DID, "io.picolabs.score_wrapper", "currentStanding", { scoreTracker: window.localStorage.getItem("scoreTracker") });
+    const promise = customQuery(SCORE_WRAPPER_DID, "io.picolabs.score_wrapper", "currentStanding", { scoreTracker: window.localStorage.getItem("scoreTracker") });
 
     promise.then((resp) => {this.setState({player : resp.data});}).catch((e) => {
       console.error("Error loading player info: ", e);
