@@ -19,9 +19,11 @@ export const HOST = "manifold.picolabs.io:9090";
 export const MANIFOLD_HOST = "manifold.picolabs.io";
 
 //Development
-/*export const GOOGLE_ROOT_SECURED_DID = "XiqX9UQAVDCJUk9BqrU2M3"; //this is the secured DID to the google ruleset on the root pico
+/*
+export const GOOGLE_ROOT_SECURED_DID = "XiqX9UQAVDCJUk9BqrU2M3"; //this is the secured DID to the google ruleset on the root pico
 export const GITHUB_DEFINED = false;
 export const GITHUB_ROOT_SECURED_DID = "NgzRKFXKYqG9gTeq3j9aNQ"; //this is the secured DID to the github ruleset on the root pico
 export const HTTP_PROTOCOL = "http://";
 export const HOST = "localhost:8080";
-export const MANIFOLD_HOST = "localhost:3000";*/
+export const MANIFOLD_HOST = "localhost:3000";
+*/
