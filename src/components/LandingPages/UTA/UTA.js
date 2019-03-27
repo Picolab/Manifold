@@ -91,6 +91,9 @@ class UTA extends Component {
 
   render() {
     const url = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAP_KEY}&v=3.exp&libraries=geometry,drawing,places`;
+   
+    console.log("api key", process.env.REACT_APP_GOOGLE_MAP_KEY);
+
     return (
       <div className='shortenedWidth'>
         <RegistryModal getStanding={this.getStanding} />
