@@ -3,7 +3,7 @@ import { Collapse, ListGroup, ListGroupItem, Button } from 'reactstrap';
 import { customEvent } from '../../../utils/manifoldSDK';
 import './UTA.css';
 
-const SCORE_WRAPPER_DID = "Gie2vVXqrzEpdhznYcS8f2";
+const SCORE_WRAPPER_DID = "E9wYHmbefPCKrecyj5wToE";
 
 class RouteList extends Component {
   constructor (props) {
