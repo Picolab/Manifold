@@ -89,6 +89,7 @@ class UTA extends Component {
   }
 
   createRankAndScoreStatement(player) {
+    if(player.points == null || player.points === 0) return "You have 0 points!";
     let statement = "You are currently ";
 
     if(player.tied) statement += "tied for ";
@@ -98,7 +99,8 @@ class UTA extends Component {
     statement += " place with ";
 
     statement += player.points;
-    statement += " points!";
+    if(player.points === 1) statement += " point!";
+    else  statement += " points!";
 
 
     return statement;
@@ -112,7 +114,7 @@ class UTA extends Component {
       <div className='shortenedWidth'>
         <RegistryModal getStanding={this.getStanding} />
         {this.state.player.first && <h2>Signed in as {this.state.player.first + " " + this.state.player.last} </h2>}
-        {this.state.player.points && <h5>{this.createRankAndScoreStatement(this.state.player)}</h5>}
+        {this.state.player && <h5>{this.createRankAndScoreStatement(this.state.player)}</h5>}
         {this.state.stopInfo.name && <h3>{this.camelCase(this.state.stopInfo.name)}</h3>}
 
         {this.state.stopInfo.lat && this.state.stopInfo.lon && <GMap
