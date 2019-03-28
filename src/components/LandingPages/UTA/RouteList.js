@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Collapse, ListGroup, ListGroupItem, Button } from 'reactstrap';
 import { customEvent } from '../../../utils/manifoldSDK';
+import { SCORE_WRAPPER_DID } from '../../../utils/config.js';
 import './UTA.css';
 
-const SCORE_WRAPPER_DID = "E9wYHmbefPCKrecyj5wToE";
+
 
 class RouteList extends Component {
   constructor (props) {

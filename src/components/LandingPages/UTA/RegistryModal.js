@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input } from 'reactstrap';
 import { customEvent } from '../../../utils/manifoldSDK';
-
-const SCORE_WRAPPER_DID = "E9wYHmbefPCKrecyj5wToE";
+import { SCORE_WRAPPER_DID } from '../../../utils/config.js';
 
 function getTracker() {
   let stored = localStorage.getItem("scoreTracker");

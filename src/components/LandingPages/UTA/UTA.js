@@ -6,10 +6,7 @@ import { customQuery, customEvent } from '../../../utils/manifoldSDK';
 import queryString from 'query-string';
 import RegistryModal from './RegistryModal';
 import './UTA.css';
-import { GOOGLE_MAP_KEY } from '../../../utils/config';
-
-const BUS_DID = "NoTRseQdso3LeRSQUXiQ6y";
-const SCORE_WRAPPER_DID = "E9wYHmbefPCKrecyj5wToE";
+import { GOOGLE_MAP_KEY, BUS_DID, SCORE_WRAPPER_DID } from '../../../utils/config';
 
 class UTA extends Component {
   constructor(props) {
@@ -71,7 +68,24 @@ class UTA extends Component {
   }
 
   addRankSuffix(rank) {
-    return rank + "th";
+    if (rank.toString().length > 1 && rank.toString().slice(-2).charAt(0) == '1') return rank + "th";
+    var lastLetter = rank.toString().slice(-1);
+
+    switch (lastLetter) {
+      case "1":
+      return rank + "st";
+
+      case "2":
+      return rank + "nd";
+
+      case "3":
+      return rank + "rd";
+
+      default:
+      return rank + "th";
+    }
+
+    return "\"" + lastLetter + "\"";
   }
 
   createRankAndScoreStatement(player) {
@@ -92,14 +106,13 @@ class UTA extends Component {
 
   render() {
     const url = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAP_KEY}&v=3.exp&libraries=geometry,drawing,places`;
-   
-    console.log("api key", process.env.REACT_APP_GOOGLE_MAP_KEY);
+
 
     return (
       <div className='shortenedWidth'>
         <RegistryModal getStanding={this.getStanding} />
         {this.state.player.first && <h2>Signed in as {this.state.player.first + " " + this.state.player.last} </h2>}
-        <h5>{this.createRankAndScoreStatement(this.state.player)}</h5>
+        {this.state.player.points && <h5>{this.createRankAndScoreStatement(this.state.player)}</h5>}
         {this.state.stopInfo.name && <h3>{this.camelCase(this.state.stopInfo.name)}</h3>}
 
         {this.state.stopInfo.lat && this.state.stopInfo.lon && <GMap
