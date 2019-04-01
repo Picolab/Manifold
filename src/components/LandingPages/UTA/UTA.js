@@ -89,7 +89,7 @@ class UTA extends Component {
   }
 
   createRankAndScoreStatement(player) {
-    if(player.points == null || player.points === 0) return "You have 0 points!";
+    if(!player.points || player.points === -1) return "You have 0 points!";
     let statement = "You are currently ";
 
     if(player.tied) statement += "tied for ";
@@ -126,9 +126,9 @@ class UTA extends Component {
           containerElement={<div style={{ height: `300px` }} />}
           mapElement={<div style={{ height: `100%` }} />}/>}
 
-        {this.state.stopInfo.routes_array && <br></br> && <RouteList getStanding={this.getStanding} Routes={this.state.stopInfo.routes_array} stopCode={this.state.stopCode} className='listGroup' />}
+        {this.state.stopInfo.routes_array && <RouteList getStanding={this.getStanding} Routes={this.state.stopInfo.routes_array} stopCode={this.state.stopCode} className='listGroup' />}
         <br></br>
-        <SearchBar search={this.searchStop}/>
+        {/*<SearchBar search={this.searchStop}/>*/}
 
       </div>
     )

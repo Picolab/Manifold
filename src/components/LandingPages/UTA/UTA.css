@@ -4,7 +4,7 @@
 }
 
 .listGroup {
-  margin: 10px;
+
 }
 
 .eta {
@@ -12,7 +12,7 @@
   margin-right: 10px;
   float:right;
   padding: 7px;
-
+  margin-bottom: 0px
 }
 
 .minimize {

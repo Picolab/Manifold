@@ -23,8 +23,8 @@ class RouteList extends Component {
   generateList() {
     return Object.keys(this.props.Routes).map((x) => {
       return(
-        <div onClick={this.clicked}>
-          <ListGroupItem className="listItems">
+        <div onClick={this.clicked} style={{marginTop: "20px"}}>
+          <ListGroupItem className="listItems" >
             <div>
               <div className="insideItem">
                 {this.minimize(x)}<b>{x}</b>
@@ -53,6 +53,9 @@ class RouteList extends Component {
       console.log("score recorded")
       this.setState({disabled: true});
       this.props.getStanding();
+      if(resp.data.directives[0] && resp.data.directives[0].name === "Already Earned") {
+        alert("You've already taken a bus from this stop in the last 3 minutes.");
+      }
     })
     console.log("taken");
   }
