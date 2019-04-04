@@ -197,9 +197,9 @@ export class SafeAndMineApp extends Component {
 
   render() {
     return(
-      <div>
+      <div className="shortenedWidth">
         <h1>Safe and Mine</h1>
-        <p className="shortenedWidth">Use safe and mine to help find lost things! Attach a tag to anything you want to keep safe. If you lose that item and some good samaritan scans the tag, they will see a custom message just from you. You have the option to provide your name, phone number, email, and a custom message in any combination. If you dont want to provide a piece, no problem! Just share what you feel comfortable giving out to whoever finds your thing. You can modify these below. Modifying a piece of information will immediately alter the view that those who scan tags will see.</p>
+        <p >Use safe and mine to help find lost things! Attach a tag to anything you want to keep safe. If you lose that item and some good samaritan scans the tag, they will see a custom message just from you. You have the option to provide your name, phone number, email, and a custom message in any combination. If you dont want to provide a piece, no problem! Just share what you feel comfortable giving out to whoever finds your thing. You can modify these below. Modifying a piece of information will immediately alter the view that those who scan tags will see.</p>
 
         <br></br>
 

@@ -1,0 +1,231 @@
+.connectionHeader {
+  width: 900px;
+  height: 100px;
+  display: flex;
+
+  align-items: center;
+  text-align: center;
+}
+.icon {
+  position: relative;
+  float: left;
+  margin: 5px;
+  height: 100px;
+  width: 100px;
+}
+
+.myConnection {
+  margin: 70px;
+}
+
+.notificationButton {
+  float: right;
+  margin-left: 5px;
+}
+
+.notification {
+  display: inline-block;
+  padding: 0.25em 0.4em;
+  font-size: 75%;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25rem;
+  color: #fff;
+  background-color: #6c757d;
+}
+
+.inviteItem {
+  display: block;
+  width: 100%;
+  position: relative;
+  padding: 10px 20px;
+  clear: both;
+  font-weight: normal;
+  color: #263238;
+  text-align: inherit;
+  white-space: nowrap;
+  background: none;
+  border-width: thin medium thick 1;
+  /*border: 0;
+  border-bottom: 0;*/
+
+}
+
+.flex-container {
+   display: flex;
+   flex-wrap: wrap;
+}
+
+.flex-container > div {
+  margin: 35px;
+  margin-top: -10px;
+  text-align: center;
+  line-height: 75px;
+  font-size: 30px;
+}
+
+.connection {
+  border-radius: 25px;
+  background: #000000;
+  padding: 20px;
+  width: 150px;
+  height: 150px;
+  margin-left: -20px;
+  margin-right: -30px;
+  margin-top: 40px;
+  cursor: pointer;
+}
+
+.textStickOut {
+  color:black;
+  font-weight:bold;
+}
+
+.chatBody {
+  overflow: scroll;
+  border-left: 1px solid #cfd8dc;
+  border-right: 1px solid #cfd8dc;
+  border-top: 1px solid #cfd8dc;
+  width: 434px;
+  height: 250px;
+  max-height: 300px;
+}
+
+.profilePic {
+  float: right;
+  border-radius: 50%;
+  width: 40px;
+}
+
+.sent {
+  width: 200px;
+  height: 64px;
+  border: 2px solid #33b8ff;
+  background-color: #33caff;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+  float: right;
+  clear: left;
+  clear: right;
+  width: 200px;
+  text-align: left;
+}
+
+.received {
+  width: 200px;
+  height: 64px;
+  border: 2px solid #dedede;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+  width: 200px;
+  clear: both;
+  text-align: right;
+}
+
+.connectionPic {
+  float: left;
+  border-radius: 50%;
+  width: 40px;
+}
+
+.actionHeader {
+    width: 500px;
+}
+
+.video {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.image {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.canvas {
+  display: none;
+}
+
+@media only screen and (max-width: 375px) {
+  .connectionHeader {
+    width: auto;
+    height: auto;
+    margin-left: 0;
+  }
+  .icon {
+    float: left;
+    width: 60px;
+    height: 60px;
+    margin: 0px;
+    padding-left: 0;
+    top: 0;
+    display: inline-block;
+  }
+
+  .myConnection {
+    width: 250px;
+    margin: 0px;
+    margin-left: 0px;
+    font-size: 20px;
+    text-align: left;
+    display: none;
+  }
+
+  .notificationButton{
+    float: right;
+    width: auto;
+    margin-left: 170px;
+    margin-right: -6px;
+  }
+
+  .flex-container {
+     display: flex;
+     flex-wrap: wrap;
+  }
+
+  .dropdown-menu.actionsMenu {
+    left: -12px;
+  }
+
+  .flex-container > div {
+    margin: 10px;
+    text-align: center;
+    line-height: 75px;
+    font-size: 30px;
+    margin: 40px;
+    margin-top: -10px;
+  }
+
+  .connection {
+    border-radius: 25px;
+    background: #000000;
+    padding: 20px;
+    width: 120px;
+    height: 120px;
+    margin-left: -20px;
+    margin-top: 40px;
+    flex-grow: .5;
+  }
+  .actionHeader{
+    width: 300px;
+  }
+  .btn-success {
+    margin-bottom: 10px;
+  }
+
+  .chatBody {
+    overflow: scroll;
+    border-left: 1px solid #cfd8dc;
+    border-right: 1px solid #cfd8dc;
+    border-top: 1px solid #cfd8dc;
+    width: 289px;
+    height: 250px;
+    max-height: 250px;
+  }
+}

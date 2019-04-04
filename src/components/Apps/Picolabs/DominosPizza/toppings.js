@@ -1,3 +1,4 @@
+/*
 export var toppings = {
   'X': 'Robust Inspired Tomato Sauce',
   'C': 'Cheese',
@@ -71,7 +72,7 @@ export var toppingsFlipped = {
   'BBQ sauce': 'Bq',
   'Garlic Parmesan White Sauce': 'Xw'
 }
-
+*/
 export var amount = {
   0: "None",
   .5:"Light",
@@ -82,10 +83,10 @@ export var amount = {
 }
 
 export var amountFlipped = {
-  "None": 0,
-  "Light": .5,
-  "Normal": 1,
-  "Extra": 1.5,
-  "Double": 2
+  "None": "0",
+  "Light": ".5",
+  "Normal": "1",
+  "Extra": "1.5",
+  "Double": "2"
 
 }

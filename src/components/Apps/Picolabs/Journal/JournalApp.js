@@ -71,10 +71,10 @@ export default class JournalApp extends Component {
 
   render() {
     return(
-      <div>
+      <div className="shortenedWidth">
         <h1>Journal</h1>
         <br></br>
-        <ListGroup className="shortenedWidth">
+        <ListGroup>
           <ListGroupItem>
             <Form onSubmit={this.newEntry}>
               <FormGroup>

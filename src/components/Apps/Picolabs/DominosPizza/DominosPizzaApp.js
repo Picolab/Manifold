@@ -24,8 +24,8 @@ class DominosPizzaApp extends React.Component {
     if(val == "Locator")
     {
       this.setState({
-        isMenu: true,
-        isLocator: false
+        isMenu: false,
+        isLocator: true
       })
     }
   }
@@ -33,11 +33,11 @@ class DominosPizzaApp extends React.Component {
   display () {
     if(this.state.isLocator)
     {
-      return <StoreLocator signalEvent={this.props.signalEvent} displaySwitch={this.displaySwitch}/>;
+      return <StoreLocator signalEvent={this.props.signalEvent} displaySwitch={this.displaySwitch} manifoldQuery={this.props.manifoldQuery}/>;
     }
     else if(this.state.isMenu)
     {
-      return <StoreMenu manifoldQuery={this.props.manifoldQuery}/>
+      return <StoreMenu signalEvent={this.props.signalEvent} displaySwitch={this.displaySwitch} manifoldQuery={this.props.manifoldQuery}/>
     }
 
   }

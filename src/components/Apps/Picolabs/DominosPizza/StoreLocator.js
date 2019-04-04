@@ -3,7 +3,9 @@ import logo from './pico-labs-pizza.png';
 import './DominosPizzaApp.css'
 import { Link, Route, Router, Switch } from 'react-router-dom'
 import DominosPizzaApp from './DominosPizzaApp';
-import { Button, ButtonGroup, Form, FormGroup, Input, ListGroup, ListGroupItem, Media } from 'reactstrap';
+import OrderModal from './OrderModal';
+import {customQuery, customEvent} from '../../../../utils/manifoldSDK';
+import { Container, Row, Col, Label, Button, ButtonGroup, Form, FormGroup, Input, ListGroup, ListGroupItem, Media, Card, CardTitle, CardText } from 'reactstrap';
 
 class StoreLocator extends React.Component {
   constructor(props) {
@@ -17,10 +19,55 @@ class StoreLocator extends React.Component {
       city: "",
       state: "",
       postalcode:"",
-      rSelected: ""
+      rSelected: "",
+      cart: [],
+      variants:[] ,
+      arrayOrders: [],
+      title: "",
+      description: "",
+      children: [],
+      mapTitles: {},
+      mapDescriptions: {}
     }
     this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
     this.findNearestStore = this.findNearestStore.bind(this);
+    this.handleCheck = this.handleCheck.bind(this);
+    this.getOrderDescription = this.getOrderDescription.bind(this);
+    this.getChildrenOrders = this.getChildrenOrders.bind(this);
+    this.deleteOrder = this.deleteOrder.bind(this);
+    //this.addOrderCard = this.addOrderCard.bind(this);
+  }
+
+  componentDidMount() {
+    this.getChildrenOrders();
+  }
+
+  getOrderDescription(eci) {
+    const promise = customQuery(eci, "Order", "getOrderDescription");
+    promise.then((resp) => {
+      this.setState({
+        [eci]: resp.data
+      })
+    }).catch((e) => {
+      console.error("Error getting description", e);
+    });
+  }
+
+  getChildrenOrders() {
+    const promise = this.props.manifoldQuery({
+      rid: "io.picolabs.pizza",
+      funcName: "getChildrenOrders"
+    });
+    promise.then((resp) => {
+      this.setState({
+        children: resp.data
+      })
+      for(var item in resp.data) {
+        this.getOrderDescription(resp.data[item]);
+      }
+    }).catch((e) => {
+        console.error("Error getting description", e);
+    });
   }
 
   onChange(stateKey) {
@@ -56,6 +103,133 @@ class StoreLocator extends React.Component {
     this.props.displaySwitch("Menu");
   }
 
+  getParsedVariants() {
+    const promise = this.props.manifoldQuery({
+      rid: "io.picolabs.pizza",
+      funcName: "getParsedVariants"
+    });
+    promise.then((resp) => {
+      this.setState({
+        varaints: resp.data
+      }).catch((e) => {
+        console.error("Error getting Descriptions", e);
+      })
+    });
+  }
+
+  getCart() {
+    const promise = this.props.manifoldQuery({
+      rid: "io.picolabs.pizza",
+      funcName: "getProductCart"
+    });
+    promise.then((resp) => {
+      this.setState({
+          cart: resp.data
+      }).catch((e) => {
+        console.error("Error getting Descriptions", e);
+      })
+    });
+  }
+
+  handleCheck(e) {
+    var eci = e.target.id;
+    if(this.state[eci]['active'] === "true") {
+      let promise = customEvent(e.target.id, "change", "active", { active: 'false' }, "5");
+      promise.then((resp) => {
+        this.getChildrenOrders();
+      })
+    }
+    else {
+      let promise = customEvent(e.target.id, "change", "active", { active: 'true' }, "5");
+      for(var item in this.state.children) {
+        if(this.state[this.state.children[item]]['active'] === 'true' && this.state.children[item] !== eci) {
+          customEvent(this.state.children[item], "change", "active", { active: 'false' }, "5");
+        }
+      }
+      promise.then((resp) => {
+        this.getChildrenOrders();
+      })
+    }
+  }
+
+  submitOrder() {
+    console.log("You Ordered Pizza");
+    /*this.props.signalEvent({
+      domain : "place",
+      type: "order",
+      attrs : {
+      }
+    })*/
+  }
+
+  deleteOrder(e) {
+    let promise = this.props.signalEvent({
+      domain : "delete",
+      type: "order",
+      attrs : {
+        eci:e.target.value
+      }
+    })
+
+    promise.then(() =>{
+      this.getChildrenOrders();
+    })
+  }
+
+  /*<Card className="card card2" body outline color="primary">
+    <CardTitle>
+      <FormGroup check>
+        <Label check>
+          <Input style={{'margin-left':"-1rem"}} type="checkbox" />{' '}
+            Activate
+        </Label>
+      </FormGroup>
+    </CardTitle>
+    <CardText>With supporting text below as a natural lead-in to additional content.</CardText>
+    <Button className="viewOrderButton" color="secondary">Cart</Button>
+  </Card>*/
+/*{this.state[eci]['active'] === 'true' ? <Input style={{'marginLeft':"-1rem"}} type="checkbox" value={eci} onChange={this.handleCheck} checked/>  : <Input style={{'marginLeft':"-1rem"}} type="checkbox" value={eci} onChange={this.handleCheck}/>}*/
+  renderCards() {
+    var out = [];
+     for(var item in this.state.children) {
+       var eci = this.state.children[item]
+    //     this.getOrderTitle(this.state.children[item]);
+    //     this.getOrderDescription(this.state.children[item]);
+      if(this.state[eci] !== undefined) {
+        out.push(
+          <div>
+            <Card key={eci} className="card card2" body outline color="primary">
+            <Button color="danger" className="deleteButton" value={eci} onClick={this.deleteOrder}>X</Button>
+              <CardTitle className="orderTitle">
+                <FormGroup  check>
+                  <Label check>
+                    {this.state[eci]['active'] === 'true' ? <div className="checkmarkChecked" id={eci} ref={eci} onClick={this.handleCheck} checked="checked"/> : <div className="checkmark" id={eci} ref={eci} onClick={this.handleCheck}/>}{' '}
+                      <div style={{"margin-left": "1rem"}}>{this.state[eci]['title']}</div>
+                  </Label>
+
+                </FormGroup>
+              </CardTitle>
+              <CardText style={{'padding-left': '10px', 'text-align': 'center'}}>{this.state[eci]['description']}</CardText>
+              <div>
+              <OrderModal
+                buttonLabel='Cart'
+                orderEci={eci}
+                title={this.state[eci]['title']}
+                description={this.state[eci]['description']}
+                manifoldQuery={this.props.manifoldQuery}
+                signalEvent={this.props.signalEvent}
+                displaySwitch={this.props.displaySwitch}
+              />
+              {this.state[eci]['active'] === 'true' ? <Button color="primary" className="OrderButton" size="sm" onClick={this.submitOrder}> Order </Button> : <Button color="danger" className="OrderButton" size="sm" disabled onClick={this.submitOrder}> Order </Button>}
+              </div>
+            </Card>
+          </div>
+        );
+        }
+      }
+      return out;
+  }
+
   render() {
     return (
       <div>
@@ -64,7 +238,7 @@ class StoreLocator extends React.Component {
         </div>
         <ListGroup className="shortenedWidth">
           <ListGroupItem>
-            <Form>
+            <Form autoComplete="on">
             <h2>Personal Information</h2>
               <FormGroup>
                 First Name:
@@ -111,6 +285,11 @@ class StoreLocator extends React.Component {
             <Button color="primary" size="sm" style={{"float" : "right"}} onClick={this.findNearestStore}> Submit </Button>
         </ListGroupItem>
         </ListGroup>
+        <Container>
+        <Col>
+          {this.renderCards()}
+        </Col>
+        </Container>
       </div>
     );
   }

@@ -1,0 +1,229 @@
+import React from 'react';
+import './SovrinAgent.css';
+import icon from './SovrinIcon.png';
+import picoLabs from './pico-labs-stacked.png';
+import { Badge, Button, Media, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Container, Row, Col, InputGroup, InputGroupAddon, Input} from 'reactstrap';
+import InvitationModal from './InvitationModal';
+import ConnectionModal from './ConnectionModal';
+import CameraModal from './CameraModal';
+
+class SovrinAgent extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      invitationOpen: false,
+      actionsOpen: false,
+      technicalDetails: {},
+      received_Invitation: ""
+    };
+    this.invitationToggle = this.invitationToggle.bind(this);
+    this.actionsToggle = this.actionsToggle.bind(this);
+    this.receiveInvitation = this.receiveInvitation.bind(this);
+    this.getUI = this.getUI.bind(this);
+  }
+
+  componentDidMount() {
+    this.getUI()
+  }
+
+  invitationToggle() {
+    this.setState(prevState => ({
+      invitationOpen: !prevState.invitationOpen
+    }));
+  }
+
+  actionsToggle() {
+    this.setState(prevState => ({
+      actionsOpen: !prevState.actionsOpen
+    }));
+  }
+
+  onChange(stateKey) {
+    return (event) => {
+      let value = event.target.value
+      this.setState({
+        [stateKey]: value
+      })
+    }
+  }
+
+  getUI() {
+    const promise = this.props.manifoldQuery({
+      rid: "org.sovrin.agent",
+      funcName: "ui"
+    }).catch((e) => {
+        console.error("Error getting description", e);
+    });
+    promise.then((resp) => {
+      if(JSON.stringify(resp.data) !== JSON.stringify(this.state.technicalDetails)) {
+        console.log("resp data loop");
+        this.setState({
+          technicalDetails: resp.data
+        })
+        this.getIconImages(resp.data['connections'])
+      } else {
+        console.log("no loop");
+      }})
+  }
+
+  getIconImages(connections) {
+    for(let item in connections) {
+      const promise = this.props.signalEvent({
+        domain:"sovrin",
+        type:"image",
+        attrs: {
+          label: connections[item]["label"]
+        }
+      })
+      promise.then((resp) => {
+        this.setState({
+          [connections[item]["label"]]: resp.data.directives[0]['options']['icon']
+        })
+      })
+    }
+  }
+
+  /*
+  <DropdownItem disabled>Action (disabled)</DropdownItem>
+  <DropdownItem divider />
+  <DropdownItem>Foo Action</DropdownItem>
+  <DropdownItem>Bar Action</DropdownItem>
+  <DropdownItem>Quo Action</DropdownItem>
+  */
+
+  openInvite(e) {
+    return (
+      <div>
+        <InvitationModal/>
+      </div>
+    );
+  }
+  copyInvitation(e) {
+    const text = document.getElementById('invitation');
+    // text.value = e.target.value;
+    //document.body.appendChild(el);
+    text.select();
+    document.execCommand('copy');
+  }
+
+  receiveInvitation() {
+    const promise = this.props.signalEvent({
+      domain : "sovrin",
+      type: "new_invitation",
+      attrs : {
+        url: this.state.received_Invitation
+      }
+    });
+    promise.then((resp) => {
+      this.getUI();
+    })
+  }
+
+  displayHeader() {
+      return (
+        <div>
+          <h1 className='connectionHeader'>
+            <Media object src={icon} className='icon'/>
+            <div className='myConnection'>My Connections</div>
+            <Dropdown isOpen={this.state.actionsOpen} toggle={this.actionsToggle}>
+              <DropdownToggle color='primary' className='notificationButton' outline caret>
+                Actions
+              </DropdownToggle>
+              <DropdownMenu className="actionsMenu">
+                <DropdownItem className="actionHeader" header>Generate Invitation</DropdownItem>
+                  <InputGroup>
+                    <Input id="invitation" value={this.state.technicalDetails["invitation"]}/>
+                    <InputGroupAddon addonType="append">
+                      <Button value={this.state.technicalDetails["invitation"]} onClick={this.copyInvitation}>Copy</Button>
+                    </InputGroupAddon>
+                  </InputGroup>
+                <DropdownItem header>Receive Invitation</DropdownItem>
+                  <InputGroup>
+                    <Input type="text" name="received_Invitation" placeholder="Receive Invitation" value={this.state.received_Invitation} onChange={this.onChange('received_Invitation')}/>
+                    <InputGroupAddon addonType="append">
+                      <Button onClick={this.receiveInvitation}>Receive</Button>
+                    </InputGroupAddon>
+                  </InputGroup>
+              </DropdownMenu>
+            </Dropdown>
+          </h1>
+        </div>
+      );
+  }
+  /*invitation Dropdown
+  <Dropdown isOpen={this.state.invitationOpen} toggle={this.invitationToggle}>
+    <DropdownToggle color='primary' className='notificationButton' outline>
+      Invitations <span className='notification'>4</span>
+    </DropdownToggle>
+    <DropdownMenu>
+      <DropdownItem header>Pending Invitations</DropdownItem>
+      <InvitationModal
+        buttonLabel = 'Bruce'
+      />
+      <InvitationModal
+        buttonLabel = 'Jace'
+      />
+      <InvitationModal
+        buttonLabel = 'Connor'
+      />
+      <InvitationModal
+        buttonLabel = 'Phil'
+      />
+    </DropdownMenu>
+  </Dropdown>
+  */
+
+  // <div>
+  //   <ConnectionModal
+  //     image={icon}
+  //     title='Sovrin'
+  //   />
+  // </div>
+  // <div>
+  //   <ConnectionModal
+  //     image={picoLabs}
+  //     title='Pico Labs'
+  //   />
+  // </div>
+  displayConnections() {
+    var output = [];
+    for(var item in this.state.technicalDetails['connections']) {
+      if(this.state.technicalDetails['connections'][item] !== undefined) {
+        output.push(
+          <div key={this.state.technicalDetails['connections'][item]['their_did']}>
+            <ConnectionModal
+              image={this.state[this.state.technicalDetails['connections'][item]['label']]}
+              title={this.state.technicalDetails['connections'][item]['label']}
+              myDID={this.state.technicalDetails['connections'][item]['my_did']}
+              theirDID={this.state.technicalDetails['connections'][item]['their_did']}
+              their_vk={this.state.technicalDetails['connections'][item]['their_vk']}
+              messages={this.state.technicalDetails['connections'][item]['messages']}
+              signalEvent={this.props.signalEvent}
+              getUI={this.getUI}
+            />
+          </div>
+        );
+      }
+    }
+
+    return (
+      <div className="flex-container">
+        {output}
+      </div>
+    );
+  }
+
+  render() {
+    return(
+      <div>
+          {this.displayHeader()}
+        <div>
+          {this.displayConnections()}
+        </div>
+      </div>
+    );
+  }
+
+}
+export default SovrinAgent;
