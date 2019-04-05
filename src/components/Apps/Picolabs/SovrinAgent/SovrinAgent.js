@@ -27,6 +27,10 @@ class SovrinAgent extends React.Component {
     this.getUI()
   }
 
+  componentWillUnmount() {
+    clearInterval(this.connVar);
+  }
+
   invitationToggle() {
     this.setState(prevState => ({
       invitationOpen: !prevState.invitationOpen
@@ -61,6 +65,7 @@ class SovrinAgent extends React.Component {
         this.setState({
           technicalDetails: resp.data
         })
+        clearInterval(this.connVar);
         this.getIconImages(resp.data['connections'])
       } else {
         console.log("no loop");
@@ -114,9 +119,12 @@ class SovrinAgent extends React.Component {
       attrs : {
         url: this.state.received_Invitation
       }
-    });
+    })
     promise.then((resp) => {
-      this.getUI();
+      this.setState({
+        received_Invitation: ""
+      });
+      this.connVar = setInterval(() => this.getUI(), 3000);
     })
   }
 

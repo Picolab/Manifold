@@ -21,5 +21,5 @@ export default {
   'io.picolabs.neighborhood_temps': NeighborhoodTemps,
   'io.picolabs.safeandmine': SafeAndMineApp,
   'io.picolabs.pizza': DominosPizzaApp,
-  'org.sovrin.manifold_app':SovrinAgent
+  'org.sovrin.manifold_agent':SovrinAgent
 }

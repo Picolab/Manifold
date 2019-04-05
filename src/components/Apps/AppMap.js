@@ -9,5 +9,5 @@ export default {
   "io.picolabs.journal" : JournalApp,
   "io.picolabs.score_tracker": ScoreTracker,
   "io.picolabs.pizza": DominosPizzaApp,
-  "org.sovrin.manifold_app":SovrinAgent
+  "org.sovrin.manifold_agent":SovrinAgent
 }
