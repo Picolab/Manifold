@@ -66,7 +66,7 @@ class OrderModal extends React.Component {
     var out = [];
 
     for(var item in this.state.cart) {
-      if(this.state.variants[this.state.cart[item]['Code']] !== undefined) {
+      if(this.state.cart[item] !== null && this.state.variants[this.state.cart[item]['Code']] !== undefined) {
       out.push(
         <div key={this.state.cart[item]['Code']}>
           {this.state.variants[this.state.cart[item]['Code']]['Name']} {' '}

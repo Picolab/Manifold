@@ -363,11 +363,12 @@ listCartItems() {
 
   for(var item in this.state.cart)
   {
-    if(this.state.StoreVariants !== undefined && this.state.StoreVariants[this.state.cart[item]['Code']] !== undefined) {
+    if(this.state.StoreVariants !== undefined  && this.state.cart[item] !== null && this.state.StoreVariants[this.state.cart[item]['Code']] !== undefined) {
       var compare = JSON.parse(JSON.stringify(this.state.cart[item]['Options']));
       out.push(
         <div key={this.state.StoreVariants[this.state.cart[item]['Code']]}>
-          {this.state.StoreVariants[this.state.cart[item]['Code']]['Name']}
+          {this.state.StoreVariants[this.state.cart[item]['Code']]['Name']} {' '}
+          Qty: {this.state.cart[item]['Qty']}
           {compare === '{}' ? "" : <button className='danger' id={this.state.cart[item]['Code']} value={this.state.cart[item]['Options']} onClick={this.toggleCartToppings}>
             {' '} Toppings
           </button>}
