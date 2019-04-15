@@ -210,7 +210,7 @@ class StoreLocator extends React.Component {
                 </FormGroup>
               </CardTitle>
               <CardText style={{'padding-left': '10px', 'text-align': 'center'}}>{this.state[eci]['description']}</CardText>
-              <div>
+
               <OrderModal
                 buttonLabel='Cart'
                 orderEci={eci}
@@ -220,8 +220,8 @@ class StoreLocator extends React.Component {
                 signalEvent={this.props.signalEvent}
                 displaySwitch={this.props.displaySwitch}
               />
-              {this.state[eci]['active'] === 'true' ? <Button color="primary" className="OrderButton" size="sm" onClick={this.submitOrder}> Order </Button> : <Button color="danger" className="OrderButton" size="sm" disabled onClick={this.submitOrder}> Order </Button>}
-              </div>
+              {this.state[eci]['active'] === 'true' ? <Button color="primary" className="OrderButton" size="sm" onClick={this.submitOrder}> Order </Button> : <Button color="primary" className="OrderButton" size="sm" disabled onClick={this.submitOrder}> Order </Button>}
+
             </Card>
           </div>
         );

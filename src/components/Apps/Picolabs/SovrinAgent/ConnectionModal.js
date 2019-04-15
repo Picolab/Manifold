@@ -11,12 +11,19 @@ class ConnectionModal extends React.Component {
 
     this.state = {
       modal: localStorage.getItem('modalState') === 'true' ? true : false,
-      activeTab: localStorage.getItem('currentTab')
+      activeTab: localStorage.getItem('currentTab') ==! null ? localStorage.getItem('currentTab') : '1'
     };
     this.modalToggle = this.modalToggle.bind(this);
     this.toggle = this.toggle.bind(this);
     this.sendTrustPing = this.sendTrustPing.bind(this);
     this.deleteConnection = this.deleteConnection.bind(this);
+  }
+
+  componentDidMount() {
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/jdenticon@2.1.1";
+    script.async = true;
+    document.body.appendChild(script);
   }
 
   modalToggle() {
@@ -43,7 +50,8 @@ class ConnectionModal extends React.Component {
     const promise = customEvent( this.props.myDID , "sovrin", "connection_expired", { their_vk: this.props.their_vk }, '5');
     promise.then((resp) => {
       this.props.getUI();
-    })
+    });
+    this.modalToggle();
   }
 
   // getMyDID() {
@@ -63,9 +71,13 @@ class ConnectionModal extends React.Component {
     // console.log('this.state.modal',this.state.modal);
     // console.log('tab', this.state.activeTab);
     // console.log('localStorage Tab', localStorage.getItem('currentTab'));
+    // <Media object src={this.props.image} className='connection' onClick={this.modalToggle}/>
+    // <Media object src="https://cdn.jsdelivr.net/npm/jdenticon@2.1.1" async onClick={this.modalToggle}>
+    //   <svg className="connection" data-jdenticon-value="icon value"></svg>
+    // </Media>
     return (
       <div>
-        <Media object src={this.props.image} className='connection' onClick={this.modalToggle}/>
+        { this.props.image !== null ? <Media object src={this.props.image} className='connection' onClick={this.modalToggle}/> : <svg className="connection" data-jdenticon-value={this.props.title} onClick={this.modalToggle}></svg>}
         <Modal isOpen={this.state.modal} toggle={this.modalToggle} className={this.props.className}>
           <ModalHeader toggle={this.modalToggle}>Connection with {this.props.title}</ModalHeader>
           <ModalBody>
@@ -102,7 +114,7 @@ class ConnectionModal extends React.Component {
                 </TabPane>
                 <TabPane tabId="2">
                   <Chat
-                    connectionImage = {this.props.image}
+                    connectionImage = { this.props.image !== null ? <Media object src={this.props.image} className="connectionPic" /> : <svg className="connectionPic" data-jdenticon-value={this.props.title}></svg>}
                     messages={this.props.messages}
                     their_vk={this.props.their_vk}
                     signalEvent={this.props.signalEvent}

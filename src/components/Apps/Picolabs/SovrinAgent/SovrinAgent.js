@@ -25,6 +25,10 @@ class SovrinAgent extends React.Component {
 
   componentDidMount() {
     this.getUI()
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/jdenticon@2.1.1";
+    script.async = true;
+    document.body.appendChild(script);
   }
 
   componentWillUnmount() {
@@ -159,6 +163,12 @@ class SovrinAgent extends React.Component {
         </div>
       );
   }
+
+  createDefaultImage(label) {
+    return (
+      <svg className="connection" data-jdenticon-value={label}></svg>
+    );
+  }
   /*invitation Dropdown
   <Dropdown isOpen={this.state.invitationOpen} toggle={this.invitationToggle}>
     <DropdownToggle color='primary' className='notificationButton' outline>
@@ -194,24 +204,43 @@ class SovrinAgent extends React.Component {
   //     title='Pico Labs'
   //   />
   // </div>
+
   displayConnections() {
     var output = [];
     for(var item in this.state.technicalDetails['connections']) {
       if(this.state.technicalDetails['connections'][item] !== undefined) {
-        output.push(
-          <div key={this.state.technicalDetails['connections'][item]['their_did']}>
-            <ConnectionModal
-              image={this.state[this.state.technicalDetails['connections'][item]['label']]}
-              title={this.state.technicalDetails['connections'][item]['label']}
-              myDID={this.state.technicalDetails['connections'][item]['my_did']}
-              theirDID={this.state.technicalDetails['connections'][item]['their_did']}
-              their_vk={this.state.technicalDetails['connections'][item]['their_vk']}
-              messages={this.state.technicalDetails['connections'][item]['messages']}
-              signalEvent={this.props.signalEvent}
-              getUI={this.getUI}
-            />
-          </div>
-        );
+        console.log("label", this.state[this.state.technicalDetails['connections'][item]['label']]);
+        if(this.state[this.state.technicalDetails['connections'][item]['label']] !== undefined) {
+          output.push(
+            <div key={this.state.technicalDetails['connections'][item]['their_did']}>
+              <ConnectionModal
+                image= {this.state[this.state.technicalDetails['connections'][item]['label']]}
+                title={this.state.technicalDetails['connections'][item]['label']}
+                myDID={this.state.technicalDetails['connections'][item]['my_did']}
+                theirDID={this.state.technicalDetails['connections'][item]['their_did']}
+                their_vk={this.state.technicalDetails['connections'][item]['their_vk']}
+                messages={this.state.technicalDetails['connections'][item]['messages']}
+                signalEvent={this.props.signalEvent}
+                getUI={this.getUI}
+              />
+            </div>
+          );
+        } else {
+          output.push(
+            <div key={this.state.technicalDetails['connections'][item]['their_did']}>
+              <ConnectionModal
+                image= {null}
+                title={this.state.technicalDetails['connections'][item]['label']}
+                myDID={this.state.technicalDetails['connections'][item]['my_did']}
+                theirDID={this.state.technicalDetails['connections'][item]['their_did']}
+                their_vk={this.state.technicalDetails['connections'][item]['their_vk']}
+                messages={this.state.technicalDetails['connections'][item]['messages']}
+                signalEvent={this.props.signalEvent}
+                getUI={this.getUI}
+              />
+            </div>
+          );
+        }
       }
     }
 

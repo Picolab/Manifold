@@ -28,6 +28,10 @@ class Chat extends React.Component {
   componentDidMount() {
     this.getProfileInfo();
     this.myVar = setInterval(() => this.refreshMessage(), 3000);
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/jdenticon@2.1.1";
+    script.async = true;
+    document.body.appendChild(script);
   }
 
   componentWillUnmount() {
@@ -63,7 +67,7 @@ class Chat extends React.Component {
         output.push(
           <div key={this.props.messages[item]['sent_time']}>
             <div className="received">
-              <Media object src={this.props.connectionImage} className="connectionPic"/>
+              {this.props.connectionImage}
               <p>{this.props.messages[item]['content']}</p>
             </div>
             <br />
