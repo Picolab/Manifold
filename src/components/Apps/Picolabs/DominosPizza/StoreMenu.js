@@ -53,8 +53,6 @@ class StoreMenu extends React.Component {
   }
 
   toggleTab(tab) {
-    console.log("passed in tab",tab);
-    console.log("activeTab",this.state.activeTab);
     if (this.state.activeTab !== tab) {
       this.setState({
         activeTab: tab
@@ -205,19 +203,6 @@ getCart() {
   });
 }
 
-// <div>
-//   <Button color="primary" size="lg" onClick={this.toggle} style={{ marginBottom: '1rem' }} block>
-//     {item}
-//   </Button>
-//   <Collapse isOpen={this.state[item]}>
-//     <Card>
-//       <CardBody>
-//         {this.findVariants(this.state.StoreMenu[item])}
-//       </CardBody>
-//     </Card>
-//   </Collapse>
-// </div>
-
 displayMenu() {
   var array = [];
   var count = 1;
@@ -345,6 +330,7 @@ validateOrder() {
 
 cartItemToppings(toppings) {
   var out = [];
+  console.log(toppings);
   for (var topping in toppings) {
     for(var amounts in toppings[topping]) {
     out.push(
@@ -365,17 +351,18 @@ listCartItems() {
   {
     if(this.state.StoreVariants !== undefined  && this.state.cart[item] !== null && this.state.StoreVariants[this.state.cart[item]['Code']] !== undefined) {
       var compare = JSON.parse(JSON.stringify(this.state.cart[item]['Options']));
+      var id = this.state.cart[item]['Code'].concat(this.state.cart[item]['Options']);
       out.push(
-        <div key={this.state.StoreVariants[this.state.cart[item]['Code']]}>
+        <div key={id}>
           {this.state.StoreVariants[this.state.cart[item]['Code']]['Name']} {' '}
           Qty: {this.state.cart[item]['Qty']}
-          {compare === '{}' ? "" : <button className='danger' id={this.state.cart[item]['Code']} value={this.state.cart[item]['Options']} onClick={this.toggleCartToppings}>
+          {compare === '{}' ? "" : <button className='danger' id={id} value={this.state.cart[item]['Options']} onClick={this.toggleCartToppings}>
             {' '} Toppings
           </button>}
           <button className='danger' id={this.state.cart[item]['Code']} value={this.state.cart[item]['Options']} onClick={this.onClickRemove}>
             {' '} Remove
           </button>
-          <Collapse isOpen={this.state[this.state.cart[item]['Code']]}>
+          <Collapse isOpen={this.state[id]}>
               {this.cartItemToppings(JSON.parse(this.state.cart[item]['Options']))}
           </Collapse>
         </div>

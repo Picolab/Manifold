@@ -12,6 +12,7 @@ class ItemModal extends React.Component {
       code: this.props.code,
       origToppingMap: {},
       toppingsMap: {},
+      defaultSettings: {},
       Options: {},
       Qty: 1,
       toppings: this.props.toppings,
@@ -22,7 +23,7 @@ class ItemModal extends React.Component {
     this.addItems = this.addItems.bind(this);
   }
 
-  componentWillUpdate() {
+  componentWillMount() {
     this.findDefaultToppings()
     this.findAvailableToppings()
   }
@@ -42,7 +43,7 @@ class ItemModal extends React.Component {
       toppingsMap: map
     })
   }
-
+  //map[this.state.toppings[array[0]]] === undefined &&
   findDefaultToppings() {
     var firstArray = this.props.defaultToppings.split(",");
     for(var item in firstArray) {
@@ -50,10 +51,6 @@ class ItemModal extends React.Component {
         var map = this.state.toppingsMap;
         if(map[this.state.toppings[array[0]]] === undefined && array[0] !== "")
         {
-          if(this.state.toppings[array[0]] === undefined)
-          {
-            console.log(array[0]);
-          }
           map[this.state.toppings[array[0]]] = {
             amount: amount[array[1]]
           }
@@ -91,7 +88,7 @@ class ItemModal extends React.Component {
     }
     return [];
   }
-
+  //map[this.state.toppings[anotherArray[0]]] === undefined &&
   findAvailableToppings() {
     var array = this.props.availableToppings.split(',');
     for(var item in array) {
@@ -103,7 +100,8 @@ class ItemModal extends React.Component {
           amount: amount[0]
         }
         this.setState({
-          toppingsMap: map
+          toppingsMap: map,
+          defaultSettings: Object.assign({}, map)
         });
       }
     }
@@ -254,7 +252,6 @@ class ItemModal extends React.Component {
   }
 
   addItems() {
-    //console.log("Pizza! Pizza!");
     var map = {}
     for(var item in this.state.toppingsMap) {
       if(amountFlipped[this.state.toppingsMap[item].amount] !== "0") {
@@ -264,9 +261,7 @@ class ItemModal extends React.Component {
       }
     }
 
-    //console.log(JSON.stringify(map));
-
-    this.props.signalEvent({
+    let promise = this.props.signalEvent({
       domain : "add",
       type: "Item",
       attrs : {
@@ -275,6 +270,12 @@ class ItemModal extends React.Component {
         options: JSON.stringify(map),
       }
     })
+    promise.then((resp) => {
+      this.setState({
+        toppingsMap: this.state.defaultSettings,
+        Qty: 1
+      });
+    });
     this.toggle();
     this.props.getCart();
   }
