@@ -77,7 +77,7 @@ class ConnectionModal extends React.Component {
     // </Media>
     return (
       <div>
-        { this.props.image !== null ? <Media object src={this.props.image} className='connection' onClick={this.modalToggle}/> : <svg className="connection" data-jdenticon-value={this.props.title} onClick={this.modalToggle}></svg>}
+        { this.props.image !== null ? <Media object src={this.props.image} className='connection' onClick={this.modalToggle}/> : <svg className="connection" data-jdenticon-value={this.props.theirDID} onClick={this.modalToggle}></svg>}
         <Modal isOpen={this.state.modal} toggle={this.modalToggle} className={this.props.className}>
           <ModalHeader toggle={this.modalToggle}>Connection with {this.props.title}</ModalHeader>
           <ModalBody>
@@ -114,7 +114,7 @@ class ConnectionModal extends React.Component {
                 </TabPane>
                 <TabPane tabId="2">
                   <Chat
-                    connectionImage = { this.props.image !== null ? <Media object src={this.props.image} className="connectionPic" /> : <svg className="connectionPic" data-jdenticon-value={this.props.title}></svg>}
+                    connectionImage = { this.props.image !== null ? <Media object src={this.props.image} className="connectionPic" /> : <svg className="connectionPic" data-jdenticon-value={this.props.theirDID}></svg>}
                     messages={this.props.messages}
                     their_vk={this.props.their_vk}
                     signalEvent={this.props.signalEvent}
