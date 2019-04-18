@@ -35,6 +35,7 @@ class StoreMenu extends React.Component {
     this.onClickRemove = this.onClickRemove.bind(this);
     this.validateOrder = this.validateOrder.bind(this);
     this.getToppingsMap = this.getToppingsMap.bind(this);
+    this.changeQty = this.changeQty.bind(this);
   }
 
   onChange(stateKey) {
@@ -355,7 +356,19 @@ listCartItems() {
       out.push(
         <div key={id}>
           {this.state.StoreVariants[this.state.cart[item]['Code']]['Name']} {' '}
-          Qty: {this.state.cart[item]['Qty']}
+          Qty:
+          <Input style={{width:50, display:"inline"}} type="select" bsSize="sm" name="Quantity" id={JSON.stringify(this.state.cart[item])} className="select" onChange={this.changeQty}>
+            <option selected={this.state.cart[item]['Qty'] === '1' ? 'selected' : ""}>1</option>
+            <option selected={this.state.cart[item]['Qty'] === '2' ? 'selected' : ""}>2</option>
+            <option selected={this.state.cart[item]['Qty'] === '3' ? 'selected' : ""}>3</option>
+            <option selected={this.state.cart[item]['Qty'] === '4' ? 'selected' : ""}>4</option>
+            <option selected={this.state.cart[item]['Qty'] === '5' ? 'selected' : ""}>5</option>
+            <option selected={this.state.cart[item]['Qty'] === '6' ? 'selected' : ""}>6</option>
+            <option selected={this.state.cart[item]['Qty'] === '7' ? 'selected' : ""}>7</option>
+            <option selected={this.state.cart[item]['Qty'] === '8' ? 'selected' : ""}>8</option>
+            <option selected={this.state.cart[item]['Qty'] === '9' ? 'selected' : ""}>9</option>
+            <option selected={this.state.cart[item]['Qty'] === '10' ? 'selected' : ""}>10</option>
+          </Input>
           {compare === '{}' ? "" : <button className='danger' id={id} value={this.state.cart[item]['Options']} onClick={this.toggleCartToppings}>
             {' '} Toppings
           </button>}
@@ -371,6 +384,27 @@ listCartItems() {
   }
 
   return out;
+}
+
+changeQty(e) {
+  var item = e.target.id;
+  var qty = e.target.value;
+
+  console.log(item);
+  console.log(qty);
+
+  var promise = this.props.signalEvent({
+    domain : "change",
+    type: "qty",
+    attrs : {
+      item: item,
+      qty: qty
+    }
+  });
+
+  promise.then((resp) => {
+    this.getCart();
+  });
 }
 
 onClickRemove(e) {

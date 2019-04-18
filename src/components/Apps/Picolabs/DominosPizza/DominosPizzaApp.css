@@ -67,6 +67,17 @@
   font-weight: bold;
 }
 
+.Order {
+  box-shadow: 3px 3px 3px grey;
+  display: inline-block;
+  border-radius: 8px;
+  width: 100px;
+  margin: 0 auto;
+  margin-bottom: 1rem;
+  margin-right: 1rem;
+  font-weight: bold;
+}
+
 .orderTitle {
   width: 200px;
 }

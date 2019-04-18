@@ -283,7 +283,7 @@ class ItemModal extends React.Component {
   render() {
     return (
       <div>
-        <Button color="danger" size="sm" onClick={this.toggle}>{this.props.buttonLabel}</Button>
+        <Button className="Order" color="primary" size="sm" onClick={this.toggle}>{this.props.buttonLabel}</Button>
         <Modal isOpen={this.state.modal} className="modal-xl" size="xl" toggle={this.toggle} className={this.props.className}>
           <ModalHeader toggle={this.toggle}>{this.props.title}</ModalHeader>
           <ModalBody>
