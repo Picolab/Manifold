@@ -331,7 +331,7 @@ validateOrder() {
 
 cartItemToppings(toppings) {
   var out = [];
-  console.log(toppings);
+  
   for (var topping in toppings) {
     for(var amounts in toppings[topping]) {
     out.push(
@@ -352,31 +352,33 @@ listCartItems() {
   {
     if(this.state.StoreVariants !== undefined  && this.state.cart[item] !== null && this.state.StoreVariants[this.state.cart[item]['Code']] !== undefined) {
       var compare = JSON.parse(JSON.stringify(this.state.cart[item]['Options']));
-      var id = this.state.cart[item]['Code'].concat(this.state.cart[item]['Options']);
+      var id = this.state.cart[item]['Code'].concat(JSON.stringify(this.state.cart[item]['Options']));
+      var value = JSON.stringify(this.state.cart[item]['Options']);
+      var qty = this.state.cart[item]['Qty'].toString();
       out.push(
         <div key={id}>
           {this.state.StoreVariants[this.state.cart[item]['Code']]['Name']} {' '}
           Qty:
           <Input style={{width:50, display:"inline"}} type="select" bsSize="sm" name="Quantity" id={JSON.stringify(this.state.cart[item])} className="select" onChange={this.changeQty}>
-            <option selected={this.state.cart[item]['Qty'] === '1' ? 'selected' : ""}>1</option>
-            <option selected={this.state.cart[item]['Qty'] === '2' ? 'selected' : ""}>2</option>
-            <option selected={this.state.cart[item]['Qty'] === '3' ? 'selected' : ""}>3</option>
-            <option selected={this.state.cart[item]['Qty'] === '4' ? 'selected' : ""}>4</option>
-            <option selected={this.state.cart[item]['Qty'] === '5' ? 'selected' : ""}>5</option>
-            <option selected={this.state.cart[item]['Qty'] === '6' ? 'selected' : ""}>6</option>
-            <option selected={this.state.cart[item]['Qty'] === '7' ? 'selected' : ""}>7</option>
-            <option selected={this.state.cart[item]['Qty'] === '8' ? 'selected' : ""}>8</option>
-            <option selected={this.state.cart[item]['Qty'] === '9' ? 'selected' : ""}>9</option>
-            <option selected={this.state.cart[item]['Qty'] === '10' ? 'selected' : ""}>10</option>
+            <option selected={qty=== '1' ? 'selected' : ""}>1</option>
+            <option selected={qty === '2' ? 'selected' : ""}>2</option>
+            <option selected={qty === '3' ? 'selected' : ""}>3</option>
+            <option selected={qty === '4' ? 'selected' : ""}>4</option>
+            <option selected={qty === '5' ? 'selected' : ""}>5</option>
+            <option selected={qty === '6' ? 'selected' : ""}>6</option>
+            <option selected={qty === '7' ? 'selected' : ""}>7</option>
+            <option selected={qty === '8' ? 'selected' : ""}>8</option>
+            <option selected={qty === '9' ? 'selected' : ""}>9</option>
+            <option selected={qty === '10' ? 'selected' : ""}>10</option>
           </Input>
-          {compare === '{}' ? "" : <button className='danger' id={id} value={this.state.cart[item]['Options']} onClick={this.toggleCartToppings}>
+          {compare === '{}' ? "" : <button className='danger' id={id} value={value} onClick={this.toggleCartToppings}>
             {' '} Toppings
           </button>}
-          <button className='danger' id={this.state.cart[item]['Code']} value={this.state.cart[item]['Options']} onClick={this.onClickRemove}>
+          <button className='danger' id={this.state.cart[item]['Code']} value={value} onClick={this.onClickRemove}>
             {' '} Remove
           </button>
           <Collapse isOpen={this.state[id]}>
-              {this.cartItemToppings(JSON.parse(this.state.cart[item]['Options']))}
+              {this.cartItemToppings(this.state.cart[item]['Options'])}
           </Collapse>
         </div>
       );
@@ -389,9 +391,6 @@ listCartItems() {
 changeQty(e) {
   var item = e.target.id;
   var qty = e.target.value;
-
-  console.log(item);
-  console.log(qty);
 
   var promise = this.props.signalEvent({
     domain : "change",
@@ -410,6 +409,7 @@ changeQty(e) {
 onClickRemove(e) {
   var code = e.target.id;
   var toppings = e.target.value;
+
   this.removeItem(code, toppings);
 }
 

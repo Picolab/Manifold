@@ -35,6 +35,7 @@ class StoreLocator extends React.Component {
     this.getOrderDescription = this.getOrderDescription.bind(this);
     this.getChildrenOrders = this.getChildrenOrders.bind(this);
     this.deleteOrder = this.deleteOrder.bind(this);
+    this.submitOrder = this.submitOrder.bind(this);
     //this.addOrderCard = this.addOrderCard.bind(this);
   }
 
@@ -154,12 +155,12 @@ class StoreLocator extends React.Component {
 
   submitOrder() {
     console.log("You Ordered Pizza");
-    /*this.props.signalEvent({
+    this.props.signalEvent({
       domain : "place",
       type: "order",
       attrs : {
       }
-    })*/
+    })
   }
 
   deleteOrder(e) {
