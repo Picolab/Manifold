@@ -11,7 +11,7 @@ npm start
 manifold app is used for managing your Internet of Things Pico device shadows....
 To learn more about picos, check out [PicoLabs website](http://picolabs.io)
 
-##Developers
+## Developers
 To learn how to contribute, follow the tutorials fount in the [PicoLabs documentation.](https://picolabs.atlassian.net/wiki/spaces/docs/pages/360579073/Manifold)
 
 ## Note
