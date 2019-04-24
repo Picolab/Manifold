@@ -6,7 +6,7 @@ import { customQuery, customEvent } from '../../../utils/manifoldSDK';
 import queryString from 'query-string';
 import RegistryModal from './RegistryModal';
 import './UTA.css';
-import { GOOGLE_MAP_KEY } from '../../../utils/config';
+import { GOOGLE_MAP_KEY, BUS_DID, SCORE_WRAPPER_DID } from '../../../utils/config';
 
 class UTA extends Component {
   constructor(props) {
@@ -15,14 +15,25 @@ class UTA extends Component {
     const { stopCode } = queryString.parse(props.location.search);
     this.state = {
       stopCode,
+      player: { },
       stopInfo: []
     }
     this.searchStop = this.searchStop.bind(this);
+    this.getStanding = this.getStanding.bind(this);
   }
 
   componentDidMount() {
     console.log(this.state.stopCode);
     this.searchStop(this.state.stopCode);
+    this.getStanding();
+  }
+
+  getStanding() {
+    const promise = customQuery(SCORE_WRAPPER_DID, "io.picolabs.score_wrapper", "currentStanding", { scoreTracker: window.localStorage.getItem("scoreTracker") });
+
+    promise.then((resp) => {this.setState({player : resp.data});}).catch((e) => {
+      console.error("Error loading player info: ", e);
+    });
   }
 
 
@@ -36,8 +47,8 @@ class UTA extends Component {
       });
       */
 
-    const promise = customEvent("Er4b4f7hSZLrvQ72tCK85T", "uta", "get_times", { stop_code : sCode}, "get_times").then((resp) => {
-      this.setState({stopInfo : resp.data.directives[0].options });
+    const promise = customEvent(BUS_DID, "uta", "get_times", { stop_code : sCode}, "get_times").then((resp) => {
+      this.setState({stopInfo : resp.data.directives[0].options, stopCode : sCode });
     }).catch((e) => {
       console.error("Error loading uta: ", e);
     });;
@@ -56,11 +67,54 @@ class UTA extends Component {
     return toRet;
   }
 
+  addRankSuffix(rank) {
+    if (rank.toString().length > 1 && rank.toString().slice(-2).charAt(0) == '1') return rank + "th";
+    var lastLetter = rank.toString().slice(-1);
+
+    switch (lastLetter) {
+      case "1":
+      return rank + "st";
+
+      case "2":
+      return rank + "nd";
+
+      case "3":
+      return rank + "rd";
+
+      default:
+      return rank + "th";
+    }
+
+    return "\"" + lastLetter + "\"";
+  }
+
+  createRankAndScoreStatement(player) {
+    if(!player.points || player.points === -1) return "You have 0 points!";
+    let statement = "You are currently ";
+
+    if(player.tied) statement += "tied for ";
+    else statement += "in ";
+
+    statement += this.addRankSuffix(player.rank);
+    statement += " place with ";
+
+    statement += player.points;
+    if(player.points === 1) statement += " point!";
+    else  statement += " points!";
+
+
+    return statement;
+  }
+
   render() {
-    const url = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAP_KEY}&v=3.exp&libraries=geometry,drawing,places`;
+    const url = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAP_KEY}&v=3.exp&libraries=geometry,drawing,places`;
+
+
     return (
       <div className='shortenedWidth'>
-      <RegistryModal />
+        <RegistryModal getStanding={this.getStanding} />
+        {this.state.player.first && <h2>Signed in as {this.state.player.first + " " + this.state.player.last} </h2>}
+        {this.state.player && <h5>{this.createRankAndScoreStatement(this.state.player)}</h5>}
         {this.state.stopInfo.name && <h3>{this.camelCase(this.state.stopInfo.name)}</h3>}
 
         {this.state.stopInfo.lat && this.state.stopInfo.lon && <GMap
@@ -72,9 +126,9 @@ class UTA extends Component {
           containerElement={<div style={{ height: `300px` }} />}
           mapElement={<div style={{ height: `100%` }} />}/>}
 
-        {this.state.stopInfo.routes_array && <br></br> && <RouteList Routes={this.state.stopInfo.routes_array} className='listGroup' />}
+        {this.state.stopInfo.routes_array && <RouteList getStanding={this.getStanding} Routes={this.state.stopInfo.routes_array} stopCode={this.state.stopCode} className='listGroup' />}
         <br></br>
-        <SearchBar search={this.searchStop}/>
+        {/*<SearchBar search={this.searchStop}/>*/}
 
       </div>
     )

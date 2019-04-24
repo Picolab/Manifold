@@ -9,7 +9,8 @@ class UTA extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      stopInfo: []
+      stopInfo: [],
+      stopCode: 0
     }
     this.searchStop = this.searchStop.bind(this);
   }
@@ -24,7 +25,7 @@ class UTA extends Component {
       }
     });
 
-      promise.then((resp) => {this.setState({stopInfo : resp.data});}).catch((e) => {
+      promise.then((resp) => {this.setState({stopInfo : resp.data, stopCode : sCode});}).catch((e) => {
         console.error("Error loading uta: ", e);
       });
   }
@@ -43,7 +44,7 @@ class UTA extends Component {
   }
 
   render() {
-    const url = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAP_KEY}&v=3.exp&libraries=geometry,drawing,places`;
+    const url = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAP_KEY}&v=3.exp&libraries=geometry,drawing,places`;
     return (
       <div className='shortenedWidth'>
         {this.state.stopInfo.name && <h3>{this.camelCase(this.state.stopInfo.name)}</h3>}

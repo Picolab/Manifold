@@ -59,7 +59,7 @@ class App extends Component {
       <Route key="dynamic-route-1" path="/picolabs/safeandmine" name="Safe and Mine" component={SafeAndMine} />
     );
     landingPages.push(
-      <Route key="dynamic-route-2" path="/picolabs/uta" name="UTA" component={UTA} />
+      <Route key="dynamic-route-2" path="/picolabs/bus" name="UTA" component={UTA} />
     );
     return landingPages;
   }
