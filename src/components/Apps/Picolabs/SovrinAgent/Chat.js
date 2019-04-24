@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { InputGroup, InputGroupAddon, Button, Input, Media } from 'reactstrap';
 import { retrieveOwnerProfile } from '../../../../utils/manifoldSDK';
 
@@ -10,7 +11,8 @@ class Chat extends React.Component {
     this.state = {
       displayName: "No User Found",
       imgURL: "",
-      message: ""
+      message: "",
+      agentImage: <svg className="connectionPic" data-jdenticon-value={this.props.title}></svg>,
     };
     this.getProfileInfo = this.getProfileInfo.bind(this);
     this.sendMessage = this.sendMessage.bind(this);
@@ -27,18 +29,12 @@ class Chat extends React.Component {
 
   componentDidMount() {
     this.getProfileInfo();
-    this.myVar = setInterval(() => this.refreshMessage(), 3000);
-    const script = document.createElement("script");
-    script.src = "https://cdn.jsdelivr.net/npm/jdenticon@2.1.1";
-    script.async = true;
-    document.body.appendChild(script);
+    //this.myVar = setInterval(() => this.refreshMessage(), 3000);
   }
 
   componentWillUnmount() {
-    clearInterval(this.myVar);
+    //clearInterval(this.myVar);
   }
-
-  component
 
   getProfileInfo() {
     const profileGetPromise = retrieveOwnerProfile();
@@ -67,7 +63,7 @@ class Chat extends React.Component {
         output.push(
           <div key={this.props.messages[item]['sent_time']}>
             <div className="received">
-              {this.props.connectionImage}
+              {this.props.connectionImage != null ? this.props.connectionImage : this.state.agentImage}
               <p>{this.props.messages[item]['content']}</p>
             </div>
             <br />
@@ -119,6 +115,10 @@ class Chat extends React.Component {
   }
 
   render() {
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/jdenticon@2.1.1";
+    script.async = true;
+    document.body.appendChild(script);
     return (
       <div>
         <div id="chatBody" className="chatBody">

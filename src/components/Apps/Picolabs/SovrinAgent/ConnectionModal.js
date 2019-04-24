@@ -8,10 +8,11 @@ import classnames from 'classnames';
 class ConnectionModal extends React.Component {
   constructor(props) {
     super(props);
-
+    let modalState = localStorage.getItem('modalState'.concat(this.props.theirDID));
+    let tab = localStorage.getItem('currentTab'.concat(this.props.theirDID));
     this.state = {
-      modal: localStorage.getItem('modalState') === 'true' ? true : false,
-      activeTab: localStorage.getItem('currentTab') ==! null ? localStorage.getItem('currentTab') : '1'
+      modal: modalState === 'true' ? true : false,
+      activeTab: tab !== null ? tab : '1'
     };
     this.modalToggle = this.modalToggle.bind(this);
     this.toggle = this.toggle.bind(this);
@@ -27,7 +28,7 @@ class ConnectionModal extends React.Component {
   }
 
   modalToggle() {
-    localStorage.setItem('modalState', !this.state.modal)
+    localStorage.setItem('modalState'.concat(this.props.theirDID), !this.state.modal)
     this.setState(prevState => ({
       modal: !prevState.modal
     }));
@@ -35,7 +36,7 @@ class ConnectionModal extends React.Component {
 
   toggle(tab) {
     if (this.state.activeTab !== tab) {
-      localStorage.setItem('currentTab', tab);
+      localStorage.setItem('currentTab'.concat(this.props.theirDID), tab);
       this.setState({
         activeTab: tab
       });
@@ -54,30 +55,10 @@ class ConnectionModal extends React.Component {
     this.modalToggle();
   }
 
-  // getMyDID() {
-  //   return (
-  //     <div className="textStickOut"> My DID: JCTBbPwLiGNsFevAcYTUol </div>
-  //   )
-  // }
-  //
-  // getTheirDID() {
-  //   return (
-  //     <div className="textStickOut"> Their DID: {this.props.theirDID} </div>
-  //   )
-  // }
-
   render() {
-    // console.log('localStorage',localStorage.getItem('modalState'));
-    // console.log('this.state.modal',this.state.modal);
-    // console.log('tab', this.state.activeTab);
-    // console.log('localStorage Tab', localStorage.getItem('currentTab'));
-    // <Media object src={this.props.image} className='connection' onClick={this.modalToggle}/>
-    // <Media object src="https://cdn.jsdelivr.net/npm/jdenticon@2.1.1" async onClick={this.modalToggle}>
-    //   <svg className="connection" data-jdenticon-value="icon value"></svg>
-    // </Media>
     return (
       <div>
-        { this.props.image !== null ? <Media object src={this.props.image} className='connection' onClick={this.modalToggle}/> : <svg className="connection" data-jdenticon-value={this.props.theirDID} onClick={this.modalToggle}></svg>}
+        { this.props.image !== null ? <Media object src={this.props.image} className='connection' onClick={this.modalToggle}/> : <svg className="connection" data-jdenticon-value={this.props.title} onClick={this.modalToggle}></svg>}
         <Modal isOpen={this.state.modal} toggle={this.modalToggle} className={this.props.className}>
           <ModalHeader toggle={this.modalToggle}>Connection with {this.props.title}</ModalHeader>
           <ModalBody>
@@ -114,11 +95,13 @@ class ConnectionModal extends React.Component {
                 </TabPane>
                 <TabPane tabId="2">
                   <Chat
-                    connectionImage = { this.props.image !== null ? <Media object src={this.props.image} className="connectionPic" /> : <svg className="connectionPic" data-jdenticon-value={this.props.theirDID}></svg>}
+                    connectionImage = { this.props.image !== null ? <Media object src={this.props.image} className="connectionPic" /> : null}
                     messages={this.props.messages}
                     their_vk={this.props.their_vk}
                     signalEvent={this.props.signalEvent}
                     getUI={this.props.getUI}
+                    theirDID={this.props.theirDID}
+                    title={this.props.title}
                   />
                 </TabPane>
               </TabContent>

@@ -29,6 +29,7 @@ class SovrinAgent extends React.Component {
     script.src = "https://cdn.jsdelivr.net/npm/jdenticon@2.1.1";
     script.async = true;
     document.body.appendChild(script);
+    this.connVar = setInterval(() => this.getUI(), 3000);
   }
 
   componentWillUnmount() {
@@ -66,14 +67,13 @@ class SovrinAgent extends React.Component {
     promise.then((resp) => {
       if(JSON.stringify(resp.data) !== JSON.stringify(this.state.technicalDetails)) {
         console.log("resp data loop");
-        this.setState({
+        let promiseTwo = this.setState({
           technicalDetails: resp.data
-        })
-        clearInterval(this.connVar);
+        });
+        //clearInterval(this.connVar);
         this.getIconImages(resp.data['connections'])
-      } else {
-        console.log("no loop");
-      }})
+      }
+    });
   }
 
   getIconImages(connections) {
@@ -93,14 +93,6 @@ class SovrinAgent extends React.Component {
     }
   }
 
-  /*
-  <DropdownItem disabled>Action (disabled)</DropdownItem>
-  <DropdownItem divider />
-  <DropdownItem>Foo Action</DropdownItem>
-  <DropdownItem>Bar Action</DropdownItem>
-  <DropdownItem>Quo Action</DropdownItem>
-  */
-
   openInvite(e) {
     return (
       <div>
@@ -109,9 +101,7 @@ class SovrinAgent extends React.Component {
     );
   }
   copyInvitation(e) {
-    const text = document.getElementById('invitation');
-    // text.value = e.target.value;
-    //document.body.appendChild(el);
+    const text = document.getElementById(e.target.id);
     text.select();
     document.execCommand('copy');
   }
@@ -128,7 +118,6 @@ class SovrinAgent extends React.Component {
       this.setState({
         received_Invitation: ""
       });
-      this.connVar = setInterval(() => this.getUI(), 3000);
     })
   }
 
@@ -145,9 +134,9 @@ class SovrinAgent extends React.Component {
               <DropdownMenu className="actionsMenu">
                 <DropdownItem className="actionHeader" header>Generate Invitation</DropdownItem>
                   <InputGroup>
-                    <Input id="invitation" value={this.state.technicalDetails["invitation"]}/>
+                    <Input id={this.state.technicalDetails["invitation"]} value={this.state.technicalDetails["invitation"]}/>
                     <InputGroupAddon addonType="append">
-                      <Button value={this.state.technicalDetails["invitation"]} onClick={this.copyInvitation}>Copy</Button>
+                      <Button id={this.state.technicalDetails["invitation"]} value={this.state.technicalDetails["invitation"]} onClick={this.copyInvitation}>Copy</Button>
                     </InputGroupAddon>
                   </InputGroup>
                 <DropdownItem header>Receive Invitation</DropdownItem>
@@ -169,47 +158,12 @@ class SovrinAgent extends React.Component {
       <svg className="connection" data-jdenticon-value={label}></svg>
     );
   }
-  /*invitation Dropdown
-  <Dropdown isOpen={this.state.invitationOpen} toggle={this.invitationToggle}>
-    <DropdownToggle color='primary' className='notificationButton' outline>
-      Invitations <span className='notification'>4</span>
-    </DropdownToggle>
-    <DropdownMenu>
-      <DropdownItem header>Pending Invitations</DropdownItem>
-      <InvitationModal
-        buttonLabel = 'Bruce'
-      />
-      <InvitationModal
-        buttonLabel = 'Jace'
-      />
-      <InvitationModal
-        buttonLabel = 'Connor'
-      />
-      <InvitationModal
-        buttonLabel = 'Phil'
-      />
-    </DropdownMenu>
-  </Dropdown>
-  */
-
-  // <div>
-  //   <ConnectionModal
-  //     image={icon}
-  //     title='Sovrin'
-  //   />
-  // </div>
-  // <div>
-  //   <ConnectionModal
-  //     image={picoLabs}
-  //     title='Pico Labs'
-  //   />
-  // </div>
 
   displayConnections() {
     var output = [];
     for(var item in this.state.technicalDetails['connections']) {
       if(this.state.technicalDetails['connections'][item] !== undefined) {
-        console.log("label", this.state[this.state.technicalDetails['connections'][item]['label']]);
+        //console.log("label", this.state[this.state.technicalDetails['connections'][item]['label']]);
         if(this.state[this.state.technicalDetails['connections'][item]['label']] !== undefined) {
           output.push(
             <div key={this.state.technicalDetails['connections'][item]['their_did']}>
