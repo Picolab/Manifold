@@ -8,8 +8,11 @@ npm install
 npm start
 ```
 ## Users
-manifold app is used for managing your Internet of Things Pico device shadows.... 
+manifold app is used for managing your Internet of Things Pico device shadows....
 To learn more about picos, check out [PicoLabs website](http://picolabs.io)
+
+##Developers
+To learn how to contribute, follow the tutorials fount in the [PicoLabs documentation.](https://picolabs.atlassian.net/wiki/spaces/docs/pages/360579073/Manifold)
 
 ## Note
 This application is currently under heavy development. If you want to contribute to this project, please feel free to issue a pull request.
@@ -929,7 +932,7 @@ This feature is experimental and still [has major usage issues](https://github.c
 
 ### Editor Integration
 
-If you use [Visual Studio Code](https://code.visualstudio.com), there is a [Jest extension](https://github.com/orta/vscode-jest) which works with Create React App out of the box. This provides a lot of IDE-like features while using a text editor: showing the status of a test run with potential fail messages inline, starting and stopping the watcher automatically, and offering one-click snapshot updates. 
+If you use [Visual Studio Code](https://code.visualstudio.com), there is a [Jest extension](https://github.com/orta/vscode-jest) which works with Create React App out of the box. This provides a lot of IDE-like features while using a text editor: showing the status of a test run with potential fail messages inline, starting and stopping the watcher automatically, and offering one-click snapshot updates.
 
 ![VS Code Jest Preview](https://cloud.githubusercontent.com/assets/49038/20795349/a032308a-b7c8-11e6-9b34-7eeac781003f.png)
 
