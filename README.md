@@ -8,7 +8,7 @@ npm install
 npm start
 ```
 
-To learn how to contribute, follow the tutorials fount in the [PicoLabs documentation.](https://picolabs.atlassian.net/wiki/spaces/docs/pages/360579073/Manifold)
+To learn how to contribute, follow the tutorials found in the [PicoLabs documentation.](https://picolabs.atlassian.net/wiki/spaces/docs/pages/360579073/Manifold)
 
 ## Users
 manifold app is used for managing your Internet of Things Pico device shadows....
