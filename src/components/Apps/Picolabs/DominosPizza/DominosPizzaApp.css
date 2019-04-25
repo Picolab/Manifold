@@ -41,6 +41,12 @@
   display: block;
 }
 
+.cartButton {
+  box-shadow: 3px 3px 3px grey;
+  display: inline-block;
+  border-radius: 8px;
+}
+
 .viewOrderButton {
   box-shadow: 3px 3px 3px grey;
   display: inline-block;

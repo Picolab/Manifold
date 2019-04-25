@@ -7,11 +7,11 @@ import { retrieveOwnerProfile } from '../../../../utils/manifoldSDK';
 class Chat extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       displayName: "No User Found",
       imgURL: "",
       message: "",
+      myImage: <svg className="profilePic" data-jdenticon-value={this.props.myName}></svg>,
       agentImage: <svg className="connectionPic" data-jdenticon-value={this.props.title}></svg>,
     };
     this.getProfileInfo = this.getProfileInfo.bind(this);
@@ -74,7 +74,7 @@ class Chat extends React.Component {
         output.push(
           <div key={this.props.messages[item]['sent_time']}>
             <div className="sent">
-              <Media object src={this.state.imgURL} className="profilePic"/>
+              {this.props.myImage}
               <p>{this.props.messages[item]['content']}</p>
             </div>
             <br />

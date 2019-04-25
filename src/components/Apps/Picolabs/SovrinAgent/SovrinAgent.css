@@ -14,6 +14,14 @@
   width: 100px;
 }
 
+.agentLabel {
+  max-height: 170px;
+  width: 150px;
+  font-size: 23px;
+  text-align: center;
+
+}
+
 .myConnection {
   margin: 70px;
 }
@@ -60,7 +68,7 @@
 }
 
 .flex-container > div {
-  margin: 35px;
+  margin: 15px;
   margin-top: -10px;
   text-align: center;
   line-height: 75px;
@@ -72,9 +80,7 @@
   background: #000000;
   padding: 20px;
   width: 150px;
-  height: 150px;
-  margin-left: -20px;
-  margin-right: -30px;
+  max-height: 150px;
   margin-top: 40px;
   cursor: pointer;
 }
@@ -168,8 +174,15 @@
     display: inline-block;
   }
 
+  .agentLabel {
+    max-height: 140px;
+    width: 150px;
+    font-size: 18px;
+    text-align: center;
+  }
+
   .myConnection {
-    width: 250px;
+    width: 240px;
     margin: 0px;
     margin-left: 0px;
     font-size: 20px;
@@ -194,11 +207,10 @@
   }
 
   .flex-container > div {
-    margin: 10px;
+    margin: 0px;
     text-align: center;
     line-height: 75px;
     font-size: 30px;
-    margin: 40px;
     margin-top: -10px;
   }
 
@@ -236,6 +248,7 @@
     height: auto;
     margin-left: 0;
   }
+
   .icon {
     float: left;
     width: 60px;
@@ -246,12 +259,18 @@
     display: inline-block;
   }
 
+  .agentLabel {
+    max-height: 140px;
+    width: 150px;
+    font-size: 18px;
+    text-align: center;
+  }
+
   .myConnection {
-    width: 250px;
+    width: 240px;
     margin: 0px;
     margin-left: 0px;
     font-size: 20px;
-    text-align: left;
     display: none;
   }
 
@@ -272,11 +291,10 @@
   }
 
   .flex-container > div {
-    margin: 10px;
+    margin: 0px;
     text-align: center;
     line-height: 75px;
     font-size: 30px;
-    margin: 40px;
     margin-top: -10px;
   }
 
@@ -286,7 +304,7 @@
     padding: 20px;
     width: 120px;
     height: 120px;
-    margin-left: -20px;
+    margin-left: 0px;
     margin-top: 40px;
     flex-grow: .5;
   }

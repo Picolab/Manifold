@@ -288,7 +288,7 @@ cart() {
     <FormGroup check>
       <Label check>
       <div>
-        <Button color="primary" size="sm" onClick={this.toggleCart}>Cart</Button>
+        <Button color="primary" className="cartButton" size="sm" onClick={this.toggleCart}>Cart</Button>
         <Modal isOpen={this.state.modal} toggle={this.toggleCart} className={this.props.className}>
           <ModalHeader toggle={this.toggleCart}>Your Products</ModalHeader>
             <ModalBody>
@@ -331,7 +331,7 @@ validateOrder() {
 
 cartItemToppings(toppings) {
   var out = [];
-  
+
   for (var topping in toppings) {
     for(var amounts in toppings[topping]) {
     out.push(

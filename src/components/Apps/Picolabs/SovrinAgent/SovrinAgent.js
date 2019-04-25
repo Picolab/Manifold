@@ -125,7 +125,7 @@ class SovrinAgent extends React.Component {
         <div>
           <h1 className='connectionHeader'>
             <Media object src={icon} className='icon'/>
-            <div className='myConnection'>My Connections</div>
+            <div className='myConnection'>{this.state.technicalDetails['name']}'s Connections</div>
             <Dropdown isOpen={this.state.actionsOpen} toggle={this.actionsToggle}>
               <DropdownToggle color='primary' className='notificationButton' outline caret>
                 Actions
@@ -167,6 +167,7 @@ class SovrinAgent extends React.Component {
           output.push(
             <div key={this.state.technicalDetails['connections'][item]['their_did']}>
               <ConnectionModal
+                myImage= {<svg className="profilePic" data-jdenticon-value={this.state.technicalDetails['name']}></svg>}
                 image= {this.state[this.state.technicalDetails['connections'][item]['label']]}
                 title={this.state.technicalDetails['connections'][item]['label']}
                 myDID={this.state.technicalDetails['connections'][item]['my_did']}
@@ -176,12 +177,16 @@ class SovrinAgent extends React.Component {
                 signalEvent={this.props.signalEvent}
                 getUI={this.getUI}
               />
+              <div className="agentLabel">
+                {this.state.technicalDetails['connections'][item]['label']}
+              </div>
             </div>
           );
         } else {
           output.push(
             <div key={this.state.technicalDetails['connections'][item]['their_did']}>
               <ConnectionModal
+                myImage= {<svg className="profilePic" data-jdenticon-value={this.state.technicalDetails['name']}></svg>}
                 image= {null}
                 title={this.state.technicalDetails['connections'][item]['label']}
                 myDID={this.state.technicalDetails['connections'][item]['my_did']}
@@ -191,6 +196,9 @@ class SovrinAgent extends React.Component {
                 signalEvent={this.props.signalEvent}
                 getUI={this.getUI}
               />
+              <div className="agentLabel">
+                {this.state.technicalDetails['connections'][item]['label']}
+              </div>
             </div>
           );
         }
@@ -205,6 +213,10 @@ class SovrinAgent extends React.Component {
   }
 
   render() {
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/jdenticon@2.1.1";
+    script.async = true;
+    document.body.appendChild(script);
     return(
       <div>
           {this.displayHeader()}

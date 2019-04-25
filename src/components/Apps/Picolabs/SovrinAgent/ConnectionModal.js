@@ -21,10 +21,10 @@ class ConnectionModal extends React.Component {
   }
 
   componentDidMount() {
-    const script = document.createElement("script");
-    script.src = "https://cdn.jsdelivr.net/npm/jdenticon@2.1.1";
-    script.async = true;
-    document.body.appendChild(script);
+    // const script = document.createElement("script");
+    // script.src = "https://cdn.jsdelivr.net/npm/jdenticon@2.1.1";
+    // script.async = true;
+    // document.body.appendChild(script);
   }
 
   modalToggle() {
@@ -56,8 +56,12 @@ class ConnectionModal extends React.Component {
   }
 
   render() {
+    // const script = document.createElement("script");
+    // script.src = "https://cdn.jsdelivr.net/npm/jdenticon@2.1.1";
+    // script.async = true;
+    // document.body.appendChild(script);
     return (
-      <div>
+      <div className="agentLabel">
         { this.props.image !== null ? <Media object src={this.props.image} className='connection' onClick={this.modalToggle}/> : <svg className="connection" data-jdenticon-value={this.props.title} onClick={this.modalToggle}></svg>}
         <Modal isOpen={this.state.modal} toggle={this.modalToggle} className={this.props.className}>
           <ModalHeader toggle={this.modalToggle}>Connection with {this.props.title}</ModalHeader>
@@ -95,6 +99,7 @@ class ConnectionModal extends React.Component {
                 </TabPane>
                 <TabPane tabId="2">
                   <Chat
+                    myImage={this.props.myImage}
                     connectionImage = { this.props.image !== null ? <Media object src={this.props.image} className="connectionPic" /> : null}
                     messages={this.props.messages}
                     their_vk={this.props.their_vk}
