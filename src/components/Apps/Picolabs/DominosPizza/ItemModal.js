@@ -131,7 +131,7 @@ class ItemModal extends React.Component {
                             <option value="0.5">Light</option>
                             <option value="1">Normal</option>
                             <option value="1.5">Extra</option>
-                            {anotherArray[0].substring(0,1) !== 'X' && <option value="2">Double</option>}
+                            {this.state.toppingTags[anotherArray[0]]["IgnoreQty"] === undefined && <option value="2">Double</option>}
                           </Input>
                       </FormGroup>
                     </div>
@@ -147,7 +147,7 @@ class ItemModal extends React.Component {
                             <option value="0.5">Light</option>
                             <option value="1">Normal</option>
                             <option value="1.5">Extra</option>
-                            {anotherArray[0].substring(0,1) !== 'X' && <option value="2">Double</option>}
+                            {this.state.toppingTags[anotherArray[0]]["IgnoreQty"] === undefined  && <option value="2">Double</option>}
                           </Input>
                       </FormGroup>
                     </div>
@@ -164,7 +164,7 @@ class ItemModal extends React.Component {
                           <option value="0.5">Light</option>
                           <option value="1">Normal</option>
                           <option value="1.5">Extra</option>
-                          {anotherArray[0].substring(0,1) !== 'X' && <option value="2">Double</option>}
+                          {this.state.toppingTags[anotherArray[0]]["IgnoreQty"] === undefined  && <option value="2">Double</option>}
                         </Input>
                     </FormGroup>
                   </div>
@@ -181,7 +181,7 @@ class ItemModal extends React.Component {
                         <option value="0.5">Light</option>
                         <option value="1">Normal</option>
                         <option value="1.5">Extra</option>
-                        {anotherArray[0].substring(0,1) !== 'X' && <option value="2">Double</option>}
+                        {this.state.toppingTags[anotherArray[0]]["IgnoreQty"] === undefined  && <option value="2">Double</option>}
                       </Input>
                   </FormGroup>
                 </div>

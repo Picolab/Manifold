@@ -66,7 +66,6 @@ class SovrinAgent extends React.Component {
     });
     promise.then((resp) => {
       if(JSON.stringify(resp.data) !== JSON.stringify(this.state.technicalDetails)) {
-        console.log("resp data loop");
         let promiseTwo = this.setState({
           technicalDetails: resp.data
         });

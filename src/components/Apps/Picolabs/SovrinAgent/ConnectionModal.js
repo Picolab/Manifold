@@ -89,7 +89,7 @@ class ConnectionModal extends React.Component {
                         <div className="textStickOut"> My DID: {this.props.myDID} </div>
                         <div className="textStickOut"> Their DID: {this.props.theirDID} </div>
                       <button className="btn-info" onClick={this.sendTrustPing}>Send Trust Ping</button> {' '}
-                      <button className="btn-danger" onClick={this.deleteConnection}>delete connection</button>
+                      <button className="btn-danger" onClick={this.deleteConnection}>Delete Connection</button>
                     </Col>
                   </Row>
                 </TabPane>
@@ -114,7 +114,5 @@ class ConnectionModal extends React.Component {
       </div>
     );
   }
-// <Button color="primary" onClick={this.modalToggle}>Do Something</Button>{' '}
-
 }
 export default ConnectionModal;
