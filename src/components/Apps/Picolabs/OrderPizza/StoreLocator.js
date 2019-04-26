@@ -1,8 +1,8 @@
 import React from 'react';
 import logo from './pico-labs-pizza.png';
-import './DominosPizzaApp.css'
+import './OrderPizzaApp.css'
 import { Link, Route, Router, Switch } from 'react-router-dom'
-import DominosPizzaApp from './DominosPizzaApp';
+import OrderPizzaApp from './OrderPizzaApp';
 import OrderModal from './OrderModal';
 import {customQuery, customEvent} from '../../../../utils/manifoldSDK';
 import { Container, Row, Col, Label, Button, ButtonGroup, Form, FormGroup, Input, ListGroup, ListGroupItem, Media, Card, CardTitle, CardText } from 'reactstrap';

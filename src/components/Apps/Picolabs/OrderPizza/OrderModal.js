@@ -1,5 +1,5 @@
 import React from 'react';
-import './DominosPizzaApp.css';
+import './OrderPizzaApp.css';
 import {customQuery} from '../../../../utils/manifoldSDK';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Input, Label} from 'reactstrap';
 

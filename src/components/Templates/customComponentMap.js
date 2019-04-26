@@ -7,7 +7,7 @@ import CommunityTemplate from './CommunityTemplate';
 import NeighborhoodTemps from './NeighborhoodTemps';
 import SafeAndMineApp from '../Apps/Picolabs/SafeAndMine/SafeAndMineApp';
 import JournalApp from '../Apps/Picolabs/Journal/JournalApp';
-import DominosPizzaApp from '../Apps/Picolabs/DominosPizza/DominosPizzaApp';
+import OrderPizzaApp from '../Apps/Picolabs/OrderPizza/OrderPizzaApp';
 import SovrinAgent from '../Apps/Picolabs/SovrinAgent/SovrinAgent';
 
 export default {
@@ -20,6 +20,6 @@ export default {
   'io.picolabs.community': CommunityTemplate,
   'io.picolabs.neighborhood_temps': NeighborhoodTemps,
   'io.picolabs.safeandmine': SafeAndMineApp,
-  'io.picolabs.pizza': DominosPizzaApp,
+  'io.picolabs.pizza': OrderPizzaApp,
   'org.sovrin.manifold_agent':SovrinAgent
 }

@@ -3,7 +3,7 @@ import StoreMenu from './StoreMenu';
 import StoreLocator from './StoreLocator';
 import { Link, Route, Router, Switch } from 'react-router-dom'
 
-class DominosPizzaApp extends React.Component {
+class OrderPizzaApp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -50,4 +50,4 @@ class DominosPizzaApp extends React.Component {
     );
   }
 };
-export default DominosPizzaApp;
+export default OrderPizzaApp;

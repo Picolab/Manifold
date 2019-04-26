@@ -1,6 +1,6 @@
 import React from 'react';
 import {amount, amountFlipped} from './toppings';
-import './DominosPizzaApp.css'
+import './OrderPizzaApp.css'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Input, Label, Container, Row, Col} from 'reactstrap';
 
 class ItemModal extends React.Component {

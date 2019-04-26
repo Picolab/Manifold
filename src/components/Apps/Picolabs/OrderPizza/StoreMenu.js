@@ -1,5 +1,5 @@
 import React from 'react';
-import './DominosPizzaApp.css';
+import './OrderPizzaApp.css';
 import ItemModal from './ItemModal';
 import spinner from './PizzaLoader.GIF';
 import {amount, amountFlipped} from './toppings';
