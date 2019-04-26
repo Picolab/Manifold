@@ -45,7 +45,7 @@ class OrderModal extends React.Component {
   }
 
   getCart() {
-    const promise = customQuery(this.props.orderEci, "Order", "getProductCart");
+    const promise = customQuery(this.props.orderEci, "io.picolabs.child_order", "getProductCart");
     promise.then((resp) => {
       this.setState({
           cart: resp.data
@@ -80,7 +80,7 @@ class OrderModal extends React.Component {
   }
 
   editOrder() {
-    const promise = customQuery(this.state.eci, "Order", "getOrder");
+    const promise = customQuery(this.state.eci, "io.picolabs.child_order", "getOrder");
     promise.then((resp) => {
       const promiseTwo = this.props.signalEvent({
         domain : "set",

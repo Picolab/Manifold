@@ -44,7 +44,7 @@ class StoreLocator extends React.Component {
   }
 
   getOrderDescription(eci) {
-    const promise = customQuery(eci, "Order", "getOrderDescription");
+    const promise = customQuery(eci, "io.picolabs.child_order", "getOrderDescription");
     promise.then((resp) => {
       this.setState({
         [eci]: resp.data
