@@ -108,7 +108,7 @@
 
 .sent {
   width: 200px;
-  height: 64px;
+/*  height: 64px; */
   border: 2px solid #33b8ff;
   background-color: #33caff;
   border-radius: 5px;
@@ -123,7 +123,7 @@
 
 .received {
   width: 200px;
-  height: 64px;
+  /*height: 64px; */
   border: 2px solid #5BC236;
   background-color: 	#5BC236;
   border-radius: 5px;
@@ -131,7 +131,7 @@
   margin: 10px 0;
   width: 200px;
   clear: both;
-  text-align: right;
+  text-align: left;
 }
 
 .connectionPic {
