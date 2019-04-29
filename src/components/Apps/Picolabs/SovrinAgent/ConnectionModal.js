@@ -107,6 +107,7 @@ class ConnectionModal extends React.Component {
                     getUI={this.props.getUI}
                     theirDID={this.props.theirDID}
                     title={this.props.title}
+                    invitation={this.props.invitation}
                   />
                 </TabPane>
               </TabContent>

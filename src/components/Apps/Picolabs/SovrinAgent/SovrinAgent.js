@@ -176,6 +176,7 @@ class SovrinAgent extends React.Component {
                 messages={this.state.technicalDetails['connections'][item]['messages']}
                 signalEvent={this.props.signalEvent}
                 getUI={this.getUI}
+                invitation={this.state.technicalDetails["invitation"]}
               />
               <div className="agentLabel">
                 {this.state.technicalDetails['connections'][item]['label']}
@@ -195,6 +196,7 @@ class SovrinAgent extends React.Component {
                 messages={this.state.technicalDetails['connections'][item]['messages']}
                 signalEvent={this.props.signalEvent}
                 getUI={this.getUI}
+                invitation={this.state.technicalDetails["invitation"]}
               />
               <div className="agentLabel">
                 {this.state.technicalDetails['connections'][item]['label']}

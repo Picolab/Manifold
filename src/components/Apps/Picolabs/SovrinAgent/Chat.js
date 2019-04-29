@@ -29,11 +29,9 @@ class Chat extends React.Component {
 
   componentDidMount() {
     this.getProfileInfo();
-    //this.myVar = setInterval(() => this.refreshMessage(), 3000);
   }
 
   componentWillUnmount() {
-    //clearInterval(this.myVar);
   }
 
   getProfileInfo() {
@@ -119,13 +117,15 @@ class Chat extends React.Component {
     script.src = "https://cdn.jsdelivr.net/npm/jdenticon@2.1.1";
     script.async = true;
     document.body.appendChild(script);
+
     return (
       <div>
         <div id="chatBody" className="chatBody">
           {this.displayMessages()}
         </div>
         <InputGroup>
-          <Input type="text" name="message" placeholder="Send Message" value={this.state.message} onChange={this.onChange('message')}/>
+          <Input autoFocus id={this.props.invitation.concat(this.props.title)} onMouseDown={(e)=>{ e.stopPropagation();}}
+            type="text" name="message" placeholder="Send Message" onKeyDown={(e)=>{ if(e.keyCode === 13){this.sendMessage()}}} value={this.state.message} onChange={this.onChange('message')}/>
           <InputGroupAddon addonType="append">
             <Button onClick={this.sendMessage} color="secondary">Send</Button>
           </InputGroupAddon>
