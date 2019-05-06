@@ -104,6 +104,7 @@ class ConnectionModal extends React.Component {
                     messages={this.props.messages}
                     their_vk={this.props.their_vk}
                     signalEvent={this.props.signalEvent}
+                    manifoldQuery={this.props.manifoldQuery}
                     getUI={this.props.getUI}
                     theirDID={this.props.theirDID}
                     title={this.props.title}

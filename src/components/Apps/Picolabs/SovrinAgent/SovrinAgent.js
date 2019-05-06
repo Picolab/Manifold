@@ -175,6 +175,7 @@ class SovrinAgent extends React.Component {
                 their_vk={this.state.technicalDetails['connections'][item]['their_vk']}
                 messages={this.state.technicalDetails['connections'][item]['messages']}
                 signalEvent={this.props.signalEvent}
+                manifoldQuery={this.props.manifoldQuery}
                 getUI={this.getUI}
                 invitation={this.state.technicalDetails["invitation"]}
               />
@@ -195,6 +196,7 @@ class SovrinAgent extends React.Component {
                 their_vk={this.state.technicalDetails['connections'][item]['their_vk']}
                 messages={this.state.technicalDetails['connections'][item]['messages']}
                 signalEvent={this.props.signalEvent}
+                manifoldQuery={this.props.manifoldQuery}
                 getUI={this.getUI}
                 invitation={this.state.technicalDetails["invitation"]}
               />
