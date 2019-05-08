@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { retrieveOwnerProfile } from '../../../../utils/manifoldSDK';
 //import PropTypes from 'prop-types';
 import { Button, Form, FormGroup, Label, Input, Media, ListGroup, ListGroupItem, Container, Row, Col } from 'reactstrap';
 import DeleteButton from './DeleteButton';
@@ -36,6 +37,7 @@ export class SafeAndMineApp extends Component {
       validTagId: true
     }
 
+    this.getProfileInfo = this.getProfileInfo.bind(this);
     this.updateData = this.updateData.bind(this);
     this.registerTag = this.registerTag.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -48,6 +50,27 @@ export class SafeAndMineApp extends Component {
     this.retrieveTags();
   }
 
+  getProfileInfo() {
+    const profileGetPromise = retrieveOwnerProfile();
+    profileGetPromise.then((resp) => {
+      const profile = resp.data;
+      console.log(resp.data);
+      if (profile.google) {
+        this.setState({
+          name: profile.google.displayName,
+          email: profile.google.email
+        })
+      } else if(profile.github) {
+        this.setState({
+          name: profile.github.displayName,
+          email: profile.google.email
+        })
+      }
+    }).catch((e) => {
+      console.error(e);
+    });
+  }
+
   retrieveInformation() {
     const promise = this.props.manifoldQuery({
       rid: "io.picolabs.safeandmine",
@@ -56,15 +79,20 @@ export class SafeAndMineApp extends Component {
 
     promise.then((resp) => {
       const { name = "", email = "", phone = "", message = "", shareName = false, shareEmail = false, sharePhone = false } = resp.data;
-      this.setState({
-        savedName: name,
-        savedEmail: email,
-        savedPhone: phone,
-        savedMessage: message,
-        shareName,
-        sharePhone,
-        shareEmail,
-      })
+      if(name === "" && email === "") {
+        this.getProfileInfo();
+      }
+      else {
+        this.setState({
+          savedName: name,
+          savedEmail: email,
+          savedPhone: phone,
+          savedMessage: message,
+          shareName,
+          sharePhone,
+          shareEmail,
+        })
+      }
     }).catch((e) => {
       console.error("Error loading safeandmine information", e);
     })

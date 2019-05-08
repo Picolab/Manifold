@@ -14,6 +14,7 @@ class Chat extends React.Component {
       message: "",
       myImage: <svg className="profilePic" data-jdenticon-value={this.props.myName}></svg>,
       agentImage: <svg className="connectionPic" data-jdenticon-value={this.props.title}></svg>,
+      currentMSGstatus: "",
       failedMessage: failedMessage === null | failedMessage === 'null' ? "" : failedMessage
     };
     this.getProfileInfo = this.getProfileInfo.bind(this);
@@ -62,7 +63,6 @@ class Chat extends React.Component {
   }
 
   getLastMessageStatus() {
-    console.log("status check!");
     const promise = this.props.manifoldQuery({
       rid: "org.sovrin.manifold_agent",
       funcName: "lastMessageStatus"
@@ -70,10 +70,14 @@ class Chat extends React.Component {
         console.error("Error getting message status", e);
     });
     promise.then((resp) => {
+      console.log(resp.data["status"]);
       if(resp.data["status"] === "pending") {
         if(this.statusCheck === undefined || this.statusCheck === null) {
             this.statusCheck = setInterval(() => this.getLastMessageStatus(), 500);
         }
+        // this.setState({
+        //   currentMSGstatus: resp.data["status"]
+        // })
       }
       else if(resp.data["status"] === "failed") {
         if(this.statusCheck !== undefined) {
@@ -91,11 +95,10 @@ class Chat extends React.Component {
         if(this.statusCheck !== undefined) {
             clearInterval(this.statusCheck);
             this.statusCheck = undefined;
-            localStorage.setItem('failedMessage'.concat(this.props.theirDID), "")
-            this.setState({
-              failedMessage: ""
-            });
         }
+        // this.setState({
+        //   currentMSGstatus: resp.data["status"]
+        // })
       }
     });
   }
@@ -127,7 +130,6 @@ class Chat extends React.Component {
       }
     }
     if(this.state.failedMessage !== null && this.state.failedMessage !== "") {
-      console.log("Failed Message");
       output.push(
         <div key={this.state.failedMessage.concat("Failure")}>
           <div className="failedMessage">
@@ -154,6 +156,9 @@ class Chat extends React.Component {
     });
     promise.then((resp) => {
       this.props.getUI();
+      this.setState({
+        failedMessage: ""
+      });
       this.getLastMessageStatus();
       this.setState({
         message: ""
@@ -172,6 +177,10 @@ class Chat extends React.Component {
     });
     promise.then((resp) => {
       this.props.getUI();
+      localStorage.setItem('failedMessage'.concat(this.props.theirDID), "")
+      this.setState({
+        failedMessage: ""
+      });
       this.getLastMessageStatus();
     });
   }
@@ -184,7 +193,6 @@ class Chat extends React.Component {
     var element = document.getElementById("chatBody");
     if(element !== null) {
       element.scrollTop = element.scrollHeight;
-      console.log(element.scrollHeight);
     }
   }
 

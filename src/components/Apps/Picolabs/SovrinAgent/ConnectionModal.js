@@ -12,11 +12,13 @@ class ConnectionModal extends React.Component {
     let tab = localStorage.getItem('currentTab'.concat(this.props.theirDID));
     this.state = {
       modal: modalState === 'true' ? true : false,
-      activeTab: tab !== null ? tab : '1'
+      activeTab: tab !== null ? tab : '1',
+      pingStatus: null
     };
     this.modalToggle = this.modalToggle.bind(this);
     this.toggle = this.toggle.bind(this);
     this.sendTrustPing = this.sendTrustPing.bind(this);
+    this.getPingStatus = this.getPingStatus.bind(this);
     this.deleteConnection = this.deleteConnection.bind(this);
   }
 
@@ -30,7 +32,8 @@ class ConnectionModal extends React.Component {
   modalToggle() {
     localStorage.setItem('modalState'.concat(this.props.theirDID), !this.state.modal)
     this.setState(prevState => ({
-      modal: !prevState.modal
+      modal: !prevState.modal,
+      pingStatus: null
     }));
   }
 
@@ -38,13 +41,63 @@ class ConnectionModal extends React.Component {
     if (this.state.activeTab !== tab) {
       localStorage.setItem('currentTab'.concat(this.props.theirDID), tab);
       this.setState({
-        activeTab: tab
+        activeTab: tab,
+        pingStatus: null
       });
     }
   }
 
+  getPingStatus() {
+    const promise = this.props.manifoldQuery({
+      rid: "org.sovrin.manifold_agent",
+      funcName: "pingStatus"
+    }).catch((e) => {
+        console.error("Error getting message status", e);
+    });
+    promise.then((resp) => {
+      console.log(resp.data);
+      if(resp.data === "pending") {
+        if(this.pingStatusCheck === undefined || this.pingStatusCheck === null) {
+            this.pingStatusCheck = setInterval(() => this.getPingStatus(), 500);
+        }
+        this.setState({
+          pingStatus: resp.data
+        });
+      }
+      else if(resp.data === "disconnected") {
+        if(this.pingStatusCheck !== undefined) {
+            clearInterval(this.pingStatusCheck);
+            this.pingStatusCheck = undefined;
+        }
+        this.setState({
+          pingStatus: resp.data
+        });
+
+      }
+      else if(resp.data === "connected") {
+        this.props.getUI();
+        if(this.pingStatusCheck !== undefined) {
+            clearInterval(this.pingStatusCheck);
+            this.pingStatusCheck = undefined;
+        }
+        this.setState({
+          pingStatus: resp.data
+        });
+      }
+    });
+  }
+
   sendTrustPing() {
-    const promise = customEvent( this.props.myDID , "sovrin",  "trust_ping_requested", { their_vk: this.props.their_vk }, '5');
+    const promise = this.props.signalEvent({
+      domain : "sovrin",
+      type: "check_connection",
+      attrs : {
+        their_vk: this.props.their_vk
+      }
+    });
+    promise.then((resp) => {
+      this.getPingStatus();
+    });
   }
 
   deleteConnection() {
@@ -117,6 +170,8 @@ class ConnectionModal extends React.Component {
           <ModalFooter>
             <Button color="secondary" onClick={this.modalToggle}>Cancel</Button>
           </ModalFooter>
+          {(this.state.pingStatus === 'connected') && <div id="snackbar" style={{left: "50%", color: "green"}}>You are connected to {this.props.title}</div>}
+          {(this.state.pingStatus === 'disconnected') && <div id="snackbar" style={{left: "47%"}}>You are disconnected from {this.props.title}</div>}
         </Modal>
       </div>
     );
