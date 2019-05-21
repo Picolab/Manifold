@@ -15,7 +15,8 @@ class SovrinAgent extends React.Component {
       invitationOpen: false,
       actionsOpen: false,
       technicalDetails: {},
-      received_Invitation: ""
+      received_Invitation: "",
+      messages: []
     };
     this.invitationToggle = this.invitationToggle.bind(this);
     this.actionsToggle = this.actionsToggle.bind(this);
@@ -62,7 +63,7 @@ class SovrinAgent extends React.Component {
       rid: "org.sovrin.agent",
       funcName: "ui"
     }).catch((e) => {
-        console.error("Error getting description", e);
+        console.error("Error getting technical details", e);
     });
     promise.then((resp) => {
       if(JSON.stringify(resp.data) !== JSON.stringify(this.state.technicalDetails)) {

@@ -171,7 +171,7 @@ class ConnectionModal extends React.Component {
             <Button color="secondary" onClick={this.modalToggle}>Cancel</Button>
           </ModalFooter>
           {(this.state.pingStatus === 'connected') && <div id="snackbar" style={{left: "50%", color: "green"}}>You are connected to {this.props.title}</div>}
-          {(this.state.pingStatus === 'disconnected') && <div id="snackbar" style={{left: "47%"}}>You are disconnected from {this.props.title}</div>}
+          {(this.state.pingStatus === 'disconnected') && <div id="snackbar" style={{left: "47%"}}>You are not connected to {this.props.title}</div>}
         </Modal>
       </div>
     );

@@ -11,6 +11,8 @@ class Chat extends React.Component {
     this.state = {
       displayName: "No User Found",
       imgURL: "",
+      uiMessages: null,
+      messages: [],
       message: "",
       myImage: <svg className="profilePic" data-jdenticon-value={this.props.myName}></svg>,
       agentImage: <svg className="connectionPic" data-jdenticon-value={this.props.title}></svg>,
@@ -20,6 +22,7 @@ class Chat extends React.Component {
     this.getProfileInfo = this.getProfileInfo.bind(this);
     this.sendMessage = this.sendMessage.bind(this);
     this.reSendMessage = this.reSendMessage.bind(this);
+    this.retrieveMessages = this.retrieveMessages.bind(this);
   }
 
   onChange(stateKey) {
@@ -37,6 +40,12 @@ class Chat extends React.Component {
 
   componentDidUpdate() {
     this.scrollToBottom();
+    if(JSON.stringify(this.state.uiMessages) !== JSON.stringify(this.props.messages)) {
+      this.setState({
+        uiMessages: this.props.messages
+      });
+      this.retrieveMessages();
+    }
   }
 
   componentWillUnmount() {
@@ -59,6 +68,23 @@ class Chat extends React.Component {
       }
     }).catch((e) => {
       console.error(e);
+    });
+  }
+
+  retrieveMessages() {
+    const promise = this.props.manifoldQuery({
+      rid: "org.sovrin.manifold_agent",
+      funcName: "retrieveMSGs",
+      funcArgs: {
+        their_vk: this.props.their_vk
+      }
+    }).catch((e) => {
+        console.error("Error getting messages", e);
+    });
+    promise.then((resp) => {
+      this.setState({
+          messages: resp.data
+      })
     });
   }
 
@@ -105,41 +131,41 @@ class Chat extends React.Component {
 
   displayMessages() {
     var output = [];
-    for(var item in this.props.messages){
-      if(this.props.messages[item]['from'] === 'incoming') {
+    for(var item in this.state.messages){
+      if(this.state.messages[item]['from'] === 'incoming') {
         output.push(
-          <div key={this.props.messages[item]['sent_time']}>
+          <div key={this.state.messages[item]['sent_time']}>
             <div className="received">
               {this.props.connectionImage != null ? this.props.connectionImage : this.state.agentImage}
-              <p>{this.props.messages[item]['content']}</p>
+              <p>{this.state.messages[item]['content']}</p>
             </div>
             <br />
           </div>
         );
-      }
-      else {
-        output.push(
-          <div key={this.props.messages[item]['sent_time']}>
-            <div className="sent">
-              {this.props.myImage}
-              <p>{this.props.messages[item]['content']}</p>
+      } else {
+        if(this.state.messages[item]['failed'] === undefined) {
+          output.push(
+            <div key={this.state.messages[item]['sent_time']}>
+              <div className="sent">
+                {this.props.myImage}
+                <p>{this.state.messages[item]['content']}</p>
+              </div>
+              <br />
             </div>
-            <br />
-          </div>
-        );
+          );
+        } else {
+            output.push(
+              <div key={this.state.messages[item]['sent_time'].concat("Failure")}>
+                <div className="failedMessage">
+                  {this.props.myImage}
+                  <p>Message Not Sent: {this.state.messages[item]['content']}</p>
+                </div>
+                <br />
+                <Media object src={messageFailure} className="failedMessageIcon" id={this.state.messages[item]['sent_time']} title={this.state.messages[item]['content']} onClick={(e)=>{this.reSendMessage(e.target.title, e.target.id)}}/>
+              </div>
+            );
+        }
       }
-    }
-    if(this.state.failedMessage !== null && this.state.failedMessage !== "") {
-      output.push(
-        <div key={this.state.failedMessage.concat("Failure")}>
-          <div className="failedMessage">
-            {this.props.myImage}
-            <p>Message Not Sent: {this.state.failedMessage}</p>
-          </div>
-          <br />
-          <Media object src={messageFailure} className="failedMessageIcon" onClick={this.reSendMessage}/>
-        </div>
-      );
     }
     this.scrollToBottom();
     return output;
@@ -166,13 +192,16 @@ class Chat extends React.Component {
     })
   }
 
-  reSendMessage() {
+  reSendMessage(cont, time) {
+    console.log(time);
+    console.log(cont);
     const promise = this.props.signalEvent({
       domain : "sovrin",
       type: "check_connection",
       attrs : {
         their_vk: this.props.their_vk,
-        content: this.state.failedMessage
+        content: cont,
+        sent_time: time
       }
     });
     promise.then((resp) => {
@@ -201,6 +230,7 @@ class Chat extends React.Component {
     script.src = "https://cdn.jsdelivr.net/npm/jdenticon@2.1.1";
     script.async = true;
     document.body.appendChild(script);
+    console.log(this.state.failedMessage);
     return (
       <div>
         <div id="chatBody" className="chatBody">

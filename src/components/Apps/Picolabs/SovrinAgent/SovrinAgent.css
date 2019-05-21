@@ -120,6 +120,7 @@
   clear: right;
   width: 200px;
   text-align: left;
+  overflow-wrap: break-word;
 }
 
 .received {
@@ -134,6 +135,7 @@
   width: 200px;
   clear: both;
   text-align: left;
+  overflow-wrap: break-word;
 }
 
 .failedMessage {
