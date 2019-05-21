@@ -2,6 +2,8 @@ import axios from 'axios';
 import { getHostname, getOwnerECI ,getManifoldECI} from './AuthService';
 import { HTTP_PROTOCOL, GOOGLE_ROOT_SECURED_DID, GITHUB_ROOT_SECURED_DID } from './config.js';
 
+//axios.defaults.withCredentials = true;
+
 export function sky_cloud(eci){ return `${HTTP_PROTOCOL}${getHostname()}/sky/cloud/${eci}`};
 export function sky_event(eci) { return `${HTTP_PROTOCOL}${getHostname()}/sky/event/${eci}`};
 
@@ -93,6 +95,13 @@ export function discovery(eci){
 
 export function installApp(eci,rid){
   return axios.post(`${sky_event(eci)}/Apps/manifold/installapp?rid=${rid}`);
+}
+
+export function getCookie(name) {
+  console.log("COOKIES", document.cookie);
+  var value = "; " + document.cookie;
+  var parts = value.split("; " + name + "=");
+  if (parts.length === 2) return parts.pop().split(";").shift();
 }
 
 //returns true if attemptNum is a number, eventFunction is a function, and eventAttrs is an object, else false
