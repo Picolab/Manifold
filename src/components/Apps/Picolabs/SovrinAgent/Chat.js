@@ -35,7 +35,7 @@ class Chat extends React.Component {
   }
 
   componentDidMount() {
-    this.getProfileInfo();
+    //this.getProfileInfo();
   }
 
   componentDidUpdate() {
@@ -132,38 +132,40 @@ class Chat extends React.Component {
   displayMessages() {
     var output = [];
     for(var item in this.state.messages){
-      if(this.state.messages[item]['from'] === 'incoming') {
-        output.push(
-          <div key={this.state.messages[item]['sent_time']}>
-            <div className="received">
-              {this.props.connectionImage != null ? this.props.connectionImage : this.state.agentImage}
-              <p>{this.state.messages[item]['content']}</p>
-            </div>
-            <br />
-          </div>
-        );
-      } else {
-        if(this.state.messages[item]['failed'] === undefined) {
+      if(this.state.messages[item] !== null) {
+        if(this.state.messages[item]['from'] === 'incoming') {
           output.push(
             <div key={this.state.messages[item]['sent_time']}>
-              <div className="sent">
-                {this.props.myImage}
+              <div className="received">
+                {this.props.connectionImage != null ? this.props.connectionImage : this.state.agentImage}
                 <p>{this.state.messages[item]['content']}</p>
               </div>
               <br />
             </div>
           );
         } else {
+          if(this.state.messages[item]['failed'] === undefined) {
             output.push(
-              <div key={this.state.messages[item]['sent_time'].concat("Failure")}>
-                <div className="failedMessage">
+              <div key={this.state.messages[item]['sent_time']}>
+                <div className="sent">
                   {this.props.myImage}
-                  <p>Message Not Sent: {this.state.messages[item]['content']}</p>
+                  <p>{this.state.messages[item]['content']}</p>
                 </div>
                 <br />
-                <Media object src={messageFailure} className="failedMessageIcon" id={this.state.messages[item]['sent_time']} title={this.state.messages[item]['content']} onClick={(e)=>{this.reSendMessage(e.target.title, e.target.id)}}/>
               </div>
             );
+          } else {
+              output.push(
+                <div key={this.state.messages[item]['sent_time'].concat("Failure")}>
+                  <div className="failedMessage">
+                    {this.props.myImage}
+                    <p>Message Not Sent: {this.state.messages[item]['content']}</p>
+                  </div>
+                  <br />
+                  <Media object src={messageFailure} className="failedMessageIcon" id={this.state.messages[item]['sent_time']} title={this.state.messages[item]['content']} onClick={(e)=>{this.reSendMessage(e.target.title, e.target.id)}}/>
+                </div>
+              );
+          }
         }
       }
     }
@@ -182,12 +184,13 @@ class Chat extends React.Component {
     });
     promise.then((resp) => {
       this.props.getUI();
+      localStorage.setItem('failedMessage'.concat(this.props.theirDID), '')
       this.setState({
-        failedMessage: ""
+        failedMessage: ''
       });
       this.getLastMessageStatus();
       this.setState({
-        message: ""
+        message: ''
       });
     })
   }
@@ -206,9 +209,9 @@ class Chat extends React.Component {
     });
     promise.then((resp) => {
       this.props.getUI();
-      localStorage.setItem('failedMessage'.concat(this.props.theirDID), "")
+      localStorage.setItem('failedMessage'.concat(this.props.theirDID), '')
       this.setState({
-        failedMessage: ""
+        failedMessage: ''
       });
       this.getLastMessageStatus();
     });
