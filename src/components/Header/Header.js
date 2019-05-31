@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Dropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import {logOut} from '../../utils/AuthService';
+import {NotificationsModal} from '../Modals/NotificationsModal';
 import { retrieveOwnerProfile } from '../../utils/manifoldSDK';
 
 class Header extends Component {
@@ -99,7 +100,7 @@ class Header extends Component {
           </li>
           */}
           <li className="nav-item d-md-down-none">
-            <a className="nav-link" href="/"><i className="icon-bell"></i>{/*<span className="badge badge-pill badge-danger">5</span>*/}</a>
+            <NotificationsModal />
           </li>
           <li className="nav-item">
             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} >
