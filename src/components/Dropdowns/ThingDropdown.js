@@ -3,6 +3,7 @@ import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem} from 'reactstrap'
 //import ColorModal from '../Modals/ColorModal';
 // import CommunitiesModal from '../Modals/CommunitiesModal';
 import InstallModal from '../Modals/InstallModal';
+import UninstallModal from '../Modals/UninstallModal';
 import RenameModal from '../Modals/RenameModal';
 import RemoveThingModal from '../Modals/RemoveThingModal';
 import PropTypes from 'prop-types';
@@ -15,6 +16,7 @@ export class ThingDropdown extends Component {
       isOpen: props.isOpen,
       removeOpen: false,
       installOpen: false,
+      uninstallOpen: false,
       renameOpen:false,
       //colorOpen: false,
       communitiesOpen: false
@@ -22,11 +24,13 @@ export class ThingDropdown extends Component {
 
     this.openRemove = this.openRemove.bind(this);
     this.openInstall = this.openInstall.bind(this);
+    this.openUninstall = this.openUninstall.bind(this);
     this.openRename = this.openRename.bind(this);
     //this.openColor = this.openColor.bind(this);
 
     this.toggleRemove = this.toggleRemove.bind(this);
     this.toggleInstall = this.toggleInstall.bind(this);
+    this.toggleUninstall = this.toggleUninstall.bind(this);
     this.toggleRename = this.toggleRename.bind(this);
     //this.toggleColor = this.toggleColor.bind(this);
   }
@@ -49,6 +53,11 @@ export class ThingDropdown extends Component {
     this.toggleInstall();
   }
 
+  openUninstall() {
+    this.props.toggleSettings();
+    this.toggleUninstall();
+  }
+
   openRename() {
     this.props.toggleSettings();
     this.toggleRename();
@@ -68,6 +77,12 @@ export class ThingDropdown extends Component {
   toggleInstall() {
     this.setState({
       installOpen: !this.state.installOpen
+    })
+  }
+
+  toggleUninstall() {
+    this.setState({
+      uninstallOpen: !this.state.uninstallOpen
     })
   }
 
@@ -113,6 +128,12 @@ export class ThingDropdown extends Component {
             <i className="fa fa-cloud-download float-right" style={{"margin-right": "0", "margin-top": "4px"}} />
           </DropdownItem>
           <InstallModal modalOn={this.state.installOpen} toggleFunc={this.toggleInstall} picoID={this.props.picoID}/>
+
+          <DropdownItem onClick={this.openUninstall}>
+            Delete an App
+            <i className="fa fa-minus float-right" style={{"margin-right": "0", "margin-top": "4px"}} />
+          </DropdownItem>
+          <UninstallModal modalOn={this.state.uninstallOpen} toggleFunc={this.toggleUninstall} picoID={this.props.picoID}/>
 
           {/*<DropdownItem onClick={this.openColor}>
             Change Color

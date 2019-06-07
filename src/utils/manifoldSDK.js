@@ -97,6 +97,10 @@ export function installApp(eci,rid){
   return axios.post(`${sky_event(eci)}/Apps/manifold/installapp?rid=${rid}`);
 }
 
+export function uninstallApp(eci,rid){
+  return axios.post(`${sky_event(eci)}/Apps/manifold/uninstallapp?rid=${rid}`);
+}
+
 export function getCookie(name) {
   console.log("COOKIES", document.cookie);
   var value = "; " + document.cookie;

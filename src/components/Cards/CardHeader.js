@@ -43,7 +43,7 @@ class CardHeader extends Component {
       return(
         <div className="card-header draggable" style={{"backgroundColor": this.props.color}}>
           <div style={{float: "left", "maxWidth":"85%", "overflow":"hidden", "textOverflow": "ellipsis"}}>
-            {this.props.name}
+            <h4>{this.props.name}</h4>
           </div>
           {this.renderDropdown()}
           <OpenCardButton picoID={this.props.picoID}/>

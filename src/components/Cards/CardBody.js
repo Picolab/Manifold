@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import AppMap from '../Apps/AppMap'
+import CardMap from '../Apps/CardMap'
 import PropTypes from 'prop-types'
 import ManifoldApp from '../Apps/ManifoldApp'
 
@@ -10,7 +10,7 @@ export class CardBody extends Component {
     if(!appInfo.bindings){
       appInfo.bindings = {}; //default to an empty object
     }
-    const CustomComponent = AppMap[appInfo.rid];
+    const CustomComponent = CardMap[appInfo.rid];
     if(CustomComponent){
       return (
         <div>

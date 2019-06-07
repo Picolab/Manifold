@@ -25,11 +25,11 @@ export class MyThings extends Component {
         }else{
           return (
             <div>
-              <MediaQuery minWidth={1224}>
+              <MediaQuery minWidth={600}>
                 {this.loadDropdown()}
                 <CardGrid idList={this.props.thingIdList} cardType="Thing"/>
               </MediaQuery>
-              <MediaQuery maxWidth={1223}>
+              <MediaQuery maxWidth={599}>
                 <CardList idList={this.props.thingIdList}/>
               </MediaQuery>
             </div>

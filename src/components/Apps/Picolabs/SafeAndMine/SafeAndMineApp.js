@@ -91,6 +91,7 @@ export class SafeAndMineApp extends Component {
           shareName,
           sharePhone,
           shareEmail,
+          messageLength: message.length,
         })
       }
     }).catch((e) => {
