@@ -44,5 +44,15 @@ ruleset io.picolabs.thing {
     }
   }
 
+  rule uninstallApp {
+    select when manifold uninstallapp
+    pre {}
+    noop();
+    fired {
+      raise wrangler event "uninstall_rulesets_requested"
+        attributes event:attrs;
+    }
+  }
+
 
 }//end ruleset
