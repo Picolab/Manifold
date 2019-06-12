@@ -3,7 +3,7 @@ import './OrderPizzaApp.css';
 import {customQuery} from '../../../../utils/manifoldSDK';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 
-class OrderModal extends React.Component {
+class OrderModalCardView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,7 +13,6 @@ class OrderModal extends React.Component {
     };
     this.toggle = this.toggle.bind(this);
     this.getCart = this.getCart.bind(this);
-    this.editOrder = this.editOrder.bind(this);
     this.getParsedVariants = this.getParsedVariants.bind(this);
   }
 
@@ -79,28 +78,6 @@ class OrderModal extends React.Component {
     return out;
   }
 
-  editOrder() {
-    const promise = customQuery(this.state.eci, "io.picolabs.child_order", "getOrder");
-    promise.then((resp) => {
-      const promiseTwo = this.props.signalEvent({
-        domain : "set",
-        type: "order",
-        attrs : {
-          products: JSON.stringify(this.state.cart),
-          order: JSON.stringify(resp.data['order']),
-          title: resp.data['title'],
-          description: resp.data['description'],
-          eci: this.state.eci
-        }
-      }).catch((e) => {
-        console.error("Error getting Order", e);
-      });
-      promiseTwo.then((resp) => {
-        this.props.displaySwitch("Menu");
-      })
-    })
-  }
-
   render() {
     return (
       <div>
@@ -111,7 +88,6 @@ class OrderModal extends React.Component {
           {this.displayCart()}
         </ModalBody>
         <ModalFooter>
-        <Button color="primary" className="genericButton" onClick={this.editOrder}>Edit</Button>{' '}
         <Button color="secondary" className="genericButton" onClick={this.toggle}>Cancel</Button>
         </ModalFooter>
       </Modal>
@@ -121,4 +97,4 @@ class OrderModal extends React.Component {
 
 }
 
-export default OrderModal;
+export default OrderModalCardView;

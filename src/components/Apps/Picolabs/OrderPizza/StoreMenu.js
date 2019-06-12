@@ -2,9 +2,9 @@ import React from 'react';
 import './OrderPizzaApp.css';
 import ItemModal from './ItemModal';
 import spinner from './PizzaLoader.GIF';
-import {amount, amountFlipped} from './toppings';
+import {amount} from './toppings';
 import classnames from 'classnames';
-import {Collapse, Button, Form, FormGroup, Label, Input, CardBody, Card, Modal, ModalHeader, ModalBody, ModalFooter, TabContent, TabPane, Nav, NavItem, NavLink, CardTitle, CardText, Row, Col, Media} from 'reactstrap';
+import {Collapse, Button, FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter, TabContent, TabPane, Nav, NavItem, NavLink, Media} from 'reactstrap';
 
 class StoreMenu extends React.Component {
   constructor(props) {
@@ -19,16 +19,19 @@ class StoreMenu extends React.Component {
       toppingsMap: {},
       reverseMap: {},
       toppingTags: {},
-      collapse: {},
+      cardCollapse: false,
       cart: [],
       activeTab: '1',
-      loading: true
-      //title: "",
-      //description: ""
+      loading: true,
+      title: "",
+      description: "",
+      formComplete: null,
+      formError: null
     }
     this.toggle = this.toggle.bind(this);
     this.toggleCart = this.toggleCart.bind(this);
-    this.tooggleTab = this.toggleTab.bind(this);
+    this.toggleTab = this.toggleTab.bind(this);
+    this.toggleCardCollapse = this.toggleCardCollapse.bind(this);
     this.getCart = this.getCart.bind(this);
     this.toggleCartToppings = this.toggleCartToppings.bind(this);
     this.removeItem = this.removeItem.bind(this);
@@ -49,7 +52,8 @@ class StoreMenu extends React.Component {
 
   toggleCart() {
     this.setState(prevState => ({
-      modal: !prevState.modal
+      modal: !prevState.modal,
+      cardCollapse: false
     }));
   }
 
@@ -59,6 +63,10 @@ class StoreMenu extends React.Component {
         activeTab: tab
       });
     }
+  }
+
+  toggleCardCollapse() {
+    this.setState(state => ({ cardCollapse: !state.cardCollapse }));
   }
 
   toggle(e) {
@@ -79,7 +87,6 @@ class StoreMenu extends React.Component {
     this.getStoreVariants();
     this.getDescription();
     this.getCart();
-    var map = {};
     for( var item in this.state.StoreMenu)
     {
       this.setState({
@@ -91,6 +98,14 @@ class StoreMenu extends React.Component {
         loading: false
       })
     }, 3000)
+  }
+
+  componentWillUnmount() {
+    // this.props.signalEvent({
+    //   domain : "echo",
+    //   type: "clear",
+    //   attrs : {}
+    // });
   }
 
   myFunction() {
@@ -112,6 +127,19 @@ class StoreMenu extends React.Component {
       })
     }).catch((e) => {
       console.error("Error getting toppings", e);
+    });
+  }
+
+  getOrderDescription() {
+    const promise = this.props.manifoldQuery({
+      rid: "io.picolabs.pizza",
+      funcName: "getOrderDescription"
+    });
+    promise.then((resp) => {
+      this.setState({
+          title: resp.data['title'],
+          description: resp.data['description']
+      });
     });
   }
 
@@ -199,6 +227,7 @@ getCart() {
         [resp.data[item]['Code']]: false
       })
     }
+    this.getOrderDescription();
   }).catch((e) => {
     console.error("Error getting Descriptions", e);
   });
@@ -294,15 +323,46 @@ cart() {
             <ModalBody>
               {this.listCartItems()}
                 Order Title:
-                <input type="text" name="title" style={{margin: 5}} ref={input => this._title = input}/>
+                <input type="text" name="title" style={{margin: 5}} ref={input => this._title = input} placeholder={this.state.title}/>
                 <div>
                 Description:
-                <input type="textarea" name="description" style={{margin: 5}} ref={input => this._description = input}/>
+                <input type="textarea" name="description" style={{margin: 5}} ref={input => this._description = input} placeholder={this.state.description}/>
                 </div>
+                Payment option:
+                <FormGroup check>
+                  <Label check>
+                    <Input type="radio" name="radio1" id="cash" onChange={()=>{if(this.state.cardCollapse)this.toggleCardCollapse()}}/>{' '}
+                    Cash
+                  </Label>
+                </FormGroup>
+                <FormGroup check>
+                  <Label check>
+                    <Input type="radio" name="radio1" onChange={this.toggleCardCollapse}/>{' '}
+                    Card
+                  </Label>
+                </FormGroup>
+                <Collapse isOpen={this.state.cardCollapse}>
+                  Card Number:
+                  <input type="text" name="card_number" style={{margin: 5}} ref={input => this._card_number = input}/>
+                  <div>
+                    Card Expiration:
+                    <input type="text" name="expiration" style={{margin: 5}} ref={input => this._expiration = input}/> {'Ex: 06/19'}
+                  </div>
+                  <div>
+                    Security Code:
+                    <input type="text" name="security_code" style={{margin: 5}} ref={input => this._security_code = input}/>
+                  </div>
+                  <div>
+                    Postal Code:
+                    <input type="text" name="postal_code" style={{margin: 5}} ref={input => this._postal_code = input}/>
+                  </div>
+                </Collapse>
+                {this.state.formComplete === false && <div style={{ 'color': 'red'}}>* Please fill all fields </div>}
+                {this.state.formError && <div style={{ 'color': 'red'}}>* Error: please check all fields </div>}
             </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={this.validateOrder}>Submit</Button>{' '}
-            <Button color="secondary" onClick={this.toggleCart}>Cancel</Button>
+            {this.state.cart.length > 0 ? <Button color="primary" className="genericButton" onClick={this.validateOrder}>Submit</Button> : <Button color="primary" className="genericButton" disabled onClick={this.validateOrder}>Submit</Button>} {' '}
+            <Button color="secondary" className="genericButton" onClick={this.toggleCart}>Cancel</Button>
           </ModalFooter>
         </Modal>
         <FormGroup>
@@ -315,18 +375,63 @@ cart() {
 }
 
 validateOrder() {
-  let promise = this.props.signalEvent({
-    domain : "create",
-    type: "order",
-    attrs : {
-      title: this._title.value,
-      description: this._description.value
+  if(this.state.cardCollapse === true) {
+    if(this._card_number.value !== "" && this._expiration.value !== "" && this._postal_code.value !== ""
+      && this._security_code.value !== "") {
+        let first_promise = this.props.signalEvent({
+          domain : "add",
+          type: "card",
+          attrs : {
+            number: this._card_number.value,
+            expiration: this._expiration.value,
+            postal_code: this._postal_code.value,
+            security_code: this._security_code.value,
+          }
+        });
+        first_promise.then((resp) => {
+          console.log(resp.data.directives);
+          if(resp.data.directives.length === 0 || resp.data.directives[0]['name'] !== "No Type Found") {
+            var t = (this._title.value !== "") ? this._title.value : this.state.title;
+            var d = (this._description.value !== "") ? this._description.value : this.state.description;
+            let second_promise = this.props.signalEvent({
+              domain : "create",
+              type: "order",
+              attrs : {
+                title: t,
+                description: d
+              }
+            })
+            second_promise.then(() => {
+              this.props.displaySwitch('Locator');
+            })
+          } else {
+            this.setState({
+              formError: true,
+              formComplete: true
+            });
+          }
+        })
+    } else {
+      this.setState({
+        formComplete: false
+      });
     }
-  })
+  } else {
+      var t = (this._title.value !== "") ? this._title.value : this.state.title;
+      var d = (this._description.value !== "") ? this._description.value : this.state.description;
+      let promise = this.props.signalEvent({
+        domain : "create",
+        type: "order",
+        attrs : {
+          title: t,
+          description: d
+        }
+      })
 
-  promise.then(() => {
-    this.props.displaySwitch('Locator');
-  })
+      promise.then(() => {
+        this.props.displaySwitch('Locator');
+      })
+  }
 }
 
 cartItemToppings(toppings) {

@@ -1,6 +1,6 @@
 import React from 'react';
 import {Modal, ModalHeader, ModalBody, ModalFooter, Button, Media, TabContent, TabPane, Nav, NavItem,
-        NavLink, Card, CardTitle, CardText, Row, Col} from 'reactstrap';
+        NavLink, Row, Col} from 'reactstrap';
 import {customEvent} from '../../../../utils/manifoldSDK';
 import Chat from './Chat';
 import classnames from 'classnames';

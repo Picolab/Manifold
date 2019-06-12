@@ -1,11 +1,9 @@
 import React from 'react';
 import './SovrinAgent.css';
 import icon from './SovrinIcon.png';
-import picoLabs from './pico-labs-stacked.png';
-import { Badge, Button, Media, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Container, Row, Col, InputGroup, InputGroupAddon, Input} from 'reactstrap';
+import { Button, Media, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, InputGroup, InputGroupAddon, Input} from 'reactstrap';
 import InvitationModal from './InvitationModal';
 import ConnectionModal from './ConnectionModal';
-import CameraModal from './CameraModal';
 
 class SovrinAgent extends React.Component {
   constructor(props) {
@@ -67,7 +65,7 @@ class SovrinAgent extends React.Component {
     });
     promise.then((resp) => {
       if(JSON.stringify(resp.data) !== JSON.stringify(this.state.technicalDetails)) {
-        let promiseTwo = this.setState({
+        this.setState({
           technicalDetails: resp.data
         });
         //clearInterval(this.connVar);

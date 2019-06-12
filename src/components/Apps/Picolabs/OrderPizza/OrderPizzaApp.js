@@ -1,7 +1,6 @@
 import React from 'react';
 import StoreMenu from './StoreMenu';
 import StoreLocator from './StoreLocator';
-import { Link, Route, Router, Switch } from 'react-router-dom'
 
 class OrderPizzaApp extends React.Component {
   constructor(props) {
@@ -14,14 +13,14 @@ class OrderPizzaApp extends React.Component {
   }
 
   displaySwitch(val) {
-    if(val == "Menu")
+    if(val === "Menu")
     {
       this.setState({
         isMenu: true,
         isLocator: false
       })
     }
-    if(val == "Locator")
+    if(val === "Locator")
     {
       this.setState({
         isMenu: false,
