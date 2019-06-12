@@ -1,7 +1,7 @@
 import React from 'react';
 import {amount, amountFlipped} from './toppings';
 import './OrderPizzaApp.css'
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Input, Label, Container, Row, Col} from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Input, Label, Container, Row, Col} from 'reactstrap';
 
 class ItemModal extends React.Component {
   constructor(props) {
@@ -284,7 +284,7 @@ class ItemModal extends React.Component {
     return (
       <div>
         <Button className="Order" color="primary" size="sm" onClick={this.toggle}>{this.props.buttonLabel}</Button>
-        <Modal isOpen={this.state.modal} className="modal-xl" size="xl" toggle={this.toggle} className={this.props.className}>
+        <Modal isOpen={this.state.modal} className="modal-xl" size="xl" toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>{this.props.title}</ModalHeader>
           <ModalBody>
             <div>
@@ -299,8 +299,8 @@ class ItemModal extends React.Component {
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={this.addItems}>Add</Button>{' '}
-            <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+            <Button color="primary" className="genericButton" onClick={this.addItems}>Add</Button>{' '}
+            <Button color="secondary" className="genericButton" onClick={this.toggle}>Cancel</Button>
           </ModalFooter>
         </Modal>
       </div>

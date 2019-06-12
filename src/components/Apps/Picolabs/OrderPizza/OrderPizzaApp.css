@@ -37,11 +37,17 @@
   width: 300px;
   border-radius: 8px;
   margin: 10px;
-  float: right;
+  float: left;
   display: block;
 }
 
 .cartButton {
+  box-shadow: 3px 3px 3px grey;
+  display: inline-block;
+  border-radius: 8px;
+}
+
+.genericButton {
   box-shadow: 3px 3px 3px grey;
   display: inline-block;
   border-radius: 8px;
@@ -116,6 +122,10 @@
   width: 20px;
   margin: 4px;
   background-color: #eee;
+}
+
+.invalid {
+  border: 1px solid rgb(255, 0, 0);
 }
 
 .defaultToppings {
