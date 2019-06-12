@@ -6,6 +6,9 @@ import OrderPizzaApp from './Picolabs/OrderPizza/OrderPizzaApp';
 import SovrinAgent from './Picolabs/SovrinAgent/SovrinAgent';
 import AuroraCardView from './Picolabs/Aurora/AuroraCardView';
 import WeatherCardView from './Picolabs/Weather/WeatherCardView';
+import CO2CardView from './Picolabs/Wovyn/CO2/CO2CardView';
+import TemperaturesCardView from './Picolabs/Wovyn/Temperatures/TemperaturesCardView';
+import LightCardView from './Picolabs/Wovyn/Light/LightCardView';
 
 export default {
   "io.picolabs.safeandmine" : SafeAndMineCardView,
@@ -15,5 +18,8 @@ export default {
   "io.picolabs.pizza": OrderPizzaApp,
   "org.sovrin.manifold_agent": SovrinAgent,
   "io.picolabs.aurora_app": AuroraCardView,
-  "io.picolabs.weather": WeatherCardView
+  "io.picolabs.weather": WeatherCardView,
+  "io.picolabs.co2_app": CO2CardView,
+  "io.picolabs.temperatures_app": TemperaturesCardView,
+  "io.picolabs.light_app": LightCardView
 }
