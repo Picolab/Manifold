@@ -332,7 +332,7 @@ cart() {
                 <FormGroup check>
                   <Label check>
                     <Input type="radio" name="radio1" id="cash" onChange={()=>{if(this.state.cardCollapse)this.toggleCardCollapse()}}/>{' '}
-                    Cash
+                    Cash or pay at store
                   </Label>
                 </FormGroup>
                 <FormGroup check>

@@ -2,6 +2,7 @@ import React from 'react';
 import logo from './pico-labs-pizza.png';
 import './OrderPizzaApp.css'
 import OrderModal from './OrderModal';
+import DeleteOrderModal from './DeleteOrderModal';
 import {customQuery, customEvent} from '../../../../utils/manifoldSDK';
 import { Container, Col, Label, Button, ButtonGroup, Form, FormGroup, Input, ListGroup, ListGroupItem, Media, Card, CardTitle, CardText } from 'reactstrap';
 
@@ -34,8 +35,8 @@ class StoreLocator extends React.Component {
     this.handleCheck = this.handleCheck.bind(this);
     this.getOrderDescription = this.getOrderDescription.bind(this);
     this.getChildrenOrders = this.getChildrenOrders.bind(this);
-    this.deleteOrder = this.deleteOrder.bind(this);
     this.submitOrder = this.submitOrder.bind(this);
+    this.changeServiceMethod = this.changeServiceMethod.bind(this);
     //this.addOrderCard = this.addOrderCard.bind(this);
   }
 
@@ -181,6 +182,13 @@ class StoreLocator extends React.Component {
     }
   }
 
+  changeServiceMethod(e) {
+    let promise = customEvent(e.target.id, "change", "service", { method: e.target.value }, "5");
+    promise.then((resp) => {
+      this.getChildrenOrders();
+    })
+  }
+
   submitOrder() {
     console.log("You Ordered Pizza");
     this.props.signalEvent({
@@ -191,44 +199,20 @@ class StoreLocator extends React.Component {
     })
   }
 
-  deleteOrder(e) {
-    let promise = this.props.signalEvent({
-      domain : "delete",
-      type: "order",
-      attrs : {
-        eci:e.target.value
-      }
-    })
-
-    promise.then(() =>{
-      this.getChildrenOrders();
-    })
-  }
-
-  /*<Card className="card card2" body outline color="primary">
-    <CardTitle>
-      <FormGroup check>
-        <Label check>
-          <Input style={{'margin-left':"-1rem"}} type="checkbox" />{' '}
-            Activate
-        </Label>
-      </FormGroup>
-    </CardTitle>
-    <CardText>With supporting text below as a natural lead-in to additional content.</CardText>
-    <Button className="viewOrderButton" color="secondary">Cart</Button>
-  </Card>*/
-/*{this.state[eci]['active'] === 'true' ? <Input style={{'marginLeft':"-1rem"}} type="checkbox" value={eci} onChange={this.handleCheck} checked/>  : <Input style={{'marginLeft':"-1rem"}} type="checkbox" value={eci} onChange={this.handleCheck}/>}*/
   renderCards() {
     var out = [];
      for(var item in this.state.children) {
        var eci = this.state.children[item]
-    //     this.getOrderTitle(this.state.children[item]);
-    //     this.getOrderDescription(this.state.children[item]);
       if(this.state[eci] !== undefined) {
         out.push(
           <div key={eci.concat("card")}>
             <Card key={eci} className="card card2" body outline color="primary">
-            <Button color="danger" className="deleteButton" value={eci} onClick={this.deleteOrder}>X</Button>
+            <DeleteOrderModal
+              title={this.state[eci]['title']}
+              eci={eci}
+              signalEvent={this.props.signalEvent}
+              getChildrenOrders={this.getChildrenOrders}
+            />
               <CardTitle className="orderTitle">
                 <FormGroup  check>
                   <Label check>
@@ -240,8 +224,14 @@ class StoreLocator extends React.Component {
               </CardTitle>
               <CardText style={{'paddingLeft': '5px', 'textAlign': 'left'}}>
                 Description: {this.state[eci]['description']}
-                <div>Payment Method: {this.state[eci]['Payment Method'] === "Cash" ? this.state[eci]['Payment Method'] : "Card ending in ".concat(this.state[eci]['Payment Method'])}</div>
-                <div>Service Method: {this.state[eci]['Service Method']}</div>
+                <div>Payment Method: {this.state[eci]['Payment Method'] === "Cash or pay at store" ? this.state[eci]['Payment Method'] : "Card ending in ".concat(this.state[eci]['Payment Method'])}</div>
+                <div style={{"paddingTop": "5px"}}>
+                  <Button color="primary" className="serviceMethodSmall" onClick={this.changeServiceMethod} value="Carryout" id={eci} active={this.state[eci]['Service Method'] === "Carryout"}>Carryout</Button>
+                  <Button color="primary" className="serviceMethodSmall" onClick={this.changeServiceMethod} value="Delivery" id={eci} active={this.state[eci]['Service Method'] === "Delivery"}>Delivery</Button>
+                </div>
+                <div>
+                  Selected: {this.state[eci]['Service Method']}
+                </div>
               </CardText>
 
               <OrderModal
