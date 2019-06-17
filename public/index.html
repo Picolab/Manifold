@@ -38,12 +38,12 @@
     <script>
       function init() {
         gapi.load('auth2', function() {
-          console.log("google auth loaded!");
+          //console.log("google auth loaded!");
           let googlePromise = gapi.auth2.init({
             client_id: "548552688547-i40k0nigeafm0vjnqgmoj2oldddgbjqi.apps.googleusercontent.com"
           });
           googlePromise.then((googleAuth) => {
-            console.log("googleAuth", googleAuth);
+            //console.log("googleAuth", googleAuth);
           });
         });
       }

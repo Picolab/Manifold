@@ -12,7 +12,7 @@ class CardList extends Component {
 
     this.props.idList.forEach((picoID) => {
       list.push(
-        <ListItem key={"ListItem" + this.props.picoID} picoID={picoID}/>
+        <ListItem key={picoID} picoID={picoID}/>
       )
     });
 

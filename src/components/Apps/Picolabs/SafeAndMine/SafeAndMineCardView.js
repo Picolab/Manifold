@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 //import PropTypes from 'prop-types';
 import { Media, ListGroup, ListGroupItem } from 'reactstrap';
+import { retrieveOwnerProfile } from '../../../../utils/manifoldSDK';
 import tag from './tag.png';
 import './SafeAndMine.css';
 
@@ -34,6 +35,7 @@ export class SafeAndMineCardView extends Component {
 
     this.retrieveInformation = this.retrieveInformation.bind(this);
     this.retrieveTags = this.retrieveTags.bind(this);
+    this.getProfileInfo = this.getProfileInfo.bind(this);
   }
 
   componentDidMount() {
@@ -41,6 +43,26 @@ export class SafeAndMineCardView extends Component {
     this.retrieveTags();
   }
 
+  getProfileInfo() {
+    const profileGetPromise = retrieveOwnerProfile();
+    profileGetPromise.then((resp) => {
+      const profile = resp.data;
+      //console.log(resp.data);
+      if (profile.google) {
+        this.setState({
+          name: profile.google.displayName,
+          email: profile.google.email
+        })
+      } else if(profile.github) {
+        this.setState({
+          name: profile.github.displayName,
+          email: profile.google.email
+        })
+      }
+    }).catch((e) => {
+      console.error(e);
+    });
+  }
 
   retrieveInformation() {
     const promise = this.props.manifoldQuery({

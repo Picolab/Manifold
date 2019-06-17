@@ -35,7 +35,6 @@ export class NotificationsModal extends Component {
       this.setState({
         notifications: resp.data
       });
-      console.log(resp.data);
     });
   }
 

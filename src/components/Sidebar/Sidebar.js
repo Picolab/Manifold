@@ -7,8 +7,6 @@ class Sidebar extends Component {
   constructor(props){
     super(props);
 
-    console.log("SIDEBAR PROPS: ", this.props);
-
     this.state = {
       tutorialOpen : false
     }
