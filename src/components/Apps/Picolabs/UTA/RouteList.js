@@ -31,7 +31,7 @@ class RouteList extends Component {
   generateTimes(routeName) {
     return this.props.Routes[routeName].map((x) => {
       if(this.props.Routes[routeName][this.props.Routes[routeName].length - 1] !== x)return (<ListGroupItem key={x}>{this.prettyTimes(x)}</ListGroupItem>);
-
+      else return(<div />);
     })
   }
 
@@ -49,7 +49,7 @@ class RouteList extends Component {
       minuteString = timeString.substring(3,5);
     }
 
-    hourInt = parseInt(hourString);
+    hourInt = parseInt(hourString, 10);
     if(hourInt > 11) {
       if (hourInt > 12) hourInt -= 12;
       return hourInt + ":" + minuteString + " pm";

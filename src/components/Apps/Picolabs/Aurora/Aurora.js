@@ -1,18 +1,15 @@
 import React, { Component } from 'react';
-import { Button, Form, FormGroup, Input, ListGroup, ListGroupItem } from 'reactstrap';
+import { Button, ListGroup, ListGroupItem } from 'reactstrap';
 
 import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap.css';
 
-import ReactDOM from 'react-dom';
 import Tooltip from 'rc-tooltip';
 import Slider from 'rc-slider';
 import Connect from './Connect';
 
 import './Aurora.css';
 
-const createSliderWithTooltip = Slider.createSliderWithTooltip;
-const Range = createSliderWithTooltip(Slider.Range);
 const Handle = Slider.Handle;
 
 const handle = (props) => {
@@ -47,6 +44,9 @@ export default class Aurora extends Component {
     this.brightnessHandle = this.brightnessHandle.bind(this);
     this.listEffects = this.listEffects.bind(this);
     this.selectEffect = this.selectEffect.bind(this);
+    this.hueBar = this.hueBar.bind(this);
+    this.saturationBar = this.saturationBar.bind(this);
+    this.brightnessBar = this.brightnessBar.bind(this);
   }
 
   componentDidMount() {
@@ -83,6 +83,9 @@ export default class Aurora extends Component {
             let newState = resp2.data;
             newState.connected = true;
             newState.triedLoading = true;
+            newState.barHue = newState.hue.value;
+            newState.barSaturation = newState.saturation.value;
+            newState.barBrightness = newState.brightness.value;
             this.setState(newState);
           }
         })
@@ -118,6 +121,23 @@ export default class Aurora extends Component {
     promise.then(() => {
       this.setState({isOn : {value : false}})
     });
+  }
+
+  hueBar(value) {
+    this.setState({barHue: value})
+  }
+
+  saturationBar(value) {
+    let lightness = (2-value) * this.state.brightness.value;
+    let newVal = this.state.brightness.value * value;
+    newVal /= ((lightness <= 1) ? lightness : 2 - lightness);
+
+    this.setState({barSaturation: newVal})
+  }
+
+  brightnessBar(value) {
+    let newVal = ((2-value) * this.state.brightness.value) / 2;
+    this.setState({barBrightness: newVal})
   }
 
   hueHandle(value) {
@@ -213,15 +233,16 @@ export default class Aurora extends Component {
         <h4>Aurora:</h4><br />
 
         <h5>Hue:</h5>
-        <Slider min={this.state.hue.min} max={this.state.hue.max} defaultValue={this.state.hue.value} onAfterChange={this.hueHandle} handle={handle} />
+        <Slider min={this.state.hue.min} max={this.state.hue.max} defaultValue={this.state.hue.value} onChange={this.hueBar} onAfterChange={this.hueHandle} handle={handle} />
         <br />
 
         <h5>Saturation:</h5>
-        <Slider min={this.state.saturation.min} max={this.state.saturation.max} defaultValue={this.state.saturation.value} onAfterChange={this.saturationHandle} handle={handle} />
+        <Slider min={this.state.saturation.min} max={this.state.saturation.max} defaultValue={this.state.saturation.value} onChange={this.saturationBar} onAfterChange={this.saturationHandle} handle={handle} />
         <br />
 
         <h5>Brightness:</h5>
-        <Slider min={this.state.brightness.min} max={this.state.brightness.max} defaultValue={this.state.brightness.value} onAfterChange={this.brightnessHandle} handle={handle} />
+        <Slider min={this.state.brightness.min} max={this.state.brightness.max} defaultValue={this.state.brightness.value} onChange={this.brightnessBar} onAfterChange={this.brightnessHandle} handle={handle} />
+        <div style={{"height" : "40px", "backgroundColor" : `hsl(${this.state.barHue},${this.state.barSaturation}%,${this.state.barBrightness}%)`}} />
         <br />
 
         <h5>Effects:</h5>

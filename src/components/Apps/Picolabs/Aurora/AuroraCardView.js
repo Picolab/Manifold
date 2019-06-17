@@ -1,18 +1,14 @@
 import React, { Component } from 'react';
-import { Button, Form, FormGroup, Input, ListGroup, ListGroupItem } from 'reactstrap';
+import { Button, ListGroup, ListGroupItem } from 'reactstrap';
 
 import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap.css';
 
-import ReactDOM from 'react-dom';
 import Tooltip from 'rc-tooltip';
 import Slider from 'rc-slider';
-import Connect from './Connect';
 
 import './Aurora.css';
 
-const createSliderWithTooltip = Slider.createSliderWithTooltip;
-const Range = createSliderWithTooltip(Slider.Range);
 const Handle = Slider.Handle;
 
 const handle = (props) => {

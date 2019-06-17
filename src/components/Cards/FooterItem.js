@@ -18,7 +18,7 @@ class FooterItem extends Component {
     if(this.props.index === this.props.currentApp){
       return(
         <btn className="circle-selected" id={mediaID} onClick={this.dotClicked}>
-          <img src={this.props.allApps[this.props.index].iconURL} style={{width: 30, "border-radius": 50}} />
+          <img src={this.props.allApps[this.props.index].iconURL} alt={this.props.allApps[this.props.index].name} style={{width: 30, "border-radius": 50}} />
           <UncontrolledTooltip placement="bottom" delay={800} target={mediaID}>
             {this.props.allApps[this.props.index].name}
           </UncontrolledTooltip>
@@ -27,7 +27,7 @@ class FooterItem extends Component {
     }else{
       return(
         <btn className="circle" id={mediaID} onClick={this.dotClicked}>
-          <img src={this.props.allApps[this.props.index].iconURL} style= {{width: 25, "border-radius": 50}} />
+          <img src={this.props.allApps[this.props.index].iconURL} alt={this.props.allApps[this.props.index].name} style= {{width: 25, "border-radius": 50}} />
           <UncontrolledTooltip placement="bottom" delay={800} target={mediaID}>
             {this.props.allApps[this.props.index].name}
           </UncontrolledTooltip>

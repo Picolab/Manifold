@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
-import { ListGroupItem, Collapse, Button, Form, FormGroup, Input } from 'reactstrap';
+import { ListGroupItem } from 'reactstrap';
 import './Journal.css';
 
 export default class CardEntry extends Component {
-
-  constructor(props) {
-    super(props);
-  }
 
   convertDate(timestamp) {
     let toReturn = "";

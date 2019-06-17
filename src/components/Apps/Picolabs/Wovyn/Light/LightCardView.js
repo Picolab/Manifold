@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { ListGroup, ListGroupItem, Container, Row, Col, Table } from 'reactstrap';
-import ReactAnimatedWeather from 'react-animated-weather';
+import { ListGroup, ListGroupItem } from 'reactstrap';
 
 export default class LightCardView extends Component {
 

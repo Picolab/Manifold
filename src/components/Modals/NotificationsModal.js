@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, ListGroupItem, ListGroup} from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, ListGroupItem, ListGroup} from 'reactstrap';
 import {customQuery, customEvent} from '../../utils/manifoldSDK';
 import {getManifoldECI} from '../../utils/AuthService';
 import './notificationsCSS.css'

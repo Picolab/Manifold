@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import CardEntry from './CardEntry';
-import { Button, Form, FormGroup, Input, ListGroup, ListGroupItem } from 'reactstrap';
+import { ListGroup } from 'reactstrap';
 import './Journal.css';
 
 export default class JournalApp extends Component {

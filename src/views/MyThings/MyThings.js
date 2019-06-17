@@ -6,7 +6,7 @@ import MyThingsHeader from '../../components/MyThingsComponents/MyThingsHeader';
 import { getThingIdList } from '../../reducers';
 import MediaQuery from 'react-responsive';
 import PropTypes from 'prop-types';
-import Header from '../../components/Header/Header';
+//import Header from '../../components/Header/Header';
 import { Dropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap';
 
 export class MyThings extends Component {

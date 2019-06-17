@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
-import { retrieveOwnerProfile } from '../../../../utils/manifoldSDK';
 //import PropTypes from 'prop-types';
-import { Button, Form, FormGroup, Label, Input, Media, ListGroup, ListGroupItem, Container, Row, Col } from 'reactstrap';
-import DeleteButton from './DeleteButton';
+import { Media, ListGroup, ListGroupItem } from 'reactstrap';
 import tag from './tag.png';
 import './SafeAndMine.css';
-const TAG_CHAR_LENGTH = 6;
-const MAIN_MESSAGE_CHAR_LENGTH = 250;
-const META_FIELD_CHAR_LENGTH = 100;
 
 export class SafeAndMineCardView extends Component {
 
@@ -104,7 +99,7 @@ export class SafeAndMineCardView extends Component {
         </ListGroupItem>
       );
     })
-    if (toDisplay.length == 0) return "Registerd Tags will appear here!"
+    if (toDisplay.length === 0) return "Registerd Tags will appear here!"
     else return toDisplay;
   }
 

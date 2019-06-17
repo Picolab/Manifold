@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Container, Row, Col, ListGroup} from 'reactstrap';
 import IconInfo from './IconInfo';
 import GoogleSignIn from './GoogleSignIn';
-import MeetTheTeam from './MeetTheTeam';
+//import MeetTheTeam from './MeetTheTeam';
 import GithubButton from './GithubButton';
 import { GITHUB_DEFINED } from '../../../../utils/config';
 import '../loginStyles.css';

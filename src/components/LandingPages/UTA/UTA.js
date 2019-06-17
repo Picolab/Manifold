@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import SearchBar from './SearchBar';
 import RouteList from './RouteList';
 import GMap from './GMap';
 import { customQuery, customEvent } from '../../../utils/manifoldSDK';
 import queryString from 'query-string';
 import RegistryModal from './RegistryModal';
 import './UTA.css';
-import { GOOGLE_MAP_KEY, BUS_DID, SCORE_WRAPPER_DID } from '../../../utils/config';
+//import { GOOGLE_MAP_KEY, BUS_DID, SCORE_WRAPPER_DID } from '../../../utils/config';
+import { BUS_DID, SCORE_WRAPPER_DID } from '../../../utils/config';
 
 class UTA extends Component {
   constructor(props) {
@@ -47,11 +47,11 @@ class UTA extends Component {
       });
       */
 
-    const promise = customEvent(BUS_DID, "uta", "get_times", { stop_code : sCode}, "get_times").then((resp) => {
+    customEvent(BUS_DID, "uta", "get_times", { stop_code : sCode}, "get_times").then((resp) => {
       this.setState({stopInfo : resp.data.directives[0].options, stopCode : sCode });
     }).catch((e) => {
       console.error("Error loading uta: ", e);
-    });;
+    });
   }
 
   camelCase(stopName) {
@@ -68,7 +68,7 @@ class UTA extends Component {
   }
 
   addRankSuffix(rank) {
-    if (rank.toString().length > 1 && rank.toString().slice(-2).charAt(0) == '1') return rank + "th";
+    if (rank.toString().length > 1 && rank.toString().slice(-2).charAt(0) === '1') return rank + "th";
     var lastLetter = rank.toString().slice(-1);
 
     switch (lastLetter) {
@@ -85,7 +85,7 @@ class UTA extends Component {
       return rank + "th";
     }
 
-    return "\"" + lastLetter + "\"";
+    //return "\"" + lastLetter + "\"";
   }
 
   createRankAndScoreStatement(player) {

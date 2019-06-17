@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import SearchBar from './SearchBar';
 import RouteList from './RouteList';
 import GMap from './GMap';
-import { GOOGLE_MAP_KEY } from '../../../../utils/config';
+//import { GOOGLE_MAP_KEY } from '../../../../utils/config';
 import './UTA.css';
 
 class UTA extends Component {
