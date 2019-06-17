@@ -128,7 +128,7 @@ class OrderPizzaCardView extends React.Component {
 
                 </FormGroup>
               </CardTitle>
-              <CardText style={{'paddingLeft': '5px', 'textAlign': 'left'}}>
+              <div style={{'paddingLeft': '5px', 'textAlign': 'left'}}>
                 Description: {this.state[eci]['description']}
                 <div>Payment Method: {this.state[eci]['Payment Method'] === "Cash or pay at store" ? this.state[eci]['Payment Method'] : "Card ending in ".concat(this.state[eci]['Payment Method'])}</div>
                 <div style={{"paddingTop": "5px"}}>
@@ -138,7 +138,7 @@ class OrderPizzaCardView extends React.Component {
                 <div>
                   Selected: {this.state[eci]['Service Method']}
                 </div>
-              </CardText>
+              </div>
 
               <OrderModalCardView
                 buttonLabel='Cart'

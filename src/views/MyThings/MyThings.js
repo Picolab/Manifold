@@ -45,7 +45,7 @@ export class MyThings extends Component {
   loadDropdown() {
     return (
       <div>
-        <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} style={{"margin-left": "10px"}}>
+        <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} style={{"marginLeft": "10px"}}>
         <DropdownToggle caret>
           {this.state.thingsSize} View
         </DropdownToggle>

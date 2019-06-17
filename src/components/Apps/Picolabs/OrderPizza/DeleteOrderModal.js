@@ -20,7 +20,7 @@ class DeleteOrderModal extends React.Component {
   }
 
   deleteOrder(e) {
-    this.toggle;
+    this.toggle();
     let promise = this.props.signalEvent({
       domain : "delete",
       type: "order",
