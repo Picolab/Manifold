@@ -4,6 +4,11 @@
   height: auto;
 }
 
+.smalllogoImage {
+  width: 80px;
+  height: auto;
+}
+
 .stickOutText {
   color:black;
   font-weight:bold;
@@ -122,6 +127,12 @@
   width: 20px;
   margin: 4px;
   background-color: #eee;
+}
+
+.serviceMethodSmall {
+  height: 10%;
+  width: 25%;
+  font-size: 70%
 }
 
 .invalid {

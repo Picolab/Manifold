@@ -113,25 +113,25 @@ export class ThingDropdown extends Component {
 
         <DropdownItem onClick={this.openRename}>
           Rename Thing
-          <i className="fa fa-pencil float-right" style={{"margin-right": "0", "margin-top": "4px"}} />
+          <i className="fa fa-pencil float-right" style={{"marginRight": "0", "marginTop": "4px"}} />
         </DropdownItem>
         <RenameModal modalOn={this.state.renameOpen} toggleFunc={this.toggleRename} picoID={this.props.picoID}/>
 
           <DropdownItem onClick={this.openRemove} >
             Remove Thing
-            <i className="fa fa-trash float-right" style={{"margin-right": "0", "margin-top": "4px"}} />
+            <i className="fa fa-trash float-right" style={{"marginRight": "0", "marginTop": "4px"}} />
           </DropdownItem>
           <RemoveThingModal modalOn={this.state.removeOpen} toggleFunc={this.toggleRemove} picoID={this.props.picoID}/>
 
           <DropdownItem onClick={this.openInstall}>
             Install an App
-            <i className="fa fa-cloud-download float-right" style={{"margin-right": "0", "margin-top": "4px"}} />
+            <i className="fa fa-cloud-download float-right" style={{"marginRight": "0", "marginTop": "4px"}} />
           </DropdownItem>
           <InstallModal modalOn={this.state.installOpen} toggleFunc={this.toggleInstall} picoID={this.props.picoID}/>
 
           <DropdownItem onClick={this.openUninstall}>
             Delete an App
-            <i className="fa fa-minus float-right" style={{"margin-right": "0", "margin-top": "4px"}} />
+            <i className="fa fa-minus float-right" style={{"marginRight": "0", "marginTop": "4px"}} />
           </DropdownItem>
           <UninstallModal modalOn={this.state.uninstallOpen} toggleFunc={this.toggleUninstall} picoID={this.props.picoID}/>
 

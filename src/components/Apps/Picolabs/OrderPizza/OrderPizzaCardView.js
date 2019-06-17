@@ -1,7 +1,11 @@
 import React from 'react';
 import OrderModalCardView from './OrderModalCardView';
+import DeleteOrderModal from './DeleteOrderModal';
+import './OrderPizzaApp.css'
+import logo from './pico-labs-pizza.png';
+import pizza from './pizza logo.png';
 import {customQuery, customEvent} from '../../../../utils/manifoldSDK';
-import { Label, Button, Form, FormGroup, Card, CardTitle, CardText} from 'reactstrap';
+import { Label, Button, Form, FormGroup, Card, CardTitle, CardText, Media} from 'reactstrap';
 
 class OrderPizzaCardView extends React.Component {
   constructor(props) {
@@ -18,8 +22,8 @@ class OrderPizzaCardView extends React.Component {
     }
     this.handleCheck = this.handleCheck.bind(this);
     this.getChildrenOrders = this.getChildrenOrders.bind(this);
-    this.deleteOrder = this.deleteOrder.bind(this);
     this.submitOrder = this.submitOrder.bind(this);
+    this.changeServiceMethod = this.changeServiceMethod.bind(this);
   }
 
   componentDidMount() {
@@ -84,22 +88,19 @@ class OrderPizzaCardView extends React.Component {
     }
   }
 
+  changeServiceMethod(e) {
+    let promise = customEvent(e.target.id, "change", "service", { method: e.target.value }, "5");
+    promise.then((resp) => {
+      this.getChildrenOrders();
+    })
+  }
+
   submitOrder() {
     console.log("You Ordered Pizza");
     this.props.signalEvent({
       domain : "place",
       type: "order",
       attrs : {
-      }
-    })
-  }
-
-  deleteOrder(e) {
-    let promise = this.props.signalEvent({
-      domain : "delete",
-      type: "order",
-      attrs : {
-        eci:e.target.value
       }
     })
   }
@@ -111,8 +112,13 @@ class OrderPizzaCardView extends React.Component {
       if(this.state[eci] !== undefined) {
         out.push(
           <div key={eci.concat("card")}>
-            <Card key={eci} className="card card2" body outline color="primary">
-            <Button color="danger" className="deleteButton" value={eci} onClick={this.deleteOrder}>X</Button>
+            <Card key={eci} className="card card2" style={{"margin": "3px"}} body outline color="primary">
+            <DeleteOrderModal
+              title={this.state[eci]['title']}
+              eci={eci}
+              signalEvent={this.props.signalEvent}
+              getChildrenOrders={this.getChildrenOrders}
+            />
               <CardTitle className="orderTitle">
                 <FormGroup  check>
                   <Label check>
@@ -122,11 +128,17 @@ class OrderPizzaCardView extends React.Component {
 
                 </FormGroup>
               </CardTitle>
-              <CardText style={{'paddingLeft': '5px', 'textAlign': 'left'}}>
+              <div style={{'paddingLeft': '5px', 'textAlign': 'left'}}>
                 Description: {this.state[eci]['description']}
-                <div>Payment Method: {this.state[eci]['Payment Method'] === "Cash" ? this.state[eci]['Payment Method'] : "Card ending in ".concat(this.state[eci]['Payment Method'])}</div>
-                <div>Service Method: {this.state[eci]['Service Method']}</div>
-              </CardText>
+                <div>Payment Method: {this.state[eci]['Payment Method'] === "Cash or pay at store" ? this.state[eci]['Payment Method'] : "Card ending in ".concat(this.state[eci]['Payment Method'])}</div>
+                <div style={{"paddingTop": "5px"}}>
+                  <Button color="primary" className="serviceMethodSmall" onClick={this.changeServiceMethod} value="Carryout" id={eci} active={this.state[eci]['Service Method'] === "Carryout"}>Carryout</Button>
+                  <Button color="primary" className="serviceMethodSmall" onClick={this.changeServiceMethod} value="Delivery" id={eci} active={this.state[eci]['Service Method'] === "Delivery"}>Delivery</Button>
+                </div>
+                <div>
+                  Selected: {this.state[eci]['Service Method']}
+                </div>
+              </div>
 
               <OrderModalCardView
                 buttonLabel='Cart'
@@ -150,6 +162,12 @@ class OrderPizzaCardView extends React.Component {
   render() {
     return(
       <div>
+        <h1 style={{"textAlign": "center"}}>
+          <div>
+            Pizza Orders
+          </div>
+          <Media object src={logo} className="smalllogoImage"></Media>
+        </h1>
         {this.renderCards()}
       </div>
     );
