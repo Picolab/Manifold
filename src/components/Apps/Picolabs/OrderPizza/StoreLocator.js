@@ -4,7 +4,7 @@ import './OrderPizzaApp.css'
 import OrderModal from './OrderModal';
 import DeleteOrderModal from './DeleteOrderModal';
 import {customQuery, customEvent} from '../../../../utils/manifoldSDK';
-import { Container, Col, Label, Button, ButtonGroup, Form, FormGroup, Input, ListGroup, ListGroupItem, Media, Card, CardTitle, CardText } from 'reactstrap';
+import { Container, Col, Label, Button, ButtonGroup, Form, FormGroup, Input, ListGroup, ListGroupItem, Media, Card, CardTitle } from 'reactstrap';
 
 class StoreLocator extends React.Component {
   constructor(props) {

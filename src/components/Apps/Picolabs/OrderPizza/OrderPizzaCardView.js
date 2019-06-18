@@ -3,9 +3,8 @@ import OrderModalCardView from './OrderModalCardView';
 import DeleteOrderModal from './DeleteOrderModal';
 import './OrderPizzaApp.css'
 import logo from './pico-labs-pizza.png';
-import pizza from './pizza logo.png';
 import {customQuery, customEvent} from '../../../../utils/manifoldSDK';
-import { Label, Button, Form, FormGroup, Card, CardTitle, CardText, Media} from 'reactstrap';
+import { Label, Button, FormGroup, Card, CardTitle, Media} from 'reactstrap';
 
 class OrderPizzaCardView extends React.Component {
   constructor(props) {
