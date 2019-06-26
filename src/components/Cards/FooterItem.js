@@ -14,6 +14,7 @@ class FooterItem extends Component {
   }
 
   render(){
+    console.log("FooterItem", this.props.allApps);
     const mediaID = "iconMedia" + this.props.index;
     if(this.props.index === this.props.currentApp){
       return(

@@ -311,7 +311,7 @@ class StoreLocator extends React.Component {
           <div style={{ 'color': 'red'}}>{this.state.errorMessage}</div>
         </ListGroup>
         <Container>
-        <Col>
+        <Col className="scrollableOrders">
           {this.renderCards()}
         </Col>
         </Container>

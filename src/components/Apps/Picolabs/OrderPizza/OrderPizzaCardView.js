@@ -167,7 +167,9 @@ class OrderPizzaCardView extends React.Component {
           </div>
           <Media object src={logo} className="smalllogoImage"></Media>
         </h1>
-        {this.renderCards()}
+        <div className="orders-container">
+          {this.renderCards()}
+        </div>
       </div>
     );
   }

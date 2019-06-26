@@ -19,6 +19,21 @@
   float: left;
 }
 
+.orders-container {
+   display: flex;
+   flex-wrap: wrap;
+}
+
+.orders-container > div {
+
+}
+
+.scrollableOrders {
+  overflow: auto;
+  height: 850px;
+  width: 700px;
+}
+
 .select {
   width:100px;
 }

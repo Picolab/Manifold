@@ -4,6 +4,11 @@ import ItemModal from './ItemModal';
 import spinner from './PizzaLoader.GIF';
 import {amount} from './toppings';
 import classnames from 'classnames';
+import breadtwist from './parmesianBreadTwist.png';
+import chickenBone from './ChickenBone.png';
+import lavaBrownie from './lavabrownie.png';
+import soda from './Soda.png';
+import pizza from './pizza logo.png';
 import {Collapse, Button, FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter, TabContent, TabPane, Nav, NavItem, NavLink, Media} from 'reactstrap';
 
 class StoreMenu extends React.Component {
@@ -261,8 +266,17 @@ displayMenuItems() {
   for( var item in this.state.StoreMenu) {
     let temp = count.toString();
     array.push(
-      <TabPane key={"The body of ".concat(item)} tabId={temp}>
-          {this.findVariants(this.state.StoreMenu[item])}
+      <TabPane key={"The body of ".concat(item)} tabId={temp} style={{"min-height": "750px"}}>
+        {item === "Breads" && <Media object src={breadtwist} style={{"float": "right"}}></Media>}
+        {(item === "Build Your Own" || item === "Specialty Pizzas") && <Media object src={pizza} style={{"float": "right"}}></Media>}
+        {item === "Chicken" &&  <Media object src={chickenBone} style={{"float": "right"}}></Media>}
+        {item === "Desserts" &&  <Media object src={lavaBrownie} style={{"float": "right"}}></Media>}
+        {item === "Drinks" && <Media object src={soda} style={{"float": "right"}}></Media>}
+        {item === "Extras" && <i className="fas fa- float-right fa-lg "/>}
+        {item === "Pasta" && <i className="fas fa- float-right fa-lg "/>}
+        {item === "Salads" && <i className="fas fa- float-right fa-lg "/>}
+        {item === "Sandwiches" && <i className="fas fa- float-right fa-lg "/>}
+        {this.findVariants(this.state.StoreMenu[item])}
       </TabPane>
     );
     count++;
@@ -284,7 +298,7 @@ findVariants(array, code) {
     for(var product in this.state.StoreVariants) {
       if(this.state.StoreVariants[product]["ProductCode"] === array[item]) {
         out.push(
-            <FormGroup key={this.state.StoreVariants[product]["Code"]} tag="fieldset">
+            <FormGroup style={{"width": "500px"}} key={this.state.StoreVariants[product]["Code"]} tag="fieldset">
             <FormGroup check>
               <Label check>
                 {this.state.StoreVariants[product]["Name"]}

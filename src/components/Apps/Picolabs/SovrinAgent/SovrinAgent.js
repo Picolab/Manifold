@@ -161,7 +161,6 @@ class SovrinAgent extends React.Component {
     var output = [];
     for(var item in this.state.technicalDetails['connections']) {
       if(this.state.technicalDetails['connections'][item] !== undefined) {
-        //console.log("label", this.state[this.state.technicalDetails['connections'][item]['label']]);
         if(this.state[this.state.technicalDetails['connections'][item]['label']] !== undefined) {
           output.push(
             <div key={this.state.technicalDetails['connections'][item]['their_did']}>

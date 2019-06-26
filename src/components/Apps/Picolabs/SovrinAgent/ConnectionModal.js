@@ -1,10 +1,11 @@
 import React from 'react';
 import {Modal, ModalHeader, ModalBody, ModalFooter, Button, Media, TabContent, TabPane, Nav, NavItem,
         NavLink, Row, Col} from 'reactstrap';
-import {customEvent} from '../../../../utils/manifoldSDK';
+import {customEvent, customQuery} from '../../../../utils/manifoldSDK';
+import {getManifoldECI} from '../../../../utils/AuthService';
 import Chat from './Chat';
 import classnames from 'classnames';
-
+import queryString from 'query-string';
 class ConnectionModal extends React.Component {
   constructor(props) {
     super(props);
@@ -23,10 +24,23 @@ class ConnectionModal extends React.Component {
   }
 
   componentDidMount() {
-    // const script = document.createElement("script");
-    // script.src = "https://cdn.jsdelivr.net/npm/jdenticon@2.1.1";
-    // script.async = true;
-    // document.body.appendChild(script);
+    this.checkForNotifications();
+  }
+
+  checkForNotifications() {
+    var index = window.location.href.lastIndexOf("?");
+    let {id} = queryString.parse(window.location.href.substring(index));
+    let promise = customQuery(getManifoldECI(),"io.picolabs.notifications", "getState", {id});
+
+    promise.then((resp) => {
+      if(this.props.theirDID === resp.data.agent) {
+        this.setState({
+          activeTab: resp.data.tab,
+          modal: true
+        });
+      }
+    })
+
   }
 
   modalToggle() {
