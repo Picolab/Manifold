@@ -24,12 +24,22 @@ class ConnectionModal extends React.Component {
   }
 
   componentDidMount() {
+    //this.checkForNotifications();
+  }
+
+  componentDidUpdate() {
     this.checkForNotifications();
   }
 
   checkForNotifications() {
     var index = window.location.href.lastIndexOf("?");
+    if(index === -1) {
+      return;
+    }
     let {id} = queryString.parse(window.location.href.substring(index));
+    if(id === null) {
+      return;
+    }
     let promise = customQuery(getManifoldECI(),"io.picolabs.notifications", "getState", {id});
 
     promise.then((resp) => {
@@ -39,6 +49,8 @@ class ConnectionModal extends React.Component {
           modal: true
         });
       }
+
+      window.location.href = window.location.href.substring(0,index);
     })
 
   }

@@ -9,6 +9,16 @@ import chickenBone from './ChickenBone.png';
 import lavaBrownie from './lavabrownie.png';
 import soda from './Soda.png';
 import pizza from './pizza logo.png';
+import slice1 from './PizzaSlice1.png';
+import slice2 from './PizzaSlice2.png';
+import slice3 from './PizzaSlice3.png';
+import slice4 from './PizzaSlice4.png';
+import slice5 from './PizzaSlice5.png';
+import slice6 from './PizzaSlice6.png';
+import slice7 from './PizzaSlice7.png';
+import fullpizza from './fullpizza.png';
+import onelesslice from './onelesslice.png'
+import twolesslice from './twolesslice.png'
 import {Collapse, Button, FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter, TabContent, TabPane, Nav, NavItem, NavLink, Media} from 'reactstrap';
 
 class StoreMenu extends React.Component {
@@ -267,15 +277,16 @@ displayMenuItems() {
     let temp = count.toString();
     array.push(
       <TabPane key={"The body of ".concat(item)} tabId={temp} style={{"min-height": "750px"}}>
-        {item === "Breads" && <Media object src={breadtwist} style={{"float": "right"}}></Media>}
-        {(item === "Build Your Own" || item === "Specialty Pizzas") && <Media object src={pizza} style={{"float": "right"}}></Media>}
-        {item === "Chicken" &&  <Media object src={chickenBone} style={{"float": "right"}}></Media>}
-        {item === "Desserts" &&  <Media object src={lavaBrownie} style={{"float": "right"}}></Media>}
-        {item === "Drinks" && <Media object src={soda} style={{"float": "right"}}></Media>}
-        {item === "Extras" && <i className="fas fa- float-right fa-lg "/>}
-        {item === "Pasta" && <i className="fas fa- float-right fa-lg "/>}
-        {item === "Salads" && <i className="fas fa- float-right fa-lg "/>}
-        {item === "Sandwiches" && <i className="fas fa- float-right fa-lg "/>}
+        {item === "Breads" && <Media object src={slice1} style={{"float": "right", "width": "750px", "height": "750px"}}></Media>}
+        {item === "Build Your Own" && <Media object src={slice2} style={{"float": "right", "width": "750px", "height": "750px"}}></Media>}
+        {item === "Chicken" &&  <Media object src={slice3} style={{"float": "right", "width": "750px", "height": "750px"}}></Media>}
+        {item === "Desserts" &&  <Media object src={slice4} style={{"float": "right", "width": "750px", "height": "750px"}}></Media>}
+        {item === "Drinks" && <Media object src={slice5} style={{"float": "right", "width": "750px", "height": "750px"}}></Media>}
+        {item === "Extras" && <Media object src={slice6} style={{"float": "right", "width": "750px", "height": "750px"}}></Media>}
+        {item === "Pasta" && <Media object src={slice7} style={{"float": "right", "width": "750px", "height": "750px"}}></Media>}
+        {item === "Salads" && <Media object src={fullpizza} style={{"float": "right", "width": "750px", "height": "750px"}}></Media>}
+        {item === "Sandwiches" && <Media object src={onelesslice} style={{"float": "right", "width": "750px", "height": "750px"}}></Media>}
+        {item === "Specialty Pizzas" && <Media object src={twolesslice} style={{"float": "right", "width": "750px", "height": "750px"}}></Media>}
         {this.findVariants(this.state.StoreMenu[item])}
       </TabPane>
     );
