@@ -52,11 +52,20 @@ export class NotificationsModal extends Component {
 
   removeNotification(id) {
     return () => {
+      console.log("id", id);
       const promise = customEvent(getManifoldECI(), 'manifold', 'remove_notification', {'notificationID': id}, 'remove_notification');
       promise.then((resp) => {
         this.getNotifications();
       });
     };
+  }
+
+  seenNotification(id) {
+    return () => {
+      let remove = this.removeNotification(id);
+      remove();
+      this.toggle();
+    }
   }
 
   convertDate(timestamp) {
@@ -136,7 +145,7 @@ export class NotificationsModal extends Component {
         <div key={this.state.notifications[item].id}>
           <ListGroupItem style={{"padding": "1rem 1.25rem"}}>
             <i id={"delete" + this.state.notifications[item].message} className="fa fa-trash float-right fa-lg manifoldDropdown" onClick={this.removeNotification(this.state.notifications[item].id)}/>
-            <a href={`/#/mythings/${this.state.notifications[item].did}/${this.state.notifications[item].ruleset}?id=${this.state.notifications[item].id}`} onClick={this.toggle}><i id={"open" + this.state.notifications[item].message} className="fa fa-sign-in float-right fa-lg manifoldDropdown" /></a>
+            <a href={`/#/mythings/${this.state.notifications[item].did}/${this.state.notifications[item].ruleset}?id=${this.state.notifications[item].id}`}><i id={"open" + this.state.notifications[item].message} className="fa fa-sign-in float-right fa-lg manifoldDropdown" onClick={this.seenNotification(this.state.notifications[item].id)}/></a>
             <h5 className="title" >{this.state.notifications[item].thing} - {this.state.notifications[item].app}</h5>
             <p className="timestamp">{this.convertDate(this.state.notifications[item].time)}</p>
             <p className="content">{this.state.notifications[item].message}</p>
