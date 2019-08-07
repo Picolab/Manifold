@@ -98,10 +98,19 @@ ruleset io.picolabs.manifold_pico {
                                 .put({ "rids": thingRids })
     }
   }
+  
   rule thingCompleted {
-    select when wrangler child_initialized where rs_attrs{"event_type"} == "manifold_create_thing"
-      initiate_subscription(event:attr("eci"), event:attr("rs_attrs"){"name"}, subscription:wellKnown_Rx(){"id"}, thing_role);
+    select when wrangler child_initialized where event_type == "manifold_create_thing"
+      initiate_subscription(event:attr("eci"), event:attr("name"), subscription:wellKnown_Rx(){"id"}, thing_role);
   }
+  
+  rule acceptManifoldSubs {
+    select when wrangler inbound_pending_subscription_added where Tx_Rx_Type == "Manifold"
+    always {
+      raise wrangler event "pending_subscription_approval" attributes event:attrs;
+    }
+  }
+  
   rule trackThingSubscription {
     select when wrangler subscription_added where event:attr("Tx_role") == thing_role
     pre {
@@ -133,10 +142,12 @@ ruleset io.picolabs.manifold_pico {
                                 .put({"rids": communityRids})
     }
   }
+  
   rule communityCompleted {
-    select when wrangler child_initialized where rs_attrs{"event_type"} == "manifold_create_community"
-      initiate_subscription(event:attr("eci"), event:attr("rs_attrs"){"name"}, subscription:wellKnown_Rx(){"id"}, community_role);
+    select when wrangler child_initialized where event_type == "manifold_create_community"
+      initiate_subscription(event:attr("eci"), event:attr("name"), subscription:wellKnown_Rx(){"id"}, community_role);
   }
+  
   rule trackCommSubscription {
     select when wrangler subscription_added where event:attr("Tx_role") == community_role
     pre {
@@ -175,6 +186,7 @@ ruleset io.picolabs.manifold_pico {
         attributes {"Id": sub{"Id"}, "picoID": picoID, "event_type": "thing_deletion"}
     }
   }
+  
   rule deleteThing {
     select when wrangler subscription_removed where event:attr("event_type") == "thing_deletion"
     pre {

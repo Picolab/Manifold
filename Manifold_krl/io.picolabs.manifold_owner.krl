@@ -77,15 +77,5 @@ ruleset io.picolabs.manifold_owner {
         attributes { "name": config{"pico_name"}, "color": "#7FFFD4", "rids": config{"rids"},"event_type": "manifold_create_owner" }
     }
   }
-  rule ownerCompleted{
-    select when wrangler child_initialized where rs_attrs{"event_type"} == "manifold_create_owner"
-    pre{eci = event:attr("eci") }
-    every{
-      event:send(
-        { "eci": eci,
-          "domain": "wrangler", "type": "autoAcceptConfigUpdate",
-          "attrs": {"variable"    : "Tx_Rx_Type",
-                    "regex_str"   : "Manifold" }})
-    }
-  }
+
 }
