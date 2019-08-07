@@ -41,3 +41,9 @@ color: green !important;
 .colPadding {
   padding-left: 5px !important;
 }
+
+.domain {
+  color: white;
+  background-color: rgb(75,159,211);
+  font-weight: bold;
+}

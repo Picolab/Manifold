@@ -4,7 +4,7 @@ import { Card, CardText, CardBody, CardTitle, CardLink } from 'reactstrap';
 import { isLoggedIn } from '../../utils/AuthService';
 import { Link } from 'react-router-dom';
 import queryString from 'query-string';
-import { customQuery } from '../../utils/manifoldSDK';
+import { customQuery, customEvent } from '../../utils/manifoldSDK';
 import './SafeAndMine.css';
 
 export class SafeAndMine extends Component {
@@ -39,7 +39,16 @@ export class SafeAndMine extends Component {
     }).catch((e) => {
       console.error(e);
     });
+    this.notify();
   }
+
+  notify() {
+    const promise = customEvent(this.state.DID, "safeandmine", "notify", { tagID: this.state.tagID });
+    promise.then((resp) => {
+      console.log("notified");
+    })
+  }
+
   displayCard() {
     const { name, phone, email, message, shareName, sharePhone, shareEmail } = this.state;
     const loggedIn = isLoggedIn();

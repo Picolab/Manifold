@@ -83,9 +83,7 @@ export default class Aurora extends Component {
             let newState = resp2.data;
             newState.connected = true;
             newState.triedLoading = true;
-            newState.barHue = newState.hue.value;
-            newState.barSaturation = newState.saturation.value;
-            newState.barBrightness = newState.brightness.value;
+            this.hsvToRgb(newState.hue.value / newState.hue.max, newState.saturation.value / newState.saturation.max, newState.brightness.value / newState.brightness.max);
             this.setState(newState);
           }
         })
@@ -123,21 +121,56 @@ export default class Aurora extends Component {
     });
   }
 
+  hsvToRgb(h, s, v) {
+    let r,g,b;
+    let i = Math.floor(h * 6);
+    let f = h * 6 - i;
+    let p = v * (1 - s);
+    let q = v * (1 - f * s);
+    let t = v * (1 - (1 - f) * s);
+
+    switch (i % 6) {
+      case 0: r = v; g = t; b = p; break;
+      case 1: r = q; g = v; b = p; break;
+      case 2: r = p; g = v; b = t; break;
+      case 3: r = p; g = q; b = v; break;
+      case 4: r = t; g = p; b = v; break;
+      case 5: r = v; g = p; b = q; break;
+      default: console.error("did mod 6 and got a value not between 0 and 5");
+    }
+
+    let newColor  = {
+        red: r * 255,
+        green: g * 255,
+        blue: b * 255
+      };
+
+
+    this.setState(newColor);
+  }
+
   hueBar(value) {
-    this.setState({barHue: value})
+    let h = value / this.state.hue.max;
+    let s = this.state.saturation.value / this.state.saturation.max;
+    let v = this.state.brightness.value / this.state.brightness.max;
+
+    this.hsvToRgb(h,s,v);
   }
 
   saturationBar(value) {
-    let lightness = (2-value) * this.state.brightness.value;
-    let newVal = this.state.brightness.value * value;
-    newVal /= ((lightness <= 1) ? lightness : 2 - lightness);
+    let h = this.state.hue.value / this.state.hue.max;
+    let s = value / this.state.saturation.max;
+    let v = this.state.brightness.value / this.state.brightness.max;
 
-    this.setState({barSaturation: newVal})
+    this.hsvToRgb(h,s,v);
   }
 
   brightnessBar(value) {
-    let newVal = ((2-value) * this.state.brightness.value) / 2;
-    this.setState({barBrightness: newVal})
+    let h = this.state.hue.value / this.state.hue.max;
+    let s = this.state.saturation.value / this.state.saturation.max;
+    let v = value / this.state.brightness.max;
+
+    this.hsvToRgb(h,s,v);
   }
 
   hueHandle(value) {
@@ -242,7 +275,8 @@ export default class Aurora extends Component {
 
         <h5>Brightness:</h5>
         <Slider min={this.state.brightness.min} max={this.state.brightness.max} defaultValue={this.state.brightness.value} onChange={this.brightnessBar} onAfterChange={this.brightnessHandle} handle={handle} />
-        <div style={{"height" : "40px", "backgroundColor" : `hsl(${this.state.barHue},${this.state.barSaturation}%,${this.state.barBrightness}%)`}} />
+        <br />
+        <div style={{"height" : "40px", "backgroundColor" : `rgb(${this.state.red},${this.state.green},${this.state.blue})`}} />
         <br />
 
         <h5>Effects:</h5>

@@ -29,7 +29,8 @@ export class SafeAndMineApp extends Component {
 
 
       tagID: "",
-      registeredTags: [],
+      domain: "picolabs",
+      registeredTags: {},
 
       // component state
 
@@ -161,7 +162,7 @@ export class SafeAndMineApp extends Component {
     e.preventDefault();
     /*if (this.state.tagID.length !== TAG_CHAR_LENGTH) {
       this.setState({
-        validTagId: false
+        validTagId: true
       })
       return;
     }*/
@@ -170,7 +171,8 @@ export class SafeAndMineApp extends Component {
       domain: "safeandmine",
       type: "new_tag",
       attrs: {
-        tagID: this.state.tagID
+        tagID: this.state.tagID,
+        domain: this.state.domain
       }
     });
     promise.then(() => {
@@ -209,20 +211,35 @@ export class SafeAndMineApp extends Component {
     }
   }
 
-
-  displayTagList() {
+  displayDomain(domain, key) {
     let toDisplay = [];
-    this.state.registeredTags.forEach((tagID) => {
+    domain.forEach((tagID) => {
       toDisplay.push(
         <ListGroupItem key={tagID}>
           <Media object src={tag} className="tagImage"></Media>
           {"  " + tagID}
-          <DeleteButton signalEvent={this.props.signalEvent} tagID={tagID} retrieveTags={this.retrieveTags} />
+          <DeleteButton signalEvent={this.props.signalEvent} tagID={tagID} domain={key} retrieveTags={this.retrieveTags} />
         </ListGroupItem>
       );
-    })
+    });
     return toDisplay;
   }
+
+  displayTagList() {
+    let toDisplay = [];
+    console.log("tags", this.state.registeredTags);
+    for (var key in this.state.registeredTags) {
+      toDisplay.push(
+             <ListGroup>
+              <ListGroupItem className="domain" key={key}>{key}</ListGroupItem>
+              {this.displayDomain(this.state.registeredTags[key], key)}
+             </ListGroup>
+         );
+    }
+
+    return toDisplay;
+  }
+
 
   render() {
     return(
@@ -322,15 +339,29 @@ export class SafeAndMineApp extends Component {
 
         <br></br><br></br>
         <h3>Registered Tags</h3>
-        <ListGroup className="shortenedWidth">
           {this.displayTagList()}
-        </ListGroup>
         <br></br>
         <Form onSubmit={this.registerTag} className="shortenedWidth">
           <FormGroup>
-            <Label for="Message">Enter New TagID</Label>
-            <Input type="text" name="tagID" id="tagID" placeholder="ABCDEF" value={this.state.tagID} onChange={this.onChange('tagID')} />
-            {this.state.validTagId ? "" : <i style={{"color":"rgb(213, 99, 71)"}}> Tag ID must be {TAG_CHAR_LENGTH} characters</i>}
+
+            <Label for="Message">Enter a new TagID:</Label>
+
+            <Container style={{margin:0, padding:0}}>
+              <Row style={{margin:0, padding:0}}>
+                <Col xs="10" style={{margin:0, padding:0}}>
+                  <Input type="text" name="tagID" id="tagID" placeholder="ABCDEF" value={this.state.tagID} onChange={this.onChange('tagID')} />
+                  {this.state.validTagId ? "" : <i style={{"color":"rgb(213, 99, 71)"}}> Tag ID must be at least {TAG_CHAR_LENGTH} characters</i>}
+                </Col>
+                <Col xs="2" style={{margin:0, padding:0}}>
+
+                  <Input type="select" name="domain" id="domain" onChange={this.onChange('domain')}>
+                    <option>picolabs</option>
+                    <option>sqtg</option>
+                  </Input>
+                </Col>
+              </Row>
+            </Container>
+
           </FormGroup>
           <Button>Register Tag</Button>
         </Form>

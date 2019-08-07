@@ -9,7 +9,7 @@ export default class DeleteButton extends Component {
           const promise = this.props.signalEvent({
             domain : "safeandmine",
             type : "deregister",
-            attrs : { tagID : this.props.tagID }
+            attrs : { tagID : this.props.tagID, domain : this.props.domain }
           })
           promise.then(() => {
             this.props.retrieveTags();
