@@ -16,6 +16,7 @@ class SovrinAgent extends React.Component {
       received_Invitation: "",
       messages: []
     };
+    this.poll = this.poll.bind(this);
     this.invitationToggle = this.invitationToggle.bind(this);
     this.actionsToggle = this.actionsToggle.bind(this);
     this.receiveInvitation = this.receiveInvitation.bind(this);
@@ -24,15 +25,37 @@ class SovrinAgent extends React.Component {
 
   componentDidMount() {
     this.getUI()
+    //this.setCurrentPage();
     const script = document.createElement("script");
     script.src = "https://cdn.jsdelivr.net/npm/jdenticon@2.1.1";
     script.async = true;
     document.body.appendChild(script);
+    this.pollInterval = setInterval(() => this.poll(), 3000);
     this.connVar = setInterval(() => this.getUI(), 3000);
+  }
+
+  poll() {
+    let promise = this.props.signalEvent({
+        domain:"edge",
+        type:"poll_all_needed",
+        attrs: {
+        }
+    });
+  }
+
+  setCurrentPage() {
+    this.props.signalEvent({
+      domain:"sovrin",
+      type:"set_page",
+      attrs: {
+        page: "connections"
+      }
+    })
   }
 
   componentWillUnmount() {
     clearInterval(this.connVar);
+    clearInterval(this.pollInterval);
   }
 
   invitationToggle() {
@@ -69,7 +92,22 @@ class SovrinAgent extends React.Component {
           technicalDetails: resp.data
         });
         //clearInterval(this.connVar);
+        this.getEdgeUI();
         this.getIconImages(resp.data['connections'])
+      }
+    });
+  }
+
+  getEdgeUI() {
+    const promise = this.props.manifoldQuery({
+      rid: "org.sovrin.edge",
+      funcName: "ui"
+    }).catch((e) => {
+        console.error("Error getting edge ui", e);
+    });
+    promise.then((resp) => {
+      if(resp.data !== undefined) {
+        this.setRouter(resp.data);
       }
     });
   }
@@ -89,6 +127,37 @@ class SovrinAgent extends React.Component {
         })
       })
     }
+  }
+
+  setRouter(routerUI) {
+    this.setState({
+      routerUI: routerUI,
+      routerName: routerUI['routerName'],
+    });
+  }
+
+  hasRouter(label) {
+    let routerConn = label.concat(" to ".concat(this.state.technicalDetails["name"]));
+    if (this.state.routerUI !== undefined && this.state.routerUI["routerConnections"][routerConn] !== undefined) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  displayViaRouterInvitation() {
+    return (
+      <div>
+      <DropdownItem className="actionHeader" header>Generate Invitation Via {this.state.routerName}</DropdownItem>
+        <InputGroup>
+          <Input id={this.state.routerUI["invitationVia".concat(this.state.routerName)]} value={this.state.routerUI["invitationVia".concat(this.state.routerName)]}/>
+            <InputGroupAddon addonType="append">
+              <Button id={this.state.routerUI["invitationVia".concat(this.state.routerName)]} value={this.state.routerUI["invitationVia".concat(this.state.routerName)]} onClick={this.copyInvitation}>Copy</Button>
+            </InputGroupAddon>
+        </InputGroup>
+        </div>
+    );
   }
 
   openInvite(e) {
@@ -137,14 +206,15 @@ class SovrinAgent extends React.Component {
                       <Button id={this.state.technicalDetails["invitation"]} value={this.state.technicalDetails["invitation"]} onClick={this.copyInvitation}>Copy</Button>
                     </InputGroupAddon>
                   </InputGroup>
-                <DropdownItem header>Receive Invitation</DropdownItem>
-                  <InputGroup>
-                    <Input type="text" name="received_Invitation" placeholder="Receive Invitation" value={this.state.received_Invitation} onChange={this.onChange('received_Invitation')}/>
-                    <InputGroupAddon addonType="append">
-                      <Button onClick={this.receiveInvitation}>Receive</Button>
-                    </InputGroupAddon>
-                  </InputGroup>
-              </DropdownMenu>
+              {this.state.routerUI !== undefined && this.displayViaRouterInvitation()}
+              <DropdownItem header>Receive Invitation</DropdownItem>
+                <InputGroup>
+                  <Input type="text" name="received_Invitation" placeholder="Receive Invitation" value={this.state.received_Invitation} onChange={this.onChange('received_Invitation')}/>
+                  <InputGroupAddon addonType="append">
+                    <Button onClick={this.receiveInvitation}>Receive</Button>
+                  </InputGroupAddon>
+                </InputGroup>
+            </DropdownMenu>
             </Dropdown>
           </h1>
         </div>
@@ -177,9 +247,7 @@ class SovrinAgent extends React.Component {
                 getUI={this.getUI}
                 invitation={this.state.technicalDetails["invitation"]}
               />
-              <div className="agentLabel">
-                {this.state.technicalDetails['connections'][item]['label']}
-              </div>
+                {this.hasRouter(this.state.technicalDetails['connections'][item]['label']) === true  ? <div className="agentLabel"> {this.state.technicalDetails['connections'][item]['label']} <span> (via {this.state.routerName}) </span> </div> : <div className="agentLabel"> {this.state.technicalDetails['connections'][item]['label']} </div>}
             </div>
           );
         } else {
@@ -199,7 +267,7 @@ class SovrinAgent extends React.Component {
                 invitation={this.state.technicalDetails["invitation"]}
               />
               <div className="agentLabel">
-                {this.state.technicalDetails['connections'][item]['label']}
+                {this.hasRouter(this.state.technicalDetails['connections'][item]['label']) === true  ? <div className="agentLabel"> {this.state.technicalDetails['connections'][item]['label']} (via {this.state.routerName}) </div> : <div className="agentLabel"> {this.state.technicalDetails['connections'][item]['label']} </div>}
               </div>
             </div>
           );

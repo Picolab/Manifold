@@ -6,11 +6,14 @@ import {getManifoldECI} from '../../../../utils/AuthService';
 import Chat from './Chat';
 import classnames from 'classnames';
 import queryString from 'query-string';
+
 class ConnectionModal extends React.Component {
   constructor(props) {
     super(props);
     let modalState = localStorage.getItem('modalState'.concat(this.props.theirDID));
+    //console.log("modalState",modalState);
     let tab = localStorage.getItem('currentTab'.concat(this.props.theirDID));
+    //console.log("tab",tab);
     this.state = {
       modal: modalState === 'true' ? true : false,
       activeTab: tab !== null ? tab : '1',
@@ -25,10 +28,54 @@ class ConnectionModal extends React.Component {
 
   componentDidMount() {
     //this.checkForNotifications();
+    this.setCurrentPage();
+  }
+
+  componentWillUnmount() {
+    this.props.signalEvent({
+      domain:"sovrin",
+      type:"set_page",
+      attrs: {
+        page: "connections"
+      }
+    });
   }
 
   componentDidUpdate() {
     this.checkForNotifications();
+    this.setCurrentPage();
+  }
+
+  setCurrentPage() {
+    //console.log("this.state.modal",this.state.modal);
+    if(localStorage.getItem('modalState'.concat(this.props.theirDID)) === false) {
+      this.props.signalEvent({
+        domain:"sovrin",
+        type:"set_page",
+        attrs: {
+          page: "connections"
+        }
+      })
+    } else {
+      if(localStorage.getItem('currentTab'.concat(this.props.theirDID)) === '1') {
+        this.props.signalEvent({
+          domain:"sovrin",
+          type:"set_page",
+          attrs: {
+            page: "info"
+          }
+        })
+      } else {
+        this.props.signalEvent({
+          domain:"sovrin",
+          type:"set_page",
+          attrs: {
+            page: "chat",
+            their_vk: this.props.their_vk
+          }
+        })
+      }
+    }
   }
 
   checkForNotifications() {
@@ -135,10 +182,6 @@ class ConnectionModal extends React.Component {
   }
 
   render() {
-    // const script = document.createElement("script");
-    // script.src = "https://cdn.jsdelivr.net/npm/jdenticon@2.1.1";
-    // script.async = true;
-    // document.body.appendChild(script);
     return (
       <div className="agentLabel">
         { this.props.image !== null ? <Media object src={this.props.image} className='connection' onClick={this.modalToggle}/> : <svg className="connection" data-jdenticon-value={this.props.title} onClick={this.modalToggle}></svg>}

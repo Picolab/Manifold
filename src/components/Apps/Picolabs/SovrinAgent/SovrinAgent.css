@@ -16,10 +16,15 @@
 
 .agentLabel {
   max-height: 170px;
-  width: 150px;
+  width: 200px;
   font-size: 23px;
   text-align: center;
+}
 
+.agentViaLabel {
+  max-height: 170px;
+  font-size: 23px;
+  text-align: center;
 }
 
 .myConnection {

@@ -88,6 +88,24 @@ class Profile extends Component {
     return services;
   }
 
+  renderOtherServices() {
+    return (
+      <div  className="profileServiceSection">
+        <h2 className="serviceHeader"> Other </h2>
+        <Table>
+          <tbody>
+              {this.renderOtherProfileRow()}
+          </tbody>
+        </Table>
+      </div>);
+  }
+
+  renderOtherProfileRow() {
+    for(var item in this.state.profile.other) {
+
+    }
+  }
+
 
   render(){
     return (
@@ -95,7 +113,7 @@ class Profile extends Component {
         <h1> Profile</h1>
         <hr className="my-2" style={{"paddingBottom":"5px"}}/>
           {this.renderServices()}
-        </div>
+      </div>
     );
   }
 }

@@ -8,10 +8,14 @@ import Footer from '../../components/Footer/';
 import CardOverview from '../../components/CardOverview/CardOverview';
 import CardAppView from '../../components/CardAppView/CardAppView';
 
+import ThingAppOverview from '../../views/Settings/ThingAppOverview';
+import NotificationAppView from '../../views/Settings/NotificationAppView';
+
 import Dashboard from '../../views/Dashboard/'
 import MyThings from '../../views/MyThings/'
 import Communities from '../../views/Communities/Communities'
 import Profile from '../../views/Profile/Profile'
+import Settings from '../../views/Settings/Settings'
 import Feedback from '../../views/Feedback/Feedback'
 import Privacy from '../../views/Privacy/Privacy'
 //import Help from '../../views/Help/Help'
@@ -47,11 +51,14 @@ class Full extends Component {
             <div className="container-fluid">
               <Switch>
                 <Route path="/dashboard" name="Dashboard" component={Dashboard}/>
+                <Route path="/settings/:picoID/notification-settings/:appRid" name="App Notification Settings" component={NotificationAppView}/>
                 <Route path="/mythings/:picoID/:appRid" name="Thing App View" component={CardAppView}/>
                 <Route path="/mythings/:picoID" name="Card Overview" component={CardOverview}/>
                 <Route path="/mythings" name="My Things" component={MyThings}/>
+                <Route path="/settings/:picoID" name="ThingAppOverview" component={ThingAppOverview}/>
                 <Route path="/communities" name="Communities" component={Communities}/>
                 <Route path="/profile" name="Profile" component={Profile}/>
+                <Route path="/settings" name="Settings" component={Settings}/>
                 <Route path="/feedback" name="Feedback" component={Feedback}/>
                 <Route path="/privacy" name="Privacy" component={Privacy}/>
                 <Route path="/components/buttons" name="Buttons" component={Buttons}/>
