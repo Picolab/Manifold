@@ -15,6 +15,7 @@ class CardFooter extends Component{
 
   renderFooterItems() {
     let footers = [];
+    console.log("CardFooter", this.props.allApps);
     for(var i = 0; i < this.props.totalApps; i++){
       footers.push(
         <FooterItem

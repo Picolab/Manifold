@@ -4,6 +4,21 @@ import ItemModal from './ItemModal';
 import spinner from './PizzaLoader.GIF';
 import {amount} from './toppings';
 import classnames from 'classnames';
+import breadtwist from './parmesianBreadTwist.png';
+import chickenBone from './ChickenBone.png';
+import lavaBrownie from './lavabrownie.png';
+import soda from './Soda.png';
+import pizza from './pizza logo.png';
+import slice1 from './PizzaSlice1.png';
+import slice2 from './PizzaSlice2.png';
+import slice3 from './PizzaSlice3.png';
+import slice4 from './PizzaSlice4.png';
+import slice5 from './PizzaSlice5.png';
+import slice6 from './PizzaSlice6.png';
+import slice7 from './PizzaSlice7.png';
+import fullpizza from './fullpizza.png';
+import onelesslice from './onelesslice.png'
+import twolesslice from './twolesslice.png'
 import {Collapse, Button, FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter, TabContent, TabPane, Nav, NavItem, NavLink, Media} from 'reactstrap';
 
 class StoreMenu extends React.Component {
@@ -261,8 +276,18 @@ displayMenuItems() {
   for( var item in this.state.StoreMenu) {
     let temp = count.toString();
     array.push(
-      <TabPane key={"The body of ".concat(item)} tabId={temp}>
-          {this.findVariants(this.state.StoreMenu[item])}
+      <TabPane key={"The body of ".concat(item)} tabId={temp} style={{"min-height": "750px"}}>
+        {item === "Breads" && <Media object src={slice1} style={{"float": "right", "width": "750px", "height": "750px"}}></Media>}
+        {item === "Build Your Own" && <Media object src={slice2} style={{"float": "right", "width": "750px", "height": "750px"}}></Media>}
+        {item === "Chicken" &&  <Media object src={slice3} style={{"float": "right", "width": "750px", "height": "750px"}}></Media>}
+        {item === "Desserts" &&  <Media object src={slice4} style={{"float": "right", "width": "750px", "height": "750px"}}></Media>}
+        {item === "Drinks" && <Media object src={slice5} style={{"float": "right", "width": "750px", "height": "750px"}}></Media>}
+        {item === "Extras" && <Media object src={slice6} style={{"float": "right", "width": "750px", "height": "750px"}}></Media>}
+        {item === "Pasta" && <Media object src={slice7} style={{"float": "right", "width": "750px", "height": "750px"}}></Media>}
+        {item === "Salads" && <Media object src={fullpizza} style={{"float": "right", "width": "750px", "height": "750px"}}></Media>}
+        {item === "Sandwiches" && <Media object src={onelesslice} style={{"float": "right", "width": "750px", "height": "750px"}}></Media>}
+        {item === "Specialty Pizzas" && <Media object src={twolesslice} style={{"float": "right", "width": "750px", "height": "750px"}}></Media>}
+        {this.findVariants(this.state.StoreMenu[item])}
       </TabPane>
     );
     count++;
@@ -284,7 +309,7 @@ findVariants(array, code) {
     for(var product in this.state.StoreVariants) {
       if(this.state.StoreVariants[product]["ProductCode"] === array[item]) {
         out.push(
-            <FormGroup key={this.state.StoreVariants[product]["Code"]} tag="fieldset">
+            <FormGroup style={{"width": "500px"}} key={this.state.StoreVariants[product]["Code"]} tag="fieldset">
             <FormGroup check>
               <Label check>
                 {this.state.StoreVariants[product]["Name"]}

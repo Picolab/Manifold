@@ -25,7 +25,9 @@ class Card extends Component {
 
   componentWillMount(){
     //query for the discovery and app info
+    console.log("Card", this.props.installedApps);
     if(!this.props.installedApps) { //if we haven't retrieved it yet
+      console.log("I am inside the if statement in Card");
       this.props.dispatch(discovery(this.props.DID, this.props.picoID));
     }
   }
@@ -52,6 +54,7 @@ class Card extends Component {
   }
 
   render(){
+    console.log("Card", this.props.installedApps);
     return (
       <div className="card" style={{  height: "inherit", width: "inherit"}}>
 

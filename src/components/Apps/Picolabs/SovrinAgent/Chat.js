@@ -233,7 +233,6 @@ class Chat extends React.Component {
     script.src = "https://cdn.jsdelivr.net/npm/jdenticon@2.1.1";
     script.async = true;
     document.body.appendChild(script);
-    console.log(this.state.failedMessage);
     return (
       <div>
         <div id="chatBody" className="chatBody">

@@ -133,10 +133,10 @@ export class NotificationsModal extends Component {
     var out = [];
     for(var item in this.state.notifications) {
       out.push(
-        <div>
+        <div key={this.state.notifications[item].id}>
           <ListGroupItem style={{"padding": "1rem 1.25rem"}}>
             <i id={"delete" + this.state.notifications[item].message} className="fa fa-trash float-right fa-lg manifoldDropdown" onClick={this.removeNotification(this.state.notifications[item].id)}/>
-            <a href={`/#/mythings/${this.state.notifications[item].picoId}/${this.state.notifications[item].ruleset}`} onClick={this.toggle}><i id={"open" + this.state.notifications[item].message} className="fa fa-sign-in float-right fa-lg manifoldDropdown" /></a>
+            <a href={`/#/mythings/${this.state.notifications[item].did}/${this.state.notifications[item].ruleset}?id=${this.state.notifications[item].id}`} onClick={this.toggle}><i id={"open" + this.state.notifications[item].message} className="fa fa-sign-in float-right fa-lg manifoldDropdown" /></a>
             <h5 className="title" >{this.state.notifications[item].thing} - {this.state.notifications[item].app}</h5>
             <p className="timestamp">{this.convertDate(this.state.notifications[item].time)}</p>
             <p className="content">{this.state.notifications[item].message}</p>
