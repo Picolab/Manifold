@@ -13,7 +13,7 @@ ruleset io.picolabs.manifold_owner {
                       "attrs": [  ] }
                    ] }
 
-    config={"pico_name" : "Manifold", "URI" : ["io.picolabs.manifold_pico.krl"], "rids": ["io.picolabs.manifold_pico","io.picolabs.subscription", "io.picolabs.notifications"], "channel_type":"App"};
+    config={"pico_name" : "Manifold", "URI" : ["io.picolabs.manifold_pico.krl"], "rids": ["io.picolabs.manifold_pico","io.picolabs.subscription","io.picolabs.notifications","io.picolabs.prowl_notifications","io.picolabs.twilio_notifications"], "channel_type":"App"};
 
     getManifoldPico = function(){
       child = wrangler:children(config{"pico_name"}).klog("child: ");
