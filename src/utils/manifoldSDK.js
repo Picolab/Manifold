@@ -28,11 +28,16 @@ export function customQuery(eci, ruleset, funcName, params){
 }
 
 export function getManifoldInfo(){
+  updateManifoldVersion();
   return axios.get(`${sky_cloud(getManifoldECI())}/io.picolabs.manifold_pico/getManifoldInfo`);
 }
 
 export function hasTutorial() {
   return axios.get(`${sky_cloud(getManifoldECI())}/io.picolabs.manifold_pico/hasTutorial`);
+}
+
+export function updateManifoldVersion() {
+  return axios.post(`${sky_event(getManifoldECI())}/eid/manifold/update_version`);
 }
 
 export function retrieveOwnerDID(attrs) {

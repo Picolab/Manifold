@@ -15,7 +15,7 @@ ruleset io.picolabs.notifications {
       //, { "name": "entry", "args": [ "key" ] }
       ] , "events":
       [
-        { "domain": "manifold", "type": "add_notification", "attrs": ["did", "thing", "app", "message", "ruleset"]}
+        { "domain": "manifold", "type": "add_notification", "attrs": ["picoId", "thing", "app", "message", "ruleset"]}
         , { "domain": "manifold", "type": "remove_notification", "attrs": ["notificationID"]}
         , { "domain": "manifold", "type": "update_app_list", "attrs": []}
         , { "domain": "manifold", "type": "set_notification_settings", "attrs": ["id"]}
@@ -61,6 +61,8 @@ ruleset io.picolabs.notifications {
       ent:notification_settings{id}{app_name}
     }
   }
+
+
 
   rule updateManifoldAppList {
     select when manifold update_app_list
@@ -113,7 +115,7 @@ ruleset io.picolabs.notifications {
 
     pre {
       thing = event:attr("thing");
-      did = event:attr("did");
+      picoId = event:attr("picoId");
       app = event:attr("app");
       message = event:attr("message");
       rs = event:attr("ruleset");
@@ -124,19 +126,19 @@ ruleset io.picolabs.notifications {
       notification = event:attrs.put("id", notificationID).put("time", time_stamp);
     }
 
-    if(thing && did && app && message && rs) then noop();
+    if(thing && picoId && app && message && rs) then noop();
 
     fired {
       ent:notifications := ent:notifications.defaultsTo([]).append(notification)
-        if (ent:notification_settings{did}{rs}{"Manifold"}) == true;
+        if (ent:notification_settings{picoId}{rs}{"Manifold"}) == true;
       ent:notification_state := ent:notification_state.defaultsTo({}).put(notificationID, state)
-        if (ent:notification_settings{did}{rs}{"Manifold"}) == true;
+        if (ent:notification_settings{picoId}{rs}{"Manifold"}) == true;
       raise twilio event "notify_through_twilio"
         attributes {"Body": message, "rs": rs, "id": did }
-      if (ent:notification_settings{did}{rs}{"Twilio"}) == true;
+      if (ent:notification_settings{picoId}{rs}{"Twilio"}) == true;
       raise prowl event "notify_through_prowl"
         attributes {"Body": message, "rs": rs, "id": did, "application": app }
-      if (ent:notification_settings{did}{rs}{"Prowl"}) == true;
+      if (ent:notification_settings{picoId}{rs}{"Prowl"}) == true;
 
     }
   }
