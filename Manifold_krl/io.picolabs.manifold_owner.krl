@@ -13,7 +13,7 @@ ruleset io.picolabs.manifold_owner {
                       "attrs": [  ] }
                    ] }
 
-    config={"pico_name" : "Manifold", "URI" : ["io.picolabs.manifold_pico.krl"], "rids": ["io.picolabs.manifold_pico","io.picolabs.subscription", "io.picolabs.notifications"], "channel_type":"App"};
+    config={"pico_name" : "Manifold", "URI" : ["io.picolabs.manifold_pico.krl"], "rids": ["io.picolabs.manifold_pico","io.picolabs.subscription","io.picolabs.notifications","io.picolabs.prowl_notifications","io.picolabs.twilio_notifications"], "channel_type":"App"};
 
     getManifoldPico = function(){
       child = wrangler:children(config{"pico_name"}).klog("child: ");
@@ -77,15 +77,5 @@ ruleset io.picolabs.manifold_owner {
         attributes { "name": config{"pico_name"}, "color": "#7FFFD4", "rids": config{"rids"},"event_type": "manifold_create_owner" }
     }
   }
-  rule ownerCompleted{
-    select when wrangler child_initialized where rs_attrs{"event_type"} == "manifold_create_owner"
-    pre{eci = event:attr("eci") }
-    every{
-      event:send(
-        { "eci": eci,
-          "domain": "wrangler", "type": "autoAcceptConfigUpdate",
-          "attrs": {"variable"    : "Tx_Rx_Type",
-                    "regex_str"   : "Manifold" }})
-    }
-  }
+
 }
