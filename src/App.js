@@ -30,8 +30,10 @@ import { DragDropContext } from 'react-dnd';
 
 import { fromJS } from 'immutable';
 
+//landing pages
 import SafeAndMine from './components/LandingPages/SafeAndMine';
 import UTA from './components/LandingPages/UTA/UTA';
+import TagPage from './components/LandingPages/TagPage';
 
 const initialState = fromJS({
   manifoldInfo: {
@@ -60,6 +62,9 @@ class App extends Component {
     );
     landingPages.push(
       <Route key="dynamic-route-2" path="/picolabs/bus" name="UTA" component={UTA} />
+    );
+    landingPages.push(
+      <Route key="dynamic-route-3" path="/picolabs/tag" name="Tag" component={TagPage} />
     );
     return landingPages;
   }
