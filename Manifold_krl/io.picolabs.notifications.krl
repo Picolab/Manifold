@@ -63,14 +63,14 @@ ruleset io.picolabs.notifications {
   }
 
   rule updateManifoldAppList {
-    select when manifold update_app_list
+    select when manifold update_app_list or manifold update_version or manifold notify_manifold
       foreach subscription:established().filter(function(x){
         x{"Tx_role"} == "manifold_thing"
       }) setting (x,i)
     pre {
       eci = x{"Tx"}
       id = getID(x{"Id"})
-      apps = http:get(<<http://localhost:8080/sky/event/#{eci}/apps/manifold/apps>>, parseJSON=true)["content"]["directives"];
+      apps = http:get(<<#{meta:host.klog("host")}/sky/event/#{eci}/apps/manifold/apps>>, parseJSON=true)["content"]["directives"];
     }
     always {
       ent:app_list := updateAppList(id, apps);
@@ -89,6 +89,8 @@ ruleset io.picolabs.notifications {
 
     always {
       ent:notification_settings := setNotificationSettings(id, app_name).klog("ent:notification_settings");
+      raise twilio event "set_default_toPhone"
+        attributes {"id": id, "rs": app_name}
     }
   }
 
@@ -113,7 +115,7 @@ ruleset io.picolabs.notifications {
 
     pre {
       thing = event:attr("thing");
-      did = event:attr("did");
+      picoId = event:attr("picoId");
       app = event:attr("app");
       message = event:attr("message");
       rs = event:attr("ruleset");
@@ -124,19 +126,19 @@ ruleset io.picolabs.notifications {
       notification = event:attrs.put("id", notificationID).put("time", time_stamp);
     }
 
-    if(thing && did && app && message && rs) then noop();
+    if(thing && picoId && app && message && rs) then noop();
 
     fired {
       ent:notifications := ent:notifications.defaultsTo([]).append(notification)
-        if (ent:notification_settings{did}{rs}{"Manifold"}) == true;
+        if (ent:notification_settings{picoId}{rs}{"Manifold"}) == true;
       ent:notification_state := ent:notification_state.defaultsTo({}).put(notificationID, state)
-        if (ent:notification_settings{did}{rs}{"Manifold"}) == true;
+        if (ent:notification_settings{picoId}{rs}{"Manifold"}) == true;
       raise twilio event "notify_through_twilio"
-        attributes {"Body": message, "rs": rs, "id": did }
-      if (ent:notification_settings{did}{rs}{"Twilio"}) == true;
+        attributes {"Body": message, "rs": rs, "id": picoId }
+      if (ent:notification_settings{picoId}{rs}{"Twilio"}) == true;
       raise prowl event "notify_through_prowl"
-        attributes {"Body": message, "rs": rs, "id": did, "application": app }
-      if (ent:notification_settings{did}{rs}{"Prowl"}) == true;
+        attributes {"Body": message, "rs": rs, "id": picoId, "application": app }
+      if (ent:notification_settings{picoId}{rs}{"Prowl"}) == true;
 
     }
   }

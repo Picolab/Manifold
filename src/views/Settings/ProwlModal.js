@@ -43,12 +43,11 @@ class ProwlModal extends React.Component {
   getProwlAPIKey() {
     var url = window.location.href;
     var rid = url.split("/");
-    var id = rid[rid.length-3];
+    var id = rid[rid.length-2];
     var app_name = rid[rid.length-1];
     let promise = customQuery(getManifoldECI(),"io.picolabs.prowl_notifications", "getAPIKey", {"rs": app_name, "id": id});
 
     promise.then((resp) => {
-        console.log(resp.data);
         this.setState({
           prowlAPIKey: resp.data
         });
@@ -58,7 +57,7 @@ class ProwlModal extends React.Component {
   setProwlAPIKey() {
     var url = window.location.href;
     var rid = url.split("/");
-    var id = rid[rid.length-3];
+    var id = rid[rid.length-2];
     var app_name = rid[rid.length-1];
     customEvent( getManifoldECI(), "prowl", "set_APIKey", {"key": this.state.prowlAPIKey, "ruleSet": app_name, "id": id}, 'prowlAPIKeySet');
   }
@@ -66,7 +65,7 @@ class ProwlModal extends React.Component {
   getPriority() {
     var url = window.location.href;
     var rid = url.split("/");
-    var id = rid[rid.length-3];
+    var id = rid[rid.length-2];
     var app_name = rid[rid.length-1];
     let promise = customQuery(getManifoldECI(),"io.picolabs.prowl_notifications", "getPriority", {"rs": app_name, "id": id});
 
@@ -80,7 +79,7 @@ class ProwlModal extends React.Component {
   changePriority(priority) {
     var url = window.location.href;
     var rid = url.split("/");
-    var id = rid[rid.length-3];
+    var id = rid[rid.length-2];
     var app_name = rid[rid.length-1];
     customEvent( getManifoldECI(), "prowl", "set_priority", {"priority": priority, "ruleSet": app_name, "id": id}, 'priorityChange');
   }

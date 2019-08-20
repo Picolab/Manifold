@@ -55,7 +55,6 @@ export class SafeAndMineApp extends Component {
     const profileGetPromise = retrieveOwnerProfile();
     profileGetPromise.then((resp) => {
       const profile = resp.data;
-      console.log(resp.data);
       if (profile.google) {
         this.setState({
           name: profile.google.displayName,

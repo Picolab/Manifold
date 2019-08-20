@@ -31,7 +31,7 @@ class NotificationAppList extends Component {
         const mediaID = "iconMedia" + index;
         icons.push(
           <div key={"appList" + index}>
-            <Link to={"/settings/" + this.props.picoID + "/notification-settings/" + app.rid}>
+            <Link to={"/notification-settings/" + this.props.picoID + "/" + app.rid}>
               <Media style={{"margin" : "5px"}} className="appIcon" id={mediaID} object src={app.iconURL} alt="App Icon" />
             </Link>
             <UncontrolledTooltip placement="bottom" delay={300} target={mediaID}>

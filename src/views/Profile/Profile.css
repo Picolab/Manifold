@@ -4,6 +4,8 @@
 
 .serviceHeader {
     font-size: 2em;
+    display: inline;
+    width: auto;
 }
 
 .profileServiceSection {
@@ -17,4 +19,45 @@
 
 .avatarImg {
     size: 50px;
+}
+
+.edit-link {
+	text-decoration: underline !important;
+	color: #20a8d8 !important;
+	display: inline;
+  font-size: 0.875rem;
+  width: 50px !important;
+}
+
+.edit-link:hover {
+	text-decoration: underline !important;
+	color: #20a8d8 !important;
+	cursor: pointer;
+	display: inline;
+  font-size: 0.875rem;
+  width: 50px !important;
+}
+
+.full-star {
+  float: right;
+  color: yellow;
+}
+
+.full-star:hover {
+  float: right;
+  color: yellow;
+  cursor: pointer;
+}
+
+.empty-star {
+  float: right;
+}
+
+.empty-star:hover {
+  float: right;
+  cursor: pointer;
+}
+
+.invalid {
+  border: 1px solid rgb(255, 0, 0);
 }

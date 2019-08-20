@@ -22,14 +22,12 @@ class NotificationAppView extends React.Component {
   setSettings() {
     var url = window.location.href;
     var rid = url.split("/");
-    var id = rid[rid.length-3];
+    var id = rid[rid.length-2];
     var app_name = rid[rid.length-1];
 
     let promise = customQuery(getManifoldECI(),"io.picolabs.notifications", "getSettings", {id, app_name});
 
     promise.then((resp) => {
-        console.log(resp.data);
-        console.log(resp.data.Twilio);
         this.setState({
           manifold: resp.data.Manifold,
           twilio: resp.data.Twilio,
@@ -41,7 +39,7 @@ class NotificationAppView extends React.Component {
   changeSetting = (option) => {
     var url = window.location.href;
     var rid = url.split("/");
-    var id = rid[rid.length-3];
+    var id = rid[rid.length-2];
     var app_name = rid[rid.length-1];
     const promise = customEvent( getManifoldECI(), "manifold", "change_notification_setting", {"id": id, "app_name": app_name, "option": option}, 'notification_change');
     promise.then((resp) => {
@@ -82,8 +80,8 @@ class NotificationAppView extends React.Component {
 
   render() {
     return (
-      <div style={{"background-color": "#fff", "width": "600px"}}>
-        <h1 style={{"padding-left": "5px", "text-align": "center"}}>Notification Settings</h1>
+      <div style={{"backgroundColor": "#fff", "width": "600px"}}>
+        <h1 style={{"paddingLeft": "5px", "textAlign": "center"}}>Notification Settings</h1>
         <hr className="my-2" />
         <SettingsSwitch
             isChecked={this.state.manifold}

@@ -15,13 +15,13 @@ export default {
   "io.picolabs.safeandmine" : SafeAndMineCardView,
   "io.picolabs.journal" : JournalCardView,
   "io.picolabs.uta": UTA,
-  /*"io.picolabs.score_tracker": ScoreTracker,
+  "io.picolabs.score_tracker": ScoreTracker,
   "io.picolabs.pizza": OrderPizzaCardView,
   "org.sovrin.manifold_agent": SovrinAgent,
   "io.picolabs.aurora_app": AuroraCardView,
   "io.picolabs.weather": WeatherCardView,
   "io.picolabs.co2_app": CO2CardView,
   "io.picolabs.temperatures_app": TemperaturesCardView,
-  "io.picolabs.light_app": LightCardView,*/
+  "io.picolabs.light_app": LightCardView,
   "io.picolabs.reminders": Reminders
 }

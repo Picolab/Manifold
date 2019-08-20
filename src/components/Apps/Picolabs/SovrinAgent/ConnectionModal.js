@@ -128,7 +128,6 @@ class ConnectionModal extends React.Component {
         console.error("Error getting message status", e);
     });
     promise.then((resp) => {
-      console.log(resp.data);
       if(resp.data === "pending") {
         if(this.pingStatusCheck === undefined || this.pingStatusCheck === null) {
             this.pingStatusCheck = setInterval(() => this.getPingStatus(), 500);

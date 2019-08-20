@@ -34,7 +34,6 @@ class SettingsSwitch extends React.Component {
   }
 
   render () {
-    console.log("isChecked", this.state.isChecked);
       return(
           <div className="component-container">
             <div className="component-text">{this.props.text}</div>
