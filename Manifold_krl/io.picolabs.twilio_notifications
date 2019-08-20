@@ -20,7 +20,7 @@ ruleset io.picolabs.twilio_notifications {
     getSID = function(id, rs) {
       ent:rs_toSID{id}{rs}
     }
-
+    
     getDefaultNumber = function(contacts) {
       default_num = contacts.filter(function(x) {
         (x{"phone"} != null && x{"favorite"} == "true");

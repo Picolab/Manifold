@@ -93,10 +93,8 @@ ruleset io.picolabs.google_signin {
     pre {
       channel = event:attr("eci")
     }
-    if channel then noop()
-    fired {
+    if channel then
       engine:removeChannel(channel)
-    }
   }
 
   rule requestNewOwnerPico {

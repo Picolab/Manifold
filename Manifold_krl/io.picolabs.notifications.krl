@@ -70,7 +70,7 @@ ruleset io.picolabs.notifications {
     pre {
       eci = x{"Tx"}
       id = getID(x{"Id"})
-      apps = http:get(<<#{meta:host.klog("host")}/sky/event/#{eci}/apps/manifold/apps>>, parseJSON=true)["content"]["directives"];
+      apps = http:get(<<#{meta:host}/sky/event/#{eci}/apps/manifold/apps>>, parseJSON=true)["content"]["directives"];
     }
     always {
       ent:app_list := updateAppList(id, apps);
