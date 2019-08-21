@@ -26,7 +26,7 @@ export const HTTP_PROTOCOL = "http://";
 export const HOST = "localhost:8080";
 export const MANIFOLD_HOST = "localhost:3000";
 export const SCORE_WRAPPER_DID = "betoisg";
-export const BUS_DID = "ay";
+export const BUS_DID = "reat";
 
 
 //6TqEDagvFkGfZiJM5ar2VM
