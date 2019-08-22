@@ -15,19 +15,19 @@ ruleset io.picolabs.profile {
     getProfile = function() {
       ent:profile
     }
-    
+
     getOther = function() {
       ent:other
     }
-    
+
     getSection = function(section) {
       ent:other{section.lc()}
     }
-    
+
     availableSection = function(section) {
-      (ent:other{section.lc()} != null) => false | true
+       (ent:other.isnull()) => true | (ent:other{section.lc()} != null) => false | true
     }
-    
+
     unFavAll = function() {
       noFavs = ent:other.map(function(x) {
         x.set("favorite", "false")
@@ -46,12 +46,19 @@ ruleset io.picolabs.profile {
         "lastName" : profile["wea"],
         "profileImgURL" : profile["Paa"],
         "email" : profile["U3"],
-        "favorite" : "true"
+        "favorite" : "false"
       }
     }
     if event:attr("profile") then noop();
     fired {
       ent:profile := ent:profile.defaultsTo({}).put("google", googleProfile);
+    }
+  }
+
+  rule set_google_favorite {
+    select when profile google_set_fav
+    always {
+      ent:profile{"favorite"} := ent:profile{"favorite"}.defaultsTo("false")
     }
   }
 
@@ -72,7 +79,7 @@ ruleset io.picolabs.profile {
       ent:profile := ent:profile.defaultsTo({}).put("github", githubProfile);
     }
   }
-  
+
   rule save_other_profile {
     select when profile other_profile_save
     pre {
@@ -85,7 +92,7 @@ ruleset io.picolabs.profile {
       ent:other := ent:other.defaultsTo({}).put(section, contacts);
     }
   }
-  
+
   rule remove_other_profile {
     select when profile other_profile_remove
     pre {
@@ -96,7 +103,7 @@ ruleset io.picolabs.profile {
       ent:other := ent:other.delete(section).klog("delete");
     }
   }
-  
+
   rule change_favorite_other_profile {
     select when profile other_profile_change_favorite
     pre {
@@ -114,6 +121,6 @@ ruleset io.picolabs.profile {
       ent:profile := ent:profile.set(["google", "favorite"], value).klog("profile")
     }
   }
-  
-  
+
+
 }
