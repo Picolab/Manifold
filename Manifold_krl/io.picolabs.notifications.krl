@@ -91,6 +91,8 @@ ruleset io.picolabs.notifications {
       ent:notification_settings := setNotificationSettings(id, app_name).klog("ent:notification_settings");
       raise twilio event "set_default_toPhone"
         attributes {"id": id, "rs": app_name}
+      raise email event "set_default_recipient"
+        attributes {"id": id, "rs": app_name}
     }
   }
 
