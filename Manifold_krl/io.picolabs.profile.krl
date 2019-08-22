@@ -46,7 +46,6 @@ ruleset io.picolabs.profile {
         "lastName" : profile["wea"],
         "profileImgURL" : profile["Paa"],
         "email" : profile["U3"],
-        "favorite" : "false"
       }
     }
     if event:attr("profile") then noop();
@@ -58,7 +57,7 @@ ruleset io.picolabs.profile {
   rule set_google_favorite {
     select when profile google_set_fav
     always {
-      ent:profile{"favorite"} := ent:profile{"favorite"}.defaultsTo("false")
+      ent:profile{["google","favorite"]} := ent:profile{["google","favorite"]}.defaultsTo("false")
     }
   }
 
