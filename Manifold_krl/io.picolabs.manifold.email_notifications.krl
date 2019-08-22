@@ -22,8 +22,8 @@ ruleset io.picolabs.manifold.email_notifications {
     
   }
   
-  rule setDefaulRecepient {
-    select when email set_default_recepient 
+  rule setDefaulRecipient {
+    select when email set_default_recipient 
     pre {
       rs = event:attr("rs");
       id = event:attr("id");
@@ -40,10 +40,10 @@ ruleset io.picolabs.manifold.email_notifications {
     }
   }
   
-  rule setRecepient {
-    select when email set_recepient
+  rule setRecipient {
+    select when email set_recipient
     pre {
-      recepient = event:attr("recipient");
+      recipient = event:attr("recipient");
       rs = event:attr("ruleSet");
       id = event:attr("id");
     }
