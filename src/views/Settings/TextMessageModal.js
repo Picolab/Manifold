@@ -36,6 +36,7 @@ class TextMessageModal extends React.Component {
 
   saveInputs = () =>{
     this.setToPhone();
+    this.toggle();
   }
 
   getToPhone() {
@@ -57,7 +58,7 @@ class TextMessageModal extends React.Component {
     var rid = url.split("/");
     var id = rid[rid.length-2];
     var app_name = rid[rid.length-1];
-    customEvent( getManifoldECI(), "text_messanger", "set_toPhone", {"toPhone": this.state.toPhone, "ruleSet": app_name, "id": id}, 'setting toPhone');
+    customEvent( getManifoldECI(), "text_messenger", "set_toPhone", {"toPhone": this.state.toPhone, "ruleSet": app_name, "id": id}, 'setting toPhone');
   }
 
 

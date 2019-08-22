@@ -35,7 +35,8 @@ class EmailModal extends React.Component {
   }
 
   saveInputs = () =>{
-    this.setToPhone();
+    this.setRecipient();
+    this.toggle();
   }
 
   getRecipient() {
