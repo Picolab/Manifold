@@ -15,7 +15,7 @@ ruleset io.picolabs.notifications {
       //, { "name": "entry", "args": [ "key" ] }
       ] , "events":
       [
-        { "domain": "manifold", "type": "add_notification", "attrs": ["did", "thing", "app", "message", "ruleset"]}
+        { "domain": "manifold", "type": "add_notification", "attrs": ["picoId", "thing", "app", "message", "ruleset"]}
         , { "domain": "manifold", "type": "remove_notification", "attrs": ["notificationID"]}
         , { "domain": "manifold", "type": "update_app_list", "attrs": []}
         , { "domain": "manifold", "type": "set_notification_settings", "attrs": ["id"]}
@@ -51,9 +51,9 @@ ruleset io.picolabs.notifications {
 
     setNotificationSettings = function(id, app_name) {
       notification_settings = ent:notification_settings;
-      (notification_settings == null).klog("notification_settings == null") => {}.put(id, {}.put(app_name, {"Manifold": true, "Twilio": true, "Prowl": true, "Email": true})) |
-        (notification_settings{id} == null) => notification_settings.put(id, {}.put(app_name, {"Manifold": true, "Twilio": true, "Prowl": true, "Email": true})) |
-        (notification_settings{id}{app_name} == null) => notification_settings.put([id, app_name], {"Manifold": true, "Twilio": true, "Prowl": true, "Email": true}) |
+      (notification_settings == null).klog("notification_settings == null") => {}.put(id, {}.put(app_name, {"Manifold": true, "Twilio": true, "Prowl": true, "Email": true, "Text": true})) |
+        (notification_settings{id} == null) => notification_settings.put(id, {}.put(app_name, {"Manifold": true, "Twilio": true, "Prowl": true, "Email": true, "Text": true})) |
+        (notification_settings{id}{app_name} == null) => notification_settings.put([id, app_name], {"Manifold": true, "Twilio": true, "Prowl": true, "Email": true, "Text": true}) |
         ent:notification_settings
     }
 
@@ -92,7 +92,9 @@ ruleset io.picolabs.notifications {
       raise twilio event "set_default_toPhone"
         attributes {"id": id, "rs": app_name};
       raise email event "set_default_recipient"
-        attributes {"id": id, "rs": app_name}
+        attributes {"id": id, "rs": app_name};
+      raise text_messenger event "set_default_toPhone"
+        attributes {"id": id, "rs": app_name};
     }
   }
 
@@ -143,7 +145,10 @@ ruleset io.picolabs.notifications {
       if (ent:notification_settings{picoId}{rs}{"Prowl"}) == true;
       raise email event "notification"
         attributes {"Body": message, "rs": rs, "id": picoId, "application": app }
-      if(ent:notification_settings{picoId}{rs}{"Email"}) == true
+      if(ent:notification_settings{picoId}{rs}{"Email"}) == true;
+      raise text_messenger event "text_notification"
+        attributes {"Body": message, "rs": rs, "id": picoId, "application": app }
+      if(ent:notification_settings{picoId}{rs}{"Text"}) == true
     }
   }
 
