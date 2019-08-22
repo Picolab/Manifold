@@ -6,6 +6,7 @@ import SettingsSwitch from './SettingsSwitch';
 import TwilioSwitch from './TwilioSwitch';
 import ProwlSwitch from './ProwlSwitch';
 import EmailSwitch from './EmailSwitch';
+import TextMessageSwitch from './TextMessageSwitch';
 
 class NotificationAppView extends React.Component {
   constructor(props) {
@@ -33,7 +34,8 @@ class NotificationAppView extends React.Component {
           manifold: resp.data.Manifold,
           twilio: resp.data.Twilio,
           prowl: resp.data.Prowl,
-          email: resp.data.Email
+          email: resp.data.Email,
+          text: resp.data.Text
         });
     })
   }
@@ -110,6 +112,13 @@ class NotificationAppView extends React.Component {
             isChecked={this.state.email}
             text = "Notifications Through Email"
             param = "Email"
+            action = {this.changeSetting}
+        />
+        <hr className="my-2" />
+        <TextMessageSwitch
+            isChecked={this.state.text}
+            text = "Notifications Through Text Message"
+            param = "Text"
             action = {this.changeSetting}
         />
         <hr className="my-2" />
