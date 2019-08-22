@@ -32,8 +32,15 @@ class Profile extends Component {
   }
 
   componentWillMount() {
-    this.getProfileInfo();
-    this.getOtherInfo();
+    this.setGoogleFav();
+  }
+
+  setGoogleFav() {
+    let googleFavPromise = customEvent( getOwnerECI(), "profile", "google_set_fav", {});
+    changeFavoritePromise.then((resp) => {
+      this.getProfileInfo()
+      this.getOtherInfo()
+    })
   }
 
   getProfileInfo() {
