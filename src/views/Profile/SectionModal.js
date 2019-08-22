@@ -32,13 +32,12 @@ class SectionModal extends React.Component {
 
   saveInputs = () => {
     this.submitSection()
-    this.props.getOtherInfo();
   }
 
   submitSection() {
     let available_title_promise = customQuery(getOwnerECI(), "io.picolabs.profile", "availableSection", {"section":this.state.title})
     available_title_promise.then((resp) => {
-      if(resp.data === "true") {
+      if(resp.data) {
         let add_section_promise = customEvent( getOwnerECI(), "profile", "other_profile_save", {"section": this.state.title, "phone": this.state.phone, "email": this.state.email, "street": this.state.street, "city": this.state.city, "state": this.state.state, "postalcode": this.state.postalcode, "favorite": false}, "adding_section");
         add_section_promise.then((resp) => {
           this.setState({
@@ -53,6 +52,7 @@ class SectionModal extends React.Component {
           });
         })
         this.toggle()
+        this.props.getOtherInfo();
       }
       else {
         this.setState({
