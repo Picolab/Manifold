@@ -5,6 +5,7 @@ import {getManifoldECI} from '../../utils/AuthService';
 import SettingsSwitch from './SettingsSwitch';
 import TwilioSwitch from './TwilioSwitch';
 import ProwlSwitch from './ProwlSwitch';
+import EmailSwitch from './EmailSwitch';
 
 class NotificationAppView extends React.Component {
   constructor(props) {
@@ -31,7 +32,8 @@ class NotificationAppView extends React.Component {
         this.setState({
           manifold: resp.data.Manifold,
           twilio: resp.data.Twilio,
-          prowl: resp.data.Prowl
+          prowl: resp.data.Prowl,
+          email: resp.data.Email
         });
     })
   }
@@ -47,35 +49,35 @@ class NotificationAppView extends React.Component {
     });
   }
 
-  displayForm() {
-    return (
-      <Form>
-        <FormGroup>
-          <Label for="exampleEmail">Twilio Number</Label>
-          <Input type="twilioNumber" name="twilioNumber" id="twilioNumber"  />
-        </FormGroup>
-        <FormGroup>
-          <Label for="examplePassword">To Phone</Label>
-          <Input type="toPhone" name="toPhone" id="toPhone" />
-        </FormGroup>
-      </Form>
-    );
-  }
-
-  displayFadedForm() {
-    return(
-      <Form style={{"opacity": "0.5"}}>
-        <FormGroup>
-          <Label for="exampleEmail">Twilio Number</Label>
-          <Input type="twilioNumber" name="twilioNumber" id="twilioNumber" disabled />
-        </FormGroup>
-        <FormGroup>
-          <Label for="examplePassword" >To Phone</Label>
-          <Input type="toPhone" name="toPhone" id="toPhone" disabled/>
-        </FormGroup>
-      </Form>
-    );
-  }
+  // displayForm() {
+  //   return (
+  //     <Form>
+  //       <FormGroup>
+  //         <Label for="exampleEmail">Twilio Number</Label>
+  //         <Input type="twilioNumber" name="twilioNumber" id="twilioNumber"  />
+  //       </FormGroup>
+  //       <FormGroup>
+  //         <Label for="examplePassword">To Phone</Label>
+  //         <Input type="toPhone" name="toPhone" id="toPhone" />
+  //       </FormGroup>
+  //     </Form>
+  //   );
+  // }
+  //
+  // displayFadedForm() {
+  //   return(
+  //     <Form style={{"opacity": "0.5"}}>
+  //       <FormGroup>
+  //         <Label for="exampleEmail">Twilio Number</Label>
+  //         <Input type="twilioNumber" name="twilioNumber" id="twilioNumber" disabled />
+  //       </FormGroup>
+  //       <FormGroup>
+  //         <Label for="examplePassword" >To Phone</Label>
+  //         <Input type="toPhone" name="toPhone" id="toPhone" disabled/>
+  //       </FormGroup>
+  //     </Form>
+  //   );
+  // }
 
 
   render() {
@@ -101,6 +103,13 @@ class NotificationAppView extends React.Component {
             isChecked={this.state.prowl}
             text = "Notifications Through Prowl"
             param = "Prowl"
+            action = {this.changeSetting}
+        />
+        <hr className="my-2" />
+        <EmailSwitch
+            isChecked={this.state.email}
+            text = "Notifications Through Email"
+            param = "Email"
             action = {this.changeSetting}
         />
         <hr className="my-2" />

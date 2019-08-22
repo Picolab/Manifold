@@ -51,9 +51,9 @@ ruleset io.picolabs.notifications {
 
     setNotificationSettings = function(id, app_name) {
       notification_settings = ent:notification_settings;
-      (notification_settings == null).klog("notification_settings == null") => {}.put(id, {}.put(app_name, {"Manifold": true, "Twilio": true, "Prowl": true})) |
-        (notification_settings{id} == null) => notification_settings.put(id, {}.put(app_name, {"Manifold": true, "Twilio": true, "Prowl": true})) |
-        (notification_settings{id}{app_name} == null) => notification_settings.put([id, app_name], {"Manifold": true, "Twilio": true, "Prowl": true}) |
+      (notification_settings == null).klog("notification_settings == null") => {}.put(id, {}.put(app_name, {"Manifold": true, "Twilio": true, "Prowl": true, "Email": true})) |
+        (notification_settings{id} == null) => notification_settings.put(id, {}.put(app_name, {"Manifold": true, "Twilio": true, "Prowl": true, "Email": true})) |
+        (notification_settings{id}{app_name} == null) => notification_settings.put([id, app_name], {"Manifold": true, "Twilio": true, "Prowl": true, "Email": true}) |
         ent:notification_settings
     }
 
@@ -70,7 +70,7 @@ ruleset io.picolabs.notifications {
     pre {
       eci = x{"Tx"}
       id = getID(x{"Id"})
-      apps = http:get(<<#{meta:host}/sky/event/#{eci}/apps/manifold/apps>>, parseJSON=true)["content"]["directives"];
+      apps = http:get(<<#{meta:host.klog("host")}/sky/event/#{eci}/apps/manifold/apps>>, parseJSON=true)["content"]["directives"];
     }
     always {
       ent:app_list := updateAppList(id, apps);
@@ -139,7 +139,9 @@ ruleset io.picolabs.notifications {
       raise prowl event "notify_through_prowl"
         attributes {"Body": message, "rs": rs, "id": picoId, "application": app }
       if (ent:notification_settings{picoId}{rs}{"Prowl"}) == true;
-
+      raise email event "notification"
+        attributes {"Body": message, "rs": rs, "id": picoId, "application": app }
+      if(ent:notification_settings{picoId}{rs}{"Email"}) == true
     }
   }
 
