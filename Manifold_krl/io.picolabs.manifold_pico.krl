@@ -16,13 +16,13 @@ ruleset io.picolabs.manifold_pico {
                     { "domain": "manifold", "type": "devReset",
                       "attrs": [ ] }
                       ,{ "domain": "manifold", "type": "change_thing_name",
-                      "attrs": [ "picoID", "changedName" ] }] }
+                      "attrs": [ "picoID", "changedName" ] } ] }
 
     thingRids = "io.picolabs.thing;io.picolabs.subscription"
     communityRids = "io.picolabs.community;io.picolabs.subscription"
     thing_role = "manifold_thing"
     community_role = "manifold_community"
-    max_picos = 100
+    max_picos = 30
 
     getManifoldInfo = function() {
       {
@@ -37,6 +37,7 @@ ruleset io.picolabs.manifold_pico {
         sub.put(value)
       })
     }
+    
 
     hasTutorial = function() {
       ent:tutorial.defaultsTo(false);
@@ -87,10 +88,32 @@ ruleset io.picolabs.manifold_pico {
       ent:communities.defaultsTo({}).keys() >< picoID
     }
   }//end global
+  
+  rule updateManifoldVersion {
+    select when manifold update_version
+    
+    pre {
+      needed_rulesets = ["io.picolabs.notifications",
+                          "io.picolabs.prowl_notifications",
+                          "io.picolabs.twilio_notifications",
+                          "io.picolabs.manifold.email_notifications",
+                          "io.picolabs.manifold.text_message_notifications"].difference(wrangler:installedRulesets()).klog("needed");
+    }
+    
+    if needed_rulesets.length() > 0 then noop();
+    
+    fired {
+      raise wrangler event "install_rulesets_requested"
+      attributes {
+        "rids" : needed_rulesets
+      }
+    }
+    
+  }
 
   rule createThing {
     select when manifold create_thing
-    if event:attr("name") && wrangler:children().length() < max_picos then
+    if event:attr("name") && wrangler:children().length() <= max_picos then
       send_directive("Attempting to create new Thing", { "thing":event:attr("name") })
     fired {
       raise wrangler event "new_child_request"
@@ -98,19 +121,10 @@ ruleset io.picolabs.manifold_pico {
                                 .put({ "rids": thingRids })
     }
   }
-  
   rule thingCompleted {
-    select when wrangler child_initialized where event_type == "manifold_create_thing"
-      initiate_subscription(event:attr("eci"), event:attr("name"), subscription:wellKnown_Rx(){"id"}, thing_role);
+    select when wrangler child_initialized where rs_attrs{"event_type"} == "manifold_create_thing"
+      initiate_subscription(event:attr("eci"), event:attr("rs_attrs"){"name"}, subscription:wellKnown_Rx(){"id"}, thing_role);
   }
-  
-  rule acceptManifoldSubs {
-    select when wrangler inbound_pending_subscription_added where Tx_Rx_Type == "Manifold"
-    always {
-      raise wrangler event "pending_subscription_approval" attributes event:attrs;
-    }
-  }
-  
   rule trackThingSubscription {
     select when wrangler subscription_added where event:attr("Tx_role") == thing_role
     pre {
@@ -142,12 +156,10 @@ ruleset io.picolabs.manifold_pico {
                                 .put({"rids": communityRids})
     }
   }
-  
   rule communityCompleted {
-    select when wrangler child_initialized where event_type == "manifold_create_community"
-      initiate_subscription(event:attr("eci"), event:attr("name"), subscription:wellKnown_Rx(){"id"}, community_role);
+    select when wrangler child_initialized where rs_attrs{"event_type"} == "manifold_create_community"
+      initiate_subscription(event:attr("eci"), event:attr("rs_attrs"){"name"}, subscription:wellKnown_Rx(){"id"}, community_role);
   }
-  
   rule trackCommSubscription {
     select when wrangler subscription_added where event:attr("Tx_role") == community_role
     pre {
@@ -186,7 +198,6 @@ ruleset io.picolabs.manifold_pico {
         attributes {"Id": sub{"Id"}, "picoID": picoID, "event_type": "thing_deletion"}
     }
   }
-  
   rule deleteThing {
     select when wrangler subscription_removed where event:attr("event_type") == "thing_deletion"
     pre {
@@ -294,4 +305,5 @@ ruleset io.picolabs.manifold_pico {
       ent:things := ent:things.put([picoID, "name"], changedName);
     }
   }
+  
 }//end ruleset
