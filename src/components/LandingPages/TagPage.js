@@ -33,7 +33,7 @@ class TagPage extends React.Component {
     }
 
     this.setState({ isValid: true, redirect: true });
-    window.location.href=`https://apps.picolabs.io/${this.state.tagId}`
+    window.location.href=`https://tag.picolabs.io/${this.state.tagId}`
   }
   render() {
     return (
