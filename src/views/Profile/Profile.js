@@ -38,6 +38,13 @@ class Profile extends Component {
   setGoogleFav() {
     let googleFavPromise = customEvent( getOwnerECI(), "profile", "google_set_fav", {});
     googleFavPromise.then((resp) => {
+      this.setGithubFav();
+    })
+  }
+
+  setGoogleFav() {
+    let githubFavPromise = customEvent( getOwnerECI(), "profile", "github_set_fav", {});
+    githubFavPromise.then((resp) => {
       this.getProfileInfo()
       this.getOtherInfo()
     })
