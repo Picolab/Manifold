@@ -42,7 +42,7 @@ class Profile extends Component {
     })
   }
 
-  setGoogleFav() {
+  setGithubFav() {
     let githubFavPromise = customEvent( getOwnerECI(), "profile", "github_set_fav", {});
     githubFavPromise.then((resp) => {
       this.getProfileInfo()
