@@ -19,18 +19,12 @@ class FooterItem extends Component {
       return(
         <div className="circle-selected" id={mediaID} onClick={this.dotClicked}>
           <img src={this.props.allApps[this.props.index].iconURL} alt={this.props.allApps[this.props.index].name} style={{width: 30, "borderRadius": 50}} />
-          <UncontrolledTooltip placement="bottom" delay={800} target={mediaID}>
-            {this.props.allApps[this.props.index].name}
-          </UncontrolledTooltip>
         </div>
       );
     } else {
       return(
         <div className="circle" id={mediaID} onClick={this.dotClicked}>
           <img src={this.props.allApps[this.props.index].iconURL} alt={this.props.allApps[this.props.index].name} style= {{width: 25, "borderRadius": 50}} />
-          <UncontrolledTooltip placement="bottom" delay={800} target={mediaID}>
-            {this.props.allApps[this.props.index].name}
-          </UncontrolledTooltip>
         </div>
       );
     }
