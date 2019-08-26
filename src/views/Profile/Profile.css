@@ -19,6 +19,8 @@
 
 .avatarImg {
     size: 50px;
+    max-height: 100px;
+    max-width: 100px;
 }
 
 .edit-link {
