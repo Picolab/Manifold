@@ -98,11 +98,48 @@ class Profile extends Component {
       <div key={serviceName} className="profileServiceSection">
         <h2 className="serviceHeader">
           {formattedServiceName}{' '}
-          {(formattedServiceName !== "Google") &&
+          {favorite === "true" && <i className="fa fa-star full-star" id={formattedServiceName} aria-hidden="true" onClick={(e) => {this.changeFavorite(e, "false")}}></i>}
+          {favorite === "false" && <i className="fa fa-star-o empty-star" id={formattedServiceName} aria-hidden="true" onClick={(e) => {this.changeFavorite(e, "true")}}></i>}
+        </h2>
+        <Table>
+          <tbody>
+            {(avatarImg !== undefined) && this.renderProfileRow("Avatar", avatarImg, true)}
+            {this.renderProfileRow("Display Name", displayName)}
+            {this.renderProfileRow("First Name", firstName)}
+            {this.renderProfileRow("Last Name", lastName)}
+            {this.renderProfileRow("Email", email)}
+            {this.renderProfileRow("Phone", phone)}
+            {(street || city || state || postalcode) && this.renderProfileRow("Address", this.formatAddress(street, city, state, postalcode))}
+          </tbody>
+        </Table>
+      </div>
+    )
+  }
+
+  renderOtherService(service, serviceName) {
+    if (!service)
+      return;
+    let formattedServiceName = serviceName.charAt(0).toUpperCase() + serviceName.substr(1);
+    let avatarImg = service.profileImgURL
+    let displayName = service.displayName
+    let firstName = service.firstName
+    let lastName = service.lastName
+    let email = service.email
+    let phone = service.phone
+    let street = service.street
+    let city = service.city
+    let state = service.state
+    let postalcode = service.postalcode
+    let favorite = service.favorite
+
+    return (
+      <div key={serviceName} className="profileServiceSection">
+        <h2 className="serviceHeader">
+          {formattedServiceName}{' '}
           <EditModal
             sectionTitle={formattedServiceName}
             getOtherInfo = {this.getOtherInfo}
-            favorite = {favorite}/>}
+            favorite = {favorite}/>
           {favorite === "true" && <i className="fa fa-star full-star" id={formattedServiceName} aria-hidden="true" onClick={(e) => {this.changeFavorite(e, "false")}}></i>}
           {favorite === "false" && <i className="fa fa-star-o empty-star" id={formattedServiceName} aria-hidden="true" onClick={(e) => {this.changeFavorite(e, "true")}}></i>}
         </h2>
@@ -140,7 +177,7 @@ class Profile extends Component {
       services.push(this.renderService(this.state.profile[element], element))
     })
     Object.getOwnPropertyNames(this.state.other).forEach(element => {
-      services.push(this.renderService(this.state.other[element], element))
+      services.push(this.renderOtherService(this.state.other[element], element))
     })
     return services;
   }
