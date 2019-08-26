@@ -84,40 +84,40 @@ class NotificationAppView extends React.Component {
 
   render() {
     return (
-      <div style={{"backgroundColor": "#fff", "width": "600px"}}>
+      <div className="notification-section">
         <h1 style={{"paddingLeft": "5px", "textAlign": "center"}}>Notification Settings</h1>
         <hr className="my-2" />
         <SettingsSwitch
             isChecked={this.state.manifold}
-            text = "Notifications Through Manifold"
+            text = "Manifold"
             param = "Manifold"
             action = {this.changeSetting}
         />
         <hr className="my-2" />
         <TwilioSwitch
             isChecked={this.state.twilio}
-            text = "Notifications Through Twilio"
+            text = "Twilio"
             param = "Twilio"
             action = {this.changeSetting}
         />
         <hr className="my-2" />
         <ProwlSwitch
             isChecked={this.state.prowl}
-            text = "Notifications Through Prowl"
+            text = "Prowl"
             param = "Prowl"
             action = {this.changeSetting}
         />
         <hr className="my-2" />
         <EmailSwitch
             isChecked={this.state.email}
-            text = "Notifications Through Email"
+            text = "Email"
             param = "Email"
             action = {this.changeSetting}
         />
         <hr className="my-2" />
         <TextMessageSwitch
             isChecked={this.state.text}
-            text = "Notifications Through Text Message"
+            text = "Text Message"
             param = "Text"
             action = {this.changeSetting}
         />

@@ -1,43 +1,30 @@
-.profileRowText {
-    font-size: 1.5em;
-}
+@media only screen and (min-width: 500px) {
 
-.serviceHeader {
-    font-size: 2em;
-    display: inline;
-    width: auto;
-}
-
-.profileServiceSection {
-    padding-top: 20px;
-    padding-bottom: 20px;
-}
-
-.shortenedWidth {
-    max-width: 500px;
+  .profileRowText {
+      font-size: 1.5em;
   }
 
-.avatarImg {
-    size: 50px;
-    max-height: 100px;
-    max-width: 100px;
-}
+  .serviceHeader {
+      font-size: 2em;
+      display: inline;
+      width: auto;
+  }
 
-.edit-link {
-	text-decoration: underline !important;
-	color: #20a8d8 !important;
-	display: inline;
-  font-size: 0.875rem;
-  width: 50px !important;
-}
+  .profileServiceSection {
+      padding-top: 20px;
+      padding-bottom: 20px;
+  }
 
-.edit-link:hover {
-	text-decoration: underline !important;
-	color: #20a8d8 !important;
-	cursor: pointer;
-	display: inline;
-  font-size: 0.875rem;
-  width: 50px !important;
+  .shortenedWidth {
+      max-width: 500px;
+    }
+
+  .avatarImg {
+      size: 50px;
+      max-height: 100px;
+      max-width: 100px;
+  }
+
 }
 
 .full-star {
@@ -62,4 +49,21 @@
 
 .invalid {
   border: 1px solid rgb(255, 0, 0);
+}
+
+.edit-link {
+  text-decoration: underline !important;
+  color: #20a8d8 !important;
+  display: inline;
+  font-size: 0.875rem;
+  width: 50px !important;
+}
+
+.edit-link:hover {
+  text-decoration: underline !important;
+  color: #20a8d8 !important;
+  cursor: pointer;
+  display: inline;
+  font-size: 0.875rem;
+  width: 50px !important;
 }
