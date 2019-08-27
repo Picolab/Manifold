@@ -51,11 +51,11 @@ class Full extends Component {
             <div className="container-fluid">
               <Switch>
                 <Route path="/dashboard" name="Dashboard" component={Dashboard}/>
-                <Route path="/settings/:picoID/notification-settings/:appRid" name="App Notification Settings" component={NotificationAppView}/>
+                <Route path="/notification-settings/:picoID/:appRid" name="App Notification Settings" component={NotificationAppView}/>
                 <Route path="/mythings/:picoID/:appRid" name="Thing App View" component={CardAppView}/>
                 <Route path="/mythings/:picoID" name="Card Overview" component={CardOverview}/>
                 <Route path="/mythings" name="My Things" component={MyThings}/>
-                <Route path="/settings/:picoID" name="ThingAppOverview" component={ThingAppOverview}/>
+                <Route path="/notification-settings/:picoID" name="ThingAppOverview" component={ThingAppOverview}/>
                 <Route path="/communities" name="Communities" component={Communities}/>
                 <Route path="/profile" name="Profile" component={Profile}/>
                 <Route path="/settings" name="Settings" component={Settings}/>

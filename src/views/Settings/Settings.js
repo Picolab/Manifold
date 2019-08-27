@@ -17,7 +17,6 @@ class Settings extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props.thingIdList);
   }
 
   displayThings() {

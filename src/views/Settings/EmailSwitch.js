@@ -1,7 +1,8 @@
 import React from "react";
+import EmailModal from './EmailModal';
 import "./SettingsSwitch.css";
 
-class SettingsSwitch extends React.Component {
+class EmailSwitch extends React.Component {
 
   constructor ( props ) {
       super( props );
@@ -36,7 +37,8 @@ class SettingsSwitch extends React.Component {
   render () {
       return(
           <div className="component-container">
-            <div className="component-text">{this.props.text}</div>
+            <div className="component-text">{this.props.text}</div>{' '}
+            <EmailModal/>
             <div className="switch-container">
                 <label className="label-switch">
                     <input ref="switch" checked={ this.state.isChecked } onClick={this.action()} onChange={ this.handleChange } className="switch" type="checkbox" />
@@ -50,4 +52,4 @@ class SettingsSwitch extends React.Component {
     }
 
 }
-export default SettingsSwitch;
+export default EmailSwitch;

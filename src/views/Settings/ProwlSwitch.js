@@ -1,9 +1,6 @@
 import React from "react";
-import { Input } from 'reactstrap';
 import "./SettingsSwitch.css";
 import ProwlModal from './ProwlModal';
-import {customEvent, customQuery} from '../../utils/manifoldSDK';
-import {getManifoldECI} from '../../utils/AuthService';
 
 class ProwlSwitch extends React.Component {
 

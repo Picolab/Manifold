@@ -123,3 +123,16 @@ input[type="checkbox"].switch:checked + div > div {
 	-webkit-transform: translate3d(26px, 0, 0);
 	transform: translate3d(26px, 0, 0);
 }
+
+.notification-section {
+  background-color: #fff;
+}
+
+@media only screen and (min-width: 500px) {
+
+  .notification-section {
+    background-color: #fff;
+    width: 600px;
+  }
+
+}

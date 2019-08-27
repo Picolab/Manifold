@@ -35,7 +35,7 @@ class SovrinAgent extends React.Component {
   }
 
   poll() {
-    let promise = this.props.signalEvent({
+    this.props.signalEvent({
         domain:"edge",
         type:"poll_all_needed",
         attrs: {

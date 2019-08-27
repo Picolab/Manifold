@@ -50,7 +50,7 @@ class TwilioModal extends React.Component {
   getToken() {
     var url = window.location.href;
     var rid = url.split("/");
-    var id = rid[rid.length-3];
+    var id = rid[rid.length-2];
     var app_name = rid[rid.length-1];
     let promise = customQuery(getManifoldECI(),"io.picolabs.twilio_notifications", "getToken", {"rs": app_name, "id": id});
 
@@ -64,7 +64,7 @@ class TwilioModal extends React.Component {
   setToken() {
     var url = window.location.href;
     var rid = url.split("/");
-    var id = rid[rid.length-3];
+    var id = rid[rid.length-2];
     var app_name = rid[rid.length-1];
     customEvent( getManifoldECI(), "twilio", "set_Token", {"token": this.state.token, "ruleSet": app_name, "id": id}, 'setToken');
   }
@@ -72,7 +72,7 @@ class TwilioModal extends React.Component {
   getSID() {
     var url = window.location.href;
     var rid = url.split("/");
-    var id = rid[rid.length-3];
+    var id = rid[rid.length-2];
     var app_name = rid[rid.length-1];
     let promise = customQuery(getManifoldECI(),"io.picolabs.twilio_notifications", "getSID", {"rs": app_name, "id": id});
 
@@ -86,7 +86,7 @@ class TwilioModal extends React.Component {
   setSID() {
     var url = window.location.href;
     var rid = url.split("/");
-    var id = rid[rid.length-3];
+    var id = rid[rid.length-2];
     var app_name = rid[rid.length-1];
     customEvent( getManifoldECI(), "twilio", "set_SID", {"sid": this.state.sid, "ruleSet": app_name, "id": id}, 'setSID');
   }
@@ -94,7 +94,7 @@ class TwilioModal extends React.Component {
   getToPhone() {
     var url = window.location.href;
     var rid = url.split("/");
-    var id = rid[rid.length-3];
+    var id = rid[rid.length-2];
     var app_name = rid[rid.length-1];
     let promise = customQuery(getManifoldECI(),"io.picolabs.twilio_notifications", "getToPhone", {"rs": app_name, "id": id});
 
@@ -108,7 +108,7 @@ class TwilioModal extends React.Component {
   setToPhone() {
     var url = window.location.href;
     var rid = url.split("/");
-    var id = rid[rid.length-3];
+    var id = rid[rid.length-2];
     var app_name = rid[rid.length-1];
     customEvent( getManifoldECI(), "twilio", "set_toPhone", {"toPhone": this.state.toPhone, "ruleSet": app_name, "id": id}, 'toPhoneSet');
   }
@@ -116,7 +116,7 @@ class TwilioModal extends React.Component {
   getFromPhone() {
     var url = window.location.href;
     var rid = url.split("/");
-    var id = rid[rid.length-3];
+    var id = rid[rid.length-2];
     var app_name = rid[rid.length-1];
     let promise = customQuery(getManifoldECI(),"io.picolabs.twilio_notifications", "getFromPhone", {"rs": app_name, "id": id});
 
@@ -130,7 +130,7 @@ class TwilioModal extends React.Component {
   setFromPhone() {
     var url = window.location.href;
     var rid = url.split("/");
-    var id = rid[rid.length-3];
+    var id = rid[rid.length-2];
     var app_name = rid[rid.length-1];
     customEvent( getManifoldECI(), "twilio", "set_fromPhone", {"fromPhone": this.state.fromPhone, "ruleSet": app_name, "id": id}, 'fromPhoneSet');
   }
@@ -159,13 +159,13 @@ class TwilioModal extends React.Component {
               <FormGroup row>
                 <Label for="twilioNumber" sm={4}>Twilio Number</Label>
                 <Col sm={10}>
-                  <Input type="twilioNumber" name="twilioNumber" id="twilioNumber" placeholder="Twilio Number" value={this.state.fromPhone} onChange={this.onChange('fromPhone')}/>
+                  <Input type="text" pattern="[2-9][0-9]{2}[2-9][0-9]{2}[0-9]{4}" name="twilioNumber" id="twilioNumber" placeholder="Twilio Number" value={this.state.fromPhone} onChange={this.onChange('fromPhone')}/>
                 </Col>
               </FormGroup>
               <FormGroup row>
                 <Label for="toPhone" sm={4}>To Phone</Label>
                 <Col sm={10}>
-                  <Input type="toPhone" name="toPhone" id="toPhone" placeholder="To Phone" value={this.state.toPhone} onChange={this.onChange('toPhone')}/>
+                  <Input type="text" pattern="[2-9][0-9]{2}[2-9][0-9]{2}[0-9]{4}" name="toPhone" id="toPhone" placeholder="To Phone" value={this.state.toPhone} onChange={this.onChange('toPhone')}/>
                 </Col>
               </FormGroup>
             </Form>

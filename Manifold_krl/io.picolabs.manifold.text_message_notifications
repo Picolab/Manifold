@@ -1,0 +1,73 @@
+ruleset io.picolabs.manifold.text_message_notifications {
+  meta {
+    use module io.picolabs.wrangler alias wrangler
+    shares __testing, getToPhone
+  }
+  global {
+    __testing = { "queries":
+      [ { "name": "__testing" }
+      //, { "name": "entry", "args": [ "key" ] }
+      ] , "events":
+      [ //{ "domain": "d1", "type": "t1" }
+      //, { "domain": "d2", "type": "t2", "attrs": [ "a1", "a2" ] }
+      ]
+    }
+
+    getDefaultNumber = function(contacts) {
+      default_num = contacts.filter(function(x) {
+        (x{"phone"} != null && x{"favorite"} == "true");
+      });
+      default_num.values()[0]{"phone"}
+    }
+
+    getToPhone = function(id, rs) {
+      ent:toPhone{id}{rs}
+    }
+  }
+
+  rule setDefaultToPhone {
+    select when text_messenger set_default_toPhone
+    pre {
+      rs = event:attr("rs");
+      id = event:attr("id");
+      owner_eci = wrangler:parent_eci().klog("parentEci");
+      contacts = wrangler:skyQuery(owner_eci, "io.picolabs.profile", "getOther").klog("contacts")
+      default_number = getDefaultNumber(contacts).klog("default_num")
+
+    }
+    if default_number then noop();
+    fired {
+      raise text_messenger event "set_toPhone"
+        attributes {"toPhone": default_number, "ruleSet": rs, "id": id}
+      if ent:toPhone{id}{rs} == null
+    }
+  }
+
+  rule setToPhone {
+    select when text_messenger set_toPhone
+    pre {
+      phone = event:attr("toPhone");
+      rs = event:attr("ruleSet");
+      id = event:attr("id");
+    }
+    always {
+      ent:toPhone := (ent:toPhone == null) => {}.put(id, {}.put(rs, phone)) |
+                     (ent:toPhone{id} == null) => ent:toPhone.put(id, {}.put(rs, phone)) |
+                     (ent:toPhone{id}{rs} == null) => ent:toPhone.put([id, rs], phone) |
+                      ent:toPhone.set([id,rs], phone);
+    }
+  }
+
+  rule send_notification {
+    select when text_messenger text_notification
+    pre {
+      id = event:attr("id");
+      rs = event:attr("rs");
+    }
+    event:send({
+      "eci": "CqpUcKndBo8xeioWJFQM47", "eid": "text_message_notification",
+      "domain": "text_messenger", "type": "notification",
+      "attrs": { "toPhone": ent:toPhone{id}{rs}, "Body": event:attr("Body") }
+    },  host="https://manifold.picolabs.io:9090")
+  }
+}

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { ListGroupItem } from 'reactstrap';
 import { getName } from '../../reducers';
 //import ThingDropdown from '../Dropdowns/ThingDropdown';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 
 class ListThing extends Component {
   constructor(props) {
@@ -17,7 +17,6 @@ class ListThing extends Component {
   }
 
   toggleSettings() {
-    //console.log("Settings dropdown toggled");
     this.setState({
       dropdownOpen: !this.state.dropdownOpen
     });

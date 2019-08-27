@@ -51,9 +51,9 @@ ruleset io.picolabs.notifications {
 
     setNotificationSettings = function(id, app_name) {
       notification_settings = ent:notification_settings;
-      (notification_settings == null).klog("notification_settings == null") => {}.put(id, {}.put(app_name, {"Manifold": true, "Twilio": true, "Prowl": true})) |
-        (notification_settings{id} == null) => notification_settings.put(id, {}.put(app_name, {"Manifold": true, "Twilio": true, "Prowl": true})) |
-        (notification_settings{id}{app_name} == null) => notification_settings.put([id, app_name], {"Manifold": true, "Twilio": true, "Prowl": true}) |
+      (notification_settings == null).klog("notification_settings == null") => {}.put(id, {}.put(app_name, {"Manifold": true, "Twilio": true, "Prowl": true, "Email": true, "Text": true})) |
+        (notification_settings{id} == null) => notification_settings.put(id, {}.put(app_name, {"Manifold": true, "Twilio": true, "Prowl": true, "Email": true, "Text": true})) |
+        (notification_settings{id}{app_name} == null) => notification_settings.put([id, app_name], {"Manifold": true, "Twilio": true, "Prowl": true, "Email": true, "Text": true}) |
         ent:notification_settings
     }
 
@@ -62,17 +62,15 @@ ruleset io.picolabs.notifications {
     }
   }
 
-
-
   rule updateManifoldAppList {
-    select when manifold update_app_list
+    select when manifold update_app_list or manifold update_version or manifold notify_manifold
       foreach subscription:established().filter(function(x){
         x{"Tx_role"} == "manifold_thing"
       }) setting (x,i)
     pre {
       eci = x{"Tx"}
       id = getID(x{"Id"})
-      apps = http:get(<<http://localhost:8080/sky/event/#{eci}/apps/manifold/apps>>, parseJSON=true)["content"]["directives"];
+      apps = http:get(<<#{meta:host.klog("host")}/sky/event/#{eci}/apps/manifold/apps>>, parseJSON=true)["content"]["directives"];
     }
     always {
       ent:app_list := updateAppList(id, apps);
@@ -91,6 +89,12 @@ ruleset io.picolabs.notifications {
 
     always {
       ent:notification_settings := setNotificationSettings(id, app_name).klog("ent:notification_settings");
+      raise twilio event "set_default_toPhone"
+        attributes {"id": id, "rs": app_name};
+      raise email event "set_default_recipient"
+        attributes {"id": id, "rs": app_name};
+      raise text_messenger event "set_default_toPhone"
+        attributes {"id": id, "rs": app_name};
     }
   }
 
@@ -134,12 +138,17 @@ ruleset io.picolabs.notifications {
       ent:notification_state := ent:notification_state.defaultsTo({}).put(notificationID, state)
         if (ent:notification_settings{picoId}{rs}{"Manifold"}) == true;
       raise twilio event "notify_through_twilio"
-        attributes {"Body": message, "rs": rs, "id": did }
+        attributes {"Body": message, "rs": rs, "id": picoId }
       if (ent:notification_settings{picoId}{rs}{"Twilio"}) == true;
       raise prowl event "notify_through_prowl"
-        attributes {"Body": message, "rs": rs, "id": did, "application": app }
+        attributes {"Body": message, "rs": rs, "id": picoId, "application": app }
       if (ent:notification_settings{picoId}{rs}{"Prowl"}) == true;
-
+      raise email event "notification"
+        attributes {"Body": message, "rs": rs, "id": picoId, "application": app }
+      if(ent:notification_settings{picoId}{rs}{"Email"}) == true;
+      raise text_messenger event "text_notification"
+        attributes {"Body": message, "rs": rs, "id": picoId, "application": app }
+      if(ent:notification_settings{picoId}{rs}{"Text"}) == true
     }
   }
 

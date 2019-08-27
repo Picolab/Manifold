@@ -1,5 +1,6 @@
 ruleset io.picolabs.twilio_notifications {
   meta {
+    use module io.picolabs.wrangler alias wrangler
     shares __testing, getToPhone, getFromPhone, getToken, getSID
   }
   global {
@@ -18,6 +19,13 @@ ruleset io.picolabs.twilio_notifications {
 
     getSID = function(id, rs) {
       ent:rs_toSID{id}{rs}
+    }
+    
+    getDefaultNumber = function(contacts) {
+      default_num = contacts.filter(function(x) {
+        (x{"phone"} != null && x{"favorite"} == "true");
+      });
+      default_num.values()[0]{"phone"}
     }
 
     getToPhone = function(id, rs) {
@@ -59,6 +67,24 @@ ruleset io.picolabs.twilio_notifications {
     }
   }
 
+  rule setDefaultToPhone {
+    select when twilio set_default_toPhone
+    pre {
+      rs = event:attr("rs");
+      id = event:attr("id");
+      owner_eci = wrangler:parent_eci().klog("parentEci");
+      contacts = wrangler:skyQuery(owner_eci, "io.picolabs.profile", "getOther").klog("contacts")
+      default_number = getDefaultNumber(contacts).klog("default_num")
+
+    }
+    if default_number then noop();
+    fired {
+      raise twilio event "set_toPhone"
+        attributes {"toPhone": default_number, "ruleSet": rs, "id": id}
+      if ent:toPhone{id}{rs} == null
+    }
+  }
+
   rule setToPhone {
     select when twilio set_toPhone
     pre {
@@ -94,8 +120,8 @@ ruleset io.picolabs.twilio_notifications {
     pre {
       rs = event:attr("rs");
       id = event:attr("id");
-      toPhone = (ent:toPhone{id}{rs}.isnull() || ent:toPhone{id}{rs} == "") => null | ent:toPhone{id}{rs} //You can default the toPhone number
-      fromPhone = (ent:fromPhone{id}{rs}.isnull() || ent:fromPhone{id}{rs} == "") => null | ent:fromPhone{id}{rs}//Twilio Number
+      toPhone = (ent:toPhone{id}{rs}.isnull() || ent:toPhone{id}{rs} == "") => null | ent:toPhone{id}{rs}
+      fromPhone = (ent:fromPhone{id}{rs}.isnull() || ent:fromPhone{id}{rs} == "") => null | ent:fromPhone{id}{rs}
       accountSID = ent:rs_toSID{id}{rs}
       authToken = ent:rs_toToken{id}{rs}
       body = event:attr("Body");

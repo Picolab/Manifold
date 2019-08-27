@@ -135,7 +135,7 @@ export class ThingDropdown extends Component {
             <i className="fa fa-minus float-right" style={{"marginRight": "0", "marginTop": "4px"}} />
           </DropdownItem>
           <UninstallModal modalOn={this.state.uninstallOpen} toggleFunc={this.toggleUninstall} picoID={this.props.picoID}/>
-          <Link to={"/settings/" + this.props.picoID}>
+          <Link to={"/notification-settings/" + this.props.picoID}>
           <DropdownItem>
               Notifications
               <i className="icon-bell bell float-right" style={{"marginRight": "0", "marginTop": "4px"}} />
