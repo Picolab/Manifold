@@ -1,3 +1,8 @@
+/*
+  These import statements are react libraries that we are importing. The first
+  one is standard and is needed for all react components. The second one is a
+  library we imported
+*/
 import React, { Component } from 'react';
 import { ListGroup, ListGroupItem, Container, Row, Col } from 'reactstrap';
 import ReactAnimatedWeather from 'react-animated-weather';

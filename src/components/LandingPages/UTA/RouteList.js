@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Collapse, ListGroup, ListGroupItem, Button } from 'reactstrap';
 import { customEvent } from '../../../utils/manifoldSDK';
-import { SCORE_WRAPPER_DID } from '../../../utils/config.js';
+//import { SCORE_WRAPPER_DID } from '../../../utils/config.js';
 import './UTA.css';
 
 
@@ -48,7 +48,7 @@ class RouteList extends Component {
   }
 
   takeBus() {
-    let promise = customEvent(SCORE_WRAPPER_DID, "score_wrapper", "new_points", { scoreTracker: window.localStorage.getItem("scoreTracker"), points : 1, descr : this.props.stopCode }, "take_bus");
+    /*let promise = customEvent(SCORE_WRAPPER_DID, "score_wrapper", "new_points", { scoreTracker: window.localStorage.getItem("scoreTracker"), points : 1, descr : this.props.stopCode }, "take_bus");
     promise.then((resp) => {
       console.log("score recorded")
       this.setState({disabled: true});
@@ -57,7 +57,7 @@ class RouteList extends Component {
         alert("You've already taken a bus from this stop in the last 3 minutes.");
       }
     })
-    console.log("taken");
+    console.log("taken");*/
   }
 
   generateTimes(routeName) {

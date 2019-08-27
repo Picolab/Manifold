@@ -6,7 +6,7 @@ import queryString from 'query-string';
 import RegistryModal from './RegistryModal';
 import './UTA.css';
 //import { GOOGLE_MAP_KEY, BUS_DID, SCORE_WRAPPER_DID } from '../../../utils/config';
-import { BUS_DID, SCORE_WRAPPER_DID } from '../../../utils/config';
+import { BUS_DID } from '../../../utils/config';
 
 class UTA extends Component {
   constructor(props) {
@@ -29,11 +29,11 @@ class UTA extends Component {
   }
 
   getStanding() {
-    const promise = customQuery(SCORE_WRAPPER_DID, "io.picolabs.score_wrapper", "currentStanding", { scoreTracker: window.localStorage.getItem("scoreTracker") });
+    /*const promise = customQuery(SCORE_WRAPPER_DID, "io.picolabs.score_wrapper", "currentStanding", { scoreTracker: window.localStorage.getItem("scoreTracker") });
 
     promise.then((resp) => {this.setState({player : resp.data});}).catch((e) => {
       console.error("Error loading player info: ", e);
-    });
+    });*/
   }
 
 
@@ -46,8 +46,16 @@ class UTA extends Component {
         console.error("Error loading uta: ", e);
       });
       */
+      let options;
 
-    customEvent(BUS_DID, "uta", "get_times", { stop_code : sCode}, "get_times").then((resp) => {
+      if(sCode === "OW001") {
+        options = { stop_code : "830127" }
+      }
+      else {
+        options = { stop_code : sCode }
+      }
+
+    customEvent(BUS_DID, "uta", "get_times", options, "get_times").then((resp) => {
       this.setState({stopInfo : resp.data.directives[0].options, stopCode : sCode });
     }).catch((e) => {
       console.error("Error loading uta: ", e);
@@ -67,7 +75,7 @@ class UTA extends Component {
     return toRet;
   }
 
-  addRankSuffix(rank) {
+  /*addRankSuffix(rank) {
     if (rank.toString().length > 1 && rank.toString().slice(-2).charAt(0) === '1') return rank + "th";
     var lastLetter = rank.toString().slice(-1);
 
@@ -104,7 +112,7 @@ class UTA extends Component {
 
 
     return statement;
-  }
+  }*/
 
   render() {
     const url = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAP_KEY}&v=3.exp&libraries=geometry,drawing,places`;
@@ -112,10 +120,10 @@ class UTA extends Component {
 
     return (
       <div className='shortenedWidth'>
-        <RegistryModal getStanding={this.getStanding} />
+        {/*<RegistryModal getStanding={this.getStanding} />
         {this.state.player.first && <h2>Signed in as {this.state.player.first + " " + this.state.player.last} </h2>}
         {this.state.player && <h5>{this.createRankAndScoreStatement(this.state.player)}</h5>}
-        {this.state.stopInfo.name && <h3>{this.camelCase(this.state.stopInfo.name)}</h3>}
+        {this.state.stopInfo.name && <h3>{this.camelCase(this.state.stopInfo.name)}</h3>}*/}
 
         {this.state.stopInfo.lat && this.state.stopInfo.lon && <GMap
           lat={parseFloat(this.state.stopInfo.lat)}

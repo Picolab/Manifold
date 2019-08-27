@@ -89,9 +89,22 @@ export default class Reminders extends Component {
     return toReturn;
   }
 
+  isValidDate() {
+    var dateObject = new Date();
+    console.log("current time", dateObject.getTime());
+  }
+
   onChange(stateKey) {
     return (event) => {
       let value = event.target.value;
+
+
+        if(stateKey == 'date') {
+          this.isValidDate();
+          console.log(`${this.state.date}T${this.state.time}:00.000Z`)
+          console.log("selected time:", new Date(`${this.state.date}T${this.state.time}:00.000Z`).getTime());
+        }
+
       this.setState({
         [stateKey]: value
       })
