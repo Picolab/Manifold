@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import './TagPage.css';
 
-class TagPage extends React.Component {
+class SquareTagPage extends React.Component {
   constructor(props) {
     super(props);
 
@@ -33,7 +33,7 @@ class TagPage extends React.Component {
     }
 
     this.setState({ isValid: true, redirect: true });
-    window.location.href=`http://tag.picolabs.io/${this.state.tagId}`
+    window.location.href=`http://sqtg.me/${this.state.tagId}`
   }
   render() {
     return (
@@ -43,12 +43,13 @@ class TagPage extends React.Component {
           validated={this.state.validated.toString()}
           onSubmit={this.handleSubmit}>
           <FormGroup>
-            <Label for="tagId">Enter A Tag ID</Label>
+            <Label for="tagId" size="lg">Enter A Tag ID</Label>
             <Input
               required
               type="text"
               name="tagId"
               id="tagId"
+              size="lg"
               value={this.state.tagId}
               onChange={this.handleChange}
               placeholder="ABC123"
@@ -58,7 +59,7 @@ class TagPage extends React.Component {
                 Please enter a valid tag ID
               </div>}
           </FormGroup>
-          <Button block color="primary" type="submit">
+          <Button block color="primary" type="submit" size="lg">
             Submit
           </Button>
         </Form>
@@ -67,4 +68,4 @@ class TagPage extends React.Component {
   }
 }
 
-export default TagPage;
+export default SquareTagPage;
