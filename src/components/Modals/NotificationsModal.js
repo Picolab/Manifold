@@ -19,7 +19,7 @@ export class NotificationsModal extends Component {
   componentDidMount() {
     this.getNotifications();
     this.getNotificationsCount();
-    this.notifyCountVar = setInterval(() => this.getNotificationsCount(), 30000000);
+    this.notifyCountVar = setInterval(() => this.getNotificationsCount(), 3000);
   }
 
   toggle() {
