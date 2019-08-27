@@ -17,8 +17,8 @@ export default {
   /*"io.picolabs.uta": UTA,
   "io.picolabs.score_tracker": ScoreTracker,
   "io.picolabs.pizza": OrderPizzaCardView,
-  "org.sovrin.manifold_agent": SovrinAgent,*/
-  "io.picolabs.aurora_app": AuroraCardView,
+  "org.sovrin.manifold_agent": SovrinAgent,
+  "io.picolabs.aurora_app": AuroraCardView,*/
   "io.picolabs.weather": WeatherCardView,
   /*"io.picolabs.co2_app": CO2CardView,
   "io.picolabs.temperatures_app": TemperaturesCardView,
