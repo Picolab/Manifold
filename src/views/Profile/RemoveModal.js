@@ -40,8 +40,8 @@ class RemoveModal extends React.Component {
             Are you sure you want to remove {this.props.sectionTitle}?
           </ModalBody>
           <ModalFooter>
-            <Button color="danger" onClick={this.remove}>Yes</Button>{' '}
-            <Button color="secondary" onClick={this.toggle}>No</Button>
+            <Button color="danger" onClick={this.remove}>Remove</Button>{' '}
+            <Button color="secondary" onClick={this.toggle}>Cancel</Button>
           </ModalFooter>
         </Modal>
       </div>

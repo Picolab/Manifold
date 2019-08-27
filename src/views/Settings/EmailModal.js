@@ -73,7 +73,7 @@ class EmailModal extends React.Component {
               <FormGroup row>
                 <Label for="recipient" sm={4}>Recipient</Label>
                 <Col sm={10}>
-                  <Input type="recipient" name="recipient" id="recipient" placeholder="Recipient" value={this.state.recipient} onChange={this.onChange('recipient')}/>
+                  <Input type="email" name="recipient" id="recipient" placeholder="Email" value={this.state.recipient} onChange={this.onChange('recipient')}/>
                 </Col>
               </FormGroup>
             </Form>

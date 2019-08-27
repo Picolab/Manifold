@@ -159,13 +159,13 @@ class TwilioModal extends React.Component {
               <FormGroup row>
                 <Label for="twilioNumber" sm={4}>Twilio Number</Label>
                 <Col sm={10}>
-                  <Input type="twilioNumber" name="twilioNumber" id="twilioNumber" placeholder="Twilio Number" value={this.state.fromPhone} onChange={this.onChange('fromPhone')}/>
+                  <Input type="text" pattern="[2-9][0-9]{2}[2-9][0-9]{2}[0-9]{4}" name="twilioNumber" id="twilioNumber" placeholder="Twilio Number" value={this.state.fromPhone} onChange={this.onChange('fromPhone')}/>
                 </Col>
               </FormGroup>
               <FormGroup row>
                 <Label for="toPhone" sm={4}>To Phone</Label>
                 <Col sm={10}>
-                  <Input type="toPhone" name="toPhone" id="toPhone" placeholder="To Phone" value={this.state.toPhone} onChange={this.onChange('toPhone')}/>
+                  <Input type="text" pattern="[2-9][0-9]{2}[2-9][0-9]{2}[0-9]{4}" name="toPhone" id="toPhone" placeholder="To Phone" value={this.state.toPhone} onChange={this.onChange('toPhone')}/>
                 </Col>
               </FormGroup>
             </Form>

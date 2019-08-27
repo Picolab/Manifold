@@ -73,7 +73,7 @@ class TextMessageModal extends React.Component {
               <FormGroup row>
                 <Label for="toPhone" sm={4}>To Phone</Label>
                 <Col sm={10}>
-                  <Input type="toPhone" name="toPhone" id="toPhone" placeholder="Phone Number" value={this.state.toPhone} onChange={this.onChange('toPhone')}/>
+                  <Input type="text" pattern="[2-9][0-9]{2}[2-9][0-9]{2}[0-9]{4}" name="toPhone" id="toPhone" placeholder="Phone Number" value={this.state.toPhone} onChange={this.onChange('toPhone')}/>
                 </Col>
               </FormGroup>
             </Form>
