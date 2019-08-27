@@ -36,11 +36,8 @@ class CardOverview extends Component {
           {this.props.name ? this.props.name : "Loading..."}
         </h1>
         <h3 className="overviewHeader">Apps</h3>
-        <Button id="appAdd" className="appAddButton" color="primary" size="sm" onClick={this.handleClick}>+</Button>
+        <Button id="appAdd" className="appAddButton" color="primary" size="sm" onClick={this.handleClick}><i className="fa fa-plus-circle"></i>{' '}Install an App</Button>
         <InstallModal modalOn={this.state.installOpen} toggleFunc={this.toggleInstall} picoID={this.props.picoID}/>
-        <UncontrolledTooltip placement="bottom" delay={300} target="appAdd">
-          Install An App
-        </UncontrolledTooltip>
         <hr className="overviewUnderline"></hr>
         <AppList picoID={this.props.picoID}/>
       </div>
