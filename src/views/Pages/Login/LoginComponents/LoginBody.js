@@ -52,14 +52,13 @@ class LoginBody extends Component {
           </Col>
         </Row>
         <Row className="centerRow" style={{ paddingTop: "10px" }}>
-          {/*<GoogleSignIn />
+          <GoogleSignIn />
           {GITHUB_DEFINED && <div style={{width: "10px"}}></div>}
-          {GITHUB_DEFINED && <GithubButton />}*/}
-          <h5 style={{color: "red"}}>Manifold is currently down and undergoing maintenance.</h5>
+          {GITHUB_DEFINED && <GithubButton />}
         </Row>
-        {/*}<Row className="centerRow">
+        <Row className="centerRow">
           <p className="popUpWarning">Not working? Try enabling popups on your browser</p>
-        </Row>*/}
+        </Row>
         <Row className="centerRow">
           <p className="loginDevInfo">Manifold is currently under heavy development. Many apps and features are still forthcoming</p>
           <hr style={{width: "100%", marginTop: "0.5rem"}}/>
