@@ -35,6 +35,7 @@ import SafeAndMine from './components/LandingPages/SafeAndMine';
 import UTA from './components/LandingPages/UTA/UTA';
 import PicoTagPage from './components/LandingPages/PicoTagPage';
 import SquareTagPage from './components/LandingPages/SquareTagPage';
+import MirrorDisplay from './components/LandingPages/MirrorDisplay';
 
 const initialState = fromJS({
   manifoldInfo: {
@@ -69,6 +70,9 @@ class App extends Component {
     );
     landingPages.push(
       <Route key="dynamic-route-4" path="/sqtg/tag" name="SquarTag" component={SquareTagPage} />
+    );
+    landingPages.push(
+      <Route key="dynamic-route-5" path="/:picoID/display" name="SmartMirror" component={MirrorDisplay} />
     )
     return landingPages;
   }

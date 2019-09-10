@@ -10,18 +10,20 @@ import CO2 from './Picolabs/Wovyn/CO2/CO2';
 import Temperatures from './Picolabs/Wovyn/Temperatures/Temperatures';
 import Light from './Picolabs/Wovyn/Light/Light';
 import Reminders from './Picolabs/Reminders/Reminders';
+import SmartMirror from './Picolabs/SmartMirror/SmartMirror';
 
 export default {
   "io.picolabs.safeandmine" : SafeAndMineApp,
   "io.picolabs.journal" : JournalApp,
-  /*"io.picolabs.uta": UTA,
+  "io.picolabs.uta": UTA,
   "io.picolabs.score_tracker": ScoreTracker,
   "io.picolabs.pizza": OrderPizzaApp,
   "org.sovrin.manifold_agent": SovrinAgent,
-  "io.picolabs.aurora_app": Aurora,*/
+  "io.picolabs.aurora_app": Aurora,
   "io.picolabs.weather": Weather,
-  /*"io.picolabs.co2_app": CO2,
+  "io.picolabs.co2_app": CO2,
   "io.picolabs.temperatures_app": Temperatures,
-  "io.picolabs.light_app": Light,*/
-  "io.picolabs.reminders": Reminders
+  "io.picolabs.light_app": Light,
+  "io.picolabs.reminders": Reminders,
+  "io.picolabs.manifold.smart_mirror": SmartMirror
 }
