@@ -37,7 +37,7 @@ ruleset io.picolabs.manifold_pico {
         sub.put(value)
       })
     }
-    
+
 
     hasTutorial = function() {
       ent:tutorial.defaultsTo(false);
@@ -88,10 +88,16 @@ ruleset io.picolabs.manifold_pico {
       ent:communities.defaultsTo({}).keys() >< picoID
     }
   }//end global
-  
+  rule initialized {
+    select when wrangler ruleset_added where rids.klog("rids") >< meta:rid.klog("meta rid")
+    fired {
+      raise wrangler event "autoAcceptConfigUpdate"
+        attributes {"config": {"configName": "Manifold", "password": "", "entries": { "Tx_Rx_Type": "Manifold"}}}
+    }
+  }
   rule updateManifoldVersion {
     select when manifold update_version
-    
+
     pre {
       needed_rulesets = ["io.picolabs.notifications",
                           "io.picolabs.prowl_notifications",
@@ -99,16 +105,16 @@ ruleset io.picolabs.manifold_pico {
                           "io.picolabs.manifold.email_notifications",
                           "io.picolabs.manifold.text_message_notifications"].difference(wrangler:installedRulesets()).klog("needed");
     }
-    
+
     if needed_rulesets.length() > 0 then noop();
-    
+
     fired {
       raise wrangler event "install_rulesets_requested"
       attributes {
         "rids" : needed_rulesets
       }
     }
-    
+
   }
 
   rule createThing {
@@ -122,8 +128,8 @@ ruleset io.picolabs.manifold_pico {
     }
   }
   rule thingCompleted {
-    select when wrangler child_initialized where rs_attrs{"event_type"} == "manifold_create_thing"
-      initiate_subscription(event:attr("eci"), event:attr("rs_attrs"){"name"}, subscription:wellKnown_Rx(){"id"}, thing_role);
+    select when wrangler child_initialized where event_type == "manifold_create_thing"
+      initiate_subscription(event:attr("eci"), event:attr("name"), subscription:wellKnown_Rx(){"id"}, thing_role);
   }
   rule trackThingSubscription {
     select when wrangler subscription_added where event:attr("Tx_role") == thing_role
@@ -157,8 +163,8 @@ ruleset io.picolabs.manifold_pico {
     }
   }
   rule communityCompleted {
-    select when wrangler child_initialized where rs_attrs{"event_type"} == "manifold_create_community"
-      initiate_subscription(event:attr("eci"), event:attr("rs_attrs"){"name"}, subscription:wellKnown_Rx(){"id"}, community_role);
+    select when wrangler child_initialized where event_type == "manifold_create_community"
+      initiate_subscription(event:attr("eci"), event:attr("name"), subscription:wellKnown_Rx(){"id"}, community_role);
   }
   rule trackCommSubscription {
     select when wrangler subscription_added where event:attr("Tx_role") == community_role
@@ -305,5 +311,5 @@ ruleset io.picolabs.manifold_pico {
       ent:things := ent:things.put([picoID, "name"], changedName);
     }
   }
-  
+
 }//end ruleset
