@@ -88,7 +88,17 @@ ruleset io.picolabs.manifold_pico {
       ent:communities.defaultsTo({}).keys() >< picoID
     }
   }//end global
+<<<<<<< HEAD
 
+=======
+  rule initialized {
+    select when wrangler ruleset_added where rids.klog("rids") >< meta:rid.klog("meta rid")
+    fired {
+      raise wrangler event "autoAcceptConfigUpdate"
+        attributes {"config": {"configName": "Manifold", "password": "", "entries": { "Tx_Rx_Type": "Manifold"}}}
+    }
+  }
+>>>>>>> 1ea9ebe1f2bf65e84aa4905363e8fe03210f7bf1
   rule updateManifoldVersion {
     select when manifold update_version
 
@@ -122,9 +132,14 @@ ruleset io.picolabs.manifold_pico {
     }
   }
   rule thingCompleted {
+<<<<<<< HEAD
     select when wrangler child_initialized
       where event_type == "manifold_create_thing" || rs_attrs{"event_type"} == "manifold_create_thing"
     initiate_subscription(event:attr("eci"), event:attr("name"), subscription:wellKnown_Rx(){"id"}, thing_role);
+=======
+    select when wrangler child_initialized where event_type == "manifold_create_thing"
+      initiate_subscription(event:attr("eci"), event:attr("name"), subscription:wellKnown_Rx(){"id"}, thing_role);
+>>>>>>> 1ea9ebe1f2bf65e84aa4905363e8fe03210f7bf1
   }
 
   rule autoAcceptSubscriptions {
@@ -167,9 +182,14 @@ ruleset io.picolabs.manifold_pico {
     }
   }
   rule communityCompleted {
+<<<<<<< HEAD
     select when wrangler child_initialized
       where event_type == "manifold_create_community" || rs_attrs{"event_type"} == "manifold_create_community"
     initiate_subscription(event:attr("eci"), event:attr("name"), subscription:wellKnown_Rx(){"id"}, community_role);
+=======
+    select when wrangler child_initialized where event_type == "manifold_create_community"
+      initiate_subscription(event:attr("eci"), event:attr("name"), subscription:wellKnown_Rx(){"id"}, community_role);
+>>>>>>> 1ea9ebe1f2bf65e84aa4905363e8fe03210f7bf1
   }
   rule trackCommSubscription {
     select when wrangler subscription_added where event:attr("Tx_role") == community_role
