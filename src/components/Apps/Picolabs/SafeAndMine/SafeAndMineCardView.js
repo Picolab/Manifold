@@ -239,7 +239,7 @@ export class SafeAndMineAppCardView extends Component {
       }
     }
     else {
-      toDisplay.push(<p>You currently have no registered tags. Open up this card to register new tags!</p>)
+      toDisplay.push(<p key="noTags">You currently have no registered tags. Open up this card to register new tags!</p>)
     }
 
     return toDisplay;
