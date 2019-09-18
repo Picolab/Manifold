@@ -9,7 +9,9 @@ import { discovery } from '../../actions';
 import AppMap from '../Apps/AppMap';
 
 const createAppOptions = () => {
-  return Object.keys(AppMap);
+  var options = Object.keys(AppMap);
+  options = options.filter(key => key !== "io.picolabs.manifold_monitor")
+  return options;
 }
 
 export class InstallModal extends Component {
