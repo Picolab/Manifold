@@ -27,6 +27,16 @@
 
 }
 
+.copyButton {
+  width: 70px;
+}
+
+.receiveButton {
+  width: 70px !important;
+  padding-left: 7px;
+  padding-right: 7px;
+}
+
 .full-star {
   float: right;
   color: yellow;
