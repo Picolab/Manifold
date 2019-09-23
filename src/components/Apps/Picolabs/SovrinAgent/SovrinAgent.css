@@ -14,6 +14,18 @@
   width: 100px;
 }
 
+.edgeInput {
+  margin-bottom: 10px;
+}
+
+.edit-link {
+  text-decoration: underline !important;
+  color: #20a8d8 !important;
+  display: inline;
+  font-size: 0.875rem;
+  width: 30px !important;
+}
+
 .agentLabel {
   max-height: 170px;
   width: 200px;
@@ -180,6 +192,13 @@
 
 .actionHeader {
     width: 500px;
+    padding: 8px 20px;
+    background: #eceff1;
+    border-bottom: 1px solid #cfd8dc;
+    margin-bottom: 0;
+    font-size: 0.875rem;
+    color: #b0bec5;
+    white-space: nowrap;
 }
 
 .video {
@@ -194,6 +213,13 @@
 
 .canvas {
   display: none;
+}
+
+.makeEdge {
+  width: inherit;
+  height: inherit;
+  color: #87cefa
+
 }
 
 #snackbar {
