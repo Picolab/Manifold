@@ -5,6 +5,7 @@ import { Button, Form, FormGroup, Label, Input, Media, ListGroup, ListGroupItem,
 import DeleteButton from './DeleteButton';
 import tag from './tag.png';
 import './SafeAndMine.css';
+import queryString from 'query-string';
 const TAG_CHAR_LENGTH = 6;
 const MAIN_MESSAGE_CHAR_LENGTH = 250;
 const META_FIELD_CHAR_LENGTH = 100;
@@ -13,6 +14,11 @@ export class SafeAndMineApp extends Component {
 
   constructor(props) {
     super(props);
+
+
+    let params = (window.location.href.indexOf('?') !== -1) ? window.location.href.slice(window.location.href.indexOf('?') + 1) : "";
+    let { tagID, domain } = (queryString.parse(params)) ? queryString.parse(params): " ";
+    if (domain !== "sqtg" && domain !== "picolabs") domain = "picolabs";
 
     this.state = {
       name: "",
@@ -26,10 +32,8 @@ export class SafeAndMineApp extends Component {
       shareName: false,
       shareEmail: false,
       sharePhone: false,
-
-
-      tagID: "",
-      domain: "picolabs",
+      tagID: (tagID) ? tagID : "",
+      domain,
       registeredTags: {},
 
       // component state
@@ -227,11 +231,11 @@ export class SafeAndMineApp extends Component {
 
   displayTagList() {
     let toDisplay = [];
-    console.log("tags", this.state.registeredTags);
+    //console.log("tags", this.state.registeredTags);
     for (var key in this.state.registeredTags) {
       toDisplay.push(
-             <ListGroup>
-              <ListGroupItem className="domain" key={key}>{key}</ListGroupItem>
+             <ListGroup key={key}>
+              <ListGroupItem className="domain">{key}</ListGroupItem>
               {this.displayDomain(this.state.registeredTags[key], key)}
              </ListGroup>
          );
@@ -354,7 +358,7 @@ export class SafeAndMineApp extends Component {
                 </Col>
                 <Col xs="2" style={{margin:0, padding:0}}>
 
-                  <Input type="select" name="domain" id="domain" onChange={this.onChange('domain')}>
+                  <Input type="select" name="domain" id="domain" value={this.state.domain} onChange={this.onChange('domain')}>
                     <option>picolabs</option>
                     <option>sqtg</option>
                   </Input>

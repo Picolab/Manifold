@@ -9,6 +9,14 @@ import './CardOverview.css';
 
 class AppList extends Component {
 
+  constructor(props) {
+    super(props);
+    let params = (window.location.href.indexOf('?') !== -1) ? window.location.href.slice(window.location.href.indexOf('?')) : "";
+    this.state = {
+      params
+    }
+  }
+
   renderIcons() {
     let icons = [];
     //loop through an array of installed apps
@@ -18,7 +26,7 @@ class AppList extends Component {
         const mediaID = "iconMedia" + index;
         icons.push(
           <div key={"appList" + index}>
-            <Link to={"/mythings/" + this.props.picoID + "/" + app.rid}>
+            <Link to={"/mythings/" + this.props.picoID + "/" + app.rid + this.state.params}>
               <Media style={{"margin" : "5px"}} className="appIcon" id={mediaID} object src={app.iconURL} alt="App Icon" />
             </Link>
             <UncontrolledTooltip placement="bottom" delay={300} target={mediaID}>

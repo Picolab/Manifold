@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Collapse, ListGroup, ListGroupItem, Button } from 'reactstrap';
-import { customEvent } from '../../../utils/manifoldSDK';
 //import { SCORE_WRAPPER_DID } from '../../../utils/config.js';
 import './UTA.css';
 

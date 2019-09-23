@@ -23,13 +23,15 @@ class GoogleSignIn extends Component {
   }
 
   pollForOwnerDID(id_token, attemptNum, profile) {
+    let params = (window.location.href.indexOf('?') !== -1) ? window.location.href.slice(window.location.href.indexOf('?')) : "";
+
     if(attemptNum > 2) {
       console.error("Last attempt to retrieve owner DID failed 😭");
       return;
     }
     //exponential backoff... wait for a calculated number of milliseconds depending on which attempt this is.
     setTimeout(() => {
-      
+
       const ownerDIDPromise = retrieveOwnerDID({
         id_token,
         profile
@@ -46,7 +48,7 @@ class GoogleSignIn extends Component {
           const ownerDID = directives[index].options.DID;
           if(ownerDID) {
             storeOwnerECI(ownerDID);
-            window.location.assign(getManifoldURL());
+            window.location.assign(getManifoldURL()+`/#/mythings${params}`);
           }else{
             console.error("Uh oh! Something went wrong! 😭");
           }

@@ -14,9 +14,11 @@
   font-weight:bold;
 }
 
-.shortenedWidth {
-  width: 500px;
-  float: left;
+@media (min-width : 500px) {
+  .shortenedWidth {
+    max-width: 500px;
+    padding: 10px;
+  }
 }
 
 .orders-container {

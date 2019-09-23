@@ -33,7 +33,7 @@ class RemoveModal extends React.Component {
   render() {
     return (
       <div>
-        <Button color="danger" onClick={this.toggle}><i class="fa fa-times-circle" aria-hidden="true" onClick={this.toggle}></i>{' '}Remove Section</Button>
+        <Button color="danger" onClick={this.toggle}><i className="fa fa-times-circle" aria-hidden="true" onClick={this.toggle}></i>{' '}Remove Section</Button>
         <Modal isOpen={this.state.modal} toggle={this.toggle} className={'modal-danger'}>
           <ModalHeader toggle={this.toggle}>Remove {this.props.sectionTitle}</ModalHeader>
           <ModalBody>

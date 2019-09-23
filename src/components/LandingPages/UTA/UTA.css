@@ -1,6 +1,13 @@
-.shortenedWidth {
-  max-width: 500px;
-  padding: 10px;
+@media (min-width : 500px) {
+  .shortenedWidth {
+    max-width: 500px;
+    padding: 10px;
+  }
+}
+@media (max-width : 499px) {
+  .shortenedWidth {
+    padding: 10px;
+  }
 }
 
 .listGroup {

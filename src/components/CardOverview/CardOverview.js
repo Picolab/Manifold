@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Button, UncontrolledTooltip } from 'reactstrap';
+import { Button } from 'reactstrap';
 import InstallModal from '../Modals/InstallModal';
 import AppList from './AppList';
 

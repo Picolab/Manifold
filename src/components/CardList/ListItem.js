@@ -9,8 +9,12 @@ import { Link } from 'react-router-dom';
 class ListItem extends Component {
   constructor(props) {
     super(props);
+
+    let params = (window.location.href.indexOf('?') !== -1) ? window.location.href.slice(window.location.href.indexOf('?')) : "";
+
     this.state = {
-      dropdownOpen : false
+      dropdownOpen : false,
+      params
     }
 
     this.toggleSettings = this.toggleSettings.bind(this);
@@ -26,7 +30,7 @@ class ListItem extends Component {
   render(){
     return(
         <ListGroupItem action>
-          <Link to={"/mythings/" + this.props.picoID}>
+          <Link to={"/mythings/" + this.props.picoID + this.state.params}>
             <div style={{'width':'80%','float':'left'}}>
               {this.props.name}
             </div>

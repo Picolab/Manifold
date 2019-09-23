@@ -51,11 +51,23 @@ class Card extends Component {
     }
   }
 
+  renderHeader() {
+    if(this.props.installedApps.length > 0){
+      return (
+        <CardHeader picoID={this.props.picoID} cardType={this.props.cardType} appInfo={this.props.installedApps[this.state.currentApp]} />
+      )
+    }else{
+      return (
+        <CardHeader picoID={this.props.picoID} cardType={this.props.cardType} />
+      )
+    }
+  }
+
   render(){
     return (
       <div className="card" style={{  height: "inherit", width: "inherit"}}>
 
-        <CardHeader picoID={this.props.picoID} cardType={this.props.cardType}/>
+        {this.props.installedApps && this.renderHeader()}
 
         <div className="card-block nonDraggable" style={{"textOverflow": "clip", overflow: "auto"}}>
           { this.props.installedApps && this.renderBody() }

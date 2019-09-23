@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { UncontrolledTooltip } from 'reactstrap';
+//import { UncontrolledTooltip } from 'reactstrap';
 
 class FooterItem extends Component {
   constructor(props){

@@ -114,7 +114,7 @@ class Header extends Component {
 
               <DropdownMenu>
                 <Link to="/profile" style={{ textDecoration: 'none' }}><DropdownItem className="dropdown-item"><i className="fa fa-user"></i> Profile</DropdownItem></Link>
-                <Link to="/settings" style={{ textDecoration: 'none' }}><DropdownItem className="dropdown-item"><i className="fa fa-wrench"></i> Settings</DropdownItem></Link>
+                {/*<Link to="/settings" style={{ textDecoration: 'none' }}><DropdownItem className="dropdown-item"><i className="fa fa-wrench"></i> Settings</DropdownItem></Link>*/}
                 <DropdownItem className="dropdown-item"
                   onClick = {()=>{logOut()}}>
                   <i className="fa fa-lock"></i> Logout</DropdownItem>

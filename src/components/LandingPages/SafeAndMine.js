@@ -11,11 +11,15 @@ export class SafeAndMine extends Component {
   constructor(props) {
     super(props);
 
+    let params = (window.location.href.indexOf('?') !== -1) ? window.location.href.slice(window.location.href.indexOf('?')) : "";
+
     //location is passed down from the Route component
-    const { tagID, DID } = queryString.parse(props.location.search);
+    const { tagID, DID, domain } = queryString.parse(props.location.search);
     this.state = {
       tagID,
       DID,
+      domain,
+      params,
       name: "",
       email: "",
       phone: "",
@@ -69,8 +73,8 @@ export class SafeAndMine extends Component {
       return (
         <div>
           <CardText>This tag has not yet been registered! Register this tag to see a message.</CardText>
-          {loggedIn && <CardLink tag={Link} to="/">Return home</CardLink>}
-          {!loggedIn && <CardLink tag={Link} to="/login">Sign up</CardLink>}
+          {loggedIn && <CardLink tag={Link} to={"/mythings" + this.state.params}>Return home</CardLink>}
+          {!loggedIn && <CardLink tag={Link} to={"/login" + this.state.params}>Sign up</CardLink>}
         </div>
       );
     }
@@ -81,7 +85,7 @@ export class SafeAndMine extends Component {
       <Card className="centered-card">
         <CardBody>
           <CardTitle>Safe and Mine</CardTitle>
-          <CardText>Thanks for scanning tag id: {this.state.tagID}!</CardText>
+          <CardText>Thanks for scanning tag id: {this.state.tagID} ({this.state.domain})!</CardText>
           {this.displayCard()}
         </CardBody>
       </Card>

@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import RouteList from './RouteList';
 import GMap from './GMap';
-import { customQuery, customEvent } from '../../../utils/manifoldSDK';
+import { customEvent } from '../../../utils/manifoldSDK';
 import queryString from 'query-string';
-import RegistryModal from './RegistryModal';
 import './UTA.css';
 //import { GOOGLE_MAP_KEY, BUS_DID, SCORE_WRAPPER_DID } from '../../../utils/config';
 import { BUS_DID } from '../../../utils/config';

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, FormGroup, Label, Input, Button, Container, Row, Col, Media, ListGroup, ListGroupItem } from 'reactstrap';
+import { Form, FormGroup, Label, Input, Button, Container, Row, Col, ListGroup, ListGroupItem } from 'reactstrap';
 
 export default class Reminders extends Component {
 
@@ -90,8 +90,8 @@ export default class Reminders extends Component {
   }
 
   isValidDate() {
-    var dateObject = new Date();
-    console.log("current time", dateObject.getTime());
+    //var dateObject = new Date();
+    //console.log("current time", dateObject.getTime());
   }
 
   onChange(stateKey) {
@@ -99,10 +99,10 @@ export default class Reminders extends Component {
       let value = event.target.value;
 
 
-        if(stateKey == 'date') {
+        if(stateKey === 'date') {
           this.isValidDate();
-          console.log(`${this.state.date}T${this.state.time}:00.000Z`)
-          console.log("selected time:", new Date(`${this.state.date}T${this.state.time}:00.000Z`).getTime());
+          //console.log(`${this.state.date}T${this.state.time}:00.000Z`)
+          //console.log("selected time:", new Date(`${this.state.date}T${this.state.time}:00.000Z`).getTime());
         }
 
       this.setState({
@@ -114,7 +114,7 @@ export default class Reminders extends Component {
   submit(e) {
     e.preventDefault();
     let timestamp = `${this.state.date}T${this.state.time}:00.000Z`;
-    console.log(timestamp);
+    //console.log(timestamp);
     let promise = this.props.signalEvent({
       domain: "reminder",
       type: "add_reminder",
@@ -158,9 +158,9 @@ export default class Reminders extends Component {
 
   displayReminders() {
     let toDisplay = [];
-    this.state.reminders.forEach((reminder) => {
+    this.state.reminders.forEach((reminder, i) => {
       toDisplay.push(
-        <ListGroupItem >
+        <ListGroupItem key={i}>
           <i id={"delete" + Object.values(reminder)[0].timestamp} className="fa fa-trash float-right fa-lg manifoldDropdown" onClick={this.deleteReminder(Object.keys(reminder)[0])} />
           <h5 className="title">{Object.values(reminder)[0].title}</h5>
           <p className="timestamp">You'll be reminded at {this.convertDate(Object.values(reminder)[0].time)}</p>

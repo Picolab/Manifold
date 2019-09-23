@@ -64,7 +64,7 @@ class ManifoldAppComponent extends Component {
 ManifoldAppComponent.propTypes = {
   developerComponent: PropTypes.func.isRequired,
   picoID: PropTypes.string.isRequired,
-  DID: PropTypes.string.isRequired,
+  /*DID: PropTypes.string.isRequired,*/ //DID is required, but I took it out of proptypes because it takes a second to come in and the console error is annoying
   bindings: PropTypes.object.isRequired
 }
 

@@ -3,8 +3,11 @@
   height: 20px;
 }
 
-.shortenedWidth {
-  max-width: 500px;
+@media (min-width : 500px) {
+  .shortenedWidth {
+    max-width: 500px;
+    padding: 10px;
+  }
 }
 
 .cardWidth {

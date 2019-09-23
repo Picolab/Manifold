@@ -1,8 +1,7 @@
 import React from 'react';
-import { Input, Form, FormGroup, Label } from 'reactstrap';
 import {customEvent, customQuery} from '../../utils/manifoldSDK';
 import {getManifoldECI} from '../../utils/AuthService';
-import SettingsSwitch from './SettingsSwitch';
+import ManifoldSwitch from './ManifoldSwitch';
 import TwilioSwitch from './TwilioSwitch';
 import ProwlSwitch from './ProwlSwitch';
 import EmailSwitch from './EmailSwitch';
@@ -12,7 +11,12 @@ class NotificationAppView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      dropdownOpen: false
+      dropdownOpen: false,
+      manifold: false,
+      twilio: false,
+      prowl: false,
+      email: false,
+      text: false
     }
     this.setSettings = this.setSettings.bind(this);
   }
@@ -87,7 +91,7 @@ class NotificationAppView extends React.Component {
       <div className="notification-section">
         <h1 style={{"paddingLeft": "5px", "textAlign": "center"}}>Notification Settings</h1>
         <hr className="my-2" />
-        <SettingsSwitch
+        <ManifoldSwitch
             isChecked={this.state.manifold}
             text = "Manifold"
             param = "Manifold"

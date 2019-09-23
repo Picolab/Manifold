@@ -8,7 +8,14 @@ class SectionModal extends React.Component {
     super(props);
     this.state = {
       modal: false,
-      titleError: false
+      titleError: false,
+      title: "",
+      phone: "",
+      email: "",
+      street: "",
+      city: "",
+      state: "",
+      postalcode: ""
     };
 
     this.toggle = this.toggle.bind(this);

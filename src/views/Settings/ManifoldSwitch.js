@@ -1,17 +1,17 @@
 import React from "react";
 import "./SettingsSwitch.css";
 
-class SettingsSwitch extends React.Component {
+class ManifoldSwitch extends React.Component {
 
   constructor ( props ) {
       super( props );
 
-  	this.state = {
-  		isChecked: this.props.isChecked
-  	}
+    	this.state = {
+    		isChecked: this.props.isChecked
+    	}
 
-    this.handleChange = this.handleChange.bind(this);
-  }
+      this.handleChange = this.handleChange.bind(this);
+    }
 
   componentDidUpdate() {
     if(this.props.isChecked !== this.state.isChecked) {
@@ -50,4 +50,4 @@ class SettingsSwitch extends React.Component {
     }
 
 }
-export default SettingsSwitch;
+export default ManifoldSwitch;
