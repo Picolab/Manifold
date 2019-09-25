@@ -46,7 +46,7 @@ class CardHeader extends Component {
             <h4>{this.props.name}</h4>
           </div>
           {this.renderDropdown()}
-          <OpenCardButton picoID={this.props.picoID} rid={this.props.appInfo.rid}/>
+          {this.props.appInfo && <OpenCardButton picoID={this.props.picoID} rid={this.props.appInfo.rid}/>}
         </div>
       );
     }
