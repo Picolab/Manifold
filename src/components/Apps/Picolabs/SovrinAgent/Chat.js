@@ -96,7 +96,6 @@ class Chat extends React.Component {
         console.error("Error getting message status", e);
     });
     promise.then((resp) => {
-      console.log(resp.data["status"]);
       if(resp.data["status"] === "pending") {
         if(this.statusCheck === undefined || this.statusCheck === null) {
             this.statusCheck = setInterval(() => this.getLastMessageStatus(), 500);

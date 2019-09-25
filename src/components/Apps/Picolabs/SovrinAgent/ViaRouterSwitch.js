@@ -1,5 +1,4 @@
 import React from "react";
-import { Container, Row, Col } from 'reactstrap';
 import "./ViaRouterSwitch.css"
 
 class ViaRouterSwitch extends React.Component {
@@ -35,7 +34,6 @@ class ViaRouterSwitch extends React.Component {
   }
 
   render () {
-    console.log("isChecked", this.state.isChecked);
       return(
           <div className="component-container" style={{"width": "100px", "height":"22px", "float": "right"}}>
             <div className="switch-container" style={{"float": "left"}} >

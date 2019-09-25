@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 class DeleteRouterModal extends React.Component {
   constructor(props) {
@@ -17,13 +17,13 @@ class DeleteRouterModal extends React.Component {
     return (
       <span style={{"width": "100%"}}>
         {this.props.button}
-        <Modal isOpen={this.props.deleteRouterModal}  className={this.props.className} backdrop={this.state.backdrop} className={'modal-danger'}>
+        <Modal isOpen={this.props.deleteRouterModal} backdrop={this.state.backdrop} className={'modal-danger'}>
           <ModalHeader >Delete Router</ModalHeader>
           <ModalBody>
             {this.props.hasRouterConnection ? <div>Router cannot be deleted because it is in use.</div> : <div>Are you sure you want to delete {this.props.routerLabel}?</div> }
           </ModalBody>
           <ModalFooter>
-            {this.props.hasRouterConnection ? <Button color="danger" onClick={()=> {this.props.deleteRouterToggle();}} disabled>Delete</Button> : <Button color="danger" onClick={()=> {this.props.deleteRouterToggle();}}>Delete</Button>}{' '}
+            {this.props.hasRouterConnection ? <Button color="danger" onClick={this.props.deleteRouter} disabled>Delete</Button> : <Button color="danger" onClick={this.props.deleteRouter}>Delete</Button>}{' '}
             <Button color="secondary" onClick={this.props.deleteRouterToggle}>Cancel</Button>
           </ModalFooter>
         </Modal>

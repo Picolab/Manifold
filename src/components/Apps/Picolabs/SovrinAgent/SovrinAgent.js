@@ -28,6 +28,7 @@ class SovrinAgent extends React.Component {
     this.invitationToggle = this.invitationToggle.bind(this);
     this.actionsToggle = this.actionsToggle.bind(this);
     this.receiveInvitation = this.receiveInvitation.bind(this);
+    this.deleteRouter = this.deleteRouter.bind(this)
     this.getUI = this.getUI.bind(this);
     this.getEdgeUI = this.getEdgeUI.bind(this);
     this.edgeToggle = this.edgeToggle.bind(this);
@@ -120,7 +121,6 @@ class SovrinAgent extends React.Component {
         });
         //clearInterval(this.connVar);
         this.getEdgeUI();
-        this.hasRouterConnection(resp.data['connections'])
         this.getIconImages(resp.data['connections'])
       }
     });
@@ -136,6 +136,7 @@ class SovrinAgent extends React.Component {
     promise.then((resp) => {
       if(resp !== undefined && resp.data !== null) {
         this.setRouter(resp.data);
+        this.hasRouterConnection(resp.data)
       }
       else {
         this.setState({
@@ -145,12 +146,16 @@ class SovrinAgent extends React.Component {
     });
   }
 
-  hasRouterConnection(connections) {
+  hasRouterConnection(routerUI) {
     let hasRouterConn = false
-    for(let item in connections) {
-      if(connections[item]["routerName"] !== null) {
-        hasRouterConn = true
-      }
+    if(Object.keys(routerUI["routerConnections"]).length > 1) {
+      hasRouterConn = true
+    }
+    else {
+        if(routerUI["routerConnections"][routerUI["routerName"].concat(" to ".concat(this.state.technicalDetails["name"]))]
+          === null) {
+            hasRouterConn = true
+          }
     }
     this.setState({
       hasRouterConnection: hasRouterConn
@@ -197,7 +202,7 @@ class SovrinAgent extends React.Component {
       <div>
         <DropdownItem className="actionHeader" header>Generate Invitation via {this.state.routerName}</DropdownItem>
         <InputGroup>
-          <Input id={this.state.routerUI["invitationVia".concat(this.state.routerName)]} value={this.state.routerUI["invitationVia".concat(this.state.routerName)]}/>
+          <Input id={this.state.routerUI["invitationVia".concat(this.state.routerName)]} defaultValue={this.state.routerUI["invitationVia".concat(this.state.routerName)]}/>
             <InputGroupAddon addonType="append">
               <Button className="copyButton" id={this.state.routerUI["invitationVia".concat(this.state.routerName)]} value={this.state.routerUI["invitationVia".concat(this.state.routerName)]} onClick={this.copyInvitation}>Copy</Button>
             </InputGroupAddon>
@@ -232,6 +237,7 @@ class SovrinAgent extends React.Component {
           signalEvent={this.props.signalEvent}
           manifoldQuery={this.props.manifoldQuery}
           hasRouterConnection={this.state.hasRouterConnection}
+          deleteRouter={this.deleteRouter}
           button={<Button className="makeEdge" style={{"color": "red"}} onClick={this.deleteRouterToggle}><i className="fa fa-minus-circle" /> Delete Inbound Router</Button>}
         />
       </DropdownItem>
@@ -273,6 +279,19 @@ class SovrinAgent extends React.Component {
     })
   }
 
+  deleteRouter() {
+    const promise = this.props.signalEvent({
+      domain : "edge",
+      type: "router_removal_requested",
+      attrs : {
+
+      }
+    })
+    promise.then((resp) => {
+      this.getEdgeUI();
+    })
+  }
+
   displayHeader() {
       return (
         <div>
@@ -286,7 +305,7 @@ class SovrinAgent extends React.Component {
               <DropdownMenu className="actionsMenu">
                 <DropdownItem className="actionHeader" header>Generate Invitation</DropdownItem>
                   <InputGroup>
-                    <Input id={this.state.technicalDetails["invitation"]} value={this.state.technicalDetails["invitation"]}/>
+                    <Input id={this.state.technicalDetails["invitation"]} defaultValue={this.state.technicalDetails["invitation"]}/>
                     <InputGroupAddon addonType="append">
                       <Button className="copyButton" id={this.state.technicalDetails["invitation"]} value={this.state.technicalDetails["invitation"]} onClick={this.copyInvitation}>Copy</Button>
                     </InputGroupAddon>
