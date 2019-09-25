@@ -202,9 +202,9 @@ class SovrinAgent extends React.Component {
       <div>
         <DropdownItem className="actionHeader" header>Generate Invitation via {this.state.routerName}</DropdownItem>
         <InputGroup>
-          <Input id={this.state.routerUI["invitationVia".concat(this.state.routerName)]} defaultValue={this.state.routerUI["invitationViaRouter"]}/>
+          <Input id={this.state.routerUI["invitationViaRouter"]} defaultValue={this.state.routerUI["invitationViaRouter"]}/>
             <InputGroupAddon addonType="append">
-              <Button className="copyButton" id={this.state.routerUI["invitationVia".concat(this.state.routerName)]} value={this.state.routerUI["invitationViaRouter"]} onClick={this.copyInvitation}>Copy</Button>
+              <Button className="copyButton" id={this.state.routerUI["invitationViaRouter"]} value={this.state.routerUI["invitationViaRouter"]} onClick={this.copyInvitation}>Copy</Button>
             </InputGroupAddon>
         </InputGroup>
         </div>
