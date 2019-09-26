@@ -120,13 +120,13 @@ class SovrinAgent extends React.Component {
           technicalDetails: resp.data
         });
         //clearInterval(this.connVar);
-        this.getEdgeUI();
+        this.getEdgeUI(resp.data["connections"]);
         this.getIconImages(resp.data['connections'])
       }
     });
   }
 
-  getEdgeUI() {
+  getEdgeUI(connections) {
     const promise = this.props.manifoldQuery({
       rid: "org.sovrin.edge",
       funcName: "ui"
@@ -137,6 +137,7 @@ class SovrinAgent extends React.Component {
       if(resp !== undefined && resp.data !== null) {
         this.setRouter(resp.data);
         this.hasRouterConnection(resp.data)
+        this.connectionsViaRouter
       }
       else {
         this.setState({
@@ -336,6 +337,7 @@ class SovrinAgent extends React.Component {
     var output = [];
     for(var item in this.state.technicalDetails['connections']) {
       if(this.state.technicalDetails['connections'][item] !== undefined) {
+        let hasRouter = this.hasRouter(this.state.technicalDetails['connections'][item]['label'])
         if(this.state[this.state.technicalDetails['connections'][item]['label']] !== undefined) {
           output.push(
             <div key={this.state.technicalDetails['connections'][item]['their_did']}>
@@ -351,8 +353,9 @@ class SovrinAgent extends React.Component {
                 manifoldQuery={this.props.manifoldQuery}
                 getUI={this.getUI}
                 invitation={this.state.technicalDetails["invitation"]}
+                hasRouter={hasRouter}
               />
-                {this.hasRouter(this.state.technicalDetails['connections'][item]['label']) === true  ? <div className="agentLabel"> {this.state.technicalDetails['connections'][item]['label']} <span> (via {this.state.routerName}) </span> </div> : <div className="agentLabel"> {this.state.technicalDetails['connections'][item]['label']} </div>}
+                { hasRouter === true  ? <div className="agentLabel"> {this.state.technicalDetails['connections'][item]['label']} <span> (via {this.state.routerName}) </span> </div> : <div className="agentLabel"> {this.state.technicalDetails['connections'][item]['label']} </div>}
             </div>
           );
         } else {
@@ -370,9 +373,10 @@ class SovrinAgent extends React.Component {
                 manifoldQuery={this.props.manifoldQuery}
                 getUI={this.getUI}
                 invitation={this.state.technicalDetails["invitation"]}
+                hasRouter={hasRouter}
               />
               <div className="agentLabel">
-                {this.hasRouter(this.state.technicalDetails['connections'][item]['label']) === true  ? <div className="agentLabel"> {this.state.technicalDetails['connections'][item]['label']} (via {this.state.routerName}) </div> : <div className="agentLabel"> {this.state.technicalDetails['connections'][item]['label']} </div>}
+                { hasRouter === true  ? <div className="agentLabel"> {this.state.technicalDetails['connections'][item]['label']} (via {this.state.routerName}) </div> : <div className="agentLabel"> {this.state.technicalDetails['connections'][item]['label']} </div>}
               </div>
             </div>
           );

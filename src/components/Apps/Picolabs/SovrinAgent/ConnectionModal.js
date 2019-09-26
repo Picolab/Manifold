@@ -213,8 +213,8 @@ class ConnectionModal extends React.Component {
                       <h4>Connection Information</h4>
                         <div className="textStickOut"> My DID: {this.props.myDID} </div>
                         <div className="textStickOut"> Their DID: {this.props.theirDID} </div>
-                      <button className="btn-info" onClick={this.sendTrustPing}>Send Trust Ping</button> {' '}
-                      <button className="btn-danger" onClick={this.deleteConnection}>Delete Connection</button>
+                        { !this.props.hasRouter && <button className="btn-info" onClick={this.sendTrustPing}>Send Trust Ping</button>} {' '}
+                        <button className="btn-danger" onClick={this.deleteConnection}>Delete Connection</button>
                     </Col>
                   </Row>
                 </TabPane>
@@ -230,6 +230,7 @@ class ConnectionModal extends React.Component {
                     theirDID={this.props.theirDID}
                     title={this.props.title}
                     invitation={this.props.invitation}
+                    hasRouter={this.props.hasRouter}
                   />
                 </TabPane>
               </TabContent>

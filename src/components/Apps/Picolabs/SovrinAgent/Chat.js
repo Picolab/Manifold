@@ -72,20 +72,38 @@ class Chat extends React.Component {
   }
 
   retrieveMessages() {
-    const promise = this.props.manifoldQuery({
-      rid: "org.sovrin.manifold_agent",
-      funcName: "retrieveMSGs",
-      funcArgs: {
-        their_vk: this.props.their_vk
-      }
-    }).catch((e) => {
-        console.error("Error getting messages", e);
-    });
-    promise.then((resp) => {
-      this.setState({
-          messages: resp.data
-      })
-    });
+    if(this.props.hasRouter) {
+      const promise = this.props.manifoldQuery({
+        rid: "org.sovrin.manifold_agent",
+        funcName: "retrieveMSGs",
+        funcArgs: {
+          their_vk: this.props.their_vk
+        }
+      }).catch((e) => {
+          console.error("Error getting messages", e);
+      });
+      promise.then((resp) => {
+        this.setState({
+            messages: resp.data
+        })
+      });
+    }
+    else {
+      const promise = this.props.manifoldQuery({
+        rid: "org.sovrin.manifold_agent",
+        funcName: "getMSGs",
+        funcArgs: {
+          their_vk: this.props.their_vk
+        }
+      }).catch((e) => {
+          console.error("Error getting messages", e);
+      });
+      promise.then((resp) => {
+        this.setState({
+            messages: resp.data
+        })
+      });
+    }
   }
 
   getLastMessageStatus() {
@@ -227,6 +245,8 @@ class Chat extends React.Component {
     }
   }
 
+  //{(this.state.failedMessage !== null && this.state.failedMessage !== '') && <div id="snackbar">Your last message to {this.props.title} was not sent...</div>}
+
   render() {
     const script = document.createElement("script");
     script.src = "https://cdn.jsdelivr.net/npm/jdenticon@2.1.1";
@@ -245,7 +265,6 @@ class Chat extends React.Component {
             <Button onClick={this.sendMessage} color="secondary">Send</Button>
           </InputGroupAddon>
          </InputGroup>
-         {(this.state.failedMessage !== null && this.state.failedMessage !== '') && <div id="snackbar">Your last message to {this.props.title} was not sent...</div>}
        </div>
     );
   }
