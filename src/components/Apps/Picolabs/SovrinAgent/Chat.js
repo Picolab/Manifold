@@ -72,7 +72,8 @@ class Chat extends React.Component {
   }
 
   retrieveMessages() {
-    if(this.props.hasRouter) {
+    console.log(this.props.hasRouter);
+    if(this.props.hasRouter !== true) {
       const promise = this.props.manifoldQuery({
         rid: "org.sovrin.manifold_agent",
         funcName: "retrieveMSGs",
