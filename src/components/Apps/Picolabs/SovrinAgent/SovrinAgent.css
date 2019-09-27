@@ -27,6 +27,8 @@
 }
 
 .agentLabel {
+  display: grid;
+  margin-top: 0px;
   max-height: 170px;
   width: 200px;
   font-size: 23px;
@@ -88,7 +90,7 @@
   margin: 15px;
   margin-top: -10px;
   text-align: center;
-  line-height: 60px;
+  line-height: 34.5px;
   font-size: 30px;
 }
 
@@ -273,6 +275,8 @@
   }
 
   .agentLabel {
+    display: grid;
+    margin-top: 0px;
     max-height: 140px;
     width: 150px;
     font-size: 18px;
@@ -392,6 +396,8 @@
   }
 
   .agentLabel {
+    display: grid;
+    margin-top: 0px;
     max-height: 140px;
     width: 150px;
     font-size: 18px;
