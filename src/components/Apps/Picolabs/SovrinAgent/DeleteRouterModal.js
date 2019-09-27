@@ -23,7 +23,7 @@ class DeleteRouterModal extends React.Component {
             {this.props.hasRouterConnection ? <div>Router cannot be deleted because it is in use.</div> : <div>Are you sure you want to delete {this.props.routerLabel}?</div> }
           </ModalBody>
           <ModalFooter>
-            {this.props.hasRouterConnection ? <Button color="danger" onClick={this.props.deleteRouter} disabled>Delete</Button> : <Button color="danger" onClick={this.props.deleteRouter}>Delete</Button>}{' '}
+            {this.props.hasRouterConnection ? <Button color="danger" onClick={this.props.deleteRouter} disabled>Delete</Button> : <Button color="danger" onClick={() => {this.props.deleteRouterToggle(); this.props.deleteRouter();}}>Delete</Button>}{' '}
             <Button color="secondary" onClick={this.props.deleteRouterToggle}>Cancel</Button>
           </ModalFooter>
         </Modal>

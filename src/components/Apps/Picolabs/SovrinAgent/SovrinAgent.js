@@ -137,7 +137,6 @@ class SovrinAgent extends React.Component {
       if(resp !== undefined && resp.data !== null) {
         this.setRouter(resp.data);
         this.hasRouterConnection(resp.data)
-        this.connectionsViaRouter
       }
       else {
         this.setState({
