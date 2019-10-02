@@ -28,6 +28,7 @@ class SovrinAgent extends React.Component {
     this.invitationToggle = this.invitationToggle.bind(this);
     this.actionsToggle = this.actionsToggle.bind(this);
     this.receiveInvitation = this.receiveInvitation.bind(this);
+    this.deleteRouter = this.deleteRouter.bind(this)
     this.getUI = this.getUI.bind(this);
     this.getEdgeUI = this.getEdgeUI.bind(this);
     this.edgeToggle = this.edgeToggle.bind(this);
@@ -119,14 +120,13 @@ class SovrinAgent extends React.Component {
           technicalDetails: resp.data
         });
         //clearInterval(this.connVar);
-        this.getEdgeUI();
-        this.hasRouterConnection(resp.data['connections'])
+        this.getEdgeUI(resp.data["connections"]);
         this.getIconImages(resp.data['connections'])
       }
     });
   }
 
-  getEdgeUI() {
+  getEdgeUI(connections) {
     const promise = this.props.manifoldQuery({
       rid: "org.sovrin.edge",
       funcName: "ui"
@@ -136,6 +136,7 @@ class SovrinAgent extends React.Component {
     promise.then((resp) => {
       if(resp !== undefined && resp.data !== null) {
         this.setRouter(resp.data);
+        this.hasRouterConnection(resp.data)
       }
       else {
         this.setState({
@@ -145,12 +146,16 @@ class SovrinAgent extends React.Component {
     });
   }
 
-  hasRouterConnection(connections) {
+  hasRouterConnection(routerUI) {
     let hasRouterConn = false
-    for(let item in connections) {
-      if(connections[item]["routerName"] !== null) {
-        hasRouterConn = true
-      }
+    if(Object.keys(routerUI["routerConnections"]).length > 1) {
+      hasRouterConn = true
+    }
+    else {
+        if(routerUI["routerConnections"][routerUI["routerName"].concat(" to ".concat(this.state.technicalDetails["name"]))]
+          === null) {
+            hasRouterConn = true
+          }
     }
     this.setState({
       hasRouterConnection: hasRouterConn
@@ -197,9 +202,9 @@ class SovrinAgent extends React.Component {
       <div>
         <DropdownItem className="actionHeader" header>Generate Invitation via {this.state.routerName}</DropdownItem>
         <InputGroup>
-          <Input id={this.state.routerUI["invitationVia".concat(this.state.routerName)]} value={this.state.routerUI["invitationVia".concat(this.state.routerName)]}/>
+          <Input id={this.state.routerUI["invitationViaRouter"]} defaultValue={this.state.routerUI["invitationViaRouter"]}/>
             <InputGroupAddon addonType="append">
-              <Button className="copyButton" id={this.state.routerUI["invitationVia".concat(this.state.routerName)]} value={this.state.routerUI["invitationVia".concat(this.state.routerName)]} onClick={this.copyInvitation}>Copy</Button>
+              <Button className="copyButton" id={this.state.routerUI["invitationViaRouter"]} value={this.state.routerUI["invitationViaRouter"]} onClick={this.copyInvitation}>Copy</Button>
             </InputGroupAddon>
         </InputGroup>
         </div>
@@ -232,6 +237,7 @@ class SovrinAgent extends React.Component {
           signalEvent={this.props.signalEvent}
           manifoldQuery={this.props.manifoldQuery}
           hasRouterConnection={this.state.hasRouterConnection}
+          deleteRouter={this.deleteRouter}
           button={<Button className="makeEdge" style={{"color": "red"}} onClick={this.deleteRouterToggle}><i className="fa fa-minus-circle" /> Delete Inbound Router</Button>}
         />
       </DropdownItem>
@@ -273,6 +279,19 @@ class SovrinAgent extends React.Component {
     })
   }
 
+  deleteRouter() {
+    const promise = this.props.signalEvent({
+      domain : "edge",
+      type: "router_removal_requested",
+      attrs : {
+
+      }
+    })
+    promise.then((resp) => {
+      this.getEdgeUI();
+    })
+  }
+
   displayHeader() {
       return (
         <div>
@@ -286,7 +305,7 @@ class SovrinAgent extends React.Component {
               <DropdownMenu className="actionsMenu">
                 <DropdownItem className="actionHeader" header>Generate Invitation</DropdownItem>
                   <InputGroup>
-                    <Input id={this.state.technicalDetails["invitation"]} value={this.state.technicalDetails["invitation"]}/>
+                    <Input id={this.state.technicalDetails["invitation"]} defaultValue={this.state.technicalDetails["invitation"]}/>
                     <InputGroupAddon addonType="append">
                       <Button className="copyButton" id={this.state.technicalDetails["invitation"]} value={this.state.technicalDetails["invitation"]} onClick={this.copyInvitation}>Copy</Button>
                     </InputGroupAddon>
@@ -317,6 +336,7 @@ class SovrinAgent extends React.Component {
     var output = [];
     for(var item in this.state.technicalDetails['connections']) {
       if(this.state.technicalDetails['connections'][item] !== undefined) {
+        let hasRouter = this.hasRouter(this.state.technicalDetails['connections'][item]['label'])
         if(this.state[this.state.technicalDetails['connections'][item]['label']] !== undefined) {
           output.push(
             <div key={this.state.technicalDetails['connections'][item]['their_did']}>
@@ -332,8 +352,9 @@ class SovrinAgent extends React.Component {
                 manifoldQuery={this.props.manifoldQuery}
                 getUI={this.getUI}
                 invitation={this.state.technicalDetails["invitation"]}
+                hasRouter={hasRouter}
               />
-                {this.hasRouter(this.state.technicalDetails['connections'][item]['label']) === true  ? <div className="agentLabel"> {this.state.technicalDetails['connections'][item]['label']} <span> (via {this.state.routerName}) </span> </div> : <div className="agentLabel"> {this.state.technicalDetails['connections'][item]['label']} </div>}
+                { hasRouter === true  ? <div className="agentLabel"> {this.state.technicalDetails['connections'][item]['label']} <span> (via {this.state.routerName}) </span> </div> : <div className="agentLabel"> {this.state.technicalDetails['connections'][item]['label']} </div>}
             </div>
           );
         } else {
@@ -351,9 +372,10 @@ class SovrinAgent extends React.Component {
                 manifoldQuery={this.props.manifoldQuery}
                 getUI={this.getUI}
                 invitation={this.state.technicalDetails["invitation"]}
+                hasRouter={hasRouter}
               />
               <div className="agentLabel">
-                {this.hasRouter(this.state.technicalDetails['connections'][item]['label']) === true  ? <div className="agentLabel"> {this.state.technicalDetails['connections'][item]['label']} (via {this.state.routerName}) </div> : <div className="agentLabel"> {this.state.technicalDetails['connections'][item]['label']} </div>}
+                { hasRouter === true  ? <div className="agentLabel"> {this.state.technicalDetails['connections'][item]['label']} (via {this.state.routerName}) </div> : <div className="agentLabel"> {this.state.technicalDetails['connections'][item]['label']} </div>}
               </div>
             </div>
           );
