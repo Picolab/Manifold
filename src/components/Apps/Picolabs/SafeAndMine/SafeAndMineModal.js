@@ -131,7 +131,7 @@ class SafeAndMineModal extends React.Component {
               <FormGroup row>
                 <Label for="Name" sm={4}>Name</Label>
                 <Col sm={11}>
-                  <Input type="text" name="name" id="name" placeholder="Name" value={this.state.name} onChange={this.onChange('phone')}/>
+                  <Input type="text" name="name" id="name" placeholder="Name" value={this.state.name} onChange={this.onChange('name')}/>
                 </Col>
                 <Col sm={1}>
                 <FormGroup check>
