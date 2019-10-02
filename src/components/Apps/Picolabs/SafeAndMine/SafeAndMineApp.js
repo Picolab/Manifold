@@ -224,6 +224,8 @@ export class SafeAndMineApp extends Component {
           <h2 className="serviceHeader">My Information{' '}
           <SafeAndMineModal signalEvent={this.props.signalEvent} retrieveInformation={this.retrieveInformation} shareName={this.state.shareName} shareEmail={this.state.shareEmail} sharePhone={this.state.sharePhone} name={this.state.savedName ? this.state.savedName : (this.state.profile) ? this.state.profile.displayName : ""} message={this.state.savedMessage} profile={this.state.profile} other={this.state.other} update={this.updateData} />
           </h2>
+          <br />
+          <br />
         <ListGroup>
           {this.state.savedName && <ListGroupItem><b>Name:</b> {this.state.savedName}</ListGroupItem>}
           {this.state.savedEmail && <ListGroupItem><b>Email:</b> {this.state.savedEmail}</ListGroupItem>}
