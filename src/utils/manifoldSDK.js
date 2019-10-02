@@ -58,6 +58,10 @@ export function retrieveOwnerProfile() {
   return customQuery(getOwnerECI(), "io.picolabs.profile", "getProfile");
 }
 
+export function retrieveOtherProfile() {
+  return customQuery(getOwnerECI(), "io.picolabs.profile", "getOther");
+}
+
 export function createThing(name){
   return axios.post(`${sky_event(getManifoldECI())}/Create_Thing/manifold/create_thing?name=${name}`);
 }
@@ -104,6 +108,10 @@ export function installApp(eci,rid){
 
 export function uninstallApp(eci,rid){
   return axios.post(`${sky_event(eci)}/Apps/manifold/uninstallapp?rid=${rid}`);
+}
+
+export function changeNotificationSetting(id, app_name, option) {
+  return customEvent(getManifoldECI(), "manifold", "change_notification_setting", {id, app_name, option}, "Setting");
 }
 
 export function getCookie(name) {
