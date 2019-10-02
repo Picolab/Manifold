@@ -158,8 +158,8 @@ export class SafeAndMineApp extends Component {
       }
     });
     promise.then(() => {
-
-      setTimeout(this.retrieveTags(), 500);
+      setTimeout(this.retrieveTags(), 750);
+      this.retrieveTags();
     }).catch((e) => {
       console.error(e);
     })
