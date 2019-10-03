@@ -48,7 +48,8 @@ class ConnectionModal extends React.Component {
 
   setCurrentPage() {
     //console.log("this.state.modal",this.state.modal);
-    if(localStorage.getItem('modalState'.concat(this.props.theirDID)) === false) {
+  
+    if(localStorage.getItem('modalState'.concat(this.props.theirDID)) === "false") {
       this.props.signalEvent({
         domain:"sovrin",
         type:"set_page",
@@ -108,6 +109,7 @@ class ConnectionModal extends React.Component {
       modal: !prevState.modal,
       pingStatus: null
     }));
+    this.setCurrentPage();
   }
 
   toggle(tab) {
