@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import {Table} from 'reactstrap';
 import SectionModal from './SectionModal';
 import EditModal from './EditModal';
-import { retrieveOwnerProfile } from '../../../src/utils/manifoldSDK';
+import { retrieveOwnerProfile, retrieveOtherProfile } from '../../../src/utils/manifoldSDK';
 import { getOwnerECI } from '../../../src/utils/AuthService';
-import { customQuery, customEvent } from '../../../src/utils/manifoldSDK';
+import { customEvent } from '../../../src/utils/manifoldSDK';
 import './Profile.css';
 
 //const brandPrimary =  '#20a8d8';
@@ -65,7 +65,7 @@ class Profile extends Component {
   }
 
   getOtherInfo() {
-    const otherGetPromise = customQuery(getOwnerECI(),"io.picolabs.profile", "getOther");
+    const otherGetPromise = retrieveOtherProfile();
     otherGetPromise.then((resp) => {
       const other = resp.data
       if (other) {
