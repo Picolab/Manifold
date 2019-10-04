@@ -31,6 +31,7 @@ import Tables from '../../views/Components/Tables/'
 import Tabs from '../../views/Components/Tabs/'
 import FontAwesome from '../../views/Icons/FontAwesome/'
 import SimpleLineIcons from '../../views/Icons/SimpleLineIcons/'
+import MirrorDisplay from '../../components/Apps/Picolabs/SmartMirror/MirrorDisplay'
 
 import { connect } from 'react-redux';
 import ActionTypes from '../../actions';
@@ -50,6 +51,7 @@ class Full extends Component {
             <Breadcrumb />
             <div className="container-fluid">
               <Switch>
+                <Route path="/:picoID/display" name="SmartMirror" component={MirrorDisplay} />
                 <Route path="/dashboard" name="Dashboard" component={Dashboard}/>
                 <Route path="/notification-settings/:picoID/:appRid" name="App Notification Settings" component={NotificationAppView}/>
                 <Route path="/mythings/:picoID/:appRid" name="Thing App View" component={CardAppView}/>

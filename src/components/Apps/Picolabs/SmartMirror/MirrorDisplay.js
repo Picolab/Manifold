@@ -1,7 +1,7 @@
 import React from 'react';
 import './MirrorDisplay.css';
-import CardMap from '../Apps/CardMap';
-import ManifoldApp from '../Apps/ManifoldApp';
+import CardMap from '../../../Apps/CardMap';
+import ManifoldApp from '../../../Apps/ManifoldApp';
 
 class MirrorDisplay extends React.Component {
   constructor(props) {
@@ -37,9 +37,13 @@ class MirrorDisplay extends React.Component {
     return "";
   }
 
+  getAppDisplay(app) {
+    return <div>{app}</div>
+  }
 
   renderDisplay() {
-    const { tl, tr, bl, br } = this.state;
+    const { tl, tr, bl, br } = this.state
+    console.log(this.state);
     const orientation = this.determineOrientation()
     if (orientation === "row") {
       return (
