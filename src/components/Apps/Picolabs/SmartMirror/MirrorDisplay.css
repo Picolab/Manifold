@@ -102,3 +102,13 @@
 .preview .list-group-item {
   background: inherit;
 }
+
+.mirror-display {
+    height: 100% !important;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    overflow: hidden;
+    z-index: 1021;
+}

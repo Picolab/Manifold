@@ -140,6 +140,7 @@ export function getSubID(state, picoID) {
 }
 
 export function getDID(state, picoID) {
+  console.log("state", state);
   const things = getThings(state);
   const communities = getCommunities(state);
   if(things.get(picoID)){

@@ -111,7 +111,7 @@ export default class WeatherCardView extends Component {
     }
     return(
       <Row>
-      <Col style={{maxWidth: "300px"}}>
+      <Col style={{maxWidth: "310px"}}>
         <ListGroup>
           <ListGroupItem style={{"float": "left"}}>
             <Container>
@@ -132,11 +132,11 @@ export default class WeatherCardView extends Component {
           </ListGroupItem>
         </ListGroup>
       </Col>
-      <Col style={{float: "right", maxWidth: "400px"}}>
+      <Col style={{float: "right", maxWidth: "310px"}}>
         <ListGroup>
           <ListGroupItem>
             <Container>
-              <Table style={{"width": "70%"}} borderless>
+              <Table style={{"width": "100%"}} borderless>
                 <tbody style={{"font-size": "14px"}}>
                   {this.renderHourly()}
                 </tbody>
