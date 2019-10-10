@@ -12,7 +12,6 @@ class NotificationsCycle extends React.Component {
       notifications: [],
       notificationsCount: 0,
       notificationIndex: 0,
-      notificationSize:0,
       notificationOnDisplay: 0,
       fadeIn: true
     }
@@ -30,8 +29,10 @@ class NotificationsCycle extends React.Component {
   }
 
   cycle() {
-    if(this.state.notifications[0]) {
-      if(this.state.notificationOnDisplay !== this.state.notifications[this.state.notificationIndex].id) {
+    if(this.state.notifications[0] && this.state.notifications.length > 0) {
+      if(this.state.notifications[this.state.notificationIndex] &&
+        this.state.notificationOnDisplay !== this.state.notifications[this.state.notificationIndex].id) {
+
         this.setState({
           fadeIn: true,
           notificationOnDisplay: this.state.notifications[this.state.notificationIndex].id,
@@ -40,18 +41,10 @@ class NotificationsCycle extends React.Component {
       }
       else {
         if(this.state.notificationsCount > 1) {
-          if((this.state.notificationIndex + 1) !== this.state.notificationsCount) {
-            this.setState({
-              fadeIn: false,
-              notificationIndex: this.state.notificationIndex + 1
-            })
-          }
-          else {
-            this.setState({
-              fadeIn: false,
-              notificationIndex: 0
-            })
-        }
+          this.setState({
+            fadeIn: false,
+            notificationIndex: (this.state.notificationIndex + 1) % this.state.notifications.length
+          })
         }
       }
     }
@@ -77,7 +70,7 @@ class NotificationsCycle extends React.Component {
     const promise = customQuery(getManifoldECI(), 'io.picolabs.notifications', 'getBadgeNumber', {});
     promise.then((resp) => {
       if(this.state.notificationsCount !== resp.data) {
-        if(this.state.notificationsCount < resp.data) this.getNotifications();
+        if(this.state.notificationsCount > 0) this.getNotifications();
         this.setState({
           notificationsCount: resp.data
         });
@@ -87,16 +80,15 @@ class NotificationsCycle extends React.Component {
 
   displayNotifications() {
     let index = this.state.notificationIndexOnDisplay;
-    if(this.state.notifications.length !== 0) {
+    if(this.state.notifications.length > 0) {
         return (
           <div className={this.state.fadeIn ? "notifications show" : "notifications noshow"}>
-              <h5 className="title" style={{"font-size": "28px"}}>{this.state.notifications[index].thing} - {this.state.notifications[index].app}</h5>
-              <div className="distimestamp" style={{"font-size": "20px"}}>{this.convertDate(this.state.notifications[index].time)}</div>
-              <div className="discontent" style={{"font-size": "28px"}}>{this.state.notifications[index].message}</div>
+              <h5 className="title" style={{"fontSize": "28px"}}>{this.state.notifications[index].thing} - {this.state.notifications[index].app}</h5>
+              <div className="distimestamp" style={{"fontSize": "20px"}}>{this.convertDate(this.state.notifications[index].time)}</div>
+              <div className="discontent" style={{"fontSize": "28px"}}>{this.state.notifications[index].message}</div>
           </div>
         );
     }
-    else return "You have no new notifications.";
   }
 
   convertDate(timestamp) {
@@ -169,6 +161,9 @@ class NotificationsCycle extends React.Component {
   }
 
   render() {
+    if(this.state.notifications.length === 0) {
+      return <div className="noNotifications">You have no new notifications.</div>;
+    }
     return(
       this.displayNotifications()
     );

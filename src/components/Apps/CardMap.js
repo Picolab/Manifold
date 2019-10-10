@@ -28,7 +28,6 @@ export default {
   "io.picolabs.light_app": LightCardView,
   "io.picolabs.reminders": Reminders,
   "io.picolabs.manifold.smart_mirror": SmartMirror,
-  "io.picolabs.notifications": NotificationsCycle,
   "io.picolabs.manifold_monitor": ManifoldMonitor
 
 }

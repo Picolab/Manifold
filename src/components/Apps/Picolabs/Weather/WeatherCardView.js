@@ -78,14 +78,12 @@ export default class WeatherCardView extends Component {
     var i = 0;
     var isToday = true;
 
-    console.log("hourly", hourly);
     if (hourly.length < 1) { return <div/> }
     while(isToday) {
       let militaryHours = this.convertUnixHours(hourly[i].time);
       let hours = (militaryHours > 12) ? militaryHours - 12 : militaryHours;
       let ampm = (militaryHours > 12) ? "PM" : "AM"
       let time = hours + ":00 " + ampm;
-      console.log("hours", hours, "time", time);
       out.push(
             <tr key={i}>
               <th scope="row">{time}</th>
@@ -125,7 +123,7 @@ export default class WeatherCardView extends Component {
               <Row>
                 <Col>
                 <h6>Summary: {this.state.data.currently.summary}</h6>
-                <p style={{"font-size": "14px"}}>Last updated at {this.convertTime()}</p>
+                <p style={{"fontSize": "14px"}}>Last updated at {this.convertTime()}</p>
                 </Col>
               </Row>
             </Container>
@@ -136,8 +134,8 @@ export default class WeatherCardView extends Component {
         <ListGroup>
           <ListGroupItem>
             <Container>
-              <Table style={{"width": "100%"}} borderless>
-                <tbody style={{"font-size": "14px"}}>
+              <Table style={{"width": "100%"}} borderless="true">
+                <tbody style={{"fontSize": "14px"}}>
                   {this.renderHourly()}
                 </tbody>
               </Table>

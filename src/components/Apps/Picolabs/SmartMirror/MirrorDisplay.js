@@ -27,7 +27,6 @@ class MirrorDisplay extends React.Component {
     let tr = url.searchParams.get("tr");
     let bl = url.searchParams.get("bl");
     let br = url.searchParams.get("br");
-    console.log("componentDidMount", this.props.match.params.picoID);
 
     this.setState({ tl, tr, bl, br });
 
@@ -35,7 +34,6 @@ class MirrorDisplay extends React.Component {
   }
 
   async getDisplaySettings() {
-    console.log("DID from getDisplaySettings", this.props.DID);
     let promise = customQuery( this.props.DID, "io.picolabs.manifold.smart_mirror", "getDisplaySettings");
     promise.then((resp) => {
       this.setState({
@@ -128,7 +126,6 @@ class MirrorDisplay extends React.Component {
   }
 
   render() {
-    console.log("display state", this.state);
     if(!this.props.apps) {
       if(this.props.DID) { //on page refresh, if the view is on this page, then the DID may not yet be retrieved
         this.props.retrieveApps(this.props.DID);
@@ -150,8 +147,6 @@ MirrorDisplay.propTypes = {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  console.log("redux state", state);
-  console.log("ownProps", ownProps);
   return {
     apps: getInstalledApps(state, ownProps.match.params.picoID),
     DID: getDID(state, ownProps.match.params.picoID),
@@ -160,7 +155,6 @@ const mapStateToProps = (state, ownProps) => {
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-  console.log("mapDispatchToProps", ownProps.match.params.picoID);
   return {
     retrieveApps: (DID) => {
       dispatch(discovery(DID, ownProps.match.params.picoID));

@@ -31,3 +31,8 @@
   text-align: center;
   justify-content: center;
 }
+
+.noNotifications {
+  text-align: center;
+  text-align: bottom;
+}

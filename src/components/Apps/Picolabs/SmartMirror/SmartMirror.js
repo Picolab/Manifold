@@ -8,6 +8,7 @@ import ManifoldAppComponent from '../../ManifoldApp';
 import { getInstalledApps, getDID } from '../../../../reducers';
 import { discovery } from '../../../../actions';
 import "./SmartMirror.css"
+import NotificationsCycle from "./NotificationsCycle";
 
 const topDimensions = {"width": "50px", "height": "40px", "marginTop": "17px"}
 const bottomDimensions = {"width": "50px", "height": "40px"}
@@ -140,8 +141,8 @@ class SmartMirror extends React.Component {
       domain : "mirror",
       type: "change_display_settings",
       attrs : {
-        name: "notificationsCycle",
-        selected: JSON.stringify(this.state["notificationsCycle"])
+        name: "NotificationsCycle",
+        selected: JSON.stringify(this.state["NotificationsCycle"])
       }
     }).catch((e) => {
       console.error("Error setting changes", e);
@@ -266,6 +267,11 @@ class SmartMirror extends React.Component {
         <ManifoldAppComponent developerComponent={CustomComponent} bindings={appInfo.bindings} picoID={this.props.picoID} DID={this.props.DID} />
       );
     }
+    else if(app === "NotificationsCycle") {
+      return (
+        <NotificationsCycle />
+      )
+    }
     else return (
       <div/>
     );
@@ -320,18 +326,18 @@ class SmartMirror extends React.Component {
   }
 
   renderNotificationApp() {
-    if(this.state["notificationsCycle"]) {
-      var selected = this.state["notificationsCycle"]
+    if(this.state["NotificationsCycle"]) {
+      var selected = this.state["NotificationsCycle"]
       return (
         <div className="app_section">
           <h5>Notifications</h5>
           <div>
             <div className="appIcon"><i className="fa fa-bell fa-5x"/></div>
-            <Button style={topDimensions} color="primary" onClick={() => this.onRadioBtnClick(1, "notificationsCycle")} active={selected.includes(1)} disabled={this.checkStatus(1, "notificationsCycle")}>TL</Button>
-            <Button style={topDimensions} color="primary" onClick={() => this.onRadioBtnClick(2, "notificationsCycle")} active={selected.includes(2)} disabled={this.checkStatus(2, "notificationsCycle")}>TR</Button>
+            <Button style={topDimensions} color="primary" onClick={() => this.onRadioBtnClick(1, "NotificationsCycle")} active={selected.includes(1)} disabled={this.checkStatus(1, "NotificationsCycle")}>TL</Button>
+            <Button style={topDimensions} color="primary" onClick={() => this.onRadioBtnClick(2, "NotificationsCycle")} active={selected.includes(2)} disabled={this.checkStatus(2, "NotificationsCycle")}>TR</Button>
             <br />
-            <Button style={bottomDimensions} color="primary" onClick={() => this.onRadioBtnClick(3, "notificationsCycle")} active={selected.includes(3)} disabled={this.checkStatus(3, "notificationsCycle")}>BL</Button>
-            <Button style={bottomDimensions} color="primary" onClick={() => this.onRadioBtnClick(4, "notificationsCycle")} active={selected.includes(4)} disabled={this.checkStatus(4, "notificationsCycle")}>BR</Button>
+            <Button style={bottomDimensions} color="primary" onClick={() => this.onRadioBtnClick(3, "NotificationsCycle")} active={selected.includes(3)} disabled={this.checkStatus(3, "NotificationsCycle")}>BL</Button>
+            <Button style={bottomDimensions} color="primary" onClick={() => this.onRadioBtnClick(4, "NotificationsCycle")} active={selected.includes(4)} disabled={this.checkStatus(4, "NotificationsCycle")}>BR</Button>
           </div>
         </div>
       );
