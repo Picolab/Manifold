@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import CardMap from '../../CardMap';
-import ManifoldApp from '../../ManifoldApp';
+import ManifoldAppComponent from '../../ManifoldApp';
 import { getInstalledApps, getDID } from '../../../../reducers';
 import { discovery } from '../../../../actions';
 import "./SmartMirror.css"
@@ -24,14 +24,14 @@ class SmartMirror extends React.Component {
       tr: "",
       bl: "",
       br: "",
-      picoID: ""
+      picoID: "",
+      isFullScreen: true
     }
 
     this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
     this.getDisplaySettings = this.getDisplaySettings.bind(this);
   }
   componentDidMount() {
-    console.log("apps",this.props.apps);
     var url = window.location.href;
     var array = url.split("/");
     var id = array[array.length-2];
@@ -254,8 +254,14 @@ class SmartMirror extends React.Component {
     let rid = this.state.displaySettings[app].rid;
     let appInfo = this.getAppInfo(app);
     const CustomComponent = CardMap[rid];
-    return (
-      <ManifoldApp developerComponent={CustomComponent} bindings={appInfo.bindings} picoID={this.props.picoID} />
+
+    if (appInfo.bindings) {
+      return (
+        <ManifoldAppComponent developerComponent={CustomComponent} bindings={appInfo.bindings} picoID={this.props.picoID} DID={this.props.DID} />
+      );
+    }
+    else return (
+      <div/>
     );
   }
 
@@ -268,7 +274,7 @@ class SmartMirror extends React.Component {
     return {};
   }
 
-  renderPreview() { //That's never gonna work
+  renderPreview() {
     const { tl, tr, bl, br } = this.state;
     const orientation = this.determineOrientation()
     if (orientation === "row") {
@@ -309,8 +315,6 @@ class SmartMirror extends React.Component {
 
   renderNotificationApp() {
     if(this.state["notificationsCycle"]) {
-      console.log("state", this.state);
-      console.log("notificationsCycle", this.state["notificationsCycle"]);
       var selected = this.state["notificationsCycle"]
       return (
         <div className="app_section">
@@ -329,6 +333,13 @@ class SmartMirror extends React.Component {
   }
 
   render() {
+    if(this.state.isFullScreen) {
+      return (
+        <div className="mirror-display">
+          {this.renderPreview()}
+        </div>
+      );
+    }
     const { tl, tr, bl, br, picoID } = this.state;
     if(!this.props.apps) {
       if(this.props.DID) { //on page refresh, if the view is on this page, then the DID may not yet be retrieved
@@ -348,14 +359,14 @@ class SmartMirror extends React.Component {
             </Row>
           </Col>
           <Col>
-            <a href={window.location.origin + `/#/${picoID}/display?tl=${tl}&tr=${tr}&bl=${bl}&br=${br}`}>
-            <div className="preview">
-              <div className="overlay">
-                <div className="hoverText">Click to Preview</div>
+            <div onClick={() => this.setState({ isFullScreen: true })}>
+              <div className="preview">
+                <div className="overlay">
+                  <div className="hoverText">Click to Preview</div>
+                </div>
+                {this.renderPreview()}
               </div>
-              {this.renderPreview()}
             </div>
-            </a>
           </Col>
         </Container>
       </div>

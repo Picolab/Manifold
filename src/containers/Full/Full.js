@@ -51,7 +51,7 @@ class Full extends Component {
             <Breadcrumb />
             <div className="container-fluid">
               <Switch>
-                <Route path="/:picoID/display" name="SmartMirror" component={MirrorDisplay} />
+                <Route path="/mythings/:picoID/:appRid/mirror/display" name="SmartMirror" component={MirrorDisplay} />
                 <Route path="/dashboard" name="Dashboard" component={Dashboard}/>
                 <Route path="/notification-settings/:picoID/:appRid" name="App Notification Settings" component={NotificationAppView}/>
                 <Route path="/mythings/:picoID/:appRid" name="Thing App View" component={CardAppView}/>

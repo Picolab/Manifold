@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { customQuery } from '../../../../utils/manifoldSDK';
 import './MirrorDisplay.css';
 import CardMap from '../../../Apps/CardMap';
-import ManifoldApp from '../../../Apps/ManifoldApp';
+import ManifoldAppComponent from '../../../Apps/ManifoldApp';
 
 class MirrorDisplay extends React.Component {
   constructor(props) {
@@ -18,7 +18,6 @@ class MirrorDisplay extends React.Component {
       tr: "",
       bl: "",
       br: "",
-      picoID: "",
     }
   }
   componentDidMount() {
@@ -36,6 +35,7 @@ class MirrorDisplay extends React.Component {
   }
 
   async getDisplaySettings() {
+    console.log("DID from getDisplaySettings", this.props.DID);
     let promise = customQuery( this.props.DID, "io.picolabs.manifold.smart_mirror", "getDisplaySettings");
     promise.then((resp) => {
       this.setState({
@@ -67,8 +67,7 @@ class MirrorDisplay extends React.Component {
   }
 
   getAppDisplay(app) {
-    // console.log("app", app);
-    // console.log("state", this.state);
+    //return <div>{app}</div>
     if (!app) {
       return <div></div>
     }
@@ -76,7 +75,7 @@ class MirrorDisplay extends React.Component {
     let appInfo = this.getAppInfo(app);
     const CustomComponent = CardMap[rid];
     return (
-      <ManifoldApp developerComponent={CustomComponent} bindings={appInfo.bindings} picoID={this.props.picoID} />
+      <ManifoldAppComponent developerComponent={CustomComponent} bindings={appInfo.bindings} picoID={this.props.picoID} DID={this.props.DID} />
     );
   }
 
@@ -129,6 +128,7 @@ class MirrorDisplay extends React.Component {
   }
 
   render() {
+    console.log("display state", this.state);
     if(!this.props.apps) {
       if(this.props.DID) { //on page refresh, if the view is on this page, then the DID may not yet be retrieved
         this.props.retrieveApps(this.props.DID);
@@ -144,14 +144,14 @@ class MirrorDisplay extends React.Component {
 }
 
 MirrorDisplay.propTypes = {
+  picoID: PropTypes.string.isRequired,
   DID: PropTypes.string,
   apps: PropTypes.array
 }
 
 const mapStateToProps = (state, ownProps) => {
-  console.log("state", state);
+  console.log("redux state", state);
   console.log("ownProps", ownProps);
-  console.log("mapStateToProps", ownProps.match.params.picoID);
   return {
     apps: getInstalledApps(state, ownProps.match.params.picoID),
     DID: getDID(state, ownProps.match.params.picoID),

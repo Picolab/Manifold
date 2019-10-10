@@ -112,3 +112,12 @@
     overflow: hidden;
     z-index: 1021;
 }
+
+.mirror-display canvas {
+    background: #eeeeeeee;
+    filter: invert(100%);
+}
+
+.mirror-display .list-group-item {
+  background: inherit;
+}
