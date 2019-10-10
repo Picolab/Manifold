@@ -291,36 +291,36 @@ class SmartMirror extends React.Component {
     const orientation = this.determineOrientation()
     if (orientation === "row") {
       return (
-        <div className="preview-container">
-          {(tl === tr) && <div className="preview-top-row">{this.getAppDisplay(tl)}</div>}
-          {!(tl === tr) && <div className="preview-item left">{this.getAppDisplay(tl)}</div>}
-          {!(tl === tr) && <div className="preview-item right">{this.getAppDisplay(tr)}</div>}
+        <div className="mirror-container">
+          {(tl === tr) && <div className="top-row">{this.getAppDisplay(tl)}</div>}
+          {!(tl === tr) && <div className="item left">{this.getAppDisplay(tl)}</div>}
+          {!(tl === tr) && <div className="item right">{this.getAppDisplay(tr)}</div>}
 
-          {(bl === br) && <div className="preview-bottom-row">{this.getAppDisplay(bl)}</div>}
-          {!(bl === br) && <div className="preview-item left">{this.getAppDisplay(bl)}</div>}
-          {!(bl === br) && <div className="preview-item right">{this.getAppDisplay(br)}</div>}
+          {(bl === br) && <div className="bottom-row">{this.getAppDisplay(bl)}</div>}
+          {!(bl === br) && <div className="item left">{this.getAppDisplay(bl)}</div>}
+          {!(bl === br) && <div className="item right">{this.getAppDisplay(br)}</div>}
         </div>
       );
     }
     else if (orientation === "column") {
       return (
-        <div className="preview-container">
-          {(tl === bl) && <div className="preview-left-column">{this.getAppDisplay(tl)}</div>}
-          {!(tl === bl) && <div className="preview-item left">{this.getAppDisplay(tl)}</div>}
-          {!(tl === bl) && <div className="preview-item left">{this.getAppDisplay(bl)}</div>}
+        <div className="container">
+          {(tl === bl) && <div className="left-column">{this.getAppDisplay(tl)}</div>}
+          {!(tl === bl) && <div className="item left">{this.getAppDisplay(tl)}</div>}
+          {!(tl === bl) && <div className="item left">{this.getAppDisplay(bl)}</div>}
 
-          {(tr === br) && <div className="preview-right-column">{this.getAppDisplay(tr)}</div>}
-          {!(tr === br) && <div className="preview-item right">{this.getAppDisplay(tr)}</div>}
-          {!(tr === br) && <div className="preview-item right">{this.getAppDisplay(br)}</div>}
+          {(tr === br) && <div className="right-column">{this.getAppDisplay(tr)}</div>}
+          {!(tr === br) && <div className="item right">{this.getAppDisplay(tr)}</div>}
+          {!(tr === br) && <div className="item right">{this.getAppDisplay(br)}</div>}
         </div>
       );
     }
     return (
-      <div className="preview-container">
-        <div className="preview-item left">{this.getAppDisplay(tl)}</div>
-        <div className="preview-item right">{this.getAppDisplay(tr)}</div>
-        <div className="preview-item left">{this.getAppDisplay(bl)}</div>
-        <div className="preview-item right">{this.getAppDisplay(br)}</div>
+      <div className="container">
+        <div className="item left">{this.getAppDisplay(tl)}</div>
+        <div className="item right">{this.getAppDisplay(tr)}</div>
+        <div className="item left">{this.getAppDisplay(bl)}</div>
+        <div className="item right">{this.getAppDisplay(br)}</div>
       </div>
     );
   }

@@ -18,75 +18,75 @@
   margin-right: 15px;
 }
 
-.preview-container {
+.mirror-container {
   display: grid;
-  grid-template-columns: 300px 300px;
-  grid-template-rows: 525px 525px;
+  /* grid-template-columns: 300px 300px; */
+  /* grid-template-rows: 525px 525px; */
   grid-gap: 10px;
   background-color: black;
   color: white;
   padding: 5px;
 }
 
-.preview-container > div {
+.mirror-container > div {
   background-color: #11111111;
   padding: 5px 0;
   font-size: 30px;
 }
 
-.preview-top-row {
+.top-row {
   grid-column-start: 1;
   grid-column-end: 3;
   grid-row-start: 1;
-  min-width: 600px;
-  min-height: 525px;
+  min-width: 100vh;
+  min-height: 50vh;
 }
 
-.preview-bottom-row {
+.bottom-row {
   grid-column-start: 1;
   grid-column-end: 3;
   grid-row-start: 2;
-  min-width: 600px;
-  min-height: 525px;
+  min-width: 100vh;
+  min-height: 50vh;
 }
-.preview-bottom-row .notifications {
+.bottom-row .notifications {
   margin-top: 400px;
   text-align: center;
   justify-content: center;
 }
 
-.preview-left-column {
+.left-column {
   text-align: left;
   grid-row-start: 1;
   grid-row-end: 3;
   grid-column-start: 1;
-  min-width: 300px;
-  min-height: 1050px;
+  min-width: 50vh;
+  min-height: 50vh;
 }
 
-.preview-right-column {
+.right-column {
   text-align: right;
   grid-row-start: 1;
   grid-row-end: 3;
   grid-column-start: 2;
-  min-width: 300px;
-  min-height: 1050px;
+  min-width: 50vh;
+  min-height: 50vh;
 }
 
-.preview-item {
-  min-width: 300px;
-  min-height: 525px;
+.item {
+  min-width: 50vh;
+  min-height: 50vh;
 }
 
 .domain {
   background-color: rgb(75,159,211);
 }
 
-.preview-item .left{
+.item .left{
   text-align: left;
 }
 
-.preview-item .right{
+.item .right{
   text-align: right;
 }
 
@@ -95,6 +95,7 @@
   cursor: pointer;
   width: 700px;
   height: 100%;
+  mix-blend-mode: difference;
 }
 
 .preview:before {
@@ -132,21 +133,30 @@
   display: inline;
 }
 
-.preview canvas {
+/* .preview canvas {
   background: #eeeeeeee;
   filter: invert(100%);
-}
+} */
 
 .preview .list-group-item {
   background: inherit;
 }
 
 .mirror-display {
-    height: 100% !important;
+    height: 100vh !important;
     position: absolute;
     left: 0;
     top: 0;
-    width: 100%;
+    width: 100vw !important;
     overflow: hidden;
     z-index: 1021;
+}
+
+/* .mirror-display canvas {
+  background: #eeeeeeee;
+  filter: invert(100%);
+} */
+
+.mirror-display .list-group-item {
+  background: inherit;
 }
