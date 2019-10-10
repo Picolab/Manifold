@@ -256,7 +256,7 @@ class SmartMirror extends React.Component {
   // Change text size
   getAppDisplay = (app) => {
     if (!app) {
-      return <div></div>
+      return <div/>
     }
     let rid = this.state.displaySettings[app].rid;
     let appInfo = this.getAppInfo(app);
@@ -292,35 +292,67 @@ class SmartMirror extends React.Component {
     if (orientation === "row") {
       return (
         <div className="mirror-container">
-          {(tl === tr) && <div className="top-row">{this.getAppDisplay(tl)}</div>}
-          {!(tl === tr) && <div className="item left">{this.getAppDisplay(tl)}</div>}
-          {!(tl === tr) && <div className="item right">{this.getAppDisplay(tr)}</div>}
-
-          {(bl === br) && <div className="bottom-row">{this.getAppDisplay(bl)}</div>}
-          {!(bl === br) && <div className="item left">{this.getAppDisplay(bl)}</div>}
-          {!(bl === br) && <div className="item right">{this.getAppDisplay(br)}</div>}
+          {(tl === tr) &&
+            <Row style={{height: "50%"}}>
+              <Col>{this.getAppDisplay(tl)}</Col>
+            </Row>
+          }
+          {!(tl === tr) &&
+            <Row style={{height: "50%"}}>
+              <Col>{this.getAppDisplay(tl)}</Col>
+              <Col>{this.getAppDisplay(tr)}</Col>
+            </Row>
+          }
+          {(bl === br) &&
+            <Row style={{height: "50%"}}>
+              <Col>{this.getAppDisplay(bl)}</Col>
+            </Row>
+          }
+          {!(bl === br) &&
+            <Row style={{height: "50%"}}>
+              <Col>{this.getAppDisplay(bl)}</Col>
+              <Col>{this.getAppDisplay(br)}</Col>
+            </Row>
+          }
         </div>
       );
     }
     else if (orientation === "column") {
       return (
-        <div className="container">
-          {(tl === bl) && <div className="left-column">{this.getAppDisplay(tl)}</div>}
-          {!(tl === bl) && <div className="item left">{this.getAppDisplay(tl)}</div>}
-          {!(tl === bl) && <div className="item left">{this.getAppDisplay(bl)}</div>}
-
-          {(tr === br) && <div className="right-column">{this.getAppDisplay(tr)}</div>}
-          {!(tr === br) && <div className="item right">{this.getAppDisplay(tr)}</div>}
-          {!(tr === br) && <div className="item right">{this.getAppDisplay(br)}</div>}
+        <div className="mirror-container">
+          <Row>
+            <Col>
+              {(tl === bl) && this.getAppDisplay(tl)}
+              {!(tl === bl) && this.getAppDisplay(tl)}
+              {!(tl === bl) && this.getAppDisplay(bl)}
+            </Col>
+            <Col>
+              {(tr === br) && this.getAppDisplay(tr)}
+              {!(tr === br) && this.getAppDisplay(tr)}
+              {!(tr === br) && this.getAppDisplay(br)}
+            </Col>
+          </Row>
         </div>
       );
     }
     return (
-      <div className="container">
-        <div className="item left">{this.getAppDisplay(tl)}</div>
-        <div className="item right">{this.getAppDisplay(tr)}</div>
-        <div className="item left">{this.getAppDisplay(bl)}</div>
-        <div className="item right">{this.getAppDisplay(br)}</div>
+      <div className="mirror-container">
+        <Row style={{height: "50%"}}>
+          <Col>
+            {this.getAppDisplay(tl)}
+          </Col>
+          <Col>
+            {this.getAppDisplay(tr)}
+          </Col>
+        </Row>
+        <Row style={{height: "50%"}}>
+          <Col>
+            {this.getAppDisplay(bl)}
+          </Col>
+          <Col>
+            {this.getAppDisplay(br)}
+          </Col>
+        </Row>
       </div>
     );
   }
