@@ -25,11 +25,12 @@ class SmartMirror extends React.Component {
       bl: "",
       br: "",
       picoID: "",
-      isFullScreen: true
+      isFullScreen: false
     }
 
     this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
     this.getDisplaySettings = this.getDisplaySettings.bind(this);
+    this.escFunction = this.escFunction.bind(this);
   }
   componentDidMount() {
     var url = window.location.href;
@@ -39,6 +40,11 @@ class SmartMirror extends React.Component {
       picoID: id
     })
     this.getDisplaySettings();
+    document.addEventListener("keydown", this.escFunction, false);
+  }
+
+  escFunction() {
+    this.setState({ isFullScreen: false })
   }
 
   onRadioBtnClick(selection, name) {
@@ -335,7 +341,7 @@ class SmartMirror extends React.Component {
   render() {
     if(this.state.isFullScreen) {
       return (
-        <div className="mirror-display">
+        <div className="mirror-display" onKeyDown={(e)=> this.setState({ isFullScreen: false })}>
           {this.renderPreview()}
         </div>
       );
