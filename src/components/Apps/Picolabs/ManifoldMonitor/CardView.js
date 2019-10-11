@@ -89,9 +89,10 @@ class ManifoldMonitor extends React.Component {
   }
   render() {
     return(
-      <div>
-        <Bar data={this.state.bar.usep} options={{ maintainAspectRatio: true }}/>
-      </div>
+      <Bar
+        data={this.state.bar.usep}
+        options={{ maintainAspectRatio: false }}
+        style={{height: "100%" }}/>
     );
   }
 }
