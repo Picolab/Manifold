@@ -42,7 +42,7 @@
   cursor: pointer;
   width: 700px;
   height: 100%;
-  mix-blend-mode: difference;
+  background-blend-mode: difference;
 }
 
 .preview:before {
@@ -80,10 +80,9 @@
   display: inline;
 }
 
-/* .preview canvas {
-  background: #eeeeeeee;
-  filter: invert(100%);
-} */
+ #WeatherIcon {
+   filter: invert(100%);
+  }
 
 .preview .list-group-item {
   background: inherit;
@@ -106,4 +105,8 @@
 
 .mirror-display .list-group-item {
   background: inherit;
+}
+.saveButtonColumn {
+  max-width: max-content;
+  max-height: max-content;
 }

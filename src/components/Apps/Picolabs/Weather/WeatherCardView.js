@@ -87,7 +87,7 @@ export default class WeatherCardView extends Component {
       out.push(
             <tr key={i}>
               <th scope="row">{time}</th>
-              <td><ReactAnimatedWeather icon={this.formatIcon(hourly[i].icon)} size={25} animate={true}/></td>
+              <td id="WeatherIcon"><ReactAnimatedWeather icon={this.formatIcon(hourly[i].icon)} size={25} animate={true}/></td>
               <td>{hourly[i].temperature}</td>
             </tr>
       );
@@ -114,7 +114,7 @@ export default class WeatherCardView extends Component {
           <ListGroupItem style={{"float": "left"}}>
             <Container>
               <Row>
-                <Col xs="3" ><ReactAnimatedWeather icon={this.formatIcon(this.state.data.currently.icon)} size={50} animate={true} /></Col>
+                <Col id="WeatherIcon" xs="3" ><ReactAnimatedWeather id="WeatherIcon" icon={this.formatIcon(this.state.data.currently.icon)} size={50} animate={true} /></Col>
                 <Col xs="9" >
                   <h3>{this.state.data.currently.temperature}<sup>o</sup> F</h3>
                   <h6>{this.state.data.currently.humidity * 100}% humidity</h6>
