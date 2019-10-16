@@ -10,7 +10,7 @@
 
 .notifications.show {
   opacity: 1.0;
-  position: fixed;
+  position: absolute;
   bottom: 0;
   width: 100%;
 }
