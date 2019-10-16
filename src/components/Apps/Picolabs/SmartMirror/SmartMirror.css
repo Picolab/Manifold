@@ -80,7 +80,7 @@
   display: inline;
 }
 
- #WeatherIcon {
+ .preview #WeatherIcon {
    filter: invert(100%);
   }
 
@@ -97,6 +97,10 @@
     overflow: hidden;
     z-index: 1021;
 }
+
+.mirror-display #WeatherIcon {
+  filter: invert(100%);
+ }
 
 /* .mirror-display canvas {
   background: #eeeeeeee;
