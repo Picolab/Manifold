@@ -288,23 +288,23 @@ class SmartMirror extends React.Component {
       return (
         <div className="mirror-container">
           {(tl === tr) &&
-            <Row style={{height: "50%"}}>
+            <Row style={{height: "50%", "overflow": "auto"}}>
               <Col>{this.getAppDisplay(tl)}</Col>
             </Row>
           }
           {!(tl === tr) &&
-            <Row style={{height: "50%"}}>
+            <Row style={{height: "50%", "overflow": "auto"}}>
               <Col>{this.getAppDisplay(tl)}</Col>
               <Col>{this.getAppDisplay(tr)}</Col>
             </Row>
           }
           {(bl === br) &&
-            <Row style={{height: "50%"}}>
+            <Row style={{height: "50%", "overflow": "auto"}}>
               <Col>{this.getAppDisplay(bl)}</Col>
             </Row>
           }
           {!(bl === br) &&
-            <Row style={{height: "50%"}}>
+            <Row style={{height: "50%", "overflow": "auto"}}>
               <Col>{this.getAppDisplay(bl)}</Col>
               <Col>{this.getAppDisplay(br)}</Col>
             </Row>
