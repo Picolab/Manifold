@@ -38,4 +38,7 @@
 .noNotifications {
   text-align: center;
   text-align: bottom;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
