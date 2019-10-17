@@ -26,7 +26,7 @@ ruleset io.picolabs.manifold.smart_mirror {
       (display_settings{app_name} == null) => display_settings.put(app_name, {"display": false, "rid": app_rid, "discovery": discovery, "selected":[]}) 
       | ent:display_settings;
       
-      (settings{"notificationsCycle"}.isnull()) => settings.put("notificationsCycle", {"display": false, "rid": "io.picolabs.notifications", "discovery": "", "selected":[]}) | settings
+      (settings{"NotificationsCycle"}.isnull()) => settings.put("NotificationsCycle", {"display": false, "rid": "io.picolabs.notifications", "discovery": "", "selected":[]}) | settings
     }
     
     app = { "name":"Smart Mirror", "version":"0.0" };
