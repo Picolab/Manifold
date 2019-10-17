@@ -69,7 +69,7 @@ class App extends Component {
     );
     landingPages.push(
       <Route key="dynamic-route-4" path="/sqtg/tag" name="SquarTag" component={SquareTagPage} />
-    )
+    );
     return landingPages;
   }
 

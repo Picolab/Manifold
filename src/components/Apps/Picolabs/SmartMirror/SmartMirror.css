@@ -1,0 +1,116 @@
+.appListContainer {
+  margin-left: 0;
+}
+
+.app_section {
+  margin-bottom: 50px;
+}
+
+.scrollableAppList {
+  overflow: auto;
+  height: inherit;
+  width: 400px;
+}
+
+.appIcon {
+  margin: 5px;
+  float: left;
+  margin-right: 15px;
+}
+
+.mirror-container {
+  height: 100%;
+  background-color: black;
+  color: white;
+  padding: 5px;
+}
+
+.domain {
+  background-color: rgb(75,159,211);
+}
+
+.item .left{
+  text-align: left;
+}
+
+.item .right{
+  text-align: right;
+}
+
+.preview {
+  position: relative;
+  cursor: pointer;
+  width: 700px;
+  height: 1000px;
+  background-blend-mode: difference;
+}
+
+.preview:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .3);
+  transition: opacity .3s;
+  opacity: 0;
+  z-index: 2;
+}
+
+.preview:hover:before {
+  opacity: 1;
+}
+
+.hoverText {
+  display: none;
+  color: white;
+  font-size: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-size: 70px;
+}
+
+.preview:hover .hoverText {
+  display: inline;
+}
+
+ .preview #WeatherIcon {
+   filter: invert(100%);
+  }
+
+.preview .list-group-item {
+  background: inherit;
+}
+
+.mirror-display {
+    height: 100vh !important;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100vw !important;
+    overflow: hidden;
+    z-index: 1021;
+}
+
+.mirror-display #WeatherIcon {
+  filter: invert(100%);
+ }
+
+/* .mirror-display canvas {
+  background: #eeeeeeee;
+  filter: invert(100%);
+} */
+
+.mirror-display .list-group-item {
+  background: inherit;
+}
+.saveButtonColumn {
+  max-width: max-content;
+  max-height: max-content;
+}

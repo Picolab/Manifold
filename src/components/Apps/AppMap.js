@@ -10,22 +10,22 @@ import Weather from './Picolabs/Weather/Weather';
 // import Temperatures from './Picolabs/Wovyn/Temperatures/Temperatures';
 // import Light from './Picolabs/Wovyn/Light/Light';
 import Reminders from './Picolabs/Reminders/Reminders';
-// import Lutron from './Picolabs/Lutron/Lutron';
+import SmartMirror from './Picolabs/SmartMirror/SmartMirror';
 import ManifoldMonitor from './Picolabs/ManifoldMonitor/ManifoldMonitor';
 
 export default {
   "io.picolabs.safeandmine" : SafeAndMineApp,
   "io.picolabs.journal" : JournalApp,
-  // "Lutron_manager": Lutron,
-  // "io.picolabs.uta": UTA,
-  // "io.picolabs.score_tracker": ScoreTracker,
-  // "io.picolabs.pizza": OrderPizzaApp,
+  "io.picolabs.uta": UTA,
+  "io.picolabs.score_tracker": ScoreTracker,
+  "io.picolabs.pizza": OrderPizzaApp,
   "org.sovrin.manifold_agent": SovrinAgent,
-  // "io.picolabs.aurora_app": Aurora,
+  "io.picolabs.aurora_app": Aurora,
   "io.picolabs.weather": Weather,
-  // "io.picolabs.co2_app": CO2,
-  // "io.picolabs.temperatures_app": Temperatures,
-  // "io.picolabs.light_app": Light,
+  "io.picolabs.co2_app": CO2,
+  "io.picolabs.temperatures_app": Temperatures,
+  "io.picolabs.light_app": Light,
   "io.picolabs.reminders": Reminders,
+  "io.picolabs.manifold.smart_mirror": SmartMirror,
   "io.picolabs.manifold_monitor": ManifoldMonitor
 }

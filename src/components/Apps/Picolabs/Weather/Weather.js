@@ -4,7 +4,7 @@
   library we imported
 */
 import React, { Component } from 'react';
-import { ListGroup, ListGroupItem, Container, Row, Col } from 'reactstrap';
+import { ListGroup, ListGroupItem, Container, Row, Col, Table } from 'reactstrap';
 import ReactAnimatedWeather from 'react-animated-weather';
 
 export default class Weather extends Component {
@@ -13,6 +13,7 @@ export default class Weather extends Component {
     super(props);
 
     this.state = {
+      data: {},
       humidity: 0,
       icon: "",
       summary: "",
@@ -20,13 +21,18 @@ export default class Weather extends Component {
       timestamp: ""
     }
 
-    this.getCurrent = this.getCurrent.bind(this);
+    this.getData = this.getData.bind(this);
   }
 
   componentDidMount() {
-    this.getCurrent();
+    this.getData();
 
-    setInterval(this.getCurrent, 180000);
+    setInterval(this.getData, 180000);
+  }
+
+  convertUnixHours(t) {
+    let date = new Date(t*1000);
+    return date.getHours();
   }
 
   convertTime() {
@@ -58,38 +64,95 @@ export default class Weather extends Component {
     return toReturn;
   }
 
-  getCurrent() {
+  getData() {
     let promise = this.props.manifoldQuery({
       rid: "io.picolabs.weather",
-      funcName: "getCurrent"
+      funcName: "getData"
     });
     promise.then((resp) => {
-      this.setState(resp.data);
+      this.setState({
+        data: resp.data,
+        timestamp: resp.data.timestamp
+      });
     });
+  }
+  formatIcon(icon) {
+    return icon.replace(/-/g, '_').toUpperCase()
+  }
+
+  renderHourly() {
+    var hourly = this.state.data.hourly.data;
+    var out = [];
+    var i = 0;
+    var isToday = true;
+
+    console.log("hourly", hourly);
+    if (hourly.length < 1) { return <div/> }
+    while(isToday) {
+      let militaryHours = this.convertUnixHours(hourly[i].time);
+      let hours = (militaryHours > 12) ? militaryHours - 12 : militaryHours;
+      let ampm = (militaryHours > 12) ? "PM" : "AM"
+      let time = hours + ":00 " + ampm;
+      console.log("hours", hours, "time", time);
+      out.push(
+            <tr key={i}>
+              <th scope="row">{time}</th>
+              <td id="WeatherIcon"><ReactAnimatedWeather icon={this.formatIcon(hourly[i].icon)} size={50} animate={true}/></td>
+              <td>{hourly[i].temperature}</td>
+            </tr>
+      );
+      if (militaryHours === 23) {
+        isToday = false;
+      }
+      i++;
+    }
+    return out;
   }
 
   render() {
+    if(this.state.data.currently === undefined) {
+      return(
+        <div></div>
+      );
+    }
     return(
       <div className="shortenedWidth">
       <ListGroup>
-      <h4>Current Weather:</h4>
-      <ListGroupItem>
-      <Container>
-        <Row>
-          <Col xs="3" ><ReactAnimatedWeather icon={this.state.icon} size={70} animate={true} /></Col>
-          <Col xs="9" >
-            <h3>{this.state.temperature}<sup>o</sup> F</h3>
-            <h6>{this.state.humidity * 100}% humidity</h6>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-          <h6>Summary: {this.state.summary}</h6>
-          <p>Last updated at {this.convertTime()}</p>
-          </Col>
-        </Row>
-      </Container>
-      </ListGroupItem>
+        <h4>Current Weather:</h4>
+        <ListGroupItem>
+          <Container>
+            <Row>
+              <Col id="WeatherIcon" xs="3" ><ReactAnimatedWeather icon={this.formatIcon(this.state.data.currently.icon)} size={70} animate={true} /></Col>
+              <Col xs="9" >
+                <h3>{this.state.data.currently.temperature}<sup>o</sup> F</h3>
+                <h6>{this.state.data.currently.humidity * 100}% humidity</h6>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+              <h6>Summary: {this.state.data.currently.summary}</h6>
+              <p>Last updated at {this.convertTime()}</p>
+              </Col>
+            </Row>
+          </Container>
+        </ListGroupItem>
+        <br/>
+        <ListGroupItem>
+          <Container>
+            <Table borderless>
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th></th>
+                  <th>Temperature</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.renderHourly()}
+              </tbody>
+            </Table>
+          </Container>
+        </ListGroupItem>
       </ListGroup>
       </div>
     );

@@ -1,0 +1,44 @@
+.notifications {
+  -moz-transition: opacity .4s;
+  -o-transition: opacity .4s;
+  -webkit-transition: opacity .4s;
+  transition: opacity .4s;
+  text-align: center;
+  text-align: bottom;
+  vertical-align: -100px;
+}
+
+.notifications.show {
+  opacity: 1.0;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.notifications.noshow {
+  opacity: 0.0;
+}
+
+.distimestamp {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  justify-content: center;
+}
+
+.discontent {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  justify-content: center;
+}
+
+.noNotifications {
+  text-align: center;
+  text-align: bottom;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
