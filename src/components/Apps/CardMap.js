@@ -1,17 +1,16 @@
 import SafeAndMineCardView from './Picolabs/SafeAndMine/SafeAndMineCardView';
 import JournalCardView from './Picolabs/Journal/JournalCardView';
-// import UTA from './Picolabs/UTA/UTA';
-// import ScoreTracker from './Picolabs/ScoreTracker/ScoreTracker';
-// import OrderPizzaCardView from './Picolabs/OrderPizza/OrderPizzaCardView';
+import UTA from './Picolabs/UTA/UTA';
+import ScoreTracker from './Picolabs/ScoreTracker/ScoreTracker';
+import OrderPizzaCardView from './Picolabs/OrderPizza/OrderPizzaCardView';
 import SovrinAgent from './Picolabs/SovrinAgent/SovrinAgent';
-// import AuroraCardView from './Picolabs/Aurora/AuroraCardView';
+import AuroraCardView from './Picolabs/Aurora/AuroraCardView';
 import WeatherCardView from './Picolabs/Weather/WeatherCardView';
-// import CO2CardView from './Picolabs/Wovyn/CO2/CO2CardView';
-// import TemperaturesCardView from './Picolabs/Wovyn/Temperatures/TemperaturesCardView';
-// import LightCardView from './Picolabs/Wovyn/Light/LightCardView';
+import CO2CardView from './Picolabs/Wovyn/CO2/CO2CardView';
+import TemperaturesCardView from './Picolabs/Wovyn/Temperatures/TemperaturesCardView';
+import LightCardView from './Picolabs/Wovyn/Light/LightCardView';
 import Reminders from './Picolabs/Reminders/Reminders';
 import SmartMirrorCardView from './Picolabs/SmartMirror/SmartMirrorCardView';
-import NotificationsCycle from './Picolabs/SmartMirror/NotificationsCycle';
 import ManifoldMonitor from './Picolabs/ManifoldMonitor/CardView';
 
 export default {

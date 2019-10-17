@@ -1,6 +1,5 @@
 import React from 'react';
-import{ Fade } from 'reactstrap';
-import {customQuery, customEvent} from '../../../../utils/manifoldSDK';
+import {customQuery} from '../../../../utils/manifoldSDK';
 import {getManifoldECI} from '../../../../utils/AuthService';
 import './NotificationsCycle.css';
 

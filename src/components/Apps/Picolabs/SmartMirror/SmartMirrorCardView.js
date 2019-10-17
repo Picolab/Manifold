@@ -1,14 +1,10 @@
 import React from 'react';
-import { Button, Container, Col, Row, Media } from 'reactstrap';
+import { Button, Container, Col, Media } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import CardMap from '../../CardMap';
-import ManifoldAppComponent from '../../ManifoldApp';
 import { getInstalledApps, getDID } from '../../../../reducers';
 import { discovery } from '../../../../actions';
 import "./SmartMirror.css"
-import NotificationsCycle from "./NotificationsCycle";
 
 const topDimensions = {"width": "50px", "height": "40px", "marginTop": "17px"}
 const bottomDimensions = {"width": "50px", "height": "40px"}
@@ -159,7 +155,6 @@ class SmartMirrorCardView extends React.Component {
         else {
           return false;
         }
-        break;
       case 2:
         if(selected.includes(3) || (tr !== "" && tr !== name)) {
           return true;
@@ -167,7 +162,6 @@ class SmartMirrorCardView extends React.Component {
         else {
           return false;
         }
-        break;
       case 3:
         if(selected.includes(2) || (bl !== "" && bl !== name)) {
           return true;
@@ -175,7 +169,6 @@ class SmartMirrorCardView extends React.Component {
         else {
           return false;
         }
-        break;
       case 4:
         if(selected.includes(1) || (br !== "" && br !== name)) {
           return true;
@@ -183,7 +176,6 @@ class SmartMirrorCardView extends React.Component {
         else {
           return false;
         }
-        break;
       default:
     }
   }
