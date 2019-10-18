@@ -38,9 +38,21 @@ class SmartMirror extends React.Component {
     var id = array[array.length-2];
     this.setState({
       picoID: id
-    })
+    });
+
     this.getDisplaySettings();
     document.addEventListener("keydown", this.escFunction, false);
+  }
+
+  componentDidUpdate() {
+    if (this.state.isFullScreen && this.interval === undefined) {
+      console.log("entered if");
+      this.interval = setInterval(() => this.getDisplaySettings(), 3000);
+    }
+    else if (!this.state.isFullScreen && this.interval) {
+      console.log("entered else if");
+      clearInterval(this.interval);
+    }
   }
 
   escFunction() {
