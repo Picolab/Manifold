@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Container, Col, Media } from 'reactstrap';
+import { Button, ButtonGroup, Container, Col, Media } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getInstalledApps, getDID } from '../../../../reducers';
@@ -217,11 +217,15 @@ class SmartMirrorCardView extends React.Component {
               <h5>{app.name}</h5>
               <div key={"appList" + index}>
                 <Media className="appIcon" id={mediaID} object src={app.iconURL} alt="App Icon" /> {' '}
-                <Button style={topDimensions} color="primary" onClick={() => this.onRadioBtnClick(1, app.name)} active={selected.includes(1)} disabled={this.checkStatus(1, app.name)}>TL</Button>
-                <Button style={topDimensions} color="primary" onClick={() => this.onRadioBtnClick(2, app.name)} active={selected.includes(2)} disabled={this.checkStatus(2, app.name)}>TR</Button>
+                <ButtonGroup>
+                  <Button style={topDimensions} color="primary" onClick={() => this.onRadioBtnClick(1, app.name)} active={selected.includes(1)} disabled={this.checkStatus(1, app.name)}>TL</Button>
+                  <Button style={topDimensions} color="primary" onClick={() => this.onRadioBtnClick(2, app.name)} active={selected.includes(2)} disabled={this.checkStatus(2, app.name)}>TR</Button>
+                </ButtonGroup>
                 <br />
-                <Button style={bottomDimensions} color="primary" onClick={() => this.onRadioBtnClick(3, app.name)} active={selected.includes(3)} disabled={this.checkStatus(3, app.name)}>BL</Button>
-                <Button style={bottomDimensions} color="primary" onClick={() => this.onRadioBtnClick(4, app.name)} active={selected.includes(4)} disabled={this.checkStatus(4, app.name)}>BR</Button>
+                <ButtonGroup>
+                  <Button style={bottomDimensions} color="primary" onClick={() => this.onRadioBtnClick(3, app.name)} active={selected.includes(3)} disabled={this.checkStatus(3, app.name)}>BL</Button>
+                  <Button style={bottomDimensions} color="primary" onClick={() => this.onRadioBtnClick(4, app.name)} active={selected.includes(4)} disabled={this.checkStatus(4, app.name)}>BR</Button>
+                </ButtonGroup>
               </div>
             </div>
           )
@@ -240,11 +244,15 @@ class SmartMirrorCardView extends React.Component {
           <h5>Notifications</h5>
           <div>
             <div className="appIcon"><i className="fa fa-bell fa-5x"/></div>
-            <Button style={topDimensions} color="primary" onClick={() => this.onRadioBtnClick(1, "NotificationsCycle")} active={selected.includes(1)} disabled={this.checkStatus(1, "NotificationsCycle")}>TL</Button>
-            <Button style={topDimensions} color="primary" onClick={() => this.onRadioBtnClick(2, "NotificationsCycle")} active={selected.includes(2)} disabled={this.checkStatus(2, "NotificationsCycle")}>TR</Button>
+            <ButtonGroup>
+              <Button style={topDimensions} color="primary" onClick={() => this.onRadioBtnClick(1, "NotificationsCycle")} active={selected.includes(1)} disabled={this.checkStatus(1, "NotificationsCycle")}>TL</Button>
+              <Button style={topDimensions} color="primary" onClick={() => this.onRadioBtnClick(2, "NotificationsCycle")} active={selected.includes(2)} disabled={this.checkStatus(2, "NotificationsCycle")}>TR</Button>
+            </ButtonGroup>
             <br />
-            <Button style={bottomDimensions} color="primary" onClick={() => this.onRadioBtnClick(3, "NotificationsCycle")} active={selected.includes(3)} disabled={this.checkStatus(3, "NotificationsCycle")}>BL</Button>
-            <Button style={bottomDimensions} color="primary" onClick={() => this.onRadioBtnClick(4, "NotificationsCycle")} active={selected.includes(4)} disabled={this.checkStatus(4, "NotificationsCycle")}>BR</Button>
+            <ButtonGroup>
+              <Button style={bottomDimensions} color="primary" onClick={() => this.onRadioBtnClick(3, "NotificationsCycle")} active={selected.includes(3)} disabled={this.checkStatus(3, "NotificationsCycle")}>BL</Button>
+              <Button style={bottomDimensions} color="primary" onClick={() => this.onRadioBtnClick(4, "NotificationsCycle")} active={selected.includes(4)} disabled={this.checkStatus(4, "NotificationsCycle")}>BR</Button>
+            </ButtonGroup>
           </div>
         </div>
       );
