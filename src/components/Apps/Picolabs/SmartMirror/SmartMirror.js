@@ -304,18 +304,18 @@ class SmartMirror extends React.Component {
       return (
         <div className="mirror-container">
           {(tl === tr) &&
-            <Row style={{height: "50%", "overflow": "auto"}}>
+            <Row style={{height: "50%", "overflow": "hidden"}}>
               <Col>{this.getAppDisplay(tl)}</Col>
             </Row>
           }
           {!(tl === tr) &&
-            <Row style={{height: "50%", "overflow": "auto"}}>
+            <Row style={{height: "50%", "overflow": "hidden"}}>
               <Col>{this.getAppDisplay(tl)}</Col>
               <Col>{this.getAppDisplay(tr)}</Col>
             </Row>
           }
           {(bl === br) &&
-            <Row style={{height: "50%", "overflow": "auto"}}>
+            <Row style={{height: "50%", "overflow": "hidden"}}>
               <Col>{this.getAppDisplay(bl)}</Col>
             </Row>
           }
@@ -412,9 +412,9 @@ class SmartMirror extends React.Component {
           <Col className="scrollableAppList">
             {this.renderNotificationApp()}
             {this.showAvailableApps()}
-            <Row style={{"width": "350px"}}>
+            <Col className="saveButtonColumn" style={{"width": "350px"}}>
               <Button color="primary" style={{"marginLeft": "auto"}} onClick={this.saveSettings}>Save</Button>
-            </Row>
+            </Col>
           </Col>
           <Col>
             <div onClick={() => this.setState({ isFullScreen: true })}>
