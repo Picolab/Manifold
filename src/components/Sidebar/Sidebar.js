@@ -54,7 +54,7 @@ class Sidebar extends Component {
             <li className="nav-item">
               {/*<NavLink to={'/dashboard'} className="nav-link" activeClassName="active"><i className="icon-speedometer"></i> Dashboard </NavLink>*/}
               <NavLink to={'/mythings'} className="nav-link" activeClassName="active"><div onClick={this.closeSidebar}><i className="fa fa-home"></i>My Things </div></NavLink>
-              {/*<NavLink to={'/communities'} className="nav-link" activeClassName="active"><i className="fa fa-users"></i>Communities <span className="badge badge-info">NEW</span></NavLink>*/}
+              {<NavLink to={'/communities'} className="nav-link" activeClassName="active"><i className="fa fa-users"></i>Communities <span className="badge badge-info">NEW</span></NavLink>}
             </li>
             <li className="nav-item">
               <NavLink to={'/feedback'} className="nav-link" activeClassName="active"><div onClick={this.closeSidebar}><i className="fa fa-envelope"></i>Feedback </div></NavLink>
