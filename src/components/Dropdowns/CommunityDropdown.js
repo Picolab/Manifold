@@ -2,8 +2,11 @@ import React, { Component } from 'react';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem} from 'reactstrap';
 import ColorModal from '../Modals/ColorModal';
 // import CommunitiesModal from '../Modals/CommunitiesModal';
-import InstallModal from '../Modals/InstallModal';
 import RemoveCommunityModal from '../Modals/RemoveCommunityModal';
+import InstallModal from '../Modals/InstallModal';
+import UninstallModal from '../Modals/UninstallModal';
+import AddCommThingModal from '../Modals/AddCommThingModal';
+import RemoveCommThingModal from '../Modals/RemoveCommThingModal';
 import PropTypes from 'prop-types';
 
 export class CommunityDropdown extends Component {
@@ -14,16 +17,25 @@ export class CommunityDropdown extends Component {
       isOpen: props.isOpen,
       removeOpen: false,
       installOpen: false,
+      uninstallOpen: false,
+      addThingOpen: false,
+      removeThingOpen: false,
       colorOpen: false,
       communitiesOpen: false
     }
 
     this.openRemove = this.openRemove.bind(this);
     this.openInstall = this.openInstall.bind(this);
+    this.openUninstall = this.openUninstall.bind(this);
+    this.openAddThing = this.openAddThing.bind(this);
+    this.openRemoveThing = this.openRemoveThing.bind(this);
     this.openColor = this.openColor.bind(this);
 
     this.toggleRemove = this.toggleRemove.bind(this);
     this.toggleInstall = this.toggleInstall.bind(this);
+    this.toggleUninstall = this.toggleUninstall.bind(this);
+    this.toggleAddThing = this.toggleAddThing.bind(this);
+    this.toggleRemoveThing = this.toggleRemoveThing.bind(this);
     this.toggleColor = this.toggleColor.bind(this);
   }
 
@@ -45,6 +57,21 @@ export class CommunityDropdown extends Component {
     this.toggleInstall();
   }
 
+  openUninstall() {
+    this.props.toggleSettings();
+    this.toggleUninstall();
+  }
+
+  openAddThing() {
+    this.props.toggleSettings();
+    this.toggleAddThing();
+  }
+
+  openRemoveThing() {
+    this.props.toggleSettings();
+    this.toggleRemoveThing();
+  }
+
   openColor() {
     this.props.toggleSettings();
     this.toggleColor();
@@ -59,6 +86,24 @@ export class CommunityDropdown extends Component {
   toggleInstall() {
     this.setState({
       installOpen: !this.state.installOpen
+    })
+  }
+
+  toggleUninstall() {
+    this.setState({
+      uninstallOpen: !this.state.uninstallOpen
+    })
+  }
+
+  toggleAddThing() {
+    this.setState({
+      addThingOpen: !this.state.addThingOpen
+    })
+  }
+
+  toggleRemoveThing() {
+    this.setState({
+      removeThingOpen: !this.state.removeThingOpen
     })
   }
 
@@ -89,9 +134,27 @@ export class CommunityDropdown extends Component {
 
           <DropdownItem onClick={this.openInstall}>
             Install an App
-            <i className="fa fa-cloud-download float-right"/>
+            <i className="fa fa-cloud-download float-right" style={{"marginRight": "0", "marginTop": "4px"}} />
           </DropdownItem>
           <InstallModal modalOn={this.state.installOpen} toggleFunc={this.toggleInstall} picoID={this.props.picoID}/>
+
+          <DropdownItem onClick={this.openUninstall}>
+            Uninstall an App
+            <i className="fa fa-eject float-right" style={{"marginRight": "0", "marginTop": "4px"}} />
+          </DropdownItem>
+          <UninstallModal modalOn={this.state.uninstallOpen} toggleFunc={this.toggleUninstall} picoID={this.props.picoID}/>
+
+          <DropdownItem onClick={this.openAddThing}>
+            Add Thing
+            <i className="fa fa-plus float-right"/>
+          </DropdownItem>
+          <AddCommThingModal modalOn={this.state.addThingOpen} toggleFunc={this.toggleAddThing} picoID={this.props.picoID}/>
+
+          <DropdownItem onClick={this.openRemoveThing}>
+            Remove Thing
+            <i className="fa fa-minus float-right"/>
+          </DropdownItem>
+          <RemoveCommThingModal modalOn={this.state.removeThingOpen} toggleFunc={this.toggleRemoveThing} picoID={this.props.picoID}/>
 
           <DropdownItem onClick={this.openColor}>
             Change Color
