@@ -6,13 +6,13 @@
   text-align: center;
   text-align: bottom;
   vertical-align: -100px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
 
 .notifications.show {
   opacity: 1.0;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
 }
 
 .notifications.noshow {
