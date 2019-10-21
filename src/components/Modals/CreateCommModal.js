@@ -68,7 +68,7 @@ CreateCommModal.propTypes = {
 const mapDispatchToProps = (dispatch) => {
   return {
     createCommunity: (name) => {
-      dispatch(commandAction(createCommunity, [name]))
+      dispatch(commandAction(createCommunity, [name], { delay: 500 }))
     }
   }
 }

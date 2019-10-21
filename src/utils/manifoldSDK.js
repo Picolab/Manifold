@@ -95,7 +95,15 @@ export function moveCommunity(picoID, x, y, w, h){
 }
 
 export function addToCommunity(commEci, toAddEci){
-  return axios.post(`${sky_event(commEci)}/AddToCommunity/community/addToCommunity?toAddEci=${toAddEci}`);
+  return axios.post(`${sky_event(commEci)}/AddToCommunity/community/add_thing?eci=${toAddEci}`);
+}
+
+export function getCommunityThings(commEci){
+  return axios.get(`${sky_cloud(commEci)}/io.picolabs.community/things`);
+}
+
+export function removeFromCommunity(commEci, toRemovePicoId) {
+  return axios.post(`${sky_event(commEci)}/RemoveFromCommunity/community/remove_thing?picoId=${toRemovePicoId}`);
 }
 
 export function discovery(eci){

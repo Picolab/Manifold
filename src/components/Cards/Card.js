@@ -43,9 +43,21 @@ class Card extends Component {
         <CardBody picoID={this.props.picoID} appInfo={this.props.installedApps[this.state.currentApp]}/>
       )
     }else{
+      let bodyText = "";
+      switch (this.props.cardType) {
+        case "Thing":
+          bodyText = "To install an app, either click on the wheel at the top of this card, or open the card and do it from the next page. Try out our Safe and Mine app!";
+          break;
+        case "Community":
+          bodyText = "To add things to the community, either click on the wheel at the top of this card, or drag a thing from the right toolbar onto this card! You can also install apps to this community just like you could with a thing";
+          break;
+        default:
+          bodyText = "undefined card type";
+          break;
+      }
       return (
         <div>
-          To install an app, either click on the wheel at the top of this card, or open the card and do it from the next page. Try out our Safe and Mine app!
+          {bodyText}
         </div>
       )
     }

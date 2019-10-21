@@ -6,7 +6,7 @@ import CardSideBar from '../../components/CardSideBar/CardSideBar';
 import { commandAction } from '../../actions/command';
 import { addToCommunity } from '../../utils/manifoldSDK';
 import PropTypes from 'prop-types';
-import { getCommunitiesIdList } from '../../reducers';
+import { getCommunitiesIdList, getCommunities, getThings } from '../../reducers';
 import './CommStyles.css';
 
 class Communities extends Component {
@@ -20,6 +20,9 @@ class Communities extends Component {
     console.log("dropTargetCard", dropTargetCard);
     console.log("draggedCard", draggedCard);
     //this.props.createCommSubscription(dropTargetCard.Tx, draggedCard.Tx)
+    let communityTx = this.props.communities.getIn([dropTargetCard.picoID, "Tx"]);
+    let thingTx = this.props.things.getIn([draggedCard.picoID, "Tx"]);
+    this.props.createCommSubscription(communityTx, thingTx);
   }
 
   renderGrid(){
@@ -60,7 +63,9 @@ Communities.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    communitiesIdList: getCommunitiesIdList(state)
+    communitiesIdList: getCommunitiesIdList(state),
+    communities: getCommunities(state),
+    things: getThings(state)
   }
 }
 
