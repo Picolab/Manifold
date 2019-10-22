@@ -53,6 +53,12 @@ class SmartMirror extends React.Component {
       console.log("entered else if");
       clearInterval(this.interval);
     }
+    if (this.state.isFullScreen) {
+      document.getElementsByTagName('body')[0].style.overflow = "hidden"
+    }
+    else {
+      document.getElementsByTagName('body')[0].style.overflow = "visible"
+    }
   }
 
   escFunction() {
