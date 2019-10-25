@@ -136,7 +136,6 @@ class NotificationsModal extends Component {
 
   displayNotifications() {
     var out = [];
-    console.log(this.props);
     for(var item in this.props.notifications) {
       out.push(
         <div key={this.props.notifications[item].id}>
