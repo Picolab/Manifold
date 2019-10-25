@@ -12,8 +12,7 @@ class NotificationsModal extends Component {
     super(props);
     this.state = {
       modal: false,
-      notifications: [],
-      notificationsCount: 0
+      count: 0
     };
 
     this.toggle = this.toggle.bind(this);
@@ -36,22 +35,15 @@ class NotificationsModal extends Component {
     const promise = customQuery(getManifoldECI(), 'io.picolabs.notifications', 'getNotifications');
     promise.then((resp) => {
       this.props.storeNotifications(resp.data);
-      this.setState({
-        notifications: resp.data
-      });
     });
   }
 
   getNotificationsCount() {
     const promise = customQuery(getManifoldECI(), 'io.picolabs.notifications', 'getBadgeNumber', {});
     promise.then((resp) => {
-      if(this.state.notificationsCount !== resp.data) {
-        if(this.state.notificationsCount < resp.data) this.getNotifications();
+      if(this.props.count !== resp.data) {
+        if(this.props.count < resp.data) this.getNotifications();
         this.props.storeCount(resp.data);
-
-        this.setState({
-          notificationsCount: resp.data
-        });
       }
     });
   }
@@ -144,15 +136,16 @@ class NotificationsModal extends Component {
 
   displayNotifications() {
     var out = [];
-    for(var item in this.state.notifications) {
+    console.log(this.props);
+    for(var item in this.props.notifications) {
       out.push(
-        <div key={this.state.notifications[item].id}>
+        <div key={this.props.notifications[item].id}>
           <ListGroupItem style={{"padding": "1rem 1.25rem"}}>
-            <i id={"delete" + this.state.notifications[item].message} className="fa fa-trash float-right fa-lg manifoldDropdown" onClick={this.removeNotification(this.state.notifications[item].id)}/>
-            <a href={`/#/mythings/${this.state.notifications[item].picoId}/${this.state.notifications[item].ruleset}?id=${this.state.notifications[item].id}`}><i id={"open" + this.state.notifications[item].message} className="fa fa-sign-in float-right fa-lg manifoldDropdown" onClick={this.seenNotification(this.state.notifications[item].id)}/></a>
-            <h5 className="title" >{this.state.notifications[item].thing} - {this.state.notifications[item].app}</h5>
-            <p className="timestamp">{this.convertDate(this.state.notifications[item].time)}</p>
-            <p className="content">{this.state.notifications[item].message}</p>
+            <i id={"delete" + this.props.notifications[item].message} className="fa fa-trash float-right fa-lg manifoldDropdown" onClick={this.removeNotification(this.props.notifications[item].id)}/>
+            <a href={`/#/mythings/${this.props.notifications[item].picoId}/${this.props.notifications[item].ruleset}?id=${this.props.notifications[item].id}`}><i id={"open" + this.props.notifications[item].message} className="fa fa-sign-in float-right fa-lg manifoldDropdown" onClick={this.seenNotification(this.props.notifications[item].id)}/></a>
+            <h5 className="title" >{this.props.notifications[item].thing} - {this.props.notifications[item].app}</h5>
+            <p className="timestamp">{this.convertDate(this.props.notifications[item].time)}</p>
+            <p className="content">{this.props.notifications[item].message}</p>
 
           </ListGroupItem>
         </div>
@@ -166,7 +159,7 @@ class NotificationsModal extends Component {
     return (
       <div>
         <div>
-          {this.state.notificationsCount > 0 && <span className="manifold_notification" color="#f00" onClick={this.toggle}>{this.state.notificationsCount}</span>}
+          {this.props.count > 0 && <span className="manifold_notification" color="#f00" onClick={this.toggle}>{this.props.count}</span>}
           <i className="icon-bell bell" onClick={this.toggle}></i>
         </div>
         <Modal isOpen={this.state.modal} className={'modal-info'}>

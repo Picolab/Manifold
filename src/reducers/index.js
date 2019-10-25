@@ -196,9 +196,9 @@ export function getInstalledApps(state, picoID) {
 
 //returns how many notifications are unread
 export function getNotificationsCount(state) {
-  return state.getIn(["manifoldNotifications", "count"]);
+  return state.getIn(["manifoldNotifications"]).count;
 }
 //returns an array of notifications
 export function getNotifications(state) {
-  return state.getIn(["manifoldNotifications", "notifiactions"])
+  return state.getIn(["manifoldNotifications"]).notifications;
 }
