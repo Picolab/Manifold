@@ -1,6 +1,6 @@
 import React from 'react';
-import {customQuery} from '../../../../utils/manifoldSDK';
-import {getManifoldECI} from '../../../../utils/AuthService';
+import {connect} from 'react-redux';
+import {getNotifications, getNotificationsCount} from '../../../../reducers';
 import './NotificationsCycle.css';
 
 class NotificationsCycle extends React.Component {
@@ -8,86 +8,44 @@ class NotificationsCycle extends React.Component {
     super(props);
 
     this.state = {
-      notifications: [],
-      notificationsCount: 0,
-      notificationIndex: 0,
-      notificationOnDisplay: 0,
+      current: 0,
       fadeIn: true
     }
-
   }
 
   componentDidMount() {
-    this.getNotifications();
-    this.getNotificationsCount();
-    this.notifyCountVar = setInterval(() => this.getNotificationsCount(), 3000);
     this.cycleVar = setInterval(() => this.cycle(), 3000);
   }
 
-  componentDidUpdate() {
+  componentWilUnmount() {
+    clearInterval(this.cycleVar);
   }
 
   cycle() {
-    if(this.state.notifications[0] && this.state.notifications.length > 0) {
-      if(this.state.notifications[this.state.notificationIndex] &&
-        this.state.notificationOnDisplay !== this.state.notifications[this.state.notificationIndex].id) {
-
-        this.setState({
-          fadeIn: true,
-          notificationOnDisplay: this.state.notifications[this.state.notificationIndex].id,
-          notificationIndexOnDisplay: this.state.notificationIndex
-        })
-      }
-      else {
-        if(this.state.notificationsCount > 1) {
-          this.setState({
-            fadeIn: false,
-            notificationIndex: (this.state.notificationIndex + 1) % this.state.notifications.length
-          })
-        }
-      }
-    }
-}
-
-  getNotifications() {
-    const promise = customQuery(getManifoldECI(), 'io.picolabs.notifications', 'getNotifications');
-    promise.then((resp) => {
-      if(resp.data[0]) {
-        this.setState({
-          notifications: resp.data,
-          notificationOnDisplay: resp.data[0].id,
-          notificationIndexOnDisplay: 0
-        });
-      }
+    const { notifications } = this.props;
+    const { fadeIn, current } = this.state;
+    if (fadeIn) {
       this.setState({
-        notifications: resp.data
-      });
-    });
-  }
-
-  getNotificationsCount() {
-    const promise = customQuery(getManifoldECI(), 'io.picolabs.notifications', 'getBadgeNumber', {});
-    promise.then((resp) => {
-      if(this.state.notificationsCount !== resp.data) {
-        if(this.state.notificationsCount > 0) this.getNotifications();
-        this.setState({
-          notificationsCount: resp.data
-        });
-      }
-    });
+        fadeIn: false,
+      })
+    }
+    else {
+      this.setState({
+        fadeIn: true,
+        current: (current + 1) % notifications.length
+      })
+    }
   }
 
   displayNotifications() {
-    let index = this.state.notificationIndexOnDisplay;
-    if(this.state.notifications.length > 0) {
-        return (
-          <div className={this.state.fadeIn ? "notifications show" : "notifications noshow"}>
-              <h5 className="title" style={{"fontSize": "28px"}}>{this.state.notifications[index].thing} - {this.state.notifications[index].app}</h5>
-              <div className="distimestamp" style={{"fontSize": "20px"}}>{this.convertDate(this.state.notifications[index].time)}</div>
-              <div className="discontent" style={{"fontSize": "28px"}}>{this.state.notifications[index].message}</div>
-          </div>
-        );
-    }
+    const { current, fadeIn } = this.state;
+    return (
+      <div className={fadeIn ? "notifications show" : "notifications noshow"}>
+          <h5 className="title" style={{"fontSize": "28px"}}>{this.props.notifications[current].thing} - {this.props.notifications[current].app}</h5>
+          <div className="distimestamp" style={{"fontSize": "20px"}}>{this.convertDate(this.props.notifications[current].time)}</div>
+          <div className="discontent" style={{"fontSize": "28px"}}>{this.props.notifications[current].message}</div>
+      </div>
+    );
   }
 
   convertDate(timestamp) {
@@ -160,7 +118,7 @@ class NotificationsCycle extends React.Component {
   }
 
   render() {
-    if(this.state.notifications.length === 0) {
+    if(this.props.notifications.length === 0) {
       return <div className="noNotifications">You have no new notifications.</div>;
     }
     return(
@@ -168,4 +126,11 @@ class NotificationsCycle extends React.Component {
     );
   }
 }
-export default NotificationsCycle;
+
+const mapStateToProps = (state) => {
+  return {
+    count: getNotificationsCount(state),
+    notifications: getNotifications(state)
+  }
+}
+export default connect(mapStateToProps)(NotificationsCycle);
