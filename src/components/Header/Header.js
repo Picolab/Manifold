@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Dropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import {logOut} from '../../utils/AuthService';
-import {NotificationsModal} from '../Modals/NotificationsModal';
+import NotificationsModal from '../Modals/NotificationsModal';
 import { retrieveOwnerProfile } from '../../utils/manifoldSDK';
 
 class Header extends Component {

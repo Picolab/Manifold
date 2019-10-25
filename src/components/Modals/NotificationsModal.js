@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, ListGroupItem, ListGroup} from 'reactstrap';
+import { connect } from 'react-redux';
+import { storeNotifications, storeNotificationsCount } from '../../actions';
+import { getNotificationsCount, getNotifications } from '../../reducers';
 import {customQuery, customEvent} from '../../utils/manifoldSDK';
 import {getManifoldECI} from '../../utils/AuthService';
 import './notificationsCSS.css'
 
-export class NotificationsModal extends Component {
+class NotificationsModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -32,6 +35,7 @@ export class NotificationsModal extends Component {
   getNotifications() {
     const promise = customQuery(getManifoldECI(), 'io.picolabs.notifications', 'getNotifications');
     promise.then((resp) => {
+      this.props.storeNotifications(resp.data);
       this.setState({
         notifications: resp.data
       });
@@ -43,6 +47,8 @@ export class NotificationsModal extends Component {
     promise.then((resp) => {
       if(this.state.notificationsCount !== resp.data) {
         if(this.state.notificationsCount < resp.data) this.getNotifications();
+        this.props.storeCount(resp.data);
+
         this.setState({
           notificationsCount: resp.data
         });
@@ -52,7 +58,6 @@ export class NotificationsModal extends Component {
 
   removeNotification(id) {
     return () => {
-      console.log("id", id);
       const promise = customEvent(getManifoldECI(), 'manifold', 'remove_notification', {'notificationID': id}, 'remove_notification');
       promise.then((resp) => {
         this.getNotifications();
@@ -180,4 +185,18 @@ export class NotificationsModal extends Component {
   }
 }
 
-export default NotificationsModal
+const mapStateToProps = (state) => {
+  return {
+    count: getNotificationsCount(state),
+    notifications: getNotifications(state)
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    storeCount: (count) => dispatch(storeNotificationsCount(count)),
+    storeNotifications: (notifications) => dispatch(storeNotifications(notifications))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NotificationsModal);
