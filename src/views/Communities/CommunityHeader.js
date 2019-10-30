@@ -22,7 +22,7 @@ class CommunityHeader extends Component {
     return (
       <div>
         <div style={{height:"30px"}}>
-          <button style={{float:"right"}} className="btn btn-primary" onClick={this.toggleAddModal}>+</button>
+          <button style={{float:"right"}} className="btn btn-primary" onClick={this.toggleAddModal}><i className="fa fa-plus-circle"></i>{' '}Add Community</button>
         </div>
         <CreateCommModal modalOn={this.state.addModal} toggleFunc={this.toggleAddModal}/>
       </div>
