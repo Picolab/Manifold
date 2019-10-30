@@ -227,11 +227,14 @@ ruleset io.picolabs.manifold_pico {
     select when manifold remove_community
     pre {
       picoID = event:attr("picoID");
-      subID = subIDFromPicoID(picoID, ent:things).klog("found subID: ");
+      subID = subIDFromPicoID(picoID, ent:communities).klog("found subID: ");
       sub = subscription:established("Id", event:attr("subID"))[0].klog("found sub: ");
     }
     if picoID && subID && sub then
-      send_directive("Attempting to cancel subscription to Community", {"community":event:attr("name")})
+      every {
+        event:send({ "eci" : sub{"Tx"}, "domain" : "apps", "type" : "cleanup", "attrs" : {} }); //Jace added this event send to allow each app a chance to clean up.
+        send_directive("Attempting to cancel subscription to Community", {"community":event:attr("name")})
+      }
     fired{
       raise wrangler event "subscription_cancellation"
         attributes { "Id": sub{"Id"}, "picoID": picoID, "event_type": "community_deletion" }
@@ -245,7 +248,7 @@ ruleset io.picolabs.manifold_pico {
     if picoID && isAChild(picoID) then
       send_directive("Attempting to remove Community", { "community": ent:communities{[picoID, "name"]}, "picoID": picoID })
     fired{
-      ent:communities := ent:communities.filter(function(thing){ thing{"subID"} != event:attr("Id")});
+      ent:communities := ent:communities.filter(function(comm, key){ key != picoID});
       raise wrangler event "child_deletion"
         attributes { "id": picoID } //lowercase "id" is wrangler's way to delete a child by picoID
     }
