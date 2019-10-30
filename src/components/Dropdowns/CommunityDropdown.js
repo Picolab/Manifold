@@ -132,18 +132,6 @@ export class CommunityDropdown extends Component {
           </DropdownItem>
           <RemoveCommunityModal modalOn={this.state.removeOpen} toggleFunc={this.toggleRemove} picoID={this.props.picoID}/>
 
-          <DropdownItem onClick={this.openInstall}>
-            Install an App
-            <i className="fa fa-cloud-download float-right" style={{"marginRight": "0", "marginTop": "4px"}} />
-          </DropdownItem>
-          <InstallModal modalOn={this.state.installOpen} toggleFunc={this.toggleInstall} picoID={this.props.picoID}/>
-
-          <DropdownItem onClick={this.openUninstall}>
-            Uninstall an App
-            <i className="fa fa-eject float-right" style={{"marginRight": "0", "marginTop": "4px"}} />
-          </DropdownItem>
-          <UninstallModal modalOn={this.state.uninstallOpen} toggleFunc={this.toggleUninstall} picoID={this.props.picoID}/>
-
           <DropdownItem onClick={this.openAddThing}>
             Add Thing
             <i className="fa fa-plus float-right"/>
@@ -155,6 +143,18 @@ export class CommunityDropdown extends Component {
             <i className="fa fa-minus float-right"/>
           </DropdownItem>
           <RemoveCommThingModal modalOn={this.state.removeThingOpen} toggleFunc={this.toggleRemoveThing} picoID={this.props.picoID}/>
+
+          <DropdownItem onClick={this.openInstall}>
+            Install an App
+            <i className="fa fa-cloud-download float-right" style={{"marginRight": "0", "marginTop": "4px"}} />
+          </DropdownItem>
+          <InstallModal modalOn={this.state.installOpen} toggleFunc={this.toggleInstall} picoID={this.props.picoID}/>
+
+          <DropdownItem onClick={this.openUninstall}>
+            Uninstall an App
+            <i className="fa fa-eject float-right" style={{"marginRight": "0", "marginTop": "4px"}} />
+          </DropdownItem>
+          <UninstallModal modalOn={this.state.uninstallOpen} toggleFunc={this.toggleUninstall} picoID={this.props.picoID}/>
 
           <DropdownItem onClick={this.openColor}>
             Change Color

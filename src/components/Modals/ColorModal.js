@@ -77,6 +77,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     changeColor: (name, newColor) => {
+      console.log(name, newColor);
       dispatch(commandAction(colorThing, [name, newColor]))
     }
   }
