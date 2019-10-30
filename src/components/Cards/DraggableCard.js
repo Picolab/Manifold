@@ -11,8 +11,8 @@ import './cardStyles.css';
 const cardSpec = {
   beginDrag(props){
     return {
-      cardType: props.cardType
-      //...(props.object)
+      cardType: props.cardType,
+      ...props
     }
   }
 }

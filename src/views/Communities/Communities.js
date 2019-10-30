@@ -17,12 +17,16 @@ class Communities extends Component {
   }
 
   handleDrop(dropTargetCard, draggedCard) {
-    console.log("dropTargetCard", dropTargetCard);
-    console.log("draggedCard", draggedCard);
     //this.props.createCommSubscription(dropTargetCard.Tx, draggedCard.Tx)
     let communityTx = this.props.communities.getIn([dropTargetCard.picoID, "Tx"]);
     let thingTx = this.props.things.getIn([draggedCard.picoID, "Tx"]);
-    this.props.createCommSubscription(communityTx, thingTx);
+
+    if (communityTx && thingTx) {
+      this.props.createCommSubscription(communityTx, thingTx);
+    }
+    else {
+      console.error("Unable to connect thing to community!");
+    }
   }
 
   renderGrid(){

@@ -15,8 +15,8 @@ const dropCardSpec = {
     }
     const draggedCard = monitor.getItem();
     const thisCard = {
-      cardType: props.cardType
-      //...(props.object)
+      cardType: props.cardType,
+      ...props
     }
     console.log("successfully dropped!", draggedCard);
     props.handleDrop(thisCard, draggedCard);
