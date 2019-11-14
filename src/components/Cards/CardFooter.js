@@ -9,11 +9,17 @@ class CardFooter extends Component{
     this.handleDotClick = this.handleDotClick.bind(this);
   }
 
+  componentDidMount() {
+    if (this.props.cardType === 'Community') {
+      console.log(this.props.allApps);
+    }
+  }
+
   handleDotClick(index) {
     this.props.dotClicked(index);
   }
 
-  renderFooterItems() {
+  renderFooterApps() {
     let footers = [];
     for(let i = 0; i < this.props.totalApps; i++){
       footers.push(
@@ -32,13 +38,15 @@ class CardFooter extends Component{
   render(){
     return(
       <span>
-        {this.renderFooterItems()}
+        {this.renderFooterApps()}
       </span>
     );
   }
 }
 
 CardFooter.propTypes = {
+  picoID: PropTypes.string.isRequired,
+  cardType: PropTypes.string.isRequired,
   dotClicked: PropTypes.func.isRequired,
   totalApps: PropTypes.number.isRequired,
   currentApp: PropTypes.number.isRequired
