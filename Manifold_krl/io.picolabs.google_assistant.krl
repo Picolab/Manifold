@@ -1,4 +1,4 @@
-ruleset alexa {
+ruleset io.picolabs.google_assistant {
   meta {
     shares __testing
   }
