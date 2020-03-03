@@ -84,7 +84,7 @@ ruleset io.picolabs.profile {
     pre {
       section = event:attr("section").klog("section").lc()
       service = event:attr("service").klog("service")
-      contacts = event:attrs.delete("section")
+      contacts = event:attrs.delete("section").delete("_headers")
     }
     if section then noop()
     fired {
