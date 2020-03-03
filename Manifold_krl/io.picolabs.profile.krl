@@ -41,11 +41,11 @@ ruleset io.picolabs.profile {
     pre {
       profile = event:attr("profile")
       googleProfile = {
-        "displayName" : profile["ig"],
-        "firstName" : profile["ofa"],
-        "lastName" : profile["wea"],
-        "profileImgURL" : profile["Paa"],
-        "email" : profile["U3"],
+        "displayName" : profile["ig"] || profile{"Ad"},
+        "firstName" : profile["ofa"] || profile{"vW"},
+        "lastName" : profile["wea"] || profile{"wU"},
+        "profileImgURL" : profile["Paa"] || profile{"UK"},
+        "email" : profile["U3"] || profile{"zu"},
       }
     }
     if event:attr("profile") then noop();
