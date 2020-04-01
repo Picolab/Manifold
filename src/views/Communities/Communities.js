@@ -20,11 +20,10 @@ class Communities extends Component {
     //this.props.createCommSubscription(dropTargetCard.Tx, draggedCard.Tx)
     let communityTx = this.props.communities.getIn([dropTargetCard.picoID, "Tx"]);
 <<<<<<< HEAD
-    let thingTx = this.props.things.getIn([draggedCard.picoID, "Tx"]);
-    console.log(communityTx);
-    console.log(thingTx);
-    this.props.createCommSubscription(communityTx, thingTx);
-=======
+    // let thingTx = this.props.things.getIn([draggedCard.picoID, "Tx"]);
+    // console.log(communityTx);
+    // console.log(thingTx);
+    // this.props.createCommSubscription(communityTx, thingTx);
     let thingTx = "";
     let errorMsg ="Unable to connect thing to community!";
 
