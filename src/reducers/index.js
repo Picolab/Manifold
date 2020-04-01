@@ -1,11 +1,13 @@
 import { combineReducers } from 'redux-immutable';
 import manifoldInfoReducer from './reducer_manifold_info';
 import identitiesReducer from './reducer_identities';
+import notificationsReducer from './reducer_notifications';
 import { List, Map } from 'immutable';
 
 const rootReducer = combineReducers({
   manifoldInfo: manifoldInfoReducer,
-  identities: identitiesReducer
+  identities: identitiesReducer,
+  manifoldNotifications: notificationsReducer
 });
 
 export default rootReducer;
@@ -189,4 +191,14 @@ export function getInstalledApps(state, picoID) {
     toReturn.push(value.toJS());
   });
   return toReturn;
+}
+
+
+//returns how many notifications are unread
+export function getNotificationsCount(state) {
+  return state.getIn(["manifoldNotifications"]).count;
+}
+//returns an array of notifications
+export function getNotifications(state) {
+  return state.getIn(["manifoldNotifications"]).notifications;
 }

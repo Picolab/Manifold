@@ -88,6 +88,8 @@ class Card extends Component {
 
         <div className="card-footer nonDraggable" style={{"backgroundColor": this.props.color, overflow:"hidden",  textAlign: "center", minHeight:"40px"}}>
           {this.props.installedApps && <CardFooter
+                                          picoID={this.props.picoID}
+                                          cardType={this.props.cardType}
                                           dotClicked={this.handleCarouselDotClick}
                                           totalApps={this.props.installedApps.length}
                                           currentApp={this.state.currentApp}

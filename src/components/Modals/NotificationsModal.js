@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, ListGroupItem, ListGroup} from 'reactstrap';
+import { connect } from 'react-redux';
+import { storeNotifications, storeNotificationsCount } from '../../actions';
+import { getNotificationsCount, getNotifications } from '../../reducers';
 import {customQuery, customEvent} from '../../utils/manifoldSDK';
 import {getManifoldECI} from '../../utils/AuthService';
 import './notificationsCSS.css'
 
-export class NotificationsModal extends Component {
+class NotificationsModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
       modal: false,
-      notifications: [],
-      notificationsCount: 0
+      count: 0
     };
 
     this.toggle = this.toggle.bind(this);
@@ -32,27 +34,22 @@ export class NotificationsModal extends Component {
   getNotifications() {
     const promise = customQuery(getManifoldECI(), 'io.picolabs.notifications', 'getNotifications');
     promise.then((resp) => {
-      this.setState({
-        notifications: resp.data
-      });
+      this.props.storeNotifications(resp.data);
     });
   }
 
   getNotificationsCount() {
     const promise = customQuery(getManifoldECI(), 'io.picolabs.notifications', 'getBadgeNumber', {});
     promise.then((resp) => {
-      if(this.state.notificationsCount !== resp.data) {
-        if(this.state.notificationsCount < resp.data) this.getNotifications();
-        this.setState({
-          notificationsCount: resp.data
-        });
+      if(this.props.count !== resp.data) {
+        if(this.props.count < resp.data) this.getNotifications();
+        this.props.storeCount(resp.data);
       }
     });
   }
 
   removeNotification(id) {
     return () => {
-      console.log("id", id);
       const promise = customEvent(getManifoldECI(), 'manifold', 'remove_notification', {'notificationID': id}, 'remove_notification');
       promise.then((resp) => {
         this.getNotifications();
@@ -139,15 +136,15 @@ export class NotificationsModal extends Component {
 
   displayNotifications() {
     var out = [];
-    for(var item in this.state.notifications) {
+    for(var item in this.props.notifications) {
       out.push(
-        <div key={this.state.notifications[item].id}>
+        <div key={this.props.notifications[item].id}>
           <ListGroupItem style={{"padding": "1rem 1.25rem"}}>
-            <i id={"delete" + this.state.notifications[item].message} className="fa fa-trash float-right fa-lg manifoldDropdown" onClick={this.removeNotification(this.state.notifications[item].id)}/>
-            <a href={`/#/mythings/${this.state.notifications[item].picoId}/${this.state.notifications[item].ruleset}?id=${this.state.notifications[item].id}`}><i id={"open" + this.state.notifications[item].message} className="fa fa-sign-in float-right fa-lg manifoldDropdown" onClick={this.seenNotification(this.state.notifications[item].id)}/></a>
-            <h5 className="title" >{this.state.notifications[item].thing} - {this.state.notifications[item].app}</h5>
-            <p className="timestamp">{this.convertDate(this.state.notifications[item].time)}</p>
-            <p className="content">{this.state.notifications[item].message}</p>
+            <i id={"delete" + this.props.notifications[item].message} className="fa fa-trash float-right fa-lg manifoldDropdown" onClick={this.removeNotification(this.props.notifications[item].id)}/>
+            <a href={`/#/mythings/${this.props.notifications[item].picoId}/${this.props.notifications[item].ruleset}?id=${this.props.notifications[item].id}`}><i id={"open" + this.props.notifications[item].message} className="fa fa-sign-in float-right fa-lg manifoldDropdown" onClick={this.seenNotification(this.props.notifications[item].id)}/></a>
+            <h5 className="title" >{this.props.notifications[item].thing} - {this.props.notifications[item].app}</h5>
+            <p className="timestamp">{this.convertDate(this.props.notifications[item].time)}</p>
+            <p className="content">{this.props.notifications[item].message}</p>
 
           </ListGroupItem>
         </div>
@@ -161,7 +158,7 @@ export class NotificationsModal extends Component {
     return (
       <div>
         <div>
-          {this.state.notificationsCount > 0 && <span className="manifold_notification" color="#f00" onClick={this.toggle}>{this.state.notificationsCount}</span>}
+          {this.props.count > 0 && <span className="manifold_notification" color="#f00" onClick={this.toggle}>{this.props.count}</span>}
           <i className="icon-bell bell" onClick={this.toggle}></i>
         </div>
         <Modal isOpen={this.state.modal} className={'modal-info'}>
@@ -180,4 +177,18 @@ export class NotificationsModal extends Component {
   }
 }
 
-export default NotificationsModal
+const mapStateToProps = (state) => {
+  return {
+    count: getNotificationsCount(state),
+    notifications: getNotifications(state)
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    storeCount: (count) => dispatch(storeNotificationsCount(count)),
+    storeNotifications: (notifications) => dispatch(storeNotifications(notifications))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NotificationsModal);

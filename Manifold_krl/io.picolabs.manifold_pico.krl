@@ -2,7 +2,7 @@ ruleset io.picolabs.manifold_pico {
   meta {
     use module io.picolabs.wrangler alias wrangler
     use module io.picolabs.subscription alias subscription
-    shares __testing, getManifoldInfo, isAChild, getThings
+    shares __testing, getManifoldInfo, isAChild, getThings, getThingCommByName
     provides __testing, getManifoldInfo, getThings
   }//end meta
   global {
@@ -10,6 +10,7 @@ ruleset io.picolabs.manifold_pico {
       { "queries": [ { "name":"getManifoldPico" },
                      { "name": "getManifoldInfo" },
                      { "name": "getThings" },
+                     { "name": "getThingCommByName", "args": ["name"] },
                      { "name": "isAChild", "args": ["name"] }],
         "events": [ { "domain": "manifold", "type": "create_thing",
                       "attrs": [ "name" ] },
@@ -50,6 +51,19 @@ ruleset io.picolabs.manifold_pico {
       })
     }
 
+    getThingCommByName = function(name) {
+      things = getThings().filter(function(v,k) {
+        v{"name"} == name
+      });
+      communities = getCommunities().filter(function(v,k) {
+        v{"name"} == name
+      });
+
+      things.append(communities).reduce(function(a,b) {
+        a.append(b.values())
+      },[]).head()
+    }
+
     initiate_subscription = defaction(eci, channel_name, wellKnown, role_type, optionalHost = meta:host) {
       every{
         event:send({
@@ -57,7 +71,7 @@ ruleset io.picolabs.manifold_pico {
           "domain": "wrangler", "type": "subscription",
           "attrs": {
                    "name"        : event:attr("name"),
-                   "picoID"     : event:attr("id"),
+                   "picoID"      : event:attr("id"),
                    "Rx_role"     : role_type,
                    "Tx_role"     : "manifold_pico",
                    "Tx_Rx_Type"  : "Manifold" , // auto_accept
@@ -163,7 +177,8 @@ ruleset io.picolabs.manifold_pico {
     fired{
       raise wrangler event "new_child_request"
         attributes event:attrs.put({"event_type": "manifold_create_community"})
-                                .put({"rids": communityRids})
+                              .put({"rids": communityRids})
+                              .put({"color": "#87cefa"})
     }
   }
   rule communityCompleted {
@@ -227,11 +242,14 @@ ruleset io.picolabs.manifold_pico {
     select when manifold remove_community
     pre {
       picoID = event:attr("picoID");
-      subID = subIDFromPicoID(picoID, ent:things).klog("found subID: ");
+      subID = subIDFromPicoID(picoID, ent:communities).klog("found subID: ");
       sub = subscription:established("Id", event:attr("subID"))[0].klog("found sub: ");
     }
     if picoID && subID && sub then
-      send_directive("Attempting to cancel subscription to Community", {"community":event:attr("name")})
+      every {
+        event:send({ "eci" : sub{"Tx"}, "domain" : "apps", "type" : "cleanup", "attrs" : {} }); //Jace added this event send to allow each app a chance to clean up.
+        send_directive("Attempting to cancel subscription to Community", {"community":event:attr("name")})
+      }
     fired{
       raise wrangler event "subscription_cancellation"
         attributes { "Id": sub{"Id"}, "picoID": picoID, "event_type": "community_deletion" }
@@ -245,7 +263,7 @@ ruleset io.picolabs.manifold_pico {
     if picoID && isAChild(picoID) then
       send_directive("Attempting to remove Community", { "community": ent:communities{[picoID, "name"]}, "picoID": picoID })
     fired{
-      ent:communities := ent:communities.filter(function(thing){ thing{"subID"} != event:attr("Id")});
+      ent:communities := ent:communities.filter(function(comm, key){ key != picoID});
       raise wrangler event "child_deletion"
         attributes { "id": picoID } //lowercase "id" is wrangler's way to delete a child by picoID
     }
@@ -314,6 +332,19 @@ ruleset io.picolabs.manifold_pico {
 
     fired {
       ent:things := ent:things.put([picoID, "name"], changedName);
+    }
+  }
+
+  rule colorThing {
+    select when manifold color_thing
+    pre {
+      thing = getThingCommByName(event:attr("dname"));
+      id = thing{"picoID"};
+      role = thing{"Tx_role"};
+    }
+    fired {
+      ent:things{id} := thing.set("color", event:attr("color")) if role == "manifold_thing";
+      ent:communities{id} := thing.set("color", event:attr("color")) if role == "manifold_community";
     }
   }
 

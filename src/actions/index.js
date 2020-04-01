@@ -18,6 +18,20 @@ export function discoverySuccess(result, picoID) {
   }
 }
 
+export function storeNotificationsCount(count) {
+  return {
+    type: ActionTypes.NOTIFICATIONS_COUNT,
+    count: count
+  }
+}
+
+export function storeNotifications(notifications) {
+  return {
+    type: ActionTypes.NOTIFICATIONS,
+    notifications: notifications
+  }
+}
+
 let ActionTypes = {
   MANIFOLD_INFO: 'MANIFOLD_INFO',
   COMMAND: 'COMMAND',
@@ -28,7 +42,9 @@ let ActionTypes = {
   FETCH_ECI: 'FETCH_ECI',
   FETCH_ECI_FAILED: 'FETCH_ECI_FAILED',
   DISCOVERY: 'DISCOVERY',
-  DISCOVERY_SUCCESS: 'DISCOVERY_SUCCESS'
+  DISCOVERY_SUCCESS: 'DISCOVERY_SUCCESS',
+  NOTIFICATIONS_COUNT: 'NOTIFICATIONS_COUNT',
+  NOTIFICATIONS: 'NOTIFICATIONS',
 }
 
 export default ActionTypes

@@ -17,12 +17,36 @@ class Communities extends Component {
   }
 
   handleDrop(dropTargetCard, draggedCard) {
-    console.log("dropTargetCard", dropTargetCard);
-    console.log("draggedCard", draggedCard);
     //this.props.createCommSubscription(dropTargetCard.Tx, draggedCard.Tx)
     let communityTx = this.props.communities.getIn([dropTargetCard.picoID, "Tx"]);
+<<<<<<< HEAD
     let thingTx = this.props.things.getIn([draggedCard.picoID, "Tx"]);
+    console.log(communityTx);
+    console.log(thingTx);
     this.props.createCommSubscription(communityTx, thingTx);
+=======
+    let thingTx = "";
+    let errorMsg ="Unable to connect thing to community!";
+
+    if (draggedCard.cardType === "Thing") {
+      thingTx = this.props.things.getIn([draggedCard.picoID, "Tx"]);
+    }
+    else if (draggedCard.cardType === "Community") {
+      if (draggedCard.picoID === dropTargetCard.picoID) {
+        errorMsg = "Cannont place a community inside itself";
+      }
+      else {
+        thingTx = this.props.communities.getIn([draggedCard.picoID, "Tx"]);
+      }
+    }
+
+    if (communityTx && thingTx) {
+      this.props.createCommSubscription(communityTx, thingTx);
+    }
+    else {
+      console.error(errorMsg);
+    }
+>>>>>>> 7795c1bdddfd1f694e66c203359654d016b92a0b
   }
 
   renderGrid(){

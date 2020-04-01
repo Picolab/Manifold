@@ -13,11 +13,18 @@ const dropCardSpec = {
     if(monitor.didDrop()){
       return;
     }
+
+    console.log("monitor", monitor);
     const draggedCard = monitor.getItem();
     const thisCard = {
-      cardType: props.cardType
-      //...(props.object)
+      cardType: props.cardType,
+<<<<<<< HEAD
+      picoID: props.picoID
+=======
+      ...props
+>>>>>>> 7795c1bdddfd1f694e66c203359654d016b92a0b
     }
+    console.log("props", props);
     console.log("successfully dropped!", draggedCard);
     props.handleDrop(thisCard, draggedCard);
   }
