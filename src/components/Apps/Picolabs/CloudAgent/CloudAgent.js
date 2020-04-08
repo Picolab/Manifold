@@ -1,12 +1,9 @@
 import React from 'react';
 import './SovrinAgent.css';
 import icon from './SovrinIcon.png';
-import { Button, Media, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, InputGroup, InputGroupAddon, Input} from 'reactstrap';
-import InvitationModal from './InvitationModal';
+import { Media } from 'reactstrap';
 import ConnectionModal from './ConnectionModal';
-import EdgeModal from './EdgeModal';
-import DeleteRouterModal from './DeleteRouterModal';
-import ViaRouterSwitch from './ViaRouterSwitch';
+import ConnectionDropdown from './ConnectionDropdown';
 
 class CloudAgent extends React.Component {
   constructor(props) {
@@ -14,9 +11,7 @@ class CloudAgent extends React.Component {
 
     this.state = {
       invitationOpen: false,
-      actionsOpen: false,
       technicalDetails: {},
-      received_Invitation: "",
       messages: [],
       configured: false,
       edgeModal: false,
@@ -25,15 +20,8 @@ class CloudAgent extends React.Component {
       viaRouterCheck: false
     };
     this.poll = this.poll.bind(this);
-    this.invitationToggle = this.invitationToggle.bind(this);
-    this.actionsToggle = this.actionsToggle.bind(this);
-    this.receiveInvitation = this.receiveInvitation.bind(this);
     this.deleteRouter = this.deleteRouter.bind(this)
     this.getUI = this.getUI.bind(this);
-    this.getEdgeUI = this.getEdgeUI.bind(this);
-    this.edgeToggle = this.edgeToggle.bind(this);
-    this.deleteRouterToggle = this.deleteRouterToggle.bind(this);
-    this.viaRouterCheck = this.viaRouterCheck.bind(this);
 
   }
 
@@ -46,13 +34,6 @@ class CloudAgent extends React.Component {
     document.body.appendChild(script);
     this.pollInterval = setInterval(() => this.poll(), 3000);
     this.connVar = setInterval(() => this.getUI(), 3000);
-  }
-
-  edgeToggle() {
-    this.setState(prevState => ({
-      edgeModal: !prevState.edgeModal,
-      actionsOpen: !prevState.actionsOpen
-    }));
   }
 
   deleteRouterToggle() {
@@ -84,18 +65,6 @@ class CloudAgent extends React.Component {
   componentWillUnmount() {
     clearInterval(this.connVar);
     clearInterval(this.pollInterval);
-  }
-
-  invitationToggle() {
-    this.setState(prevState => ({
-      invitationOpen: !prevState.invitationOpen
-    }));
-  }
-
-  actionsToggle() {
-    this.setState(prevState => ({
-      actionsOpen: !prevState.actionsOpen
-    }));
   }
 
   onChange(stateKey) {
@@ -197,88 +166,6 @@ class CloudAgent extends React.Component {
     }
   }
 
-  displayViaRouterInvitation() {
-    return (
-      <div>
-        <DropdownItem className="actionHeader" header>Generate Invitation via {this.state.routerName}</DropdownItem>
-        <InputGroup>
-          <Input id={this.state.routerUI["invitationViaRouter"]} defaultValue={this.state.routerUI["invitationViaRouter"]}/>
-            <InputGroupAddon addonType="append">
-              <Button className="copyButton" id={this.state.routerUI["invitationViaRouter"]} value={this.state.routerUI["invitationViaRouter"]} onClick={this.copyInvitation}>Copy</Button>
-            </InputGroupAddon>
-        </InputGroup>
-        </div>
-    );
-  }
-
-  displayMakeEdgeOption() {
-    return (
-      <DropdownItem className="actionHeader" style={{"padding": "0", "marginTop": "5px"}} header>
-        <EdgeModal
-          name={this.state.technicalDetails['name']}
-          edgeToggle={this.edgeToggle}
-          edgeModal={this.state.edgeModal}
-          signalEvent={this.props.signalEvent}
-          manifoldQuery={this.props.manifoldQuery}
-          getEdgeUI={this.getEdgeUI}
-          button={<Button className="makeEdge" style={{"color": "#87cefa"}} onClick={this.edgeToggle}><i className="fa fa-plus-circle" /> Configure Inbound Router</Button>}
-        />
-      </DropdownItem>
-    );
-  }
-
-  displayDeleteRouterOption() {
-    return (
-      <DropdownItem className="actionHeader" style={{"padding": "0", "marginTop": "5px"}} header>
-        <DeleteRouterModal
-          name={this.state.technicalDetails['name']}
-          deleteRouterToggle={this.deleteRouterToggle}
-          deleteRouterModal={this.state.deleteRouterModal}
-          signalEvent={this.props.signalEvent}
-          manifoldQuery={this.props.manifoldQuery}
-          hasRouterConnection={this.state.hasRouterConnection}
-          deleteRouter={this.deleteRouter}
-          button={<Button className="makeEdge" style={{"color": "red"}} onClick={this.deleteRouterToggle}><i className="fa fa-minus-circle" /> Delete Inbound Router</Button>}
-        />
-      </DropdownItem>
-    );
-  }
-
-  viaRouterCheck() {
-    this.setState(prevState => ({
-      viaRouterCheck: !prevState.viaRouterCheck
-    }));
-  }
-
-  openInvite(e) {
-    return (
-      <div>
-        <InvitationModal/>
-      </div>
-    );
-  }
-
-  copyInvitation(e) {
-    const text = document.getElementById(e.target.id);
-    text.select();
-    document.execCommand('copy');
-  }
-
-  receiveInvitation() {
-    let attributes = this.state.viaRouterCheck === true ? { url: this.state.received_Invitation, need_router_connection: true } : { url: this.state.received_Invitation }
-    const promise = this.props.signalEvent({
-      domain : "sovrin",
-      type: "new_invitation",
-      attrs : attributes
-    })
-    promise.then((resp) => {
-      this.setState({
-        received_Invitation: "",
-        viaRouterCheck: false
-      });
-    })
-  }
-
   deleteRouter() {
     const promise = this.props.signalEvent({
       domain : "edge",
@@ -298,29 +185,10 @@ class CloudAgent extends React.Component {
           <h1 className='connectionHeader'>
             <Media object src={icon} className='icon'/>
             <div className='myConnection'>{this.state.technicalDetails['name']}'s Connections</div>
-            <Dropdown isOpen={this.state.actionsOpen} toggle={this.actionsToggle}>
-              <DropdownToggle color='primary' className='notificationButton' outline caret>
-                Actions
-              </DropdownToggle>
-              <DropdownMenu className="actionsMenu">
-                <DropdownItem className="actionHeader" header>Generate Invitation</DropdownItem>
-                  <InputGroup>
-                    <Input id={this.state.technicalDetails["invitation"]} defaultValue={this.state.technicalDetails["invitation"]}/>
-                    <InputGroupAddon addonType="append">
-                      <Button className="copyButton" id={this.state.technicalDetails["invitation"]} value={this.state.technicalDetails["invitation"]} onClick={this.copyInvitation}>Copy</Button>
-                    </InputGroupAddon>
-                  </InputGroup>
-              {this.state.configured === true && this.displayViaRouterInvitation()}
-              <div className="actionHeader">Receive Invitation {this.state.configured && <ViaRouterSwitch text={"via "+this.state.routerName} isChecked={this.state.viaRouterCheck} action={this.viaRouterCheck}/>}</div>
-                <InputGroup>
-                  <Input type="text" name="received_Invitation" placeholder="Receive Invitation" value={this.state.received_Invitation} onChange={this.onChange('received_Invitation')}/>
-                  <InputGroupAddon addonType="append">
-                    <Button className="receiveButton" onClick={this.receiveInvitation}>Receive</Button>
-                  </InputGroupAddon>
-                </InputGroup>
-              {this.state.configured === false ? this.displayMakeEdgeOption() : this.displayDeleteRouterOption()}
-            </DropdownMenu>
-            </Dropdown>
+            <ConnectionDropdown
+              signalEvent={this.props.signalEvent}
+              manifoldQuery={this.props.manifoldQuery}
+            />
           </h1>
         </div>
       );
