@@ -48,7 +48,7 @@ class ConnectionModal extends React.Component {
 
   setCurrentPage() {
     //console.log("this.state.modal",this.state.modal);
-  
+
     if(localStorage.getItem('modalState'.concat(this.props.theirDID)) === "false") {
       this.props.signalEvent({
         domain:"sovrin",
@@ -221,19 +221,9 @@ class ConnectionModal extends React.Component {
                   </Row>
                 </TabPane>
                 <TabPane tabId="2">
-                  <Chat
-                    myImage={this.props.myImage}
-                    connectionImage = { this.props.image !== null ? <Media object src={this.props.image} className="connectionPic" /> : null}
-                    messages={this.props.messages}
-                    their_vk={this.props.their_vk}
-                    signalEvent={this.props.signalEvent}
-                    manifoldQuery={this.props.manifoldQuery}
-                    getUI={this.props.getUI}
-                    theirDID={this.props.theirDID}
-                    title={this.props.title}
-                    invitation={this.props.invitation}
-                    hasRouter={this.props.hasRouter}
-                  />
+                  <div>
+                    Coming soon...
+                  </div>
                 </TabPane>
               </TabContent>
             </div>
@@ -249,3 +239,17 @@ class ConnectionModal extends React.Component {
   }
 }
 export default ConnectionModal;
+
+// <Chat
+//   myImage={this.props.myImage}
+//   connectionImage = { this.props.image !== null ? <Media object src={this.props.image} className="connectionPic" /> : null}
+//   messages={this.props.messages}
+//   their_vk={this.props.their_vk}
+//   signalEvent={this.props.signalEvent}
+//   manifoldQuery={this.props.manifoldQuery}
+//   getUI={this.props.getUI}
+//   theirDID={this.props.theirDID}
+//   title={this.props.title}
+//   invitation={this.props.endPoint}
+//   hasRouter={this.props.hasRouter}
+// />
