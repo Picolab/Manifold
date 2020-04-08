@@ -1,0 +1,48 @@
+.actionsContainer {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.genInvitationContainer {
+  justify-content: center;
+  align-items: center;
+}
+
+.getInvitationButton {
+
+}
+
+.dropdown-item i {
+  margin: 15px;
+  width: auto;
+}
+.orContainer {
+  text-align: center;
+  display: inline-flex;
+}
+
+.divider {
+  border-top: 1px solid #000;
+  width: 100px;
+  margin: 15px;
+}
+
+.recInvitationContainer {
+  justify-content: center;
+  align-items: center;
+  margin: 15px;
+}
+
+.recInvitationInput {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.actionsMenu {
+  width: 300px;
+  height: 330px;
+  font-size: 20px;
+  background-color: #e8e8e8;
+  transform: translate3d(-95px, 35.5px, 0px) !important;
+}

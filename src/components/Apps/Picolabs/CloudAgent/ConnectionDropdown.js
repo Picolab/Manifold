@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, InputGroup, InputGroupAddon, Input} from 'reactstrap';
+import "./ConnectionDropdown.css";
 
 class ConnectionDropdown extends React.Component {
 
@@ -103,6 +104,21 @@ class ConnectionDropdown extends React.Component {
     })
   }
 
+  // <DropdownItem className="actionHeader" header>Generate Invitation</DropdownItem>
+  //   <InputGroup>
+  //     <Input id={this.state.invitation} defaultValue={this.state.invitation}/>
+  //     <InputGroupAddon addonType="append">
+  //       <Button className="copyButton" id={this.state.invitation} value={this.state.invitation} onClick={this.copyInvitation}>Copy</Button>
+  //     </InputGroupAddon>
+  //   </InputGroup>
+  // <div className="actionHeader">Receive Invitation </div>
+  //   <InputGroup>
+  //     <Input type="text" name="invitation" placeholder="Receive Invitation" value={this.state.receivedInvitation} onChange={this.onChange('receivedInvitation')}/>
+  //     <InputGroupAddon addonType="append">
+  //       <Button className="receiveButton" onClick={this.receiveInvitation}>Receive</Button>
+  //     </InputGroupAddon>
+  //   </InputGroup>
+
   displayConnectionActions() {
     if(this.state.isStatic === false) {
       return (
@@ -111,27 +127,29 @@ class ConnectionDropdown extends React.Component {
             Actions
           </DropdownToggle>
           <DropdownMenu className="actionsMenu">
-            <DropdownItem className="actionHeader" header>Generate Invitation</DropdownItem>
-              <InputGroup>
-                <Input id={this.state.invitation} defaultValue={this.state.invitation}/>
-                <InputGroupAddon addonType="append">
-                  <Button className="copyButton" id={this.state.invitation} value={this.state.invitation} onClick={this.copyInvitation}>Copy</Button>
-                </InputGroupAddon>
-              </InputGroup>
-            <div className="actionHeader">Receive Invitation </div>
-              <InputGroup>
-                <Input type="text" name="invitation" placeholder="Receive Invitation" value={this.state.receivedInvitation} onChange={this.onChange('receivedInvitation')}/>
-                <InputGroupAddon addonType="append">
-                  <Button className="receiveButton" onClick={this.receiveInvitation}>Receive</Button>
-                </InputGroupAddon>
-              </InputGroup>
+            <div className="actionsContainer">
+              <div className="genInvitationContainer">
+                <div>Generate Invitation</div>
+                <i style={{"margin": "15px"}} className="fa fa-plus-circle fa-3x" />
+              </div>
+              <div className="orContainer">
+                <div className="divider" />
+                <div style={{"marginLeft": "5px", "marginRight": "5px"}}>or</div>
+                <div className="divider"/>
+              </div>
+              <div className="recInvitationContainer">
+                <div> Receive an Invitation </div>
+                <Input type="text" name="invitation" placeholder="Receive Invitation" className="recInvitationInput" value={this.state.receivedInvitation} onChange={this.onChange('receivedInvitation')}/>
+                <Button className="receiveButton" onClick={this.receiveInvitation}>Receive</Button>
+              </div>
+            </div>
           </DropdownMenu>
         </Dropdown>
       );
     }
     else {
       return (
-          <Button onClick={this.acceptConnections}>Enable Connections</Button>
+          <Button onClick={this.acceptConnections} style={{"color": "#87cefa"}}> <i className="fa fa-plus-circle" /> Enable Connections</Button>
       );
     }
   }
