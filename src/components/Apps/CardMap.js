@@ -12,6 +12,7 @@ import LightCardView from './Picolabs/Wovyn/Light/LightCardView';
 import Reminders from './Picolabs/Reminders/Reminders';
 import SmartMirrorCardView from './Picolabs/SmartMirror/SmartMirrorCardView';
 import ManifoldMonitor from './Picolabs/ManifoldMonitor/CardView';
+import CloudAgent from './Picolabs/CloudAgent/CloudAgent';
 
 export default {
   "io.picolabs.safeandmine" : SafeAndMineCardView,
@@ -27,6 +28,6 @@ export default {
   "io.picolabs.light_app": LightCardView,
   "io.picolabs.reminders": Reminders,
   "io.picolabs.manifold.smart_mirror": SmartMirrorCardView,
-  "io.picolabs.manifold_monitor": ManifoldMonitor
-
+  "io.picolabs.manifold_monitor": ManifoldMonitor,
+  "org.sovrin.manifold_cloud_agent": CloudAgent
 }
