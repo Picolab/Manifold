@@ -9,6 +9,7 @@ class ConnectionDropdown extends React.Component {
   	this.state = {
       actionsOpen: false,
       invitation: "",
+      receivedInvitation: "",
       isStatic: true
   	}
 
@@ -71,7 +72,7 @@ class ConnectionDropdown extends React.Component {
     });
     promise.then((resp) => {
       this.setState({
-        inivitation: resp.data
+        invitation: resp.data
       });
     });
   }
@@ -89,15 +90,15 @@ class ConnectionDropdown extends React.Component {
   }
 
   receiveInvitation() {
-    let attributes = { url: this.state.invitation }
+    let attributes = { uri: this.state.receivedInvitation }
     const promise = this.props.signalEvent({
-      domain : "sovrin",
-      type: "new_invitation",
+      domain : "didcomm",
+      type: "message",
       attrs : attributes
     })
     promise.then((resp) => {
       this.setState({
-        invitation: ""
+        receivedInvitation: ""
       });
     })
   }
@@ -112,14 +113,14 @@ class ConnectionDropdown extends React.Component {
           <DropdownMenu className="actionsMenu">
             <DropdownItem className="actionHeader" header>Generate Invitation</DropdownItem>
               <InputGroup>
-                <Input id="some id" defaultValue="some invitation"/>
+                <Input id={this.state.invitation} defaultValue={this.state.invitation}/>
                 <InputGroupAddon addonType="append">
-                  <Button className="copyButton" id="some id" value={"some invitation"} onClick={this.copyInvitation}>Copy</Button>
+                  <Button className="copyButton" id={this.state.invitation} value={this.state.invitation} onClick={this.copyInvitation}>Copy</Button>
                 </InputGroupAddon>
               </InputGroup>
             <div className="actionHeader">Receive Invitation </div>
               <InputGroup>
-                <Input type="text" name="invitation" placeholder="Receive Invitation" value={this.state.invitation} onChange={this.onChange('invitation')}/>
+                <Input type="text" name="invitation" placeholder="Receive Invitation" value={this.state.receivedInvitation} onChange={this.onChange('receivedInvitation')}/>
                 <InputGroupAddon addonType="append">
                   <Button className="receiveButton" onClick={this.receiveInvitation}>Receive</Button>
                 </InputGroupAddon>
