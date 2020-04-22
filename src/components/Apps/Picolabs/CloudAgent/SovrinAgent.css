@@ -1,6 +1,7 @@
 .connectionHeader {
-  width: 900px;
-  height: 100px;
+  width: 60%;
+  margin: 0 auto;
+  padding: 20px;
   display: flex;
 
   align-items: center;
@@ -96,12 +97,26 @@
 
 .connection {
   border-radius: 25px;
-  background: #000000;
+  background: #00000085;
   padding: 20px;
   width: 150px;
   max-height: 150px;
   margin-top: 40px;
   cursor: pointer;
+  border: 1px solid black;
+  border-color: black;
+}
+
+.connection:hover {
+  border-radius: 25px;
+  background: #f8a20e;
+  padding: 20px;
+  width: 150px;
+  max-height: 150px;
+  margin-top: 40px;
+  cursor: pointer;
+  border: 1px solid black;
+  border-color: black;
 }
 
 .textStickOut {

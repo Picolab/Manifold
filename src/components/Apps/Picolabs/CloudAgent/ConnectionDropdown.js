@@ -9,12 +9,14 @@ class ConnectionDropdown extends React.Component {
 
   	this.state = {
       actionsOpen: false,
+      generateInvitationToggle: false,
       invitation: "",
       receivedInvitation: "",
       isStatic: true
   	}
 
     this.actionsToggle = this.actionsToggle.bind(this);
+    this.generateInvitationToggle = this.generateInvitationToggle.bind(this);
     this.receiveInvitation = this.receiveInvitation.bind(this);
     this.getInvitation = this.getInvitation.bind(this);
     this.isStatic = this.isStatic.bind(this);
@@ -84,6 +86,12 @@ class ConnectionDropdown extends React.Component {
     }));
   }
 
+  generateInvitationToggle() {
+    this.setState(prevState => ({
+      generateInvitationToggle: !prevState.generateInvitationToggle
+    }));
+  }
+
   copyInvitation(e) {
     const text = document.getElementById(e.target.id);
     text.select();
@@ -104,20 +112,16 @@ class ConnectionDropdown extends React.Component {
     })
   }
 
-  // <DropdownItem className="actionHeader" header>Generate Invitation</DropdownItem>
-  //   <InputGroup>
-  //     <Input id={this.state.invitation} defaultValue={this.state.invitation}/>
-  //     <InputGroupAddon addonType="append">
-  //       <Button className="copyButton" id={this.state.invitation} value={this.state.invitation} onClick={this.copyInvitation}>Copy</Button>
-  //     </InputGroupAddon>
-  //   </InputGroup>
-  // <div className="actionHeader">Receive Invitation </div>
-  //   <InputGroup>
-  //     <Input type="text" name="invitation" placeholder="Receive Invitation" value={this.state.receivedInvitation} onChange={this.onChange('receivedInvitation')}/>
-  //     <InputGroupAddon addonType="append">
-  //       <Button className="receiveButton" onClick={this.receiveInvitation}>Receive</Button>
-  //     </InputGroupAddon>
-  //   </InputGroup>
+  displayInvitation() {
+    return (
+      <div className="genInvitationContainer">
+        <Input id={this.state.invitation} defaultValue={this.state.invitation} className="genInvitationInput"/>
+        <Button className="actionButton" id={this.state.invitation} value={this.state.invitation} onClick={this.copyInvitation}>Copy</Button>
+      </div>
+    );
+  }
+
+
 
   displayConnectionActions() {
     if(this.state.isStatic === false) {
@@ -129,8 +133,8 @@ class ConnectionDropdown extends React.Component {
           <DropdownMenu className="actionsMenu">
             <div className="actionsContainer">
               <div className="genInvitationContainer">
-                <div>Generate Invitation</div>
-                <i style={{"margin": "15px"}} className="fa fa-plus-circle fa-3x" />
+                { this.state.generateInvitationToggle ? <div>Generated Invitation</div> : <div>Generate Invitation</div>}
+                { this.state.generateInvitationToggle ? this.displayInvitation() : <i style={{"margin": "20px"}} className="fa fa-plus-circle fa-3x" onClick={this.generateInvitationToggle}/>}
               </div>
               <div className="orContainer">
                 <div className="divider" />
@@ -140,7 +144,7 @@ class ConnectionDropdown extends React.Component {
               <div className="recInvitationContainer">
                 <div> Receive an Invitation </div>
                 <Input type="text" name="invitation" placeholder="Receive Invitation" className="recInvitationInput" value={this.state.receivedInvitation} onChange={this.onChange('receivedInvitation')}/>
-                <Button className="receiveButton" onClick={this.receiveInvitation}>Receive</Button>
+                <Button className="actionButton" onClick={this.receiveInvitation}>Receive</Button>
               </div>
             </div>
           </DropdownMenu>

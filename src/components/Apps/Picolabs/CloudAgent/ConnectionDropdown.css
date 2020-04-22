@@ -37,12 +37,53 @@
   margin-top: 15px;
   margin-bottom: 15px;
   text-align: center;
+  border-color: #f8a20e;
+}
+
+.genInvitationContainer {
+  justify-content: center;
+  align-items: center;
+  margin: 15px;
+}
+
+.genInvitationInput {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  text-align: center;
+  border-color: #f8a20e;
 }
 
 .actionsMenu {
   width: 300px;
-  height: 330px;
+  height: 340px;
   font-size: 20px;
   background-color: #e8e8e8;
   transform: translate3d(-95px, 35.5px, 0px) !important;
+}
+
+.actionButton {
+  color: #f8a20e;
+  border-color: #f8a20e;
+  border-radius: 20px;
+}
+
+.actionButton:hover {
+  background-color: #f8a20e;
+  color: white;
+  border-radius: 20px;
+}
+
+.btn-outline-primary {
+  color: #f8a20e;
+  border-color: #f8a20e;
+}
+
+.btn-outline-primary:hover {
+  background-color: #f8a20e;
+  border-color: #f8a20e;
+}
+
+btn-outline-primary:active, .btn-outline-primary.active, .show > .btn-outline-primary.dropdown-toggle {
+  background-color: #f8a20e;
+  border-color: #f8a20e;
 }

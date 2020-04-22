@@ -4,6 +4,7 @@ import {Modal, ModalHeader, ModalBody, ModalFooter, Button, Media, TabContent, T
 import {customEvent, customQuery} from '../../../../utils/manifoldSDK';
 import {getManifoldECI} from '../../../../utils/AuthService';
 import Chat from './Chat';
+import ConnectionInfo from './ConnectionInfo';
 import classnames from 'classnames';
 import queryString from 'query-string';
 
@@ -23,7 +24,6 @@ class ConnectionModal extends React.Component {
     this.toggle = this.toggle.bind(this);
     this.sendTrustPing = this.sendTrustPing.bind(this);
     this.getPingStatus = this.getPingStatus.bind(this);
-    this.deleteConnection = this.deleteConnection.bind(this);
   }
 
   componentDidMount() {
@@ -174,14 +174,6 @@ class ConnectionModal extends React.Component {
     });
   }
 
-  deleteConnection() {
-    const promise = customEvent( this.props.myDID , "sovrin", "connection_expired", { their_vk: this.props.their_vk }, '5');
-    promise.then((resp) => {
-      this.props.getUI();
-    });
-    this.modalToggle();
-  }
-
   render() {
     return (
       <div>
@@ -212,11 +204,12 @@ class ConnectionModal extends React.Component {
                 <TabPane tabId="1">
                   <Row>
                     <Col sm="12">
-                      <h4>Connection Information</h4>
-                        <div className="textStickOut"> My DID: {this.props.myDID} </div>
-                        <div className="textStickOut"> Their DID: {this.props.theirDID} </div>
-                        { !this.props.hasRouter && <button className="btn-info" onClick={this.sendTrustPing}>Send Trust Ping</button>} {' '}
-                        <button className="btn-danger" onClick={this.deleteConnection}>Delete Connection</button>
+                      <ConnectionInfo
+                        myDID={this.props.myDID}
+                        theirDID={this.props.theirDID}
+                        sendTrustPing={this.sendTrustPing}
+                        modalToggle={this.modalToggle}
+                      />
                     </Col>
                   </Row>
                 </TabPane>
