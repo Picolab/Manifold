@@ -55,7 +55,7 @@
 
 .actionsMenu {
   width: 300px;
-  height: 340px;
+  height: 365px;
   font-size: 20px;
   background-color: #e8e8e8;
   transform: translate3d(-95px, 35.5px, 0px) !important;
@@ -86,4 +86,13 @@
 btn-outline-primary:active, .btn-outline-primary.active, .show > .btn-outline-primary.dropdown-toggle {
   background-color: #f8a20e;
   border-color: #f8a20e;
+}
+
+.makeStaticText {
+  cursor:pointer;
+  color:blue;
+  text-decoration:underline;
+  font-size: 12px;
+  float: right;
+  margin: 5px;
 }

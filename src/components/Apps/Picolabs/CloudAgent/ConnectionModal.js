@@ -27,7 +27,6 @@ class ConnectionModal extends React.Component {
   }
 
   componentDidMount() {
-    //this.checkForNotifications();
     this.setCurrentPage();
   }
 
@@ -47,7 +46,6 @@ class ConnectionModal extends React.Component {
   }
 
   setCurrentPage() {
-    //console.log("this.state.modal",this.state.modal);
 
     if(localStorage.getItem('modalState'.concat(this.props.theirDID)) === "false") {
       this.props.signalEvent({
@@ -124,54 +122,33 @@ class ConnectionModal extends React.Component {
 
   getPingStatus() {
     const promise = this.props.manifoldQuery({
-      rid: "org.sovrin.manifold_agent",
-      funcName: "pingStatus"
+      rid: "org.sovrin.manifold_cloud_agent",
+      funcName: "getPingStatus"
     }).catch((e) => {
-        console.error("Error getting message status", e);
+          console.error("Error getting ping status", e);
     });
-    promise.then((resp) => {
-      if(resp.data === "pending") {
-        if(this.pingStatusCheck === undefined || this.pingStatusCheck === null) {
-            this.pingStatusCheck = setInterval(() => this.getPingStatus(), 500);
-        }
-        this.setState({
-          pingStatus: resp.data
-        });
-      }
-      else if(resp.data === "disconnected") {
-        if(this.pingStatusCheck !== undefined) {
-            clearInterval(this.pingStatusCheck);
-            this.pingStatusCheck = undefined;
-        }
-        this.setState({
-          pingStatus: resp.data
-        });
 
-      }
-      else if(resp.data === "connected") {
-        this.props.getUI();
-        if(this.pingStatusCheck !== undefined) {
-            clearInterval(this.pingStatusCheck);
-            this.pingStatusCheck = undefined;
-        }
-        this.setState({
-          pingStatus: resp.data
-        });
-      }
-    });
+    promise.then((resp) => {
+      this.setState({
+        pingStatus: resp.data
+      })
+    })
   }
 
   sendTrustPing() {
     const promise = this.props.signalEvent({
-      domain : "sovrin",
-      type: "check_connection",
-      attrs : {
+      domain: "aca_trust_ping",
+      type: "new_ping",
+      attrs: {
         their_vk: this.props.their_vk
       }
+    }).catch((e) => {
+      console.error("Error sending a trust ping", e);
     });
+
     promise.then((resp) => {
       this.getPingStatus();
-    });
+    })
   }
 
   render() {
@@ -209,6 +186,8 @@ class ConnectionModal extends React.Component {
                         theirDID={this.props.theirDID}
                         sendTrustPing={this.sendTrustPing}
                         modalToggle={this.modalToggle}
+                        signalEvent={this.props.signalEvent}
+                        manifoldQuery={this.props.manifoldQuery}
                       />
                     </Col>
                   </Row>

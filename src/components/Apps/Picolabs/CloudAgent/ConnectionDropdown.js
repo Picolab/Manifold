@@ -146,6 +146,7 @@ class ConnectionDropdown extends React.Component {
                 <Input type="text" name="invitation" placeholder="Receive Invitation" className="recInvitationInput" value={this.state.receivedInvitation} onChange={this.onChange('receivedInvitation')}/>
                 <Button className="actionButton" onClick={this.receiveInvitation}>Receive</Button>
               </div>
+              <div className="makeStaticText">Make Agent Static?</div>
             </div>
           </DropdownMenu>
         </Dropdown>
