@@ -147,7 +147,7 @@ class ConnectionModal extends React.Component {
     });
 
     promise.then((resp) => {
-      this.getPingStatus();
+      setTimeout(this.getPingStatus, 3000);
     })
   }
 
