@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, InputGroup, InputGroupAddon, Input} from 'reactstrap';
+import MakeStaticModal from "./MakeStaticModal"
 import "./ConnectionDropdown.css";
 
 class ConnectionDropdown extends React.Component {
@@ -12,7 +13,8 @@ class ConnectionDropdown extends React.Component {
       generateInvitationToggle: false,
       invitation: "",
       receivedInvitation: "",
-      isStatic: true
+      isStatic: true,
+      actionsToggleActive: true
   	}
 
     this.actionsToggle = this.actionsToggle.bind(this);
@@ -21,6 +23,7 @@ class ConnectionDropdown extends React.Component {
     this.getInvitation = this.getInvitation.bind(this);
     this.isStatic = this.isStatic.bind(this);
     this.acceptConnections = this.acceptConnections.bind(this);
+    this.activateActionsToggle = this.activateActionsToggle.bind(this);
   }
 
   componentDidMount() {
@@ -80,10 +83,19 @@ class ConnectionDropdown extends React.Component {
     });
   }
 
-  actionsToggle() {
+  activateActionsToggle() {
+    console.log("activate or deactivate");
     this.setState(prevState => ({
-      actionsOpen: !prevState.actionsOpen
+      actionsToggleActive: !prevState.actionsToggleActive
     }));
+  }
+
+  actionsToggle() {
+    if(this.state.actionsToggleActive) {
+      this.setState(prevState => ({
+        actionsOpen: !prevState.actionsOpen
+      }));
+    }
   }
 
   generateInvitationToggle() {
@@ -146,7 +158,11 @@ class ConnectionDropdown extends React.Component {
                 <Input type="text" name="invitation" placeholder="Receive Invitation" className="recInvitationInput" value={this.state.receivedInvitation} onChange={this.onChange('receivedInvitation')}/>
                 <Button className="actionButton" onClick={this.receiveInvitation}>Receive</Button>
               </div>
-              <div className="makeStaticText">Make Agent Static?</div>
+              <MakeStaticModal
+                isStatic={this.isStatic}
+                signalEvent={this.props.signalEvent}
+                activateActionsToggle={this.activateActionsToggle}
+              />
             </div>
           </DropdownMenu>
         </Dropdown>

@@ -12,16 +12,48 @@ class NotificationsModal extends Component {
     super(props);
     this.state = {
       modal: false,
-      count: 0
+      count: 0,
+      isActive: true
     };
-
     this.toggle = this.toggle.bind(this);
+    this.getNotificationsCount = this.getNotificationsCount.bind(this);
+    this.poll = this.poll.bind(this);
+    this.resetPoll = this.resetPoll.bind(this);
+    this.timeout = null;
+    this.prev = 1;
+    this.curr = 1;
   }
 
   componentDidMount() {
     this.getNotifications();
-    this.getNotificationsCount();
-    this.notifyCountVar = setInterval(() => this.getNotificationsCount(), 3000);
+    this.poll()
+    window.addEventListener("mouseover", this.resetPoll)
+    window.addEventListener("visibilitychange", ()=>{ if(!document.hidden) {this.resetPoll();}})
+  }
+
+  componentWilUnmount() {
+    window.removeEventListener("mouseover");
+    window.removeEventListener("visibilitychange");
+  }
+
+  resetPoll() {
+    clearTimeout(this.timeout);
+    console.log("cleared");
+    this.prev = 1;
+    this.curr = 1;
+    this.poll();
+  }
+
+  poll() {
+    this.timeout = setTimeout(async () => {
+      let next = this.prev + this.curr;
+      this.prev = this.curr;
+      this.curr = next;
+
+      await this.getNotificationsCount();
+      this.poll()
+      console.log(this.curr);
+    }, this.curr * 1000);
   }
 
   toggle() {
@@ -39,13 +71,15 @@ class NotificationsModal extends Component {
   }
 
   getNotificationsCount() {
-    const promise = customQuery(getManifoldECI(), 'io.picolabs.notifications', 'getBadgeNumber', {});
-    promise.then((resp) => {
-      if(this.props.count !== resp.data) {
-        if(this.props.count < resp.data) this.getNotifications();
-        this.props.storeCount(resp.data);
-      }
-    });
+    if(this.state.isActive === true) {
+      const promise = customQuery(getManifoldECI(), 'io.picolabs.notifications', 'getBadgeNumber', {});
+      promise.then((resp) => {
+        if(this.props.count !== resp.data) {
+          if(this.props.count < resp.data) this.getNotifications();
+          this.props.storeCount(resp.data);
+        }
+      });
+    }
   }
 
   removeNotification(id) {

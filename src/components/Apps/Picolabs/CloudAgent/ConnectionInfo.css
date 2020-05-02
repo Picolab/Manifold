@@ -14,3 +14,12 @@
   margin-top: 15px;
   border-radius: 20px;
 }
+
+.linkText {
+  cursor:pointer;
+  color:blue;
+  text-decoration:underline;
+  font-size: 12px;
+  float: right;
+  margin: 5px;
+}

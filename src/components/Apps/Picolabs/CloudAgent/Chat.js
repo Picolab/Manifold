@@ -2,7 +2,7 @@ import React from 'react';
 import { InputGroup, InputGroupAddon, Button, Input, Media} from 'reactstrap';
 import { retrieveOwnerProfile } from '../../../../utils/manifoldSDK';
 import messageFailure from './failedmessage.png';
-
+import './messaging.css';
 
 class Chat extends React.Component {
   constructor(props) {
@@ -15,13 +15,9 @@ class Chat extends React.Component {
       messages: [],
       message: "",
       myImage: <svg className="profilePic" data-jdenticon-value={this.props.myName}></svg>,
-      agentImage: <svg className="connectionPic" data-jdenticon-value={this.props.title}></svg>,
-      currentMSGstatus: "",
-      failedMessage: failedMessage === null | failedMessage === 'null' ? "" : failedMessage
+      agentImage: <svg className="connectionPic" data-jdenticon-value={this.props.title}></svg>
     };
-    this.getProfileInfo = this.getProfileInfo.bind(this);
     this.sendMessage = this.sendMessage.bind(this);
-    this.reSendMessage = this.reSendMessage.bind(this);
     this.retrieveMessages = this.retrieveMessages.bind(this);
   }
 
@@ -35,114 +31,36 @@ class Chat extends React.Component {
   }
 
   componentDidMount() {
-    //this.getProfileInfo();
+    this.retrieveMessages()
   }
 
   componentDidUpdate() {
     this.scrollToBottom();
-    if(JSON.stringify(this.state.uiMessages) !== JSON.stringify(this.props.messages)) {
-      this.setState({
-        uiMessages: this.props.messages
-      });
-      this.retrieveMessages();
-    }
   }
 
   componentWillUnmount() {
   }
 
-  getProfileInfo() {
-    const profileGetPromise = retrieveOwnerProfile();
-    profileGetPromise.then((resp) => {
-      const profile = resp.data;
-      if (profile.google) {
-        this.setState({
-          displayName: profile.google.displayName,
-          imgURL: profile.google.profileImgURL
-        })
-      } else if(profile.github) {
-        this.setState({
-          displayName: profile.github.displayName,
-          imgURL: profile.github.profileImgURL
-        })
+  retrieveMessages() {
+    let promise = this.props.manifoldQuery({
+      rid: "org.sovrin.aca.basicmessage",
+      funcName: "basicmessages",
+      funcArgs: {
+        their_vk: this.props.their_vk
       }
     }).catch((e) => {
-      console.error(e);
-    });
-  }
-
-  retrieveMessages() {
-    console.log(this.props.hasRouter);
-    if(this.props.hasRouter !== true) {
-      const promise = this.props.manifoldQuery({
-        rid: "org.sovrin.manifold_agent",
-        funcName: "retrieveMSGs",
-        funcArgs: {
-          their_vk: this.props.their_vk
-        }
-      }).catch((e) => {
-          console.error("Error getting messages", e);
-      });
-      promise.then((resp) => {
-        this.setState({
-            messages: resp.data
-        })
-      });
-    }
-    else {
-      const promise = this.props.manifoldQuery({
-        rid: "org.sovrin.manifold_agent",
-        funcName: "getMSGs",
-        funcArgs: {
-          their_vk: this.props.their_vk
-        }
-      }).catch((e) => {
-          console.error("Error getting messages", e);
-      });
-      promise.then((resp) => {
-        this.setState({
-            messages: resp.data
-        })
-      });
-    }
-  }
-
-  getLastMessageStatus() {
-    const promise = this.props.manifoldQuery({
-      rid: "org.sovrin.manifold_agent",
-      funcName: "lastMessageStatus"
-    }).catch((e) => {
-        console.error("Error getting message status", e);
+        console.error("Error getting messages", e);
     });
     promise.then((resp) => {
-      if(resp.data["status"] === "pending") {
-        if(this.statusCheck === undefined || this.statusCheck === null) {
-            this.statusCheck = setInterval(() => this.getLastMessageStatus(), 500);
-        }
-        // this.setState({
-        //   currentMSGstatus: resp.data["status"]
-        // })
-      }
-      else if(resp.data["status"] === "failed") {
-        if(this.statusCheck !== undefined) {
-            clearInterval(this.statusCheck);
-            this.statusCheck = undefined;
-        }
-        localStorage.setItem('failedMessage'.concat(this.props.theirDID), resp.data["content"])
+      if(resp === undefined || resp.data === null) {
         this.setState({
-          failedMessage: resp.data["content"]
-        });
-
+            messages: []
+        })
       }
-      else if(resp.data["status"] === "sent") {
-        this.props.getUI();
-        if(this.statusCheck !== undefined) {
-            clearInterval(this.statusCheck);
-            this.statusCheck = undefined;
-        }
-        // this.setState({
-        //   currentMSGstatus: resp.data["status"]
-        // })
+      else {
+        this.setState({
+            messages: resp.data
+        })
       }
     });
   }
@@ -161,29 +79,17 @@ class Chat extends React.Component {
               <br />
             </div>
           );
-        } else {
-          if(this.state.messages[item]['failed'] === undefined) {
-            output.push(
-              <div key={this.state.messages[item]['sent_time']}>
-                <div className="sent">
-                  {this.props.myImage}
-                  <p>{this.state.messages[item]['content']}</p>
-                </div>
-                <br />
+        }
+        else {
+          output.push(
+            <div key={this.state.messages[item]['sent_time']}>
+              <div className="sent">
+                {this.props.myImage}
+                <p>{this.state.messages[item]['content']}</p>
               </div>
-            );
-          } else {
-              output.push(
-                <div key={this.state.messages[item]['sent_time'].concat("Failure")}>
-                  <div className="failedMessage">
-                    {this.props.myImage}
-                    <p>Message Not Sent: {this.state.messages[item]['content']}</p>
-                  </div>
-                  <br />
-                  <Media object src={messageFailure} className="failedMessageIcon" id={this.state.messages[item]['sent_time']} title={this.state.messages[item]['content']} onClick={(e)=>{this.reSendMessage(e.target.title, e.target.id)}}/>
-                </div>
-              );
-          }
+              <br />
+            </div>
+          );
         }
       }
     }
@@ -193,46 +99,16 @@ class Chat extends React.Component {
 
   sendMessage() {
     const promise = this.props.signalEvent({
-      domain : "sovrin",
-      type: "check_connection",
+      domain : "aca_basicmessage",
+      type: "new_content",
       attrs : {
         their_vk: this.props.their_vk,
         content: this.state.message
       }
     });
     promise.then((resp) => {
-      this.props.getUI();
-      localStorage.setItem('failedMessage'.concat(this.props.theirDID), '')
-      this.setState({
-        failedMessage: ''
-      });
-      this.getLastMessageStatus();
-      this.setState({
-        message: ''
-      });
+      this.retrieveMessages()
     })
-  }
-
-  reSendMessage(cont, time) {
-    console.log(time);
-    console.log(cont);
-    const promise = this.props.signalEvent({
-      domain : "sovrin",
-      type: "check_connection",
-      attrs : {
-        their_vk: this.props.their_vk,
-        content: cont,
-        sent_time: time
-      }
-    });
-    promise.then((resp) => {
-      this.props.getUI();
-      localStorage.setItem('failedMessage'.concat(this.props.theirDID), '')
-      this.setState({
-        failedMessage: ''
-      });
-      this.getLastMessageStatus();
-    });
   }
 
   refreshMessage() {
@@ -245,8 +121,6 @@ class Chat extends React.Component {
       element.scrollTop = element.scrollHeight;
     }
   }
-
-  //{(this.state.failedMessage !== null && this.state.failedMessage !== '') && <div id="snackbar">Your last message to {this.props.title} was not sent...</div>}
 
   render() {
     const script = document.createElement("script");

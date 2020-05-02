@@ -2,6 +2,8 @@ import React from 'react';
 import {customEvent} from '../../../../utils/manifoldSDK';
 import {Button} from 'reactstrap';
 import "./ConnectionInfo.css"
+import RemovePingModal from './RemovePingModal'
+import DeleteConnectionModal from './DeleteConnectionModal'
 
 class ConnectionInfo extends React.Component {
   constructor(props) {
@@ -12,7 +14,6 @@ class ConnectionInfo extends React.Component {
 
     this.acceptPings = this.acceptPings.bind(this);
     this.canPing = this.canPing.bind(this);
-    this.deleteConnection = this.deleteConnection.bind(this);
   }
 
   componentDidMount() {
@@ -47,18 +48,16 @@ class ConnectionInfo extends React.Component {
     });
   }
 
-  deleteConnection() {
-    const promise = customEvent( this.props.myDID , "sovrin", "connection_expired", { their_vk: this.props.their_vk }, '5');
-    promise.then((resp) => {
-      this.props.getUI();
-    });
-    this.props.modalToggle();
-  }
-
   displayPingButton() {
     if(this.state.canPing) {
       return (
-        <button className="pingAgentButton" onClick={this.props.sendTrustPing}>Send Trust Ping</button>
+        <div style={{"display": "grid"}}>
+          <button className="pingAgentButton" onClick={this.props.sendTrustPing}>Send Trust Ping</button>
+          <RemovePingModal
+            signalEvent={this.props.signalEvent}
+            canPing={this.canPing}
+          />
+        </div>
       )
     }
     return (
@@ -73,7 +72,11 @@ class ConnectionInfo extends React.Component {
         <div className="textStickOut"> My DID: {this.props.myDID} </div>
         <div className="textStickOut"> Their DID: {this.props.theirDID} </div>
         { this.displayPingButton() } {' '}
-        <button className="deleteConnectionButton" onClick={this.deleteConnection}>Delete Connection</button>
+        <DeleteConnectionModal
+          getUI={this.props.getUI}
+          their_vk={this.props.their_vk}
+          signalEvent={this.props.signalEvent}
+        />
       </div>
     );
   }

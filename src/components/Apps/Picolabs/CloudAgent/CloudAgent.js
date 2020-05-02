@@ -27,12 +27,10 @@ class CloudAgent extends React.Component {
   componentDidMount() {
     this.getLabel()
     this.getUI()
-    //this.setCurrentPage();
     const script = document.createElement("script");
     script.src = "https://cdn.jsdelivr.net/npm/jdenticon@2.1.1";
     script.async = true;
     document.body.appendChild(script);
-    //this.pollInterval = setInterval(() => this.poll(), 3000);
     this.connVar = setInterval(() => this.getUI(), 3000);
   }
 
@@ -86,26 +84,8 @@ class CloudAgent extends React.Component {
         this.setState({
           connections: resp.data
         });
-        this.getIconImages(resp.data['connections'])
       }
     });
-  }
-
-  getIconImages(connections) {
-    for(let item in connections) {
-      const promise = this.props.signalEvent({
-        domain:"sovrin",
-        type:"image",
-        attrs: {
-          label: connections[item]["label"]
-        }
-      })
-      promise.then((resp) => {
-        this.setState({
-          [connections[item]["label"]]: resp.data.directives[0]['options']['icon']
-        })
-      })
-    }
   }
 
   displayHeader() {
@@ -123,57 +103,29 @@ class CloudAgent extends React.Component {
       );
   }
 
-  createDefaultImage(label) {
-    return (
-      <svg className="connection" data-jdenticon-value={label}></svg>
-    );
-  }
-
   displayConnections() {
     var output = [];
     for(var item in this.state.connections) {
       if(this.state.connections[item] !== undefined) {
-        if(this.state[this.state.connections[item]['label']] !== undefined) {
-          output.push(
-            <div key={this.state.connections[item]['their_did']}>
-              <ConnectionModal
-                myImage= {<svg className="profilePic" data-jdenticon-value={this.state.connections['name']}></svg>}
-                image= {this.state[this.state.connections[item]['label']]}
-                title={this.state.connections[item]['label']}
-                myDID={this.state.connections[item]['my_did']}
-                theirDID={this.state.connections[item]['their_did']}
-                their_vk={this.state.connections[item]['their_vk']}
-                messages={this.state.connections[item]['messages']}
-                signalEvent={this.props.signalEvent}
-                manifoldQuery={this.props.manifoldQuery}
-                getUI={this.getUI}
-                endPoint={this.state.connections[item]["their_endpoint"]}
-              />
-                <div className="agentLabel"> {this.state.connections[item]['label']} </div>
+        output.push(
+          <div key={this.state.connections[item]['their_did']}>
+            <ConnectionModal
+              myImage= {<svg className="profilePic" data-jdenticon-value={this.state.label}></svg>}
+              image= {null}
+              title={this.state.connections[item]['label']}
+              myDID={this.state.connections[item]['my_did']}
+              theirDID={this.state.connections[item]['their_did']}
+              their_vk={this.state.connections[item]['their_vk']}
+              signalEvent={this.props.signalEvent}
+              manifoldQuery={this.props.manifoldQuery}
+              getUI={this.getUI}
+              endPoint={this.state.connections[item]["their_endpoint"]}
+            />
+            <div className="agentLabel">
+              <div className="agentLabel"> {this.state.connections[item]['label']} </div>
             </div>
-          );
-        } else {
-          output.push(
-            <div key={this.state.connections[item]['their_did']}>
-              <ConnectionModal
-                myImage= {<svg className="profilePic" data-jdenticon-value={this.state.connections['name']}></svg>}
-                image= {null}
-                title={this.state.connections[item]['label']}
-                myDID={this.state.connections[item]['my_did']}
-                theirDID={this.state.connections[item]['their_did']}
-                their_vk={this.state.connections[item]['their_vk']}
-                messages={this.state.connections[item]['messages']}
-                signalEvent={this.props.signalEvent}
-                manifoldQuery={this.props.manifoldQuery}
-                getUI={this.getUI}
-                endPoint={this.state.connections[item]["their_endpoint"]}
-              />
-              <div className="agentLabel">
-                <div className="agentLabel"> {this.state.connections[item]['label']} </div>
-              </div>
-            </div>
-          );
-        }
+          </div>
+        );
       }
     }
 

@@ -12,9 +12,8 @@ class ConnectionModal extends React.Component {
   constructor(props) {
     super(props);
     let modalState = localStorage.getItem('modalState'.concat(this.props.theirDID));
-    //console.log("modalState",modalState);
     let tab = localStorage.getItem('currentTab'.concat(this.props.theirDID));
-    //console.log("tab",tab);
+    
     this.state = {
       modal: modalState === 'true' ? true : false,
       activeTab: tab !== null ? tab : '1',
@@ -173,7 +172,7 @@ class ConnectionModal extends React.Component {
                     className={classnames({ active: this.state.activeTab === '2' })}
                     onClick={() => { this.toggle('2'); }}
                   >
-                    Chat
+                    Messaging
                   </NavLink>
                 </NavItem>
               </Nav>
@@ -188,14 +187,23 @@ class ConnectionModal extends React.Component {
                         modalToggle={this.modalToggle}
                         signalEvent={this.props.signalEvent}
                         manifoldQuery={this.props.manifoldQuery}
+                        their_vk={this.props.their_vk}
+                        getUI={this.props.getUI}
                       />
                     </Col>
                   </Row>
                 </TabPane>
                 <TabPane tabId="2">
-                  <div>
-                    Coming soon...
-                  </div>
+                  <Chat
+                    myImage={this.props.myImage}
+                    connectionImage = { this.props.image !== null ? <Media object src={this.props.image} className="connectionPic" /> : null}
+                    their_vk={this.props.their_vk}
+                    signalEvent={this.props.signalEvent}
+                    manifoldQuery={this.props.manifoldQuery}
+                    theirDID={this.props.theirDID}
+                    title={this.props.title}
+                    invitation={this.props.endPoint}
+                  />
                 </TabPane>
               </TabContent>
             </div>
@@ -211,17 +219,3 @@ class ConnectionModal extends React.Component {
   }
 }
 export default ConnectionModal;
-
-// <Chat
-//   myImage={this.props.myImage}
-//   connectionImage = { this.props.image !== null ? <Media object src={this.props.image} className="connectionPic" /> : null}
-//   messages={this.props.messages}
-//   their_vk={this.props.their_vk}
-//   signalEvent={this.props.signalEvent}
-//   manifoldQuery={this.props.manifoldQuery}
-//   getUI={this.props.getUI}
-//   theirDID={this.props.theirDID}
-//   title={this.props.title}
-//   invitation={this.props.endPoint}
-//   hasRouter={this.props.hasRouter}
-// />
