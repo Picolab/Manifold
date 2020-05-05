@@ -5,6 +5,7 @@ import {customEvent, customQuery} from '../../../../utils/manifoldSDK';
 import {getManifoldECI} from '../../../../utils/AuthService';
 import Chat from './Chat';
 import ConnectionInfo from './ConnectionInfo';
+import "./ConnectionModal.css"
 import classnames from 'classnames';
 import queryString from 'query-string';
 
@@ -13,7 +14,7 @@ class ConnectionModal extends React.Component {
     super(props);
     let modalState = localStorage.getItem('modalState'.concat(this.props.theirDID));
     let tab = localStorage.getItem('currentTab'.concat(this.props.theirDID));
-    
+
     this.state = {
       modal: modalState === 'true' ? true : false,
       activeTab: tab !== null ? tab : '1',
@@ -209,7 +210,7 @@ class ConnectionModal extends React.Component {
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button color="secondary" onClick={this.modalToggle}>Cancel</Button>
+            <Button className="cancelButton" color="secondary" onClick={this.modalToggle}>Cancel</Button>
           </ModalFooter>
           {(this.state.pingStatus === 'connected') && <div id="snackbar" style={{left: "50%", color: "green"}}>You are connected to {this.props.title}</div>}
           {(this.state.pingStatus === 'disconnected') && <div id="snackbar" style={{left: "47%"}}>You are not connected to {this.props.title}</div>}

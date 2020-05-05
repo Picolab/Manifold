@@ -15,10 +15,17 @@ class Chat extends React.Component {
       messages: [],
       message: "",
       myImage: <svg className="profilePic" data-jdenticon-value={this.props.myName}></svg>,
-      agentImage: <svg className="connectionPic" data-jdenticon-value={this.props.title}></svg>
+      agentImage: <svg className="connectionPic" data-jdenticon-value={this.props.title}></svg>,
+      loadingMessages: true
     };
     this.sendMessage = this.sendMessage.bind(this);
     this.retrieveMessages = this.retrieveMessages.bind(this);
+    this.poll = this.poll.bind(this);
+    this.resetPoll = this.resetPoll.bind(this);
+    this.visibilitychange = this.visibilitychange.bind(this);
+    this.messageTimeout = null;
+    this.prev = 1;
+    this.curr = 1;
   }
 
   onChange(stateKey) {
@@ -31,7 +38,9 @@ class Chat extends React.Component {
   }
 
   componentDidMount() {
-    this.retrieveMessages()
+    this.poll()
+    window.addEventListener("mouseover", this.resetPoll)
+    window.addEventListener("visibilitychange", this.visibilitychange)
   }
 
   componentDidUpdate() {
@@ -39,6 +48,34 @@ class Chat extends React.Component {
   }
 
   componentWillUnmount() {
+    clearTimeout(this.messageTimeout);
+    window.removeEventListener("mouseover", this.resetPoll);
+    window.removeEventListener("visibilitychange", this.visibilitychange);
+  }
+
+  resetPoll() {
+    clearTimeout(this.messageTimeout);
+    this.prev = 1;
+    this.curr = 1;
+    this.poll();
+  }
+
+  visibilitychange() {
+    if(!document.hidden) {
+      this.resetPoll();
+    }
+  }
+
+  poll() {
+    this.messageTimeout = setTimeout(async () => {
+      let next = this.prev + this.curr;
+      this.prev = this.curr;
+      this.curr = next;
+
+      await this.retrieveMessages();
+      this.poll()
+      console.log(this.curr);
+    }, this.curr * 1000);
   }
 
   retrieveMessages() {
@@ -52,16 +89,21 @@ class Chat extends React.Component {
         console.error("Error getting messages", e);
     });
     promise.then((resp) => {
-      if(resp === undefined || resp.data === null) {
-        this.setState({
-            messages: []
-        })
-      }
-      else {
-        this.setState({
-            messages: resp.data
-        })
-      }
+      if(JSON.stringify(this.state.messages) !== JSON.stringify(resp.data)) {
+        if(resp === undefined || resp.data === null) {
+          this.setState({
+              messages: [],
+              loadingMessages: false
+          })
+        }
+        else {
+          this.setState({
+              messages: resp.data,
+              loadingMessages: false
+          })
+        }
+
+     }
     });
   }
 
@@ -107,6 +149,9 @@ class Chat extends React.Component {
       }
     });
     promise.then((resp) => {
+      this.setState({
+        message: ""
+      })
       this.retrieveMessages()
     })
   }
@@ -122,6 +167,14 @@ class Chat extends React.Component {
     }
   }
 
+  loading() {
+    return (
+      <div className="loadingio-spinner-spinner-e99p94i3o4p"><div className="ldio-o87ynsbkwv">
+      <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+      </div></div>
+    )
+  }
+
   render() {
     const script = document.createElement("script");
     script.src = "https://cdn.jsdelivr.net/npm/jdenticon@2.1.1";
@@ -130,14 +183,16 @@ class Chat extends React.Component {
     return (
       <div>
         <div id="chatBody" className="chatBody">
-          {this.displayMessages()}
+          {this.state.loadingMessages ? this.loading() : this.displayMessages()}
           {this.scrollToBottom()}
         </div>
         <InputGroup>
-          <Input autoFocus id={this.props.invitation.concat(this.props.title)} onMouseDown={(e)=>{ e.stopPropagation();}}
+          <Input className="messageInput" autoFocus id={this.props.invitation.concat(this.props.title)} onMouseDown={(e)=>{ e.stopPropagation();}}
             type="text" name="message" placeholder="Send Message" onKeyDown={(e)=>{ if(e.keyCode === 13){this.sendMessage()}}} value={this.state.message} onChange={this.onChange('message')}/>
           <InputGroupAddon addonType="append">
-            <Button onClick={this.sendMessage} color="secondary">Send</Button>
+            <div className="sendMessageButtonContainer">
+              <i className="fa fa-paper-plane sendButton" onClick={this.sendMessage} />
+            </div>
           </InputGroupAddon>
          </InputGroup>
        </div>
@@ -145,3 +200,5 @@ class Chat extends React.Component {
   }
 }
 export default Chat;
+
+//            <Button className="sendButton" onClick={this.sendMessage}>Send</Button>

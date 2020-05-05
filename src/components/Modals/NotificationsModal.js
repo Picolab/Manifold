@@ -19,6 +19,7 @@ class NotificationsModal extends Component {
     this.getNotificationsCount = this.getNotificationsCount.bind(this);
     this.poll = this.poll.bind(this);
     this.resetPoll = this.resetPoll.bind(this);
+    this.visibilitychange = this.visibilitychange.bind(this);
     this.timeout = null;
     this.prev = 1;
     this.curr = 1;
@@ -28,12 +29,12 @@ class NotificationsModal extends Component {
     this.getNotifications();
     this.poll()
     window.addEventListener("mouseover", this.resetPoll)
-    window.addEventListener("visibilitychange", ()=>{ if(!document.hidden) {this.resetPoll();}})
+    window.addEventListener("visibilitychange", this.visibilitychange)
   }
 
   componentWilUnmount() {
-    window.removeEventListener("mouseover");
-    window.removeEventListener("visibilitychange");
+    window.removeEventListener("mouseover", this.resetPoll);
+    window.removeEventListener("visibilitychange", this.visibilitychange);
   }
 
   resetPoll() {
@@ -42,6 +43,12 @@ class NotificationsModal extends Component {
     this.prev = 1;
     this.curr = 1;
     this.poll();
+  }
+
+  visibilitychange() {
+    if(!document.hidden) {
+      this.resetPoll();
+    }
   }
 
   poll() {

@@ -1,0 +1,23 @@
+.cancelButton {
+  color: #f8a20e;
+  border-color: #f8a20e;
+}
+
+.cancelButton:hover {
+  background-color: #f8a20e;
+  color: white;
+}
+
+.nav-tabs .nav-link.active {
+  border-right-color: #f8a20e;
+  border-left-color: #f8a20e;
+  border-top-color:  #f8a20e;
+}
+
+.nav-link:hover {
+  cursor: pointer;
+}
+
+.tab-content {
+  border-color: #f8a20e;
+}

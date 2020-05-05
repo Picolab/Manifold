@@ -17,21 +17,54 @@ class CloudAgent extends React.Component {
       edgeModal: false,
       deleteRouterModal: false,
       hasRouterConnection: false,
-      viaRouterCheck: false
+      viaRouterCheck: false,
+      loading: true
     };
     this.getLabel = this.getLabel.bind(this);
     this.getUI = this.getUI.bind(this);
-
+    this.poll = this.poll.bind(this);
+    this.resetPoll = this.resetPoll.bind(this);
+    this.visibilitychange = this.visibilitychange.bind(this);
+    this.connTimeout = null;
+    this.prev = 1;
+    this.curr = 1;
   }
 
   componentDidMount() {
     this.getLabel()
-    this.getUI()
     const script = document.createElement("script");
     script.src = "https://cdn.jsdelivr.net/npm/jdenticon@2.1.1";
     script.async = true;
     document.body.appendChild(script);
-    this.connVar = setInterval(() => this.getUI(), 3000);
+    this.poll()
+    window.addEventListener("mouseover", this.resetPoll)
+    window.addEventListener("visibilitychange", this.visibilitychange)
+  }
+
+  resetPoll() {
+    clearTimeout(this.connTimeout);
+    console.log("cleared");
+    this.prev = 1;
+    this.curr = 1;
+    this.poll();
+  }
+
+  visibilitychange() {
+    if(!document.hidden) {
+      this.resetPoll();
+    }
+  }
+
+  poll() {
+    this.connTimeout = setTimeout(async () => {
+      let next = this.prev + this.curr;
+      this.prev = this.curr;
+      this.curr = next;
+
+      await this.getUI();
+      this.poll()
+      console.log(this.curr);
+    }, this.curr * 1000);
   }
 
   setCurrentPage() {
@@ -45,8 +78,9 @@ class CloudAgent extends React.Component {
   }
 
   componentWillUnmount() {
-    clearInterval(this.connVar);
-    clearInterval(this.pollInterval);
+    clearTimeout(this.connTimeout);
+    window.removeEventListener("mouseover", this.resetPoll);
+    window.removeEventListener("visibilitychange", this.visibilitychange);
   }
 
   onChange(stateKey) {
@@ -82,7 +116,8 @@ class CloudAgent extends React.Component {
     promise.then((resp) => {
       if(JSON.stringify(resp.data) !== JSON.stringify(this.state.connections)) {
         this.setState({
-          connections: resp.data
+          connections: resp.data,
+          loading: false
         });
       }
     });
@@ -136,6 +171,14 @@ class CloudAgent extends React.Component {
     );
   }
 
+  loading() {
+    return (
+      <div className="loadingio-spinner-spinner-e99p94i3o4p"><div className="ldio-o87ynsbkwv">
+      <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+      </div></div>
+    )
+  }
+
   render() {
     const script = document.createElement("script");
     script.src = "https://cdn.jsdelivr.net/npm/jdenticon@2.1.1";
@@ -145,7 +188,7 @@ class CloudAgent extends React.Component {
       <div>
           {this.displayHeader()}
         <div>
-          {this.displayConnections()}
+          { this.state.loading ? this.loading() : this.displayConnections()}
         </div>
       </div>
     );
