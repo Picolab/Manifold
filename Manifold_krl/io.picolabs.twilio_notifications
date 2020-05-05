@@ -25,7 +25,10 @@ ruleset io.picolabs.twilio_notifications {
       default_num = contacts.filter(function(x) {
         (x{"phone"} != null && x{"favorite"} == "true");
       });
-      default_num.values()[0]{"phone"}
+      number = default_num.values()[0]{"phone"};
+      (number.isnull()) =>  contacts.filter(function(x) {
+        ((x{"phone"}.isnull() == false) && x{"phone"}.length() > 1)
+      }).values()[0]{"phone"}  | number
     }
 
     getToPhone = function(id, rs) {
@@ -73,7 +76,7 @@ ruleset io.picolabs.twilio_notifications {
       rs = event:attr("rs");
       id = event:attr("id");
       owner_eci = wrangler:parent_eci().klog("parentEci");
-      contacts = wrangler:skyQuery(owner_eci, "io.picolabs.profile", "getOther").klog("contacts")
+      contacts = wrangler:skyQuery(owner_eci, "io.picolabs.profile", "getContacts").klog("contacts")
       default_number = getDefaultNumber(contacts).klog("default_num")
 
     }
