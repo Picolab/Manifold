@@ -238,6 +238,17 @@
   color: #87cefa
 }
 
+.enableConnectionsButton {
+  float: left;
+  clear: both;
+  color: #f8a20e;
+  margin-top: 15px;
+}
+
+.enableConnectionsButton:hover {
+  color: white;
+  background-color: #f8a20e;
+}
 
 @keyframes ldio-o87ynsbkwv {
   0% { opacity: 1 }

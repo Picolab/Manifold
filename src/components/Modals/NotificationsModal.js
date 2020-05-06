@@ -39,7 +39,6 @@ class NotificationsModal extends Component {
 
   resetPoll() {
     clearTimeout(this.timeout);
-    console.log("cleared");
     this.prev = 1;
     this.curr = 1;
     this.poll();
@@ -59,7 +58,6 @@ class NotificationsModal extends Component {
 
       await this.getNotificationsCount();
       this.poll()
-      console.log(this.curr);
     }, this.curr * 1000);
   }
 

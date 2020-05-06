@@ -16,6 +16,7 @@ class Chat extends React.Component {
       message: "",
       myImage: <svg className="profilePic" data-jdenticon-value={this.props.myName}></svg>,
       agentImage: <svg className="connectionPic" data-jdenticon-value={this.props.title}></svg>,
+      canMessage: true,
       loadingMessages: true
     };
     this.sendMessage = this.sendMessage.bind(this);
@@ -74,8 +75,21 @@ class Chat extends React.Component {
 
       await this.retrieveMessages();
       this.poll()
-      console.log(this.curr);
     }, this.curr * 1000);
+  }
+
+  canMessage() {
+    const promise = this.props.manifoldQuery({
+      rid: "org.sovrin.manifold_cloud_agent",
+      funcName: "canMessage"
+    }).catch((e) => {
+        console.error("Error getting if agent can ping", e);
+    });
+    promise.then((resp) => {
+      this.setState({
+        canMessage: resp.data
+      });
+    });
   }
 
   retrieveMessages() {
@@ -190,8 +204,8 @@ class Chat extends React.Component {
           <Input className="messageInput" autoFocus id={this.props.invitation.concat(this.props.title)} onMouseDown={(e)=>{ e.stopPropagation();}}
             type="text" name="message" placeholder="Send Message" onKeyDown={(e)=>{ if(e.keyCode === 13){this.sendMessage()}}} value={this.state.message} onChange={this.onChange('message')}/>
           <InputGroupAddon addonType="append">
-            <div className="sendMessageButtonContainer">
-              <i className="fa fa-paper-plane sendButton" onClick={this.sendMessage} />
+            <div className="sendMessageButtonContainer" onClick={this.sendMessage}>
+              <i className="fa fa-paper-plane sendButton" />
             </div>
           </InputGroupAddon>
          </InputGroup>

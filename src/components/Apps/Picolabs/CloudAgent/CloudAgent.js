@@ -41,9 +41,18 @@ class CloudAgent extends React.Component {
     window.addEventListener("visibilitychange", this.visibilitychange)
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.picoID !== prevProps.picoID) {
+      this.setState({
+        loading: true
+      })
+      this.getLabel();
+      this.resetPoll();
+    }
+  }
+
   resetPoll() {
     clearTimeout(this.connTimeout);
-    console.log("cleared");
     this.prev = 1;
     this.curr = 1;
     this.poll();
@@ -63,7 +72,6 @@ class CloudAgent extends React.Component {
 
       await this.getUI();
       this.poll()
-      console.log(this.curr);
     }, this.curr * 1000);
   }
 
@@ -132,6 +140,7 @@ class CloudAgent extends React.Component {
             <ConnectionDropdown
               signalEvent={this.props.signalEvent}
               manifoldQuery={this.props.manifoldQuery}
+              picoID={this.props.picoID}
             />
           </h1>
         </div>

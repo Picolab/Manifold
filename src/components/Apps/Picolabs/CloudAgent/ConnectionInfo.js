@@ -9,7 +9,7 @@ class ConnectionInfo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      canPing: false
+      canPing: true
     };
 
     this.acceptPings = this.acceptPings.bind(this);
@@ -24,7 +24,9 @@ class ConnectionInfo extends React.Component {
     const promise = this.props.signalEvent({
       domain: "sovrin",
       type: "accept_trust_pings",
-      attrs: {}
+      attrs: {
+        "their_vk": this.props.their_vk
+      }
     }).catch((e) => {
       console.error("Error enabling trust ping", e);
     });
@@ -37,7 +39,10 @@ class ConnectionInfo extends React.Component {
   canPing() {
     const promise = this.props.manifoldQuery({
       rid: "org.sovrin.manifold_cloud_agent",
-      funcName: "canPing"
+      funcName: "canPing",
+      funcArgs: {
+        "their_vk": this.props.their_vk
+      }
     }).catch((e) => {
         console.error("Error getting if agent can ping", e);
     });
@@ -48,15 +53,15 @@ class ConnectionInfo extends React.Component {
     });
   }
 
+  // <RemovePingModal
+  //   signalEvent={this.props.signalEvent}
+  //   canPing={this.canPing}
+  // />
   displayPingButton() {
     if(this.state.canPing) {
       return (
         <div style={{"display": "grid"}}>
           <button className="pingAgentButton" onClick={this.props.sendTrustPing}>Send Trust Ping</button>
-          <RemovePingModal
-            signalEvent={this.props.signalEvent}
-            canPing={this.canPing}
-          />
         </div>
       )
     }

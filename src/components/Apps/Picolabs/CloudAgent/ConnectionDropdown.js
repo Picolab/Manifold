@@ -30,6 +30,11 @@ class ConnectionDropdown extends React.Component {
     this.isStatic()
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.picoID !== prevProps.picoID) {
+      this.isStatic()
+    }
+  }
   onChange(stateKey) {
     return (event) => {
       let value = event.target.value
@@ -170,7 +175,7 @@ class ConnectionDropdown extends React.Component {
     }
     else {
       return (
-          <Button onClick={this.acceptConnections} style={{"color": "#87cefa"}}> <i className="fa fa-plus-circle" /> Enable Connections</Button>
+          <Button onClick={this.acceptConnections} className="enableConnectionsButton"> <i className="fa fa-plus-circle" /> Enable Connections</Button>
       );
     }
   }
