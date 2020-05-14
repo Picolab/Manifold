@@ -124,7 +124,7 @@ ruleset io.picolabs.github_signin {
         attributes { "uuid": uuid }
     }
   }
-
+  
   rule clearUUID {
     select when github clear_uuid
     always {
