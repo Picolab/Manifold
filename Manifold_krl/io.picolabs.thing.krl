@@ -43,7 +43,7 @@ ruleset io.picolabs.thing {
         attributes event:attrs;
     }
   }
-
+  
   rule uninstallApp {
     select when manifold uninstallapp
     pre {}
