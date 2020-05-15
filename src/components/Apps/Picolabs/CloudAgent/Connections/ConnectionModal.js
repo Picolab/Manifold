@@ -1,10 +1,11 @@
 import React from 'react';
 import {Modal, ModalHeader, ModalBody, ModalFooter, Button, Media, TabContent, TabPane, Nav, NavItem,
         NavLink, Row, Col} from 'reactstrap';
-import {customEvent, customQuery} from '../../../../utils/manifoldSDK';
-import {getManifoldECI} from '../../../../utils/AuthService';
+import {customEvent, customQuery} from '../../../../../utils/manifoldSDK';
+import {getManifoldECI} from '../../../../../utils/AuthService';
 import Chat from './Chat';
 import ConnectionInfo from './ConnectionInfo';
+import Advanced from './Advanced';
 import "./ConnectionModal.css"
 import classnames from 'classnames';
 import queryString from 'query-string';
@@ -18,7 +19,7 @@ class ConnectionModal extends React.Component {
     this.state = {
       modal: modalState === 'true' ? true : false,
       activeTab: tab !== null ? tab : '1',
-      pingStatus: null
+      pingStatus: ""
     };
     this.modalToggle = this.modalToggle.bind(this);
     this.toggle = this.toggle.bind(this);
@@ -105,7 +106,7 @@ class ConnectionModal extends React.Component {
     localStorage.setItem('modalState'.concat(this.props.theirDID), !this.state.modal)
     this.setState(prevState => ({
       modal: !prevState.modal,
-      pingStatus: null
+      pingStatus: ""
     }));
     this.setCurrentPage();
   }
@@ -115,14 +116,14 @@ class ConnectionModal extends React.Component {
       localStorage.setItem('currentTab'.concat(this.props.theirDID), tab);
       this.setState({
         activeTab: tab,
-        pingStatus: null
+        pingStatus: ""
       });
     }
   }
 
   getPingStatus() {
     const promise = this.props.manifoldQuery({
-      rid: "org.sovrin.manifold_cloud_agent",
+      rid: "io.picolabs.manifold_cloud_agent",
       funcName: "getPingStatus"
     }).catch((e) => {
           console.error("Error getting ping status", e);
@@ -165,7 +166,7 @@ class ConnectionModal extends React.Component {
                     className={classnames({ active: this.state.activeTab === '1' })}
                     onClick={() => { this.toggle('1'); }}
                   >
-                    Info
+                    Ping
                   </NavLink>
                 </NavItem>
                 <NavItem>
@@ -176,23 +177,32 @@ class ConnectionModal extends React.Component {
                     Messaging
                   </NavLink>
                 </NavItem>
+                <NavItem>
+                  <NavLink
+                    className={classnames({ active: this.state.activeTab === '3' })}
+                    onClick={() => { this.toggle('3'); }}
+                  >
+                    Credentials
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink
+                    className={classnames({ active: this.state.activeTab === '4' })}
+                    onClick={() => { this.toggle('4'); }}
+                  >
+                    Advanced
+                  </NavLink>
+                </NavItem>
               </Nav>
               <TabContent activeTab={this.state.activeTab}>
                 <TabPane tabId="1">
-                  <Row>
-                    <Col sm="12">
-                      <ConnectionInfo
-                        myDID={this.props.myDID}
-                        theirDID={this.props.theirDID}
-                        sendTrustPing={this.sendTrustPing}
-                        modalToggle={this.modalToggle}
-                        signalEvent={this.props.signalEvent}
-                        manifoldQuery={this.props.manifoldQuery}
-                        their_vk={this.props.their_vk}
-                        getUI={this.props.getUI}
-                      />
-                    </Col>
-                  </Row>
+                  <ConnectionInfo
+                    sendTrustPing={this.sendTrustPing}
+                    signalEvent={this.props.signalEvent}
+                    manifoldQuery={this.props.manifoldQuery}
+                    their_vk={this.props.their_vk}
+                    pingStatus={this.state.pingStatus}
+                  />
                 </TabPane>
                 <TabPane tabId="2">
                   <Chat
@@ -201,9 +211,20 @@ class ConnectionModal extends React.Component {
                     their_vk={this.props.their_vk}
                     signalEvent={this.props.signalEvent}
                     manifoldQuery={this.props.manifoldQuery}
-                    theirDID={this.props.theirDID}
                     title={this.props.title}
                     invitation={this.props.endPoint}
+                  />
+                </TabPane>
+                <TabPane tabId="3">
+                  <div>Coming soon...</div>
+                </TabPane>
+                <TabPane tabId="4">
+                  <Advanced
+                    myDID={this.props.myDID}
+                    theirDID={this.props.theirDID}
+                    their_vk={this.props.their_vk}
+                    getUI={this.props.getUI}
+                    signalEvent={this.props.signalEvent}
                   />
                 </TabPane>
               </TabContent>

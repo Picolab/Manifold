@@ -3,7 +3,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, ListGroupItem, List
 import { connect } from 'react-redux';
 import { storeNotifications, storeNotificationsCount } from '../../actions';
 import { getNotificationsCount, getNotifications } from '../../reducers';
-import {customQuery, customEvent} from '../../utils/manifoldSDK';
+import {customQuery, customEvent, displayError} from '../../utils/manifoldSDK';
 import {getManifoldECI} from '../../utils/AuthService';
 import './notificationsCSS.css'
 
@@ -77,13 +77,19 @@ class NotificationsModal extends Component {
 
   getNotificationsCount() {
     if(this.state.isActive === true) {
-      const promise = customQuery(getManifoldECI(), 'io.picolabs.notifications', 'getBadgeNumber', {});
-      promise.then((resp) => {
-        if(this.props.count !== resp.data) {
-          if(this.props.count < resp.data) this.getNotifications();
-          this.props.storeCount(resp.data);
+      const promise = customQuery(getManifoldECI(), 'io.picolabs.notifications', 'getBadgeNumber', {})
+      promise.then(
+        (resp) => {
+
+          if(this.props.count !== resp.data) {
+            if(this.props.count < resp.data) this.getNotifications();
+            this.props.storeCount(resp.data);
+          }
+        },
+        (error) => {
+          displayError(true, "Error getting the notification count.", "404")
         }
-      });
+    );
     }
   }
 

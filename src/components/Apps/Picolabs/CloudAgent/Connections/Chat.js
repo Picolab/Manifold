@@ -1,7 +1,6 @@
 import React from 'react';
 import { InputGroup, InputGroupAddon, Button, Input, Media} from 'reactstrap';
-import { retrieveOwnerProfile } from '../../../../utils/manifoldSDK';
-import messageFailure from './failedmessage.png';
+import { retrieveOwnerProfile } from '../../../../../utils/manifoldSDK';
 import './messaging.css';
 
 class Chat extends React.Component {
@@ -80,7 +79,7 @@ class Chat extends React.Component {
 
   canMessage() {
     const promise = this.props.manifoldQuery({
-      rid: "org.sovrin.manifold_cloud_agent",
+      rid: "io.picolabs.manifold_cloud_agent",
       funcName: "canMessage"
     }).catch((e) => {
         console.error("Error getting if agent can ping", e);
@@ -94,7 +93,7 @@ class Chat extends React.Component {
 
   retrieveMessages() {
     let promise = this.props.manifoldQuery({
-      rid: "org.sovrin.aca.basicmessage",
+      rid: "io.picolabs.aca.basicmessage",
       funcName: "basicmessages",
       funcArgs: {
         their_vk: this.props.their_vk

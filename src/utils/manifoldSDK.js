@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { getHostname, getOwnerECI ,getManifoldECI} from './AuthService';
 import { HTTP_PROTOCOL, GOOGLE_ROOT_SECURED_DID, GITHUB_ROOT_SECURED_DID } from './config.js';
+import { store } from '../App';
+import { toggleErrorModal } from '../actions';
 
 //axios.defaults.withCredentials = true;
 
@@ -154,4 +156,8 @@ function linearBackoffHelper(attemptNum, eventFunction, eventAttrs) {
 
 export function linearEventBackoff(eventFunction, eventAttrs) {
   return linearBackoffHelper(0, eventFunction, eventAttrs)
+}
+
+export function displayError(value, message, status) {
+  store.dispatch(toggleErrorModal(value, message, status))
 }

@@ -1,0 +1,13 @@
+.advancedContainer {
+  display: flow-root;
+}
+
+.deleteConnectionButton {
+  color: #fff;
+  background-color: #f86c6b;
+  border-color: #f86c6b;
+  float: right;
+  clear: both;
+  margin-top: 15px;
+  border-radius: 20px;
+}

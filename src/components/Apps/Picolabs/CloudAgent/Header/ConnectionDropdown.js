@@ -46,7 +46,7 @@ class ConnectionDropdown extends React.Component {
 
   isStatic() {
     const promise = this.props.manifoldQuery({
-      rid: "org.sovrin.manifold_cloud_agent",
+      rid: "io.picolabs.manifold_cloud_agent",
       funcName: "isStatic"
     }).catch((e) => {
         console.error("Error getting technical details", e);
@@ -76,7 +76,7 @@ class ConnectionDropdown extends React.Component {
 
   getInvitation() {
     const promise = this.props.manifoldQuery({
-      rid: "org.sovrin.aca.connections",
+      rid: "io.picolabs.aca.connections",
       funcName: "invitation"
     }).catch((e) => {
         console.error("Error getting technical details", e);

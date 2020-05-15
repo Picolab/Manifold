@@ -29,5 +29,5 @@ export default {
   "io.picolabs.reminders": Reminders,
   "io.picolabs.manifold.smart_mirror": SmartMirror,
   "io.picolabs.manifold_monitor": ManifoldMonitor,
-  "org.sovrin.manifold_cloud_agent": CloudAgent
+  "io.picolabs.manifold_cloud_agent": CloudAgent
 }

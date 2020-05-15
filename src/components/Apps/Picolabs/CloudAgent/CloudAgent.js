@@ -2,8 +2,8 @@ import React from 'react';
 import './SovrinAgent.css';
 import icon from './SovrinIcon.png';
 import { Media } from 'reactstrap';
-import ConnectionModal from './ConnectionModal';
-import ConnectionDropdown from './ConnectionDropdown';
+import ConnectionModal from './Connections/ConnectionModal';
+import ConnectionDropdown from './Header/ConnectionDropdown';
 
 class CloudAgent extends React.Component {
   constructor(props) {
@@ -102,7 +102,7 @@ class CloudAgent extends React.Component {
 
   getLabel() {
     const promise = this.props.manifoldQuery({
-      rid: "org.sovrin.manifold_cloud_agent",
+      rid: "io.picolabs.manifold_cloud_agent",
       funcName: "getLabel"
     }).catch((e) => {
         console.error("Error getting technical details", e);
@@ -116,7 +116,7 @@ class CloudAgent extends React.Component {
 
   getUI() {
     const promise = this.props.manifoldQuery({
-      rid: "org.sovrin.manifold_cloud_agent",
+      rid: "io.picolabs.manifold_cloud_agent",
       funcName: "getConnections"
     }).catch((e) => {
         console.error("Error getting technical details", e);
