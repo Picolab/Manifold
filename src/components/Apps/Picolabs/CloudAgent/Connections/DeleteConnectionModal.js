@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import "./ConnectionInfo.css"
+import "./Ping.css"
 
 class DeleteConnectionModal extends React.Component {
   constructor(props) {
@@ -30,7 +30,7 @@ class DeleteConnectionModal extends React.Component {
         console.error("Error deleting connection", e);
     });
     promise.then((resp) => {
-      this.props.getUI();
+      this.props.getConnections();
     });
   }
 

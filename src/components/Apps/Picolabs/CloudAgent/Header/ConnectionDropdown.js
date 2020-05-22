@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, InputGroup, InputGroupAddon, Input} from 'reactstrap';
+import { Button, Dropdown, DropdownToggle, DropdownMenu, Input} from 'reactstrap';
 import MakeStaticModal from "./MakeStaticModal"
 import "./ConnectionDropdown.css";
 
@@ -131,7 +131,7 @@ class ConnectionDropdown extends React.Component {
 
   displayInvitation() {
     return (
-      <div className="genInvitationContainer">
+      <div>
         <Input id={this.state.invitation} defaultValue={this.state.invitation} className="genInvitationInput"/>
         <Button className="actionButton" id={this.state.invitation} value={this.state.invitation} onClick={this.copyInvitation}>Copy</Button>
       </div>

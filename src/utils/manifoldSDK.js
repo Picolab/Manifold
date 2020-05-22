@@ -158,6 +158,12 @@ export function linearEventBackoff(eventFunction, eventAttrs) {
   return linearBackoffHelper(0, eventFunction, eventAttrs)
 }
 
+/*
+	value (Boolean) true must be passed in to toggle the modal.
+	message (String) the error message you want users to see.
+	status (String or Number) the status code of the error response.
+*/
+
 export function displayError(value, message, status) {
   store.dispatch(toggleErrorModal(value, message, status))
 }

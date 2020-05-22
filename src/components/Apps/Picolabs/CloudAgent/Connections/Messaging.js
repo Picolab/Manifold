@@ -1,12 +1,10 @@
 import React from 'react';
-import { InputGroup, InputGroupAddon, Button, Input, Media} from 'reactstrap';
-import { retrieveOwnerProfile } from '../../../../../utils/manifoldSDK';
-import './messaging.css';
+import { InputGroup, InputGroupAddon, Input } from 'reactstrap';
+import './Messaging.css';
 
-class Chat extends React.Component {
+class Messaging extends React.Component {
   constructor(props) {
     super(props);
-    let failedMessage = localStorage.getItem('failedMessage'.concat(this.props.theirDID));
     this.state = {
       displayName: "No User Found",
       imgURL: "",
@@ -169,12 +167,8 @@ class Chat extends React.Component {
     })
   }
 
-  refreshMessage() {
-    this.props.getUI();
-  }
-
   scrollToBottom() {
-    var element = document.getElementById("chatBody");
+    var element = document.getElementById("messagingBody");
     if(element !== null) {
       element.scrollTop = element.scrollHeight;
     }
@@ -195,7 +189,7 @@ class Chat extends React.Component {
     document.body.appendChild(script);
     return (
       <div>
-        <div id="chatBody" className="chatBody">
+        <div id="messagingBody" className="messagingBody">
           {this.state.loadingMessages ? this.loading() : this.displayMessages()}
           {this.scrollToBottom()}
         </div>
@@ -212,6 +206,6 @@ class Chat extends React.Component {
     );
   }
 }
-export default Chat;
+export default Messaging;
 
 //            <Button className="sendButton" onClick={this.sendMessage}>Send</Button>

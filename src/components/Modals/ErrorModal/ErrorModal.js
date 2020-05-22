@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { toggleErrorModal, clearErrorModal } from '../../../actions';
 import {errorModalToggle, listErrors } from '../../../reducers';
@@ -21,6 +21,7 @@ class ErrorModal extends React.Component {
 
   copyToClipboard() {
     var text = document.createElement("textarea");
+    text.style.display = "none";
     document.body.appendChild(text);
     var copyMessage = JSON.stringify(Object.values(this.props.errors));
     text.value = copyMessage;

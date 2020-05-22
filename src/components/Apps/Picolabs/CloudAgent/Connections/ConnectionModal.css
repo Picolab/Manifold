@@ -21,3 +21,40 @@
 .tab-content {
   border-color: #f8a20e;
 }
+
+.connection {
+  border-radius: 25px;
+  background: #00000085;
+  padding: 20px;
+  width: 150px;
+  max-height: 150px;
+  margin-top: 40px;
+  border: 1px solid black;
+  border-color: black;
+}
+
+.connection:hover {
+  background: black;
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 375px) {
+  .connection {
+    border-radius: 25px;
+    background: #00000085;
+    padding: 15px;
+    width: 120px;
+    max-height: 150px;
+    margin-top: 40px;
+    cursor: pointer;
+    border: 1px solid black;
+    border-color: black;
+    background: black;
+  }
+
+
+  .nav-tabs {
+    font-size: 0.67rem;
+  }
+
+}

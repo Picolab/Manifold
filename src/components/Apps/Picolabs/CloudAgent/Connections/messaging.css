@@ -1,4 +1,4 @@
-.chatBody {
+.messagingBody {
   overflow: scroll;
   border-left: 1px solid #cfd8dc;
   border-right: 1px solid #cfd8dc;
@@ -190,7 +190,7 @@
 @media only screen and (max-width: 375px) {
 
 
-  .chatBody {
+  .messagingBody {
     overflow: scroll;
     border-left: 1px solid #cfd8dc;
     border-right: 1px solid #cfd8dc;
@@ -205,7 +205,7 @@
 
 @media (max-width: 600px) {
 
-  .chatBody {
+  .messagingBody {
     overflow: scroll;
     border-left: 1px solid #cfd8dc;
     border-right: 1px solid #cfd8dc;

@@ -1,9 +1,7 @@
 import React from 'react';
-import {customEvent} from '../../../../../utils/manifoldSDK';
-import {Button} from 'reactstrap';
-import "./ConnectionInfo.css"
+import "./Ping.css"
 
-class ConnectionInfo extends React.Component {
+class Ping extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -42,4 +40,4 @@ class ConnectionInfo extends React.Component {
   }
 }
 
-export default ConnectionInfo;
+export default Ping;

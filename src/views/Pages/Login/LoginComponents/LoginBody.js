@@ -7,6 +7,9 @@ import GithubButton from './GithubButton';
 import { GITHUB_DEFINED } from '../../../../utils/config';
 import '../loginStyles.css';
 
+//Error Modal
+import ErrorModal from '../../../../components/Modals/ErrorModal/ErrorModal'
+
 class LoginBody extends Component {
   render() {
     return (
@@ -64,6 +67,7 @@ class LoginBody extends Component {
           <hr style={{width: "100%", marginTop: "0.5rem"}}/>
         </Row>
         {/*<MeetTheTeam />*/}
+        <ErrorModal/>
       </Container>
     )
   }

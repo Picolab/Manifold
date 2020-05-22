@@ -21,7 +21,7 @@ class CloudAgent extends React.Component {
       loading: true
     };
     this.getLabel = this.getLabel.bind(this);
-    this.getUI = this.getUI.bind(this);
+    this.getConnections = this.getConnections.bind(this);
     this.poll = this.poll.bind(this);
     this.resetPoll = this.resetPoll.bind(this);
     this.visibilitychange = this.visibilitychange.bind(this);
@@ -32,10 +32,10 @@ class CloudAgent extends React.Component {
 
   componentDidMount() {
     this.getLabel()
-    const script = document.createElement("script");
-    script.src = "https://cdn.jsdelivr.net/npm/jdenticon@2.1.1";
-    script.async = true;
-    document.body.appendChild(script);
+    // const script = document.createElement("script");
+    // script.src = "https://cdn.jsdelivr.net/npm/jdenticon@2.1.1";
+    // script.async = true;
+    // document.body.appendChild(script);
     this.poll()
     window.addEventListener("mouseover", this.resetPoll)
     window.addEventListener("visibilitychange", this.visibilitychange)
@@ -70,7 +70,7 @@ class CloudAgent extends React.Component {
       this.prev = this.curr;
       this.curr = next;
 
-      await this.getUI();
+      await this.getConnections();
       this.poll()
     }, this.curr * 1000);
   }
@@ -114,12 +114,12 @@ class CloudAgent extends React.Component {
     });
   }
 
-  getUI() {
+  getConnections() {
     const promise = this.props.manifoldQuery({
       rid: "io.picolabs.manifold_cloud_agent",
       funcName: "getConnections"
     }).catch((e) => {
-        console.error("Error getting technical details", e);
+        console.error("Error getting connections.", e);
     });
     promise.then((resp) => {
       if(JSON.stringify(resp.data) !== JSON.stringify(this.state.connections)) {
@@ -162,11 +162,11 @@ class CloudAgent extends React.Component {
               their_vk={this.state.connections[item]['their_vk']}
               signalEvent={this.props.signalEvent}
               manifoldQuery={this.props.manifoldQuery}
-              getUI={this.getUI}
+              getConnections={this.getConnections}
               endPoint={this.state.connections[item]["their_endpoint"]}
             />
             <div className="agentLabel">
-              <div className="agentLabel"> {this.state.connections[item]['label']} </div>
+              {this.state.connections[item]['label']}
             </div>
           </div>
         );

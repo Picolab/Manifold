@@ -1,10 +1,10 @@
 import React from 'react';
 import {Modal, ModalHeader, ModalBody, ModalFooter, Button, Media, TabContent, TabPane, Nav, NavItem,
-        NavLink, Row, Col} from 'reactstrap';
-import {customEvent, customQuery} from '../../../../../utils/manifoldSDK';
-import {getManifoldECI} from '../../../../../utils/AuthService';
-import Chat from './Chat';
-import ConnectionInfo from './ConnectionInfo';
+        NavLink} from 'reactstrap';
+import { customQuery } from '../../../../../utils/manifoldSDK';
+import { getManifoldECI } from '../../../../../utils/AuthService';
+import Messaging from './Messaging';
+import Ping from './Ping';
 import Advanced from './Advanced';
 import "./ConnectionModal.css"
 import classnames from 'classnames';
@@ -70,7 +70,7 @@ class ConnectionModal extends React.Component {
           domain:"sovrin",
           type:"set_page",
           attrs: {
-            page: "chat",
+            page: "messaging",
             their_vk: this.props.their_vk
           }
         })
@@ -196,7 +196,7 @@ class ConnectionModal extends React.Component {
               </Nav>
               <TabContent activeTab={this.state.activeTab}>
                 <TabPane tabId="1">
-                  <ConnectionInfo
+                  <Ping
                     sendTrustPing={this.sendTrustPing}
                     signalEvent={this.props.signalEvent}
                     manifoldQuery={this.props.manifoldQuery}
@@ -205,7 +205,7 @@ class ConnectionModal extends React.Component {
                   />
                 </TabPane>
                 <TabPane tabId="2">
-                  <Chat
+                  <Messaging
                     myImage={this.props.myImage}
                     connectionImage = { this.props.image !== null ? <Media object src={this.props.image} className="connectionPic" /> : null}
                     their_vk={this.props.their_vk}
@@ -223,7 +223,7 @@ class ConnectionModal extends React.Component {
                     myDID={this.props.myDID}
                     theirDID={this.props.theirDID}
                     their_vk={this.props.their_vk}
-                    getUI={this.props.getUI}
+                    getConnections={this.props.getConnections}
                     signalEvent={this.props.signalEvent}
                   />
                 </TabPane>
