@@ -200,6 +200,14 @@
     max-height: 250px;
   }
 
+  .sendButton {
+    top: 1.5vw;
+    position: absolute;
+    color: #f8a20e;
+    color: white;
+    font-size: 1.1vw;
+  }
+
 
 }
 
@@ -213,6 +221,25 @@
     width: 289px;
     height: 250px;
     max-height: 250px;
+  }
+
+  .sendButton {
+    top: 4vw;
+    position: absolute;
+    color: #f8a20e;
+    color: white;
+    font-size: 3.5vw;
+  }
+
+  .sendMessageButtonContainer {
+    background-color: #f8a20e;
+    width: 8vw;
+    height: 8vw;
+    justify-content: center;
+    display: flex;
+    border-radius: 5vw;
+    margin: 2vw;
+    border-color: #f8a20e
   }
 
 }

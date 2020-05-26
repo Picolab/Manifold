@@ -89,7 +89,7 @@ class NotificationsModal extends Component {
         (error) => {
           displayError(true, "Error getting the notification count.", "404")
         }
-    );
+      );
     }
   }
 

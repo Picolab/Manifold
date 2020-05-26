@@ -53,24 +53,21 @@ class Header extends Component {
 
   getProfileInfo() {
     const profileGetPromise = retrieveOwnerProfile();
-    profileGetPromise.then(
-      (resp) => {
-        const profile = resp.data;
-        if (profile.google) {
-          this.setState({
-            displayName: profile.google.displayName,
-            imgURL: profile.google.profileImgURL
-          })
-        } else if(profile.github) {
-          this.setState({
-            displayName: profile.github.displayName,
-            imgURL: profile.github.profileImgURL
-          })
-        }
-      },
-      (error) => {
-          displayError(true, "Error getting manifold profile.", "404")
-      }).catch((e) => {
+    profileGetPromise.then((resp) => {
+      const profile = resp.data;
+      if (profile.google) {
+        this.setState({
+          displayName: profile.google.displayName,
+          imgURL: profile.google.profileImgURL
+        })
+      } else if(profile.github) {
+        this.setState({
+          displayName: profile.github.displayName,
+          imgURL: profile.github.profileImgURL
+        })
+      }
+    }).catch((e) => {
+      displayError(true, "Error getting manifold profile.", "404")
       console.error(e);
     });
   }

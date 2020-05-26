@@ -37,30 +37,27 @@ class GoogleSignIn extends Component {
         profile
       });
       console.log(profile);
-      ownerDIDPromise.then(
-        (resp) => {
-          const { directives } = resp.data;
-          console.log("ownerDID directives:", directives);
-          let index = getOwnerDirectiveIndex(directives);
-          if(index >= 0) {
-            //we are in business
-            console.log("Retrieved owner DID? Hopefully! 😉");
-            //assign the owner DID to local storage, then redirect the window to the dashboard
-            const ownerDID = directives[index].options.DID;
-            if(ownerDID) {
-              storeOwnerECI(ownerDID);
-              window.location.assign(getManifoldURL()+`/#/mythings${params}`);
-            }else{
-              console.error("Uh oh! Something went wrong! 😭");
-            }
-          }else {
-            //we need to try again
-            this.pollForOwnerDID(id_token, attemptNum + 1, profile);
+      ownerDIDPromise.then((resp) => {
+        const { directives } = resp.data;
+        console.log("ownerDID directives:", directives);
+        let index = getOwnerDirectiveIndex(directives);
+        if(index >= 0) {
+          //we are in business
+          console.log("Retrieved owner DID? Hopefully! 😉");
+          //assign the owner DID to local storage, then redirect the window to the dashboard
+          const ownerDID = directives[index].options.DID;
+          if(ownerDID) {
+            storeOwnerECI(ownerDID);
+            window.location.assign(getManifoldURL()+`/#/mythings${params}`);
+          }else{
+            console.error("Uh oh! Something went wrong! 😭");
           }
-        },
-        (error) => {
-          displayError(true, "Could not sign in through Google.", "404");
-        }).catch((e) => {
+        }else {
+          //we need to try again
+          this.pollForOwnerDID(id_token, attemptNum + 1, profile);
+        }
+      }).catch((e) => {
+        displayError(true, "Could not sign in through Google.", "404");
         console.error(e);
       });
     }, attemptNum * 1000);

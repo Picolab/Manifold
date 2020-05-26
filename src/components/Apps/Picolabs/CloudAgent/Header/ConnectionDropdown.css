@@ -107,6 +107,18 @@ btn-outline-primary:active, .btn-outline-primary.active, .show > .btn-outline-pr
   margin-left: 5px;
 }
 
+.enableConnectionsButton {
+  color: #f8a20e;
+  border-color: #f8a20e;
+  border-radius: 20px;
+}
+
+.enableConnectionsButton:hover {
+  background-color: #f8a20e;
+  color: white;
+  border-radius: 20px;
+}
+
 @media only screen and (max-width: 375px) {
   .notificationButton{
     float: right;

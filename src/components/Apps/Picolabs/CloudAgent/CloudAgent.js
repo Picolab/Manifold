@@ -1,9 +1,10 @@
 import React from 'react';
-import './SovrinAgent.css';
+import './CloudAgent.css';
 import icon from './SovrinIcon.png';
 import { Media } from 'reactstrap';
 import ConnectionModal from './Connections/ConnectionModal';
 import ConnectionDropdown from './Header/ConnectionDropdown';
+import { displayError } from '../../../../utils/manifoldSDK';
 
 class CloudAgent extends React.Component {
   constructor(props) {
@@ -32,10 +33,6 @@ class CloudAgent extends React.Component {
 
   componentDidMount() {
     this.getLabel()
-    // const script = document.createElement("script");
-    // script.src = "https://cdn.jsdelivr.net/npm/jdenticon@2.1.1";
-    // script.async = true;
-    // document.body.appendChild(script);
     this.poll()
     window.addEventListener("mouseover", this.resetPoll)
     window.addEventListener("visibilitychange", this.visibilitychange)
@@ -104,13 +101,14 @@ class CloudAgent extends React.Component {
     const promise = this.props.manifoldQuery({
       rid: "io.picolabs.manifold_cloud_agent",
       funcName: "getLabel"
-    }).catch((e) => {
-        console.error("Error getting technical details", e);
     });
     promise.then((resp) => {
         this.setState({
           label: resp.data
         });
+    }).catch((e) => {
+        displayError(true, "Error getting agent label.", 404);
+        console.error("Error getting agent label.", e);
     });
   }
 
@@ -118,8 +116,6 @@ class CloudAgent extends React.Component {
     const promise = this.props.manifoldQuery({
       rid: "io.picolabs.manifold_cloud_agent",
       funcName: "getConnections"
-    }).catch((e) => {
-        console.error("Error getting connections.", e);
     });
     promise.then((resp) => {
       if(JSON.stringify(resp.data) !== JSON.stringify(this.state.connections)) {
@@ -128,6 +124,9 @@ class CloudAgent extends React.Component {
           loading: false
         });
       }
+    }).catch((e) => {
+        displayError(true, "Error getting agent connections.", 404);
+        console.error("Error getting connections.", e);
     });
   }
 

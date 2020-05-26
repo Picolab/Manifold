@@ -1,6 +1,7 @@
 import React from 'react';
 import { InputGroup, InputGroupAddon, Input } from 'reactstrap';
 import './Messaging.css';
+import { displayError } from '../../../../../utils/manifoldSDK';
 
 class Messaging extends React.Component {
   constructor(props) {
@@ -79,13 +80,14 @@ class Messaging extends React.Component {
     const promise = this.props.manifoldQuery({
       rid: "io.picolabs.manifold_cloud_agent",
       funcName: "canMessage"
-    }).catch((e) => {
-        console.error("Error getting if agent can ping", e);
-    });
+    })
     promise.then((resp) => {
       this.setState({
         canMessage: resp.data
       });
+    }).catch((e) => {
+        displayError(true, "Error getting if agent can message.", 404);
+        console.error("Error getting if agent can message.", e);
     });
   }
 
@@ -96,8 +98,6 @@ class Messaging extends React.Component {
       funcArgs: {
         their_vk: this.props.their_vk
       }
-    }).catch((e) => {
-        console.error("Error getting messages", e);
     });
     promise.then((resp) => {
       if(JSON.stringify(this.state.messages) !== JSON.stringify(resp.data)) {
@@ -115,6 +115,9 @@ class Messaging extends React.Component {
         }
 
      }
+    }).catch((e) => {
+        displayError(true, "Error getting messages.", 404);
+        console.error("Error getting messages.", e);
     });
   }
 
@@ -207,5 +210,3 @@ class Messaging extends React.Component {
   }
 }
 export default Messaging;
-
-//            <Button className="sendButton" onClick={this.sendMessage}>Send</Button>

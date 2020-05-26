@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import "./Ping.css"
+import { displayError } from '../../../../../utils/manifoldSDK';
 
 class DeleteConnectionModal extends React.Component {
   constructor(props) {
@@ -26,11 +27,12 @@ class DeleteConnectionModal extends React.Component {
       attrs: {
         their_vk: this.props.their_vk
       }
-    }).catch((e) => {
-        console.error("Error deleting connection", e);
     });
     promise.then((resp) => {
       this.props.getConnections();
+    }).catch((e) => {
+        displayError(true, "Error deleting connection.", 404);
+        console.error("Error deleting connection.", e);
     });
   }
 

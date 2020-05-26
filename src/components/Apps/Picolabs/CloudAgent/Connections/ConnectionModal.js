@@ -1,7 +1,7 @@
 import React from 'react';
 import {Modal, ModalHeader, ModalBody, ModalFooter, Button, Media, TabContent, TabPane, Nav, NavItem,
         NavLink} from 'reactstrap';
-import { customQuery } from '../../../../../utils/manifoldSDK';
+import { customQuery, displayError } from '../../../../../utils/manifoldSDK';
 import { getManifoldECI } from '../../../../../utils/AuthService';
 import Messaging from './Messaging';
 import Ping from './Ping';
@@ -125,15 +125,16 @@ class ConnectionModal extends React.Component {
     const promise = this.props.manifoldQuery({
       rid: "io.picolabs.manifold_cloud_agent",
       funcName: "getPingStatus"
-    }).catch((e) => {
-          console.error("Error getting ping status", e);
-    });
+    })
 
     promise.then((resp) => {
       this.setState({
         pingStatus: resp.data
       })
-    })
+    }).catch((e) => {
+        displayError(true, "Error getting ping status.", 404);
+        console.error("Error getting ping status.", e);
+    });
   }
 
   sendTrustPing() {
@@ -143,13 +144,14 @@ class ConnectionModal extends React.Component {
       attrs: {
         their_vk: this.props.their_vk
       }
-    }).catch((e) => {
-      console.error("Error sending a trust ping", e);
     });
 
     promise.then((resp) => {
       setTimeout(this.getPingStatus, 3000);
-    })
+    }).catch((e) => {
+        displayError(true, "Error sending trust ping.", 404);
+        console.error("Error sending trust ping.", e);
+    });
   }
 
   render() {

@@ -3,7 +3,6 @@ import JournalCardView from './Picolabs/Journal/JournalCardView';
 import UTA from './Picolabs/UTA/UTA';
 import ScoreTracker from './Picolabs/ScoreTracker/ScoreTracker';
 import OrderPizzaCardView from './Picolabs/OrderPizza/OrderPizzaCardView';
-import SovrinAgent from './Picolabs/SovrinAgent/SovrinAgent';
 import AuroraCardView from './Picolabs/Aurora/AuroraCardView';
 import WeatherCardView from './Picolabs/Weather/WeatherCardView';
 import CO2CardView from './Picolabs/Wovyn/CO2/CO2CardView';
@@ -20,7 +19,6 @@ export default {
   "io.picolabs.uta": UTA,
   "io.picolabs.score_tracker": ScoreTracker,
   "io.picolabs.pizza": OrderPizzaCardView,
-  "org.sovrin.manifold_agent": SovrinAgent,
   "io.picolabs.aurora_app": AuroraCardView,
   "io.picolabs.weather": WeatherCardView,
   "io.picolabs.co2_app": CO2CardView,

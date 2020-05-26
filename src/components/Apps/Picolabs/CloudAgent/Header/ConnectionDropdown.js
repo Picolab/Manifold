@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Dropdown, DropdownToggle, DropdownMenu, Input} from 'reactstrap';
 import MakeStaticModal from "./MakeStaticModal"
 import "./ConnectionDropdown.css";
+import { displayError } from '../../../../../utils/manifoldSDK';
 
 class ConnectionDropdown extends React.Component {
 
@@ -48,8 +49,6 @@ class ConnectionDropdown extends React.Component {
     const promise = this.props.manifoldQuery({
       rid: "io.picolabs.manifold_cloud_agent",
       funcName: "isStatic"
-    }).catch((e) => {
-        console.error("Error getting technical details", e);
     });
     promise.then((resp) => {
       this.setState({
@@ -59,6 +58,9 @@ class ConnectionDropdown extends React.Component {
       if(resp.data === false) {
         this.getInvitation()
       }
+    }).catch((e) => {
+        displayError(true, "Error chekcing if agent is static.", 404);
+        console.error("Error checking if agent is static.", e);
     });
   }
 
@@ -78,13 +80,14 @@ class ConnectionDropdown extends React.Component {
     const promise = this.props.manifoldQuery({
       rid: "io.picolabs.aca.connections",
       funcName: "invitation"
-    }).catch((e) => {
-        console.error("Error getting technical details", e);
-    });
+    })
     promise.then((resp) => {
       this.setState({
         invitation: resp.data
       });
+    }).catch((e) => {
+        displayError(true, "Error getting invitation.", 404);
+        console.error("Error getting invitation.", e);
     });
   }
 
@@ -183,7 +186,7 @@ class ConnectionDropdown extends React.Component {
 
   render () {
       return(
-        <div>
+        <div className="connectionButtonContainer">
           {this.displayConnectionActions()}
         </div>
       );

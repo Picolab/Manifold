@@ -1,11 +1,11 @@
 .connectionHeader {
-  width: 60%;
+  width: 65%;
   margin: 0 auto;
   padding: 20px;
   display: flex;
-
   align-items: center;
   text-align: center;
+  height: 100px;
 }
 
 .icon {
