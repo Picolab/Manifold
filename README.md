@@ -198,7 +198,7 @@ You would need to install an ESLint plugin for your editor first.
 
 ><img src="http://i.imgur.com/yVNNHJM.png" width="300">
 
-Then add this block to the `package.json` file of your project:
+Then add this block to the `package.json` file of your project:  
 
 ```js
 {
