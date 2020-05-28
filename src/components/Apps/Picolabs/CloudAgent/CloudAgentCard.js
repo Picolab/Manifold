@@ -1,6 +1,6 @@
 import React from 'react';
 import './CloudAgent.css';
-import icon from './SovrinIcon.png';
+import icon from './Aries.png';
 import { Media } from 'reactstrap';
 import ConnectionCardView from './Connections/ConnectionCardView';
 import ConnectionDropdown from './Header/ConnectionDropdown';
@@ -31,6 +31,7 @@ class CloudAgentCard extends React.Component {
     this.curr = 1;
 
     this.displayConnection = this.displayConnection.bind(this);
+    this.returnToConnections = this.returnToConnections.bind(this);
   }
 
   componentDidMount() {
@@ -137,7 +138,6 @@ class CloudAgentCard extends React.Component {
         <div>
           <h1 className='connectionCardHeader'>
             <Media object src={icon} className='iconCardView'/>
-            <div className='myConnectionCardView'>Connections</div>
             <ConnectionDropdown
               signalEvent={this.props.signalEvent}
               manifoldQuery={this.props.manifoldQuery}
@@ -153,7 +153,6 @@ class CloudAgentCard extends React.Component {
     for(var item in this.state.connections) {
       if(this.state.connections[item] !== undefined) {
         let id = JSON.stringify(this.state.connections[item])
-        console.log(id);
         output.push(
           <div key={this.state.connections[item]['their_did']}>
             <div className="connectionWrapper" onClick={()=>{this.displayConnection(id);}}>
@@ -178,7 +177,7 @@ class CloudAgentCard extends React.Component {
     let connection = JSON.parse(id);
     let connectionView =
       <div>
-        <div className="returnToConnectionsContainer" onClick={()=>{ this.setState({connectionView: null }); }}>
+        <div className="returnToConnectionsContainer" onClick={this.returnToConnections}>
           <i className="fa fa-arrow-left returnToConnections" />
           Return
         </div>
@@ -193,6 +192,7 @@ class CloudAgentCard extends React.Component {
           manifoldQuery={this.props.manifoldQuery}
           getConnections={this.getConnections}
           endPoint={connection["their_endpoint"]}
+          returnToConnections={this.returnToConnections}
         />
       </div>
 
@@ -207,6 +207,10 @@ class CloudAgentCard extends React.Component {
       <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
       </div></div>
     )
+  }
+
+  returnToConnections() {
+    this.setState({connectionView: null });
   }
 
   render() {

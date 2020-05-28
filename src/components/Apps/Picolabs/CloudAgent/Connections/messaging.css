@@ -17,26 +17,26 @@
 }
 
 .sendMessageButtonContainer {
-  background-color: #f8a20e;
+  background-color: #487f45;
   width: 3vw;
   height: 3vw;
   justify-content: center;
   display: flex;
   border-radius: 3vw;
   margin: 1vw;
-  border-color: #f8a20e
+  border-color: #487f45
 }
 
 .sendMessageButtonContainer:hover {
   cursor: pointer;
-  background-color: #f8a20e96;
+  background-color: #487f4596;
 }
 
 
 .sendButton {
   top: 2vw;
   position: absolute;
-  color: #f8a20e;
+  color: #487f45;
   color: white;
   font-size: 1.1vw;
 }
@@ -48,8 +48,8 @@
 .sent {
   width: 200px;
 /*  height: 64px; */
-  border: 2px solid #f8a20e;
-  background-color: #f8a20e;
+  border: 2px solid #487f45;
+  background-color: #487f45;
   border-radius: 5px;
   padding: 10px;
   margin: 10px 0;
@@ -87,7 +87,7 @@
   top: 33.635px;
   position: absolute;
   animation: ldio-o87ynsbkwv linear 0.9345794392523364s infinite;
-  background: #f8a20e;
+  background: #487f45;
   width: 13.02px;
   height: 36.89px;
   border-radius: 6.51px / 7.7469px;
@@ -95,43 +95,43 @@
 }.ldio-o87ynsbkwv div:nth-child(1) {
   transform: rotate(0deg);
   animation-delay: -0.8411214953271027s;
-  background: #f8a20e;
+  background: #487f45;
 }.ldio-o87ynsbkwv div:nth-child(2) {
   transform: rotate(36deg);
   animation-delay: -0.7476635514018691s;
-  background: #f8a20e;
+  background: #487f45;
 }.ldio-o87ynsbkwv div:nth-child(3) {
   transform: rotate(72deg);
   animation-delay: -0.6542056074766355s;
-  background: #f8a20e;
+  background: #487f45;
 }.ldio-o87ynsbkwv div:nth-child(4) {
   transform: rotate(108deg);
   animation-delay: -0.5607476635514018s;
-  background: #f8a20e;
+  background: #487f45;
 }.ldio-o87ynsbkwv div:nth-child(5) {
   transform: rotate(144deg);
   animation-delay: -0.46728971962616817s;
-  background: #f8a20e;
+  background: #487f45;
 }.ldio-o87ynsbkwv div:nth-child(6) {
   transform: rotate(180deg);
   animation-delay: -0.37383177570093457s;
-  background: #f8a20e;
+  background: #487f45;
 }.ldio-o87ynsbkwv div:nth-child(7) {
   transform: rotate(216deg);
   animation-delay: -0.2803738317757009s;
-  background: #f8a20e;
+  background: #487f45;
 }.ldio-o87ynsbkwv div:nth-child(8) {
   transform: rotate(252deg);
   animation-delay: -0.18691588785046728s;
-  background: #f8a20e;
+  background: #487f45;
 }.ldio-o87ynsbkwv div:nth-child(9) {
   transform: rotate(288deg);
   animation-delay: -0.09345794392523364s;
-  background: #f8a20e;
+  background: #487f45;
 }.ldio-o87ynsbkwv div:nth-child(10) {
   transform: rotate(324deg);
   animation-delay: 0s;
-  background: #f8a20e;
+  background: #487f45;
 }
 .loadingio-spinner-spinner-e99p94i3o4p {
   width: 217px;
@@ -203,7 +203,7 @@
   .sendButton {
     top: 1.5vw;
     position: absolute;
-    color: #f8a20e;
+    color: #487f45;
     color: white;
     font-size: 1.1vw;
   }
@@ -226,20 +226,20 @@
   .sendButton {
     top: 4vw;
     position: absolute;
-    color: #f8a20e;
+    color: #487f45;
     color: white;
     font-size: 3.5vw;
   }
 
   .sendMessageButtonContainer {
-    background-color: #f8a20e;
+    background-color: #487f45;
     width: 8vw;
     height: 8vw;
     justify-content: center;
     display: flex;
     border-radius: 5vw;
     margin: 2vw;
-    border-color: #f8a20e
+    border-color: #487f45
   }
 
 }

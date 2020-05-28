@@ -28,14 +28,14 @@
   margin-top: 15px;
   margin-bottom: 15px;
   text-align: center;
-  border-color: #f8a20e;
+  border-color: #487f45;
 }
 
 .recInvitationInput:focus {
   margin-top: 15px;
   margin-bottom: 15px;
   text-align: center;
-  border-color: #0061f6;
+  border-color: #20a8d8;
 }
 
 .genInvitationContainer {
@@ -48,14 +48,14 @@
   margin-top: 15px;
   margin-bottom: 15px;
   text-align: center;
-  border-color: #f8a20e;
+  border-color: #487f45;
 }
 
 .genInvitationInput:focus {
   margin-top: 15px;
   margin-bottom: 15px;
   text-align: center;
-  border-color: #0061f6;
+  border-color: #20a8d8;
 }
 
 .actionsMenu {
@@ -67,35 +67,35 @@
 }
 
 .actionButton {
-  color: #f8a20e;
-  border-color: #f8a20e;
+  color: #487f45;
+  border-color: #487f45;
   border-radius: 20px;
 }
 
 .actionButton:hover {
-  background-color: #f8a20e;
+  background-color: #487f45;
   color: white;
   border-radius: 20px;
 }
 
 .btn-outline-primary {
-  color: #f8a20e;
-  border-color: #f8a20e;
+  color: #487f45;
+  border-color: #487f45;
 }
 
 .btn-outline-primary:hover {
-  background-color: #f8a20e;
-  border-color: #f8a20e;
+  background-color: #487f45;
+  border-color: #487f45;
 }
 
 btn-outline-primary:active, .btn-outline-primary.active, .show > .btn-outline-primary.dropdown-toggle {
-  background-color: #f8a20e;
-  border-color: #f8a20e;
+  background-color: #487f45;
+  border-color: #487f45;
 }
 
 .linkText {
   cursor:pointer;
-  color:blue;
+  color:#20a8d8;
   text-decoration:underline;
   font-size: 12px;
   float: right;
@@ -108,18 +108,18 @@ btn-outline-primary:active, .btn-outline-primary.active, .show > .btn-outline-pr
 }
 
 .enableConnectionsButton {
-  color: #f8a20e;
-  border-color: #f8a20e;
+  color: #487f45;
+  border-color: #487f45;
   border-radius: 20px;
 }
 
 .enableConnectionsButton:hover {
-  background-color: #f8a20e;
+  background-color: #487f45;
   color: white;
   border-radius: 20px;
 }
 
-@media only screen and (max-width: 375px) {
+@media and (max-width: 375px) {
   .notificationButton{
     float: right;
     width: auto;

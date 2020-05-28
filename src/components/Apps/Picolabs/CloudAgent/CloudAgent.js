@@ -1,6 +1,6 @@
 import React from 'react';
 import './CloudAgent.css';
-import icon from './SovrinIcon.png';
+import icon from './Aries.png';
 import { Media } from 'reactstrap';
 import ConnectionModal from './Connections/ConnectionModal';
 import ConnectionDropdown from './Header/ConnectionDropdown';

@@ -1,6 +1,5 @@
 import React from 'react';
-import {Modal, ModalHeader, ModalBody, ModalFooter, Button, Media, TabContent, TabPane, Nav, NavItem,
-        NavLink} from 'reactstrap';
+import { Media, TabContent, TabPane, Nav, NavItem, NavLink} from 'reactstrap';
 import { customQuery, displayError } from '../../../../../utils/manifoldSDK';
 import { getManifoldECI } from '../../../../../utils/AuthService';
 import Messaging from './Messaging';
@@ -212,6 +211,7 @@ class ConnectionCardView extends React.Component {
                   their_vk={this.props.their_vk}
                   getConnections={this.props.getConnections}
                   signalEvent={this.props.signalEvent}
+                  returnToConnections={this.props.returnToConnections}
                 />
               </TabPane>
             </TabContent>

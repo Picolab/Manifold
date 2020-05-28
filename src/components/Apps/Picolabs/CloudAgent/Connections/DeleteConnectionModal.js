@@ -30,6 +30,9 @@ class DeleteConnectionModal extends React.Component {
     });
     promise.then((resp) => {
       this.props.getConnections();
+      if(this.props.returnToConnections) {
+        this.props.returnToConnections();
+      }
     }).catch((e) => {
         displayError(true, "Error deleting connection.", 404);
         console.error("Error deleting connection.", e);

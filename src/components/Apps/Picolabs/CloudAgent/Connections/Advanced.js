@@ -19,6 +19,7 @@ class Advanced extends React.Component {
           getConnections={this.props.getConnections}
           their_vk={this.props.their_vk}
           signalEvent={this.props.signalEvent}
+          returnToConnections={this.props.returnToConnections}
         />
       </div>
     );

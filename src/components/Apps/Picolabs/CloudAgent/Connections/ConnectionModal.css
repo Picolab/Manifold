@@ -1,17 +1,17 @@
 .cancelButton {
-  color: #f8a20e;
-  border-color: #f8a20e;
+  color: #487f45;
+  border-color: #487f45;
 }
 
 .cancelButton:hover {
-  background-color: #f8a20e;
+  background-color: #487f45;
   color: white;
 }
 
 .nav-tabs .nav-link.active {
-  border-right-color: #f8a20e;
-  border-left-color: #f8a20e;
-  border-top-color:  #f8a20e;
+  border-right-color: #487f45;
+  border-left-color: #487f45;
+  border-top-color:  #487f45;
 }
 
 .nav-link:hover {
@@ -19,7 +19,7 @@
 }
 
 .tab-content {
-  border-color: #f8a20e;
+  border-color: #487f45;
 }
 
 .connection {
@@ -46,15 +46,19 @@
 @media only screen and (max-width: 375px) {
   .connection {
     border-radius: 25px;
-    background: #00000085;
     padding: 15px;
     width: 120px;
-    max-height: 150px;
-    margin-top: 40px;
-    cursor: pointer;
+    max-height: 120px;
+  }
+
+  .connectionWrapper {
+    border-radius: 25px;
+    background: black;
+    width: 120px;
+    max-height: 120px;
+    margin-top: 20px;
     border: 1px solid black;
     border-color: black;
-    background: black;
   }
 
 

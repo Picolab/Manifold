@@ -1,15 +1,23 @@
 .pingAgentButton {
   float: left;
   clear: both;
-  color: #f8a20e;
+  color: #487f45;
+  background-color: white;
   width: 50%;
   margin: auto;
   margin-top: 30px;
+
+  border-radius: 20px;
+}
+
+.pingAgentButton:hover {
+  color: white;
+  background-color: #487f45;
 }
 
 .linkText {
   cursor:pointer;
-  color:blue;
+  color:#20a8d8;
   text-decoration:underline;
   font-size: 12px;
   float: right;
