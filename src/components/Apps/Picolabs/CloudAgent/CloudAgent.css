@@ -8,6 +8,16 @@
   height: 100px;
 }
 
+.connectionCardHeader {
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  height: 100px;
+  justify-content: space-around;
+}
+
 .icon {
   position: relative;
   float: left;
@@ -16,11 +26,19 @@
   width: 100px;
 }
 
+.iconCardView {
+  position: relative;
+  float: left;
+  margin: 5px;
+  height: 65px;
+  width: 65px
+}
+
 .agentLabel {
   display: grid;
   margin-top: 0px;
   max-height: 170px;
-  width: 200px;
+  width: 150px;
   font-size: 23px;
   text-align: center;
 }
@@ -28,6 +46,11 @@
 .myConnection {
   margin: 70px;
 }
+
+.myConnection {
+  margin: 55px;
+}
+
 
 .inviteItem {
   display: block;
@@ -49,6 +72,19 @@
 .flex-container {
    display: flex;
    flex-wrap: wrap;
+}
+
+.returnToConnectionsContainer {
+  cursor: pointer;
+  margin-bottom: 10px;
+  color: #f8a20e;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+
+.returnToConnections {
+  margin-right: 5px;
 }
 
 .flex-container > div {

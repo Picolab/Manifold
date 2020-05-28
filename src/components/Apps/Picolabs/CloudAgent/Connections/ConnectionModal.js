@@ -157,7 +157,9 @@ class ConnectionModal extends React.Component {
   render() {
     return (
       <div>
-        { this.props.image !== null ? <Media object src={this.props.image} className='connection' onClick={this.modalToggle}/> : <svg className="connection" data-jdenticon-value={this.props.title} onClick={this.modalToggle}></svg>}
+        <div className="connectionWrapper">
+          <svg className="connection" data-jdenticon-value={this.props.title} onClick={this.modalToggle}></svg>
+        </div>
         <Modal isOpen={this.state.modal} toggle={this.modalToggle} className={this.props.className}>
           <ModalHeader toggle={this.modalToggle}>Connection with {this.props.title}</ModalHeader>
           <ModalBody>

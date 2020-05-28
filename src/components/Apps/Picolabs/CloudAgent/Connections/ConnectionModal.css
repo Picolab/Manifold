@@ -23,9 +23,14 @@
 }
 
 .connection {
+  padding: 20px;
+  width: 150px;
+  max-height: 150px;
+}
+
+.connectionWrapper {
   border-radius: 25px;
   background: #00000085;
-  padding: 20px;
   width: 150px;
   max-height: 150px;
   margin-top: 40px;
@@ -33,7 +38,7 @@
   border-color: black;
 }
 
-.connection:hover {
+.connectionWrapper:hover {
   background: black;
   cursor: pointer;
 }

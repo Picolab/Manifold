@@ -11,7 +11,7 @@ import Light from './Picolabs/Wovyn/Light/Light';
 import Reminders from './Picolabs/Reminders/Reminders';
 import SmartMirror from './Picolabs/SmartMirror/SmartMirror';
 import ManifoldMonitor from './Picolabs/ManifoldMonitor/ManifoldMonitor';
-import CloudAgent from './Picolabs/CloudAgent/CloudAgent'
+import CloudAgent from './Picolabs/CloudAgent/CloudAgent';
 
 export default {
   "io.picolabs.safeandmine" : SafeAndMineApp,
