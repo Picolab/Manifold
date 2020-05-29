@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import "./Ping.css"
+import "./Advanced.css"
 import { displayError } from '../../../../../utils/manifoldSDK';
 
 class DeleteConnectionModal extends React.Component {

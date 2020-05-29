@@ -154,20 +154,22 @@ class Messaging extends React.Component {
   }
 
   sendMessage() {
-    const promise = this.props.signalEvent({
-      domain : "aca_basicmessage",
-      type: "new_content",
-      attrs : {
-        their_vk: this.props.their_vk,
-        content: this.state.message
-      }
-    });
-    promise.then((resp) => {
-      this.setState({
-        message: ""
+    if(this.state.message !== "") {
+      const promise = this.props.signalEvent({
+        domain : "aca_basicmessage",
+        type: "new_content",
+        attrs : {
+          their_vk: this.props.their_vk,
+          content: this.state.message
+        }
+      });
+      promise.then((resp) => {
+        this.setState({
+          message: ""
+        })
+        this.retrieveMessages()
       })
-      this.retrieveMessages()
-    })
+    }
   }
 
   scrollToBottom() {

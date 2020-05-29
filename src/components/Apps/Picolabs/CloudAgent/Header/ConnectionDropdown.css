@@ -38,6 +38,15 @@
   border-color: #20a8d8;
 }
 
+.genInvitationButton {
+  margin: 20px;
+}
+
+.genInvitationButton:hover {
+  color: #487f45;
+  cursor: pointer;
+}
+
 .genInvitationContainer {
   justify-content: center;
   align-items: center;

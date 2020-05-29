@@ -154,7 +154,7 @@ class ConnectionDropdown extends React.Component {
             <div className="actionsContainer">
               <div className="genInvitationContainer">
                 { this.state.generateInvitationToggle ? <div>Generated Invitation</div> : <div>Generate Invitation</div>}
-                { this.state.generateInvitationToggle ? this.displayInvitation() : <i style={{"margin": "20px"}} className="fa fa-plus-circle fa-3x" onClick={this.generateInvitationToggle}/>}
+                { this.state.generateInvitationToggle ? this.displayInvitation() : <i className="fa fa-plus-circle fa-3x genInvitationButton" onClick={this.generateInvitationToggle}/>}
               </div>
               <div className="orContainer">
                 <div className="divider" />
