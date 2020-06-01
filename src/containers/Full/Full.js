@@ -32,6 +32,9 @@ import Tabs from '../../views/Components/Tabs/'
 import FontAwesome from '../../views/Icons/FontAwesome/'
 import SimpleLineIcons from '../../views/Icons/SimpleLineIcons/'
 
+//Error Modal
+import ErrorModal from '../../components/Modals/ErrorModal/ErrorModal'
+
 import { connect } from 'react-redux';
 import ActionTypes from '../../actions';
 
@@ -79,6 +82,7 @@ class Full extends Component {
           </main>
         </div>
         <Footer />
+        <ErrorModal/>
       </div>
     );
   }

@@ -32,6 +32,23 @@ export function storeNotifications(notifications) {
   }
 }
 
+export function toggleErrorModal(val, message, status) {
+  return {
+    type: ActionTypes.ERROR,
+    errorModal: val,
+    errorMessage: message,
+    errorStatusCode: status
+  }
+}
+
+export function clearErrorModal() {
+  return {
+    type: ActionTypes.CLEARERRORS,
+    errorModal: false,
+    errors: {}
+  }
+}
+
 let ActionTypes = {
   MANIFOLD_INFO: 'MANIFOLD_INFO',
   COMMAND: 'COMMAND',
@@ -45,6 +62,8 @@ let ActionTypes = {
   DISCOVERY_SUCCESS: 'DISCOVERY_SUCCESS',
   NOTIFICATIONS_COUNT: 'NOTIFICATIONS_COUNT',
   NOTIFICATIONS: 'NOTIFICATIONS',
+  ERROR: 'ERROR',
+  CLEARERRORS: 'CLEARERRORS'
 }
 
 export default ActionTypes

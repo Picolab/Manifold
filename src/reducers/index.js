@@ -2,12 +2,14 @@ import { combineReducers } from 'redux-immutable';
 import manifoldInfoReducer from './reducer_manifold_info';
 import identitiesReducer from './reducer_identities';
 import notificationsReducer from './reducer_notifications';
+import errorReducer from './reducer_error';
 import { List, Map } from 'immutable';
 
 const rootReducer = combineReducers({
   manifoldInfo: manifoldInfoReducer,
   identities: identitiesReducer,
-  manifoldNotifications: notificationsReducer
+  manifoldNotifications: notificationsReducer,
+  errorModal: errorReducer
 });
 
 export default rootReducer;
@@ -201,4 +203,13 @@ export function getNotificationsCount(state) {
 //returns an array of notifications
 export function getNotifications(state) {
   return state.getIn(["manifoldNotifications"]).notifications;
+}
+
+//Displays a error modal if request is bad
+export function errorModalToggle(state) {
+  return state.getIn(["errorModal"]).errorModal
+}
+
+export function listErrors(state) {
+  return state.getIn(["errorModal"]).errors
 }

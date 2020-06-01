@@ -1,0 +1,73 @@
+.cancelButton {
+  color: #487f45;
+  border-color: #487f45;
+}
+
+.cancelButton:hover {
+  background-color: #487f45;
+  color: white;
+}
+
+.nav-tabs .nav-link.active {
+  border-right-color: #487f45;
+  border-left-color: #487f45;
+  border-top-color:  #487f45;
+}
+
+.nav-tabs {
+  border-bottom: 1px solid #487f45;
+}
+
+.nav-link:hover {
+  cursor: pointer;
+}
+
+.tab-content {
+  border-color: #487f45;
+}
+
+.connection {
+  padding: 20px;
+  width: 150px;
+  max-height: 150px;
+}
+
+.connectionWrapper {
+  border-radius: 25px;
+  background: #00000085;
+  width: 150px;
+  max-height: 150px;
+  margin-top: 40px;
+  border: 1px solid black;
+  border-color: black;
+}
+
+.connectionWrapper:hover {
+  background: black;
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 375px) {
+  .connection {
+    border-radius: 25px;
+    padding: 15px;
+    width: 120px;
+    max-height: 120px;
+  }
+
+  .connectionWrapper {
+    border-radius: 25px;
+    background: black;
+    width: 120px;
+    max-height: 120px;
+    margin-top: 20px;
+    border: 1px solid black;
+    border-color: black;
+  }
+
+
+  .nav-tabs {
+    font-size: 0.67rem;
+  }
+
+}

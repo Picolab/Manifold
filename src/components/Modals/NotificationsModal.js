@@ -3,7 +3,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, ListGroupItem, List
 import { connect } from 'react-redux';
 import { storeNotifications, storeNotificationsCount } from '../../actions';
 import { getNotificationsCount, getNotifications } from '../../reducers';
-import {customQuery, customEvent} from '../../utils/manifoldSDK';
+import {customQuery, customEvent, displayError} from '../../utils/manifoldSDK';
 import {getManifoldECI} from '../../utils/AuthService';
 import './notificationsCSS.css'
 
@@ -12,16 +12,53 @@ class NotificationsModal extends Component {
     super(props);
     this.state = {
       modal: false,
-      count: 0
+      count: 0,
+      isActive: true
     };
-
     this.toggle = this.toggle.bind(this);
+    this.getNotificationsCount = this.getNotificationsCount.bind(this);
+    this.poll = this.poll.bind(this);
+    this.resetPoll = this.resetPoll.bind(this);
+    this.visibilitychange = this.visibilitychange.bind(this);
+    this.timeout = null;
+    this.prev = 1;
+    this.curr = 1;
   }
 
   componentDidMount() {
     this.getNotifications();
-    this.getNotificationsCount();
-    this.notifyCountVar = setInterval(() => this.getNotificationsCount(), 3000);
+    this.poll()
+    window.addEventListener("mouseover", this.resetPoll)
+    window.addEventListener("visibilitychange", this.visibilitychange)
+  }
+
+  componentWilUnmount() {
+    window.removeEventListener("mouseover", this.resetPoll);
+    window.removeEventListener("visibilitychange", this.visibilitychange);
+  }
+
+  resetPoll() {
+    clearTimeout(this.timeout);
+    this.prev = 1;
+    this.curr = 1;
+    this.poll();
+  }
+
+  visibilitychange() {
+    if(!document.hidden) {
+      this.resetPoll();
+    }
+  }
+
+  poll() {
+    this.timeout = setTimeout(async () => {
+      let next = this.prev + this.curr;
+      this.prev = this.curr;
+      this.curr = next;
+
+      await this.getNotificationsCount();
+      this.poll()
+    }, this.curr * 1000);
   }
 
   toggle() {
@@ -39,13 +76,21 @@ class NotificationsModal extends Component {
   }
 
   getNotificationsCount() {
-    const promise = customQuery(getManifoldECI(), 'io.picolabs.notifications', 'getBadgeNumber', {});
-    promise.then((resp) => {
-      if(this.props.count !== resp.data) {
-        if(this.props.count < resp.data) this.getNotifications();
-        this.props.storeCount(resp.data);
-      }
-    });
+    if(this.state.isActive === true) {
+      const promise = customQuery(getManifoldECI(), 'io.picolabs.notifications', 'getBadgeNumber', {})
+      promise.then(
+        (resp) => {
+
+          if(this.props.count !== resp.data) {
+            if(this.props.count < resp.data) this.getNotifications();
+            this.props.storeCount(resp.data);
+          }
+        },
+        (error) => {
+          displayError(true, "Error getting the notification count.", "404")
+        }
+      );
+    }
   }
 
   removeNotification(id) {

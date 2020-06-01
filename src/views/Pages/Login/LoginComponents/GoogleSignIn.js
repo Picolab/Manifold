@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { retrieveOwnerDID } from '../../../../utils/manifoldSDK';
+import { retrieveOwnerDID, displayError } from '../../../../utils/manifoldSDK';
 import { storeOwnerECI, getManifoldURL } from '../../../../utils/AuthService';
 
 /* global gapi */
@@ -57,6 +57,7 @@ class GoogleSignIn extends Component {
           this.pollForOwnerDID(id_token, attemptNum + 1, profile);
         }
       }).catch((e) => {
+        displayError(true, "Could not sign in through Google.", "404");
         console.error(e);
       });
     }, attemptNum * 1000);

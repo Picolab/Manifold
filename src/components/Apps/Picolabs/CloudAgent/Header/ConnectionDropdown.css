@@ -1,0 +1,183 @@
+.actionsContainer {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.dropdown-item i {
+  margin: 15px;
+  width: auto;
+}
+.orContainer {
+  text-align: center;
+  display: inline-flex;
+}
+
+.divider {
+  border-top: 1px solid #000;
+  width: 100px;
+  margin: 15px;
+}
+
+.recInvitationContainer {
+  justify-content: center;
+  align-items: center;
+  margin: 15px;
+}
+
+.recInvitationInput {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  text-align: center;
+  border-color: #487f45;
+}
+
+.recInvitationInput:focus {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  text-align: center;
+  border-color: #20a8d8;
+}
+
+.genInvitationButton {
+  margin: 20px;
+}
+
+.genInvitationButton:hover {
+  color: #487f45;
+  cursor: pointer;
+}
+
+.genInvitationContainer {
+  justify-content: center;
+  align-items: center;
+  margin: 15px;
+}
+
+.genInvitationInput {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  text-align: center;
+  border-color: #487f45;
+}
+
+.genInvitationInput:focus {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  text-align: center;
+  border-color: #20a8d8;
+}
+
+.actionsMenu {
+  width: 300px;
+  height: 365px;
+  font-size: 20px;
+  background-color: #e8e8e8;
+  transform: translate3d(-95px, 35.5px, 0px) !important;
+}
+
+.actionButton {
+  color: #487f45;
+  border-color: #487f45;
+  border-radius: 20px;
+}
+
+.actionButton:hover {
+  background-color: #487f45;
+  color: white;
+  border-radius: 20px;
+}
+
+.btn-outline-primary {
+  color: #487f45;
+  border-color: #487f45;
+}
+
+.btn-outline-primary:hover {
+  background-color: #487f45;
+  border-color: #487f45;
+}
+
+btn-outline-primary:active, .btn-outline-primary.active, .show > .btn-outline-primary.dropdown-toggle {
+  background-color: #487f45;
+  border-color: #487f45;
+}
+
+.linkText {
+  cursor:pointer;
+  color:#20a8d8;
+  text-decoration:underline;
+  font-size: 12px;
+  float: right;
+  margin: 5px;
+}
+
+.notificationButton {
+  float: right;
+  margin-left: 5px;
+}
+
+.enableConnectionsButton {
+  color: #487f45;
+  border-color: #487f45;
+  border-radius: 20px;
+}
+
+.enableConnectionsButton:hover {
+  background-color: #487f45;
+  color: white;
+  border-radius: 20px;
+}
+
+@media and (max-width: 375px) {
+  .notificationButton{
+    float: right;
+    width: auto;
+  }
+
+  .actionsMenu {
+    width: 180px;
+    height: 330px;
+    font-size: 15px;
+    transform: translate3d(-40px, 35.5px, 0px) !important;
+  }
+
+  .divider {
+    width: 50px;
+    margin: 10px;
+  }
+
+  .actionButton {
+    font-size: 12px;
+    padding-right: 10px;
+    padding-left: 10px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+}
+
+@media (max-width: 600px) {
+  .notificationButton{
+    float: right;
+    width: auto;
+  }
+
+  .actionsMenu {
+    width: 180px;
+    height: 330px;
+    font-size: 15px;
+    transform: translate3d(-40px, 35.5px, 0px) !important;
+  }
+
+  .divider {
+    width: 50px;
+    margin: 10px;
+  }
+
+  .actionButton {
+    font-size: 12px;
+    padding-right: 10px;
+    padding-left: 10px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+}

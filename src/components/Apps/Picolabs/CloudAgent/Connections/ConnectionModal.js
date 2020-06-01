@@ -1,9 +1,12 @@
 import React from 'react';
 import {Modal, ModalHeader, ModalBody, ModalFooter, Button, Media, TabContent, TabPane, Nav, NavItem,
-        NavLink, Row, Col} from 'reactstrap';
-import {customEvent, customQuery} from '../../../../utils/manifoldSDK';
-import {getManifoldECI} from '../../../../utils/AuthService';
-import Chat from './Chat';
+        NavLink} from 'reactstrap';
+import { customQuery, displayError } from '../../../../../utils/manifoldSDK';
+import { getManifoldECI } from '../../../../../utils/AuthService';
+import Messaging from './Messaging';
+import Ping from './Ping';
+import Advanced from './Advanced';
+import "./ConnectionModal.css"
 import classnames from 'classnames';
 import queryString from 'query-string';
 
@@ -11,23 +14,20 @@ class ConnectionModal extends React.Component {
   constructor(props) {
     super(props);
     let modalState = localStorage.getItem('modalState'.concat(this.props.theirDID));
-    //console.log("modalState",modalState);
     let tab = localStorage.getItem('currentTab'.concat(this.props.theirDID));
-    //console.log("tab",tab);
+
     this.state = {
       modal: modalState === 'true' ? true : false,
       activeTab: tab !== null ? tab : '1',
-      pingStatus: null
+      pingStatus: ""
     };
     this.modalToggle = this.modalToggle.bind(this);
     this.toggle = this.toggle.bind(this);
     this.sendTrustPing = this.sendTrustPing.bind(this);
     this.getPingStatus = this.getPingStatus.bind(this);
-    this.deleteConnection = this.deleteConnection.bind(this);
   }
 
   componentDidMount() {
-    //this.checkForNotifications();
     this.setCurrentPage();
   }
 
@@ -47,8 +47,7 @@ class ConnectionModal extends React.Component {
   }
 
   setCurrentPage() {
-    //console.log("this.state.modal",this.state.modal);
-  
+
     if(localStorage.getItem('modalState'.concat(this.props.theirDID)) === "false") {
       this.props.signalEvent({
         domain:"sovrin",
@@ -71,7 +70,7 @@ class ConnectionModal extends React.Component {
           domain:"sovrin",
           type:"set_page",
           attrs: {
-            page: "chat",
+            page: "messaging",
             their_vk: this.props.their_vk
           }
         })
@@ -107,7 +106,7 @@ class ConnectionModal extends React.Component {
     localStorage.setItem('modalState'.concat(this.props.theirDID), !this.state.modal)
     this.setState(prevState => ({
       modal: !prevState.modal,
-      pingStatus: null
+      pingStatus: ""
     }));
     this.setCurrentPage();
   }
@@ -117,75 +116,50 @@ class ConnectionModal extends React.Component {
       localStorage.setItem('currentTab'.concat(this.props.theirDID), tab);
       this.setState({
         activeTab: tab,
-        pingStatus: null
+        pingStatus: ""
       });
     }
   }
 
   getPingStatus() {
     const promise = this.props.manifoldQuery({
-      rid: "org.sovrin.manifold_agent",
-      funcName: "pingStatus"
-    }).catch((e) => {
-        console.error("Error getting message status", e);
-    });
-    promise.then((resp) => {
-      if(resp.data === "pending") {
-        if(this.pingStatusCheck === undefined || this.pingStatusCheck === null) {
-            this.pingStatusCheck = setInterval(() => this.getPingStatus(), 500);
-        }
-        this.setState({
-          pingStatus: resp.data
-        });
-      }
-      else if(resp.data === "disconnected") {
-        if(this.pingStatusCheck !== undefined) {
-            clearInterval(this.pingStatusCheck);
-            this.pingStatusCheck = undefined;
-        }
-        this.setState({
-          pingStatus: resp.data
-        });
+      rid: "io.picolabs.manifold_cloud_agent",
+      funcName: "getPingStatus"
+    })
 
-      }
-      else if(resp.data === "connected") {
-        this.props.getUI();
-        if(this.pingStatusCheck !== undefined) {
-            clearInterval(this.pingStatusCheck);
-            this.pingStatusCheck = undefined;
-        }
-        this.setState({
-          pingStatus: resp.data
-        });
-      }
+    promise.then((resp) => {
+      this.setState({
+        pingStatus: resp.data
+      })
+    }).catch((e) => {
+        displayError(true, "Error getting ping status.", 404);
+        console.error("Error getting ping status.", e);
     });
   }
 
   sendTrustPing() {
     const promise = this.props.signalEvent({
-      domain : "sovrin",
-      type: "check_connection",
-      attrs : {
+      domain: "aca_trust_ping",
+      type: "new_ping",
+      attrs: {
         their_vk: this.props.their_vk
       }
     });
-    promise.then((resp) => {
-      this.getPingStatus();
-    });
-  }
 
-  deleteConnection() {
-    const promise = customEvent( this.props.myDID , "sovrin", "connection_expired", { their_vk: this.props.their_vk }, '5');
     promise.then((resp) => {
-      this.props.getUI();
+      setTimeout(this.getPingStatus, 3000);
+    }).catch((e) => {
+        displayError(true, "Error sending trust ping.", 404);
+        console.error("Error sending trust ping.", e);
     });
-    this.modalToggle();
   }
 
   render() {
     return (
       <div>
-        { this.props.image !== null ? <Media object src={this.props.image} className='connection' onClick={this.modalToggle}/> : <svg className="connection" data-jdenticon-value={this.props.title} onClick={this.modalToggle}></svg>}
+        <div className="connectionWrapper">
+          <svg className="connection" data-jdenticon-value={this.props.title} onClick={this.modalToggle}></svg>
+        </div>
         <Modal isOpen={this.state.modal} toggle={this.modalToggle} className={this.props.className}>
           <ModalHeader toggle={this.modalToggle}>Connection with {this.props.title}</ModalHeader>
           <ModalBody>
@@ -196,7 +170,7 @@ class ConnectionModal extends React.Component {
                     className={classnames({ active: this.state.activeTab === '1' })}
                     onClick={() => { this.toggle('1'); }}
                   >
-                    Info
+                    Ping
                   </NavLink>
                 </NavItem>
                 <NavItem>
@@ -204,42 +178,64 @@ class ConnectionModal extends React.Component {
                     className={classnames({ active: this.state.activeTab === '2' })}
                     onClick={() => { this.toggle('2'); }}
                   >
-                    Chat
+                    Messaging
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink
+                    className={classnames({ active: this.state.activeTab === '3' })}
+                    onClick={() => { this.toggle('3'); }}
+                  >
+                    Credentials
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink
+                    className={classnames({ active: this.state.activeTab === '4' })}
+                    onClick={() => { this.toggle('4'); }}
+                  >
+                    Advanced
                   </NavLink>
                 </NavItem>
               </Nav>
               <TabContent activeTab={this.state.activeTab}>
                 <TabPane tabId="1">
-                  <Row>
-                    <Col sm="12">
-                      <h4>Connection Information</h4>
-                        <div className="textStickOut"> My DID: {this.props.myDID} </div>
-                        <div className="textStickOut"> Their DID: {this.props.theirDID} </div>
-                        { !this.props.hasRouter && <button className="btn-info" onClick={this.sendTrustPing}>Send Trust Ping</button>} {' '}
-                        <button className="btn-danger" onClick={this.deleteConnection}>Delete Connection</button>
-                    </Col>
-                  </Row>
+                  <Ping
+                    sendTrustPing={this.sendTrustPing}
+                    signalEvent={this.props.signalEvent}
+                    manifoldQuery={this.props.manifoldQuery}
+                    their_vk={this.props.their_vk}
+                    pingStatus={this.state.pingStatus}
+                  />
                 </TabPane>
                 <TabPane tabId="2">
-                  <Chat
+                  <Messaging
                     myImage={this.props.myImage}
                     connectionImage = { this.props.image !== null ? <Media object src={this.props.image} className="connectionPic" /> : null}
-                    messages={this.props.messages}
                     their_vk={this.props.their_vk}
                     signalEvent={this.props.signalEvent}
                     manifoldQuery={this.props.manifoldQuery}
-                    getUI={this.props.getUI}
-                    theirDID={this.props.theirDID}
                     title={this.props.title}
-                    invitation={this.props.invitation}
-                    hasRouter={this.props.hasRouter}
+                    invitation={this.props.endPoint}
+                  />
+                </TabPane>
+                <TabPane tabId="3">
+                  <div>Coming soon...</div>
+                </TabPane>
+                <TabPane tabId="4">
+                  <Advanced
+                    myDID={this.props.myDID}
+                    theirDID={this.props.theirDID}
+                    their_vk={this.props.their_vk}
+                    getConnections={this.props.getConnections}
+                    signalEvent={this.props.signalEvent}
                   />
                 </TabPane>
               </TabContent>
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button color="secondary" onClick={this.modalToggle}>Cancel</Button>
+            <Button className="cancelButton" color="secondary" onClick={this.modalToggle}>Cancel</Button>
           </ModalFooter>
           {(this.state.pingStatus === 'connected') && <div id="snackbar" style={{left: "50%", color: "green"}}>You are connected to {this.props.title}</div>}
           {(this.state.pingStatus === 'disconnected') && <div id="snackbar" style={{left: "47%"}}>You are not connected to {this.props.title}</div>}
