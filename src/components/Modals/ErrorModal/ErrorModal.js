@@ -62,7 +62,7 @@ class ErrorModal extends React.Component {
             {this.displayErrors()}
           </ModalBody>
           <ModalFooter>
-          <Button href="mailto:picolabsbyu@gmail.com" >
+          <Button href={"mailto:picolabsbyu@gmail.com?subject=Manifold Error&body=" + JSON.stringify(Object.values(this.props.errors))} >
             Report?
           </Button>
             <Button color="primary" onClick={this.copyToClipboard}> Copy </Button>
