@@ -17,8 +17,6 @@ class Feedback extends Component {
 
   render(){
     var manifold_version = process.env.REACT_APP_VERSION
-    console.log("Manifold version: %s", manifold_version)
-    // console.log(`${process.env.REACT_APP_NAME} ${process.env.REACT_APP_VERSION}`)
     var subject_helper = `mailto:picolabsbyu@gmail.com?subject=(version:%20${manifold_version})`
     return (
         <div style={{"maxWidth":"550px"}}>
