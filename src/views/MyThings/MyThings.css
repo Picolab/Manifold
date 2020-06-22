@@ -29,7 +29,7 @@
 .gear-rotate-right > div div:nth-child(6) {
     width: 72px;
     height: 72px;
-    background: #ffffff;
+    background: #e4e5e6;
     border-radius: 50%;
 }.gear-rotate-right > div div:nth-child(3) {
   transform: translate(-50%,-50%) rotate(45deg)
@@ -59,7 +59,7 @@
 .gear-rotate-left > div div:nth-child(6) {
     width: 72px;
     height: 72px;
-    background: #ffffff;
+    background: #e4e5e6;
     border-radius: 50%;
 }.gear-rotate-left > div div:nth-child(3) {
   transform: translate(-50%,-50%) rotate(45deg)
