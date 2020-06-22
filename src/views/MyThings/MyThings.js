@@ -6,11 +6,19 @@ import MyThingsHeader from '../../components/MyThingsComponents/MyThingsHeader';
 import { getThingIdList } from '../../reducers';
 import MediaQuery from 'react-responsive';
 import PropTypes from 'prop-types';
+import "./MyThings.css";
 //import Header from '../../components/Header/Header';
 import { Dropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap';
 
 export class MyThings extends Component {
-  state = { thingsSize: 'Grid', dropdownOpen: false};
+  state = { thingsSize: 'Grid', dropdownOpen: false, loading: true};
+
+  componentWillUpdate() {
+    if(this.props.thingIdList.length > 0 && this.state.loading) {
+      this.setState({loading: false})
+    }
+  }
+
   renderGrid(){
     this.toggle = this.toggle.bind(this);
     //make sure the things object really exists before trying to display them
@@ -72,10 +80,24 @@ export class MyThings extends Component {
     }));
   }
 
+  spinner() {
+    return (
+      <div>
+        <div className="loadingio-spinner-gear-q92uneavp2a-downLeft"><div className="gear-rotate-left">
+        <div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        </div></div>
+        <div className="loadingio-spinner-gear-q92uneavp2a-downRight"><div className="gear-rotate-right">
+        <div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        </div></div>
+      </div>
+    )
+  }
+
   render(){
     return (
       <div>
         <MyThingsHeader />
+        {this.state.loading && this.spinner()}
         {this.renderGrid()}
       </div>
     );
