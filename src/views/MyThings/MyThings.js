@@ -13,11 +13,11 @@ import { Dropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap
 export class MyThings extends Component {
   state = { thingsSize: 'Grid', dropdownOpen: false, loading: true};
 
-  componentWillUpdate() {
-    if(this.props.thingIdList.length > 0 && this.state.loading) {
-      this.setState({loading: false})
-    }
-  }
+  // componentWillUpdate() {
+  //   if(this.props.thingIdList.length !== undefined && this.state.loading) {
+  //     this.setState({loading: false})
+  //   }
+  // }
 
   renderGrid(){
     this.toggle = this.toggle.bind(this);
@@ -82,13 +82,14 @@ export class MyThings extends Component {
 
   spinner() {
     return (
-      <div>
+      <div className="loadingContainer">
         <div className="loadingio-spinner-gear-q92uneavp2a-downLeft"><div className="gear-rotate-left">
         <div><div></div><div></div><div></div><div></div><div></div><div></div></div>
         </div></div>
         <div className="loadingio-spinner-gear-q92uneavp2a-downRight"><div className="gear-rotate-right">
         <div><div></div><div></div><div></div><div></div><div></div><div></div></div>
         </div></div>
+        <div className="loading-text">Loading Things...</div>
       </div>
     )
   }
@@ -98,7 +99,6 @@ export class MyThings extends Component {
       <div>
         <MyThingsHeader />
         {this.state.loading && this.spinner()}
-        {this.renderGrid()}
       </div>
     );
   }
