@@ -11,23 +11,34 @@ import "./MyThings.css";
 import { Dropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap';
 
 export class MyThings extends Component {
-  state = { thingsSize: 'Grid', dropdownOpen: false, loading: true};
+  state = { thingsSize: 'Grid', dropdownOpen: false, loading: true, grid: <div></div>};
 
-  // componentWillUpdate() {
-  //   if(this.props.thingIdList.length !== undefined && this.state.loading) {
-  //     this.setState({loading: false})
-  //   }
-  // }
+  componentWillUpdate(nextProps) {
+    if(this.props.thingIdList.length !== nextProps.thingIdList.length) {
+      this.setState({
+        loading: true
+      })
+      this.setGrid(nextProps);
+    }
 
-  renderGrid(){
+  }
+
+  async setGrid(props) {
+    let grid = await this.renderGrid(props)
+    this.setState({
+      grid: grid
+    }, ()=>{this.setState({loading: false})})
+  }
+
+  async renderGrid(props) {
     this.toggle = this.toggle.bind(this);
     //make sure the things object really exists before trying to display them
-    if(this.props.thingIdList.length > 0) {
+    if(props.thingIdList.length > 0) {
         if(this.state.thingsSize === 'List') {
           return (
             <div>
               {this.loadDropdown()}
-              <CardList idList={this.props.thingIdList}/>
+              <CardList idList={props.thingIdList}/>
             </div>
           );
         }else{
@@ -35,10 +46,10 @@ export class MyThings extends Component {
             <div>
               <MediaQuery minWidth={600}>
                 {this.loadDropdown()}
-                <CardGrid idList={this.props.thingIdList} cardType="Thing"/>
+                <CardGrid idList={props.thingIdList} cardType="Thing"/>
               </MediaQuery>
               <MediaQuery maxWidth={599}>
-                <CardList idList={this.props.thingIdList}/>
+                <CardList idList={props.thingIdList}/>
               </MediaQuery>
             </div>
           );
@@ -99,6 +110,7 @@ export class MyThings extends Component {
       <div>
         <MyThingsHeader />
         {this.state.loading && this.spinner()}
+        {this.state.grid}
       </div>
     );
   }
