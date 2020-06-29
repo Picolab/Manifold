@@ -13,12 +13,12 @@ import { Dropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap
 export class MyThings extends Component {
   state = { thingsSize: 'Grid', dropdownOpen: false, loading: true, grid: <div></div>};
 
-  componentWillUpdate(nextProps) {
-    if(this.props.thingIdList.length !== nextProps.thingIdList.length) {
+  componentDidUpdate(previousProps) {
+    if(this.props.thingIdList.length !== previousProps.thingIdList.length) {
       this.setState({
         loading: true
       })
-      this.setGrid(nextProps);
+      this.setGrid(this.props);
     }
 
   }

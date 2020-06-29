@@ -44,27 +44,32 @@ class CardGrid extends Component {
 
   renderCard = (picoID, index) => {
     let pos = this.props.positionArray[index];
-    let gridSettings = {};
-    gridSettings.x = pos.x || 0;
-    gridSettings.y = pos.y || 0;
-    gridSettings.w = pos.w || 3;
-    gridSettings.h = pos.h || 2.25;
-    gridSettings.minW = pos.minw || 3;
-    gridSettings.minH = pos.minh || 2.25;
-    gridSettings.maxW = pos.maxw || 8;
-    gridSettings.maxH = pos.maxh || 5;
-    return(
-      <div key={"gridCard" + index.toString()} data-grid={gridSettings} >
+    if(pos) {
+      let gridSettings = {};
+      gridSettings.x = pos.x || 0;
+      gridSettings.y = pos.y || 0;
+      gridSettings.w = pos.w || 3;
+      gridSettings.h = pos.h || 2.25;
+      gridSettings.minW = pos.minw || 3;
+      gridSettings.minH = pos.minh || 2.25;
+      gridSettings.maxW = pos.maxw || 8;
+      gridSettings.maxH = pos.maxh || 5;
+      return(
+        <div key={"gridCard" + index.toString()} data-grid={gridSettings} >
 
-        {this.props.dropTargets && <DropTargetCard
-                                    cardType={this.props.cardType}
-                                    picoID={picoID}
-                                    handleDrop={this.props.handleDrop} />}
-        {!this.props.dropTargets && <Card
+          {this.props.dropTargets && <DropTargetCard
                                       cardType={this.props.cardType}
-                                      picoID={picoID}/>}
-      </div>
-    )
+                                      picoID={picoID}
+                                      handleDrop={this.props.handleDrop} />}
+          {!this.props.dropTargets && <Card
+                                        cardType={this.props.cardType}
+                                        picoID={picoID}/>}
+        </div>
+      )
+    }
+    else {
+      return <div key={"gridCard" + index.toString()}></div>
+    }
   }
 
   render(){
