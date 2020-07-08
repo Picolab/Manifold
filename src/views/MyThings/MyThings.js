@@ -14,7 +14,6 @@ export class MyThings extends Component {
   state = { thingsSize: 'Grid', dropdownOpen: false, loading: true, grid: <div></div>};
 
   componentDidUpdate(previousProps) {
-    console.log(this.props.thingIdList.length !== previousProps.thingIdList.length);
     if(this.props.thingIdList.length !== previousProps.thingIdList.length) {
       this.setState({
         loading: true
@@ -24,6 +23,10 @@ export class MyThings extends Component {
   }
 
   componentDidMount() {
+    console.log("didMount");
+    this.setState({
+      loading: true
+    })
     this.setGrid(this.props)
   }
 
@@ -110,6 +113,7 @@ export class MyThings extends Component {
   }
 
   render(){
+    console.log("render");
     return (
       <div>
         <MyThingsHeader />
