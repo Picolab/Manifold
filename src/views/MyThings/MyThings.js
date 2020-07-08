@@ -14,21 +14,22 @@ export class MyThings extends Component {
   state = { thingsSize: 'Grid', dropdownOpen: false, loading: true, grid: <div></div>};
 
   componentDidUpdate(previousProps) {
-    if(this.props.thingIdList.length !== previousProps.thingIdList.length) {
+    console.log("didupdate");
+    if(this.props.thingIdList.length !== previousProps.thingIdList.length || this.state.thingIdListLength !== this.props.thingIdList.length ) {
       this.setState({
-        loading: true
+        loading: true,
+        thingIdListLength: this.props.thingIdList.length
       })
       this.setGrid(this.props);
     }
   }
 
   componentDidMount() {
-    console.log("didMount");
     this.setState({
-      loading: true
+      thingIdListLength: 0
     })
-    this.setGrid(this.props)
   }
+
 
   async setGrid(props) {
     let grid = await this.renderGrid(props)
@@ -113,14 +114,22 @@ export class MyThings extends Component {
   }
 
   render(){
-    console.log("render");
-    return (
-      <div>
-        <MyThingsHeader />
-        {this.state.loading && this.spinner()}
-        {this.state.grid}
-      </div>
-    );
+    if(this.state.loading) {
+      return (
+        <div>
+          <MyThingsHeader />
+          {this.spinner()}
+        </div>
+      );
+    }
+    else {
+      return (
+        <div>
+          <MyThingsHeader />
+          {this.state.grid}
+        </div>
+      );
+    }
   }
 }
 
