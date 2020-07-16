@@ -14,13 +14,12 @@ export class MyThings extends Component {
   state = { thingsSize: 'Grid', dropdownOpen: false, loading: true, grid: <div></div>};
 
   componentDidUpdate(previousProps) {
-    console.log("didupdate");
     if(this.props.thingIdList.length !== previousProps.thingIdList.length || this.state.thingIdListLength !== this.props.thingIdList.length ) {
       this.setState({
         loading: true,
         thingIdListLength: this.props.thingIdList.length
       })
-      this.setGrid(this.props);
+      this.setGrid();
     }
   }
 
@@ -28,36 +27,34 @@ export class MyThings extends Component {
     this.setState({
       thingIdListLength: 0
     })
+    this.toggle = this.toggle.bind(this);
   }
 
 
-  async setGrid(props) {
-    let grid = await this.renderGrid(props)
+  async setGrid() {
+    let grid = await this.renderGrid()
     this.setState({
       grid: grid
     }, ()=>{this.setState({loading: false})})
   }
 
-  async renderGrid(props) {
-    this.toggle = this.toggle.bind(this);
+  async renderGrid() {
     //make sure the things object really exists before trying to display them
-    if(props.thingIdList.length > 0) {
+    if(this.props.thingIdList.length > 0) {
         if(this.state.thingsSize === 'List') {
           return (
             <div>
-              {this.loadDropdown()}
-              <CardList idList={props.thingIdList}/>
+              <CardList idList={this.props.thingIdList}/>
             </div>
           );
         }else{
           return (
             <div>
               <MediaQuery minWidth={600}>
-                {this.loadDropdown()}
-                <CardGrid idList={props.thingIdList} cardType="Thing"/>
+                <CardGrid idList={this.props.thingIdList} cardType="Thing"/>
               </MediaQuery>
               <MediaQuery maxWidth={599}>
-                <CardList idList={props.thingIdList}/>
+                <CardList idList={this.props.thingIdList}/>
               </MediaQuery>
             </div>
           );
@@ -86,10 +83,16 @@ export class MyThings extends Component {
 
   changeThingsSize = () => {
     if(this.state.thingsSize === 'Grid') {
-      this.setState({thingsSize: 'List'});
+      this.setState({
+        thingsSize: 'List',
+        loading: true
+      }, ()=> {this.setGrid()});
     }
     else if(this.state.thingsSize === 'List') {
-      this.setState({thingsSize: 'Grid'});
+      this.setState({
+        thingsSize: 'Grid',
+        loading: true
+      }, ()=> {this.setGrid()});
     }
   }
 
@@ -126,6 +129,7 @@ export class MyThings extends Component {
       return (
         <div>
           <MyThingsHeader />
+          {this.loadDropdown()}
           {this.state.grid}
         </div>
       );
