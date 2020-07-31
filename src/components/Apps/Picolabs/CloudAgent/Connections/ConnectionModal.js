@@ -7,8 +7,8 @@ import Messaging from './Messaging';
 import Ping from './Ping';
 import Advanced from './Advanced';
 import "./ConnectionModal.css"
-import classnames from 'classnames';
 import queryString from 'query-string';
+import { styles } from './ConnectionTabStyles';
 
 class ConnectionModal extends React.Component {
   constructor(props) {
@@ -167,7 +167,7 @@ class ConnectionModal extends React.Component {
               <Nav tabs>
                 <NavItem>
                   <NavLink
-                    className={classnames({ active: this.state.activeTab === '1' })}
+                    style={(this.state.activeTab === '1') ? styles.navLink : {}}
                     onClick={() => { this.toggle('1'); }}
                   >
                     Ping
@@ -175,7 +175,7 @@ class ConnectionModal extends React.Component {
                 </NavItem>
                 <NavItem>
                   <NavLink
-                    className={classnames({ active: this.state.activeTab === '2' })}
+                    style={(this.state.activeTab === '2') ? styles.navLink : {}}
                     onClick={() => { this.toggle('2'); }}
                   >
                     Messaging
@@ -183,7 +183,7 @@ class ConnectionModal extends React.Component {
                 </NavItem>
                 <NavItem>
                   <NavLink
-                    className={classnames({ active: this.state.activeTab === '3' })}
+                    style={(this.state.activeTab === '3') ? styles.navLink : {}}
                     onClick={() => { this.toggle('3'); }}
                   >
                     Credentials
@@ -191,14 +191,14 @@ class ConnectionModal extends React.Component {
                 </NavItem>
                 <NavItem>
                   <NavLink
-                    className={classnames({ active: this.state.activeTab === '4' })}
+                    style={(this.state.activeTab === '4') ? styles.navLink : {}}
                     onClick={() => { this.toggle('4'); }}
                   >
                     Advanced
                   </NavLink>
                 </NavItem>
               </Nav>
-              <TabContent activeTab={this.state.activeTab}>
+              <TabContent style={styles.tabContent} activeTab={this.state.activeTab}>
                 <TabPane tabId="1">
                   <Ping
                     sendTrustPing={this.sendTrustPing}

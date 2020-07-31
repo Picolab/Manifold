@@ -12,6 +12,7 @@ import Reminders from './Picolabs/Reminders/Reminders';
 import SmartMirror from './Picolabs/SmartMirror/SmartMirror';
 import ManifoldMonitor from './Picolabs/ManifoldMonitor/ManifoldMonitor';
 import CloudAgent from './Picolabs/CloudAgent/CloudAgent';
+import DungeonsAndDragons from './Picolabs/D&D/DungeonsAndDragons';
 
 export default {
   "io.picolabs.safeandmine" : SafeAndMineApp,
@@ -27,5 +28,6 @@ export default {
   "io.picolabs.reminders": Reminders,
   "io.picolabs.manifold.smart_mirror": SmartMirror,
   "io.picolabs.manifold_monitor": ManifoldMonitor,
-  "io.picolabs.manifold_cloud_agent": CloudAgent
+  "io.picolabs.manifold_cloud_agent": CloudAgent,
+  "D-D_Game": DungeonsAndDragons
 }

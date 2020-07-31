@@ -1,0 +1,124 @@
+.characterImage {
+  width: 20vw;
+  height: 22vw;
+}
+
+.characterName {
+  font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+  font-size: 40px;
+  text-transform: uppercase;
+  text-rendering: optimizeLegibility;
+}
+
+.characterRace {
+  font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+  font-size: 20px;
+  text-rendering: optimizeLegibility;
+}
+
+.characterSubHeader {
+  font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+  font-size: 20px;
+  text-rendering: optimizeLegibility;
+}
+
+.characterDescription {
+  font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+  font-size: 10px;
+  text-rendering: optimizeLegibility;
+}
+
+.characterAbilities {
+  font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+  font-size: 15px;
+  text-rendering: optimizeLegibility;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.characterEquipment{
+  font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+  font-size: 15px;
+  text-rendering: optimizeLegibility;
+  margin-top: 5px;
+  margin-bottom: 20px;
+}
+
+.selectionListItem {
+  border-bottom: 1px solid red;
+  margin: 5px;
+  font-size: 15px;
+}
+
+.selectionRadioButton {
+  margin-bottom: 5px;
+  margin-right: 5px;
+  cursor:pointer;
+}
+
+.selectionRadioButton input[type=radio]:checked {
+  border-radius: 11px;
+  display: block;
+  background: red;
+}
+
+.selectionDetails {
+  cursor:pointer;
+  color:red;
+  text-decoration:underline;
+  float: right;
+}
+
+.selectionDetails:hover {
+  text-shadow: 2px 2px 5px red;
+}
+
+.detailsSection {
+  margin-bottom: 10px;
+}
+
+.detailsSectionList {
+  display: list-item;
+  margin-left: 15px;
+}
+
+.detailsHeader {
+  display: inline-flex;
+  width: 100%;
+  margin-bottom: 10px;
+  border-bottom: 1px solid red;
+}
+
+.backButtonContainer {
+  font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+  cursor: pointer;
+  color: red;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.backButtonContainer:hover {
+  text-shadow: 2px 2px 5px red;
+}
+
+.detailsSectionTitle {
+  font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+  font-size: 20px;
+  color: red;
+  width: 75%;
+  text-align: center;
+}
+
+.classCard {
+  box-shadow: none;
+  margin-left: 5px;
+}
+
+.classCollapse {
+  background-color: #353434;
+}
+
+.profeciencyChoice {
+  margin-left: 5px;
+  margin-right: 5px;
+}
