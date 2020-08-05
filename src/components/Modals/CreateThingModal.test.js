@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import ConnectedModal, { CreateThingModal } from './CreateThingModal';
 import { createThing } from '../../utils/manifoldSDK';
 import ActionTypes from '../../actions';
-import uuid4 from 'uuid/v4';
+//import uuid4 from 'uuid/v4';
 
 //import stuff needed to mock the store
 import configureStore from 'redux-mock-store';
@@ -27,6 +27,16 @@ can be "implemented" to run some code, but in this case nothing runs when the mo
 */
 let mockToggle = jest.fn();
 let mockCreateThing = jest.fn();
+
+//adding this code gets rid of our dependency on npm package uuid. This function
+//isn't as good, but it will work since we're literally just using it to create
+//a random name for a test
+const uuidv4 = () => {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
 
 //clear the mock function clicked counts inbetween each test, otherwise the mock function tracking would carry from test to test
 beforeEach(() => {
