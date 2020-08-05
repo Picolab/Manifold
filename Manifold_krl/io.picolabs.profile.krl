@@ -81,11 +81,11 @@ ruleset io.picolabs.profile {
     pre {
       profile = event:attr("profile")
       googleProfile = {
-        "displayName" : profile["ig"],
-        "firstName" : profile["ofa"],
-        "lastName" : profile["wea"],
-        "profileImgURL" : profile["Paa"],
-        "email" : profile["U3"],
+        "displayName" : profile["ig"] || profile{"Cd"},
+        "firstName" : profile["ofa"] || profile{"sW"},
+        "lastName" : profile["wea"] || profile{"sU"},
+        "profileImgURL" : profile["Paa"] || profile{"PK"},
+        "email" : profile["U3"] || profile{"yu"},
       }
     }
     if event:attr("profile") then 
