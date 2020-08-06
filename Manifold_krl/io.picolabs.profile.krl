@@ -86,6 +86,7 @@ ruleset io.picolabs.profile {
         "lastName" : profile["wea"] || profile{"sU"},
         "profileImgURL" : profile["Paa"] || profile{"PK"},
         "email" : profile["U3"] || profile{"yu"},
+        "favorite": ent:profile{"google"}{"favorite"} == "true" => "true" | "false"
       }
     }
     if event:attr("profile") then 
@@ -94,7 +95,7 @@ ruleset io.picolabs.profile {
       "eid": "google_verified",
       "domain": "email",
       "type": "save_verified_email",
-      "attrs": {"email": profile["U3"]}
+      "attrs": {"email": profile["U3"] || profile{"yu"}}
     });
     fired {
       ent:profile := ent:profile.defaultsTo({}).put("google", googleProfile);
@@ -118,7 +119,8 @@ ruleset io.picolabs.profile {
         "displayName": profile["displayName"],
         "name": profile["name"],
         "profileImgURL": profile["profileImgURL"],
-        "email": profile["email"]
+        "email": profile["email"],
+        "favorite": ent:profile{"github"}{"favorite"} == "true" => "true" | "false"
       }
     }
     if event:attrs{"profile"} then 
