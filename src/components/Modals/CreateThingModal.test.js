@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ConnectedModal, { CreateThingModal } from './CreateThingModal';
+import ConnectedModal, { CreateThingModal } from './CreateThingModal/CreateThingModal';
 import { createThing } from '../../utils/manifoldSDK';
 import ActionTypes from '../../actions';
 //import uuid4 from 'uuid/v4';

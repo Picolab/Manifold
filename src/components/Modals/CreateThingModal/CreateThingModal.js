@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { createThing } from '../../utils/manifoldSDK';
+import { createThing } from '../../../utils/manifoldSDK';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { connect } from 'react-redux';
-import { commandAction } from '../../actions/command';
+import { commandAction } from '../../../actions/command';
+import IconSelector from './IconSelector';
 
 export class CreateThingModal extends Component{
   constructor(props){
     super(props);
 
     this.state = {
-      name: ""
+      name: "",
+      icon: ""
     };
 
     this.handleAddClick = this.handleAddClick.bind(this);
@@ -37,22 +39,51 @@ export class CreateThingModal extends Component{
 
   handleToggle() {
     //reset the name state, then toggle
-    this.setState({name: ""});
+    this.setState({name: "", icon: ""});
     this.props.toggleFunc();
   }
 
-  render(){
-    return (
-      <Modal isOpen={this.state.modalOn} toggle={this.handleToggle} className={'modal-primary'}>
-        <ModalHeader toggle={this.handleToggle}>Create a new Thing</ModalHeader>
+  handleNextClick = () => {
+    if (this.state.name !== "") this.setState({ icon: "asdfads"})
+  }
+
+  createButton = () => {
+    if (this.state.icon) {
+      return (<Button id="createButton" color="primary" onClick={this.handleAddClick}>Create Thing</Button>);
+    }
+    else {
+      return (<Button id="createButton" color="primary" onClick={this.handleNextClick}>Next</Button>);
+    }
+  }
+
+  modalBody = () => {
+    if (this.state.icon) {
+      return (
+        <ModalBody>
+          <IconSelector search={this.state.icon} />
+        </ModalBody>
+      );
+    }
+    else {
+      return (
         <ModalBody>
           <div className="form-group">
             <label> New Thing's name</label>
             <input type="text" className="form-control" id="name" placeholder="THING NAME" onChange={(element) => this.setState({ name: element.target.value})}/>
           </div>
         </ModalBody>
+      );
+    }
+
+  }
+
+  render(){
+    return (
+      <Modal isOpen={this.state.modalOn} toggle={this.handleToggle} className={'modal-primary'}>
+        <ModalHeader toggle={this.handleToggle}>Create a new Thing</ModalHeader>
+        {this.modalBody()}
         <ModalFooter>
-          <Button id="createButton" color="primary" onClick={this.handleAddClick}>Create Thing</Button>{' '}
+          {this.createButton()}
           <Button id="createCancel" color="secondary" onClick={this.handleToggle}>Cancel</Button>
         </ModalFooter>
       </Modal>

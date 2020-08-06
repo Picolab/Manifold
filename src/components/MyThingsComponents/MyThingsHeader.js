@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import CreateThingModal from '../Modals/CreateThingModal';
+import CreateThingModal from '../Modals/CreateThingModal/CreateThingModal';
 //import RegisterRulesetModal from '../Modals/RegisterRulesetModal';
 
 
