@@ -154,7 +154,7 @@ ruleset io.picolabs.profile {
               | contacts{"phone"} => "phone"
               | "none"
     }
-    if section then choose action.klog("action") {
+    if section then choose action {
       both => verifyBoth(contacts{"email"}, contacts{"phone"})
       email => verifyEmail(contacts{"email"})
       phone => verifyPhone(contacts{"phone"})
