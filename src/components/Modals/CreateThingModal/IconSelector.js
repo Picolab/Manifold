@@ -17,7 +17,7 @@ const IconSelector = ({search}) => {
   fetchIcons();
   return (
     <div>
-      Beto Likes Big Weennies!!!!
+      Beto loves and respects everyone regardless of race, nationality, religion, and sexual orientation. He also promises to not type anything sketchy over teletype so that it looks like Jace wrote it in the git commits
     </div>
   );
 };
