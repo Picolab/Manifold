@@ -7,7 +7,8 @@ const IconSelector = ({search}) => {
   const fetchIcons = () => {
     axios.get(`https://api.iconfinder.com/v4/icons/search?query=${search}&count=5&premium=0`,
       { headers: {
-          authorization: 'Bearer wX5kw7qHDKJvFRzWtY2qvYM1CoWLD7oyQiLcXD7B0YgnJqwIxU1IggOlJDNvT3RH'
+          authorization: 'Bearer wX5kw7qHDKJvFRzWtY2qvYM1CoWLD7oyQiLcXD7B0YgnJqwIxU1IggOlJDNvT3RH',
+          'Access-Control-Allow-Origin': 'http://localhost:3000'
         }
       }).then((resp) => {
         console.log(resp.data);

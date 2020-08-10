@@ -44,7 +44,7 @@ export class CreateThingModal extends Component{
   }
 
   handleNextClick = () => {
-    if (this.state.name !== "") this.setState({ icon: "asdfads"})
+    if (this.state.name !== "") this.setState({ icon: this.state.name})
   }
 
   createButton = () => {
