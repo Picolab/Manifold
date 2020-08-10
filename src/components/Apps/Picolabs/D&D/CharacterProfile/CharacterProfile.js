@@ -17,10 +17,21 @@ class CharacterProfile extends React.Component {
       modal: false,
       races: null,
       classes: null,
-      abilities: null
+      abilities: null,
+      character: {}
     };
     this.toggle = this.toggle.bind(this);
     this.getCharacterCreationData = this.getCharacterCreationData.bind(this);
+    this.buildCharacter = this.buildCharacter.bind(this);
+  }
+
+  buildCharacter(key, value) {
+    let map = this.state.character
+    map[key] = value
+    this.setState({
+      character: map
+    })
+    console.log("character",map);
   }
 
   toggle() {
@@ -116,12 +127,14 @@ class CharacterProfile extends React.Component {
                   <RaceSelection
                     races={this.state.races}
                     abilities={this.state.abilities}
+                    buildCharacter={this.buildCharacter}
                   />
                 </TabPane>
                 <TabPane tabId="2">
                   <ClassSelection
                     classes={this.state.classes}
                     abilities={this.state.abilities}
+                    buildCharacter={this.buildCharacter}
                   />
                 </TabPane>
                 <TabPane tabId="3">

@@ -3,11 +3,14 @@ import React from 'react';
 class ProfeciencyChoice extends React.Component {
   constructor(props) {
     super(props);
+    console.log(localStorage.getItem("profeciencies"));
+
+    let profeciencies = localStorage.getItem("profeciencies") === null ? {} : JSON.parse(localStorage.getItem("profeciencies"))
     this.state = {
       isActive: true,
       choices: this.props.choices,
       choose: this.props.choices.choose,
-      choosen: {},
+      chosen: profeciencies,
       chosenNumber: 0,
       isActive: true
     };
@@ -15,32 +18,31 @@ class ProfeciencyChoice extends React.Component {
   }
 
   choiceHandler(proficiency) {
-    console.log(proficiency.name);
-    console.log(this.state.choosen);
     let name = proficiency.name
     let value = proficiency
-    if(this.state.choosen[name]) {
-      let map = this.state.choosen
+    if(this.state.chosen[name]) {
+      let map = this.state.chosen
       delete map[name]
-      console.log("map after delete", map);
       this.setState({
-        choosen: map,
+        chosen: map,
         chosenNumber: map.size,
         isActive: true
       })
+      this.props.buildCharacter("profeciencies", map)
+      localStorage.setItem("profeciencies", JSON.stringify(map));
     }
     else {
       if(this.state.isActive) {
-        let map = this.state.choosen
+        let map = this.state.chosen
         map[name] = value
-        //Object.assign({}, map)
-        let chosenNumber = map.size
-        console.log("map after insert", map);
+        let chosenNumber = Object.keys(map).length;
         this.setState({
-          choosen: map,
+          chosen: map,
           chosenNumber: chosenNumber,
           isActive: chosenNumber === this.state.choose ? false : true
         })
+        this.props.buildCharacter("profeciencies", map)
+        localStorage.setItem("profeciencies", JSON.stringify(map));
       }
     }
   }
@@ -48,12 +50,14 @@ class ProfeciencyChoice extends React.Component {
   displaySectionList(list) {
     let out = [];
     for (let i in list) {
-      let checked = this.state.choosen[list[i].name] ? true : false
+      let checked = this.state.chosen[list[i].name] ? true : false
       let disabled =  !checked && !this.state.isActive ? true : false
       out.push(
         <div key={list[i].name}>
-          <input type="radio" className="profeciencyChoice" onClick={()=>{if(!disabled){this.choiceHandler(list[i]);}}} defaultChecked={checked}/>
-            {' '}{list[i].name.split(":")[1]}
+          {checked && <input type="checkbox" className="profeciencyChoice" onClick={()=>{this.choiceHandler(list[i]);}} defaultChecked/>}
+          {!checked && !disabled && <input type="checkbox" className="profeciencyChoice" onClick={()=>{this.choiceHandler(list[i]);}}/>}
+          {disabled && <input type="checkbox" className="profeciencyChoice" disabled/>}
+          {' '}{list[i].name.split(":")[1]}
         </div>
       )
     }

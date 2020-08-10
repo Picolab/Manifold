@@ -29,13 +29,20 @@ class RaceSelection extends React.Component {
     })
   }
 
+  handleRaceChoice(raceChoice) {
+    this.setState({
+      raceChoice: raceChoice.name
+    })
+    this.props.buildCharacter("race", raceChoice)
+  }
+
   displayRaces() {
     let races = this.state.races
     let out = []
     for(let i in races) {
       out.push(
         <div key={races[i].name} className="selectionListItem">
-          <input className="selectionRadioButton" type="radio" name="race" value={races[i].name}/> {races[i].name}
+          <input className="selectionRadioButton" type="radio" name="race" value={races[i].name} onClick={()=>{this.handleRaceChoice(races[i]);}} defaultChecked={this.state.raceChoice === races[i].name}/> {races[i].name}
           <div className="selectionDetails" onClick={()=>{this.toggleDetails(races[i]);}}>Details</div>
         </div>
       )

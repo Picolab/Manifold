@@ -31,10 +31,11 @@ class ClassSelection extends React.Component {
     })
   }
 
-  makeProfeciencyChoice(classChoice) {
+  handleClassChoice(classChoice) {
     this.setState({
-      classChoice: classChoice
+      classChoice: classChoice.name
     })
+    this.props.buildCharacter("class", classChoice)
   }
 
   displayClasses() {
@@ -44,7 +45,7 @@ class ClassSelection extends React.Component {
       out.push(
         <div key={classes[i].name}>
           <div className="selectionListItem">
-            <input className="selectionRadioButton" type="radio" name="race" id={classes[i].name} value={classes[i].name} onClick={()=>{this.makeProfeciencyChoice(classes[i].name);}} defaultChecked={this.state.classChoice === classes[i].name}/> {classes[i].name}
+            <input className="selectionRadioButton" type="radio" name="class" id={classes[i].name} value={classes[i].name} onClick={()=>{this.handleClassChoice(classes[i]);}} defaultChecked={this.state.classChoice === classes[i].name}/> {classes[i].name}
             <div className="selectionDetails" onClick={()=>{this.toggleDetails(classes[i]);}}>Details</div>
           </div>
           <Collapse isOpen={this.state.classChoice === classes[i].name}>
@@ -52,6 +53,7 @@ class ClassSelection extends React.Component {
               <CardBody className="classCollapse">
                 <ProfeciencyChoice
                   choices={classes[i].proficiency_choices[0]}
+                  buildCharacter={this.props.buildCharacter}
                 />
               </CardBody>
             </Card>
