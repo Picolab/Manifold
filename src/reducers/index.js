@@ -29,6 +29,7 @@ export default rootReducer;
         name: <pico's name>,
         picoID: <picoID>,
         color: <string of form "#ABCDEF">,
+        icon: <link to icon>,
         pos: {
           x: <number>,
           y: <number>,
@@ -127,6 +128,18 @@ export function getName(state, picoID) {
   } else if(communities.get(picoID)) {
     return communities.getIn([picoID, "name"]);
   } else{
+    return null;
+  }
+}
+
+export function getIcon(state, picoID) {
+  const things = getThings(state);
+  const communities = getCommunities(state);
+  if(things.get(picoID)){
+    return things.getIn([picoID, "icon"]);
+  } else if(communities.get(picoID)) {
+    return communities.getIn([picoID, "icon"]);
+  } else {
     return null;
   }
 }

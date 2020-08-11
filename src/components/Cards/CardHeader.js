@@ -3,7 +3,7 @@ import ThingDropdown from '../Dropdowns/ThingDropdown';
 import CommunityDropdown from '../Dropdowns/CommunityDropdown';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getName, getColor } from '../../reducers';
+import { getName, getColor, getIcon } from '../../reducers';
 import OpenCardButton from '../Buttons/OpenCardButton';
 
 class CardHeader extends Component {
@@ -14,6 +14,7 @@ class CardHeader extends Component {
       }
 
       this.toggleSettings = this.toggleSettings.bind(this);
+      console.log("PROPS", props);
     }
 
     toggleSettings() {
@@ -43,7 +44,10 @@ class CardHeader extends Component {
       return(
         <div className="card-header draggable" style={{"backgroundColor": this.props.color}}>
           <div style={{float: "left", "maxWidth":"85%", "overflow":"hidden", "textOverflow": "ellipsis"}}>
-            <h4>{this.props.name}</h4>
+            <div style={{display: 'inline-block'}}>
+              {this.props.icon && <div style={{ display: 'inline-block', background: 'white', padding: 5, borderRadius: 15 }}><img src={this.props.icon} style={{width: 20, height: 20}} /></div>}
+              <div style={{display: 'inline-block', marginLeft: 20, height: 30, verticalAlign: 'middle'}}><h4>{this.props.name}</h4></div>
+            </div>
           </div>
           {this.renderDropdown()}
           {this.props.appInfo && <OpenCardButton picoID={this.props.picoID} rid={this.props.appInfo.rid}/>}
@@ -62,7 +66,8 @@ CardHeader.propTypes = {
 const mapStateToProps = (state, ownProps) => {
   return {
     name: getName(state, ownProps.picoID),
-    color: getColor(state, ownProps.picoID)
+    color: getColor(state, ownProps.picoID),
+    icon: getIcon(state, ownProps.picoID)
   }
 }
 
