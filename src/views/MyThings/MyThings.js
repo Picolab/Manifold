@@ -11,10 +11,13 @@ import "./MyThings.css";
 import { Dropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap';
 
 export class MyThings extends Component {
-  state = { thingsSize: 'Grid', dropdownOpen: false, loading: true, grid: <div></div>, thingIdListLength: null};
+  state = { thingsSize: 'Grid', dropdownOpen: false, loading: true, grid: <div></div>};
 
   componentDidUpdate(previousProps) {
     if(this.props.thingIdList.length !== previousProps.thingIdList.length || this.state.thingIdListLength !== this.props.thingIdList.length ) {
+      if(this.loadingTimeout) {
+        clearTimeout(this.loadingTimeout);
+      }
       this.setState({
         loading: true,
         thingIdListLength: this.props.thingIdList.length
@@ -25,8 +28,10 @@ export class MyThings extends Component {
 
   componentDidMount() {
     this.toggle = this.toggle.bind(this);
+    this.setGrid = this.setGrid.bind(this);
+    this.renderGrid = this.renderGrid.bind(this);
+    this.loadingTimeout = setTimeout(()=>{this.setGrid();}, 1000);
   }
-
 
   async setGrid() {
     let grid = await this.renderGrid()
@@ -115,6 +120,7 @@ export class MyThings extends Component {
 
   render(){
     if(this.state.loading) {
+
       return (
         <div>
           <MyThingsHeader />
