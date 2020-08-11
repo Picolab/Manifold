@@ -12,6 +12,7 @@ export class CreateThingModal extends Component{
 
     this.state = {
       name: "",
+      iconSelector: "",
       icon: ""
     };
 
@@ -33,22 +34,22 @@ export class CreateThingModal extends Component{
       return;
     }
     this.handleToggle();
-    this.props.createThing(newName);
+    this.props.createThing(newName, this.state.icon);
 
   }
 
   handleToggle() {
     //reset the name state, then toggle
-    this.setState({name: "", icon: ""});
+    this.setState({name: "", iconSelector: ""});
     this.props.toggleFunc();
   }
 
   handleNextClick = () => {
-    if (this.state.name !== "") this.setState({ icon: this.state.name})
+    if (this.state.name !== "") this.setState({ iconSelector: this.state.name})
   }
 
   createButton = () => {
-    if (this.state.icon) {
+    if (this.state.iconSelector) {
       return (<Button id="createButton" color="primary" onClick={this.handleAddClick}>Create Thing</Button>);
     }
     else {
@@ -57,10 +58,10 @@ export class CreateThingModal extends Component{
   }
 
   modalBody = () => {
-    if (this.state.icon) {
+    if (this.state.iconSelector) {
       return (
         <ModalBody>
-          <IconSelector search={this.state.icon} />
+          <IconSelector search={this.state.iconSelector} selected={this.state.icon} setSelected={(icon) => { this.setState({icon}); }} />
         </ModalBody>
       );
     }
@@ -99,8 +100,8 @@ CreateThingModal.propTypes = {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    createThing: (name) => {
-      dispatch(commandAction(createThing, [name], {delay : 500} ))
+    createThing: (name, icon) => {
+      dispatch(commandAction(createThing, [name, icon], {delay : 500} ))
     }
   }
 }

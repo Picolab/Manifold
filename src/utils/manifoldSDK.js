@@ -64,8 +64,8 @@ export function retrieveOtherProfile() {
   return customQuery(getOwnerECI(), "io.picolabs.profile", "getOther");
 }
 
-export function createThing(name){
-  return axios.post(`${sky_event(getManifoldECI())}/Create_Thing/manifold/create_thing?name=${name}`);
+export function createThing(name, icon){
+  return axios.post(`${sky_event(getManifoldECI())}/Create_Thing/manifold/create_thing`, {name, icon});
 }
 
 export function createCommunity(name){

@@ -1,23 +1,32 @@
-import React, { useState } from 'react';
-import { ICON_API_KEY } from '../../../utils/config';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 
-const IconSelector = ({search}) => {
-  const [icons, setIcons] = useState('');
+import Icon from './Icon';
+import { getManifoldECI } from '../../../utils/AuthService';
+import { customQuery } from '../../../utils/manifoldSDK';
+import { styles } from './styles';
 
-  const fetchIcons = () => {
-    axios.get(`https://api.iconfinder.com/v4/icons/search?query=${search}&count=5&premium=0`,
-      { headers: {
-          authorization: `Bearer ${ICON_API_KEY}`
-        }
-      }).then((resp) => {
-        console.log(resp.data);
-      });
+const IconSelector = ({search, selected, setSelected}) => {
+  const [icons, setIcons] = useState([]);
+
+  useEffect(() => {
+    customQuery(getManifoldECI(), 'iconfinder', 'getIcons', {query: search} ).then((resp) => {
+      setIcons(resp.data);
+    });
+  }, []);
+
+  const iconList = () => {
+    return icons.map((x, i) => {
+      let key = search + ' icon ' + i;
+      return (<Icon key={key} src={x} alt={key} selected={selected} setSelected={setSelected} />)
+    });
   };
-  fetchIcons();
+
   return (
     <div>
-      Beto loves and respects everyone regardless of race, nationality, religion, and sexual orientation. He also promises to not type anything sketchy over teletype so that it looks like Jace wrote it in the git commits
+      Select an icon:
+      <div style={styles.iconList}>
+        {iconList()}
+      </div>
     </div>
   );
 };

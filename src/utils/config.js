@@ -10,7 +10,6 @@ export const EVENT_PATH = "sky/event";
 export const FUNCTION_PATH = "sky/cloud";
 export const CLIENT_SECRET = "";
 export const PROTOCOL_KEY = "http_protocol";
-export const ICON_API_KEY = 'wX5kw7qHDKJvFRzWtY2qvYM1CoWLD7oyQiLcXD7B0YgnJqwIxU1IggOlJDNvT3RH';
 //Production
 //export const GOOGLE_ROOT_SECURED_DID = "VwvGB9gKoJmnG8LRLsRvzB"; //this is the secured DID to the google ruleset on the root pico
 //export const GITHUB_ROOT_SECURED_DID = "NBVihL6RPyLGDsKPBpMNgA"; //this is the secured DID to the github ruleset on the root pico
