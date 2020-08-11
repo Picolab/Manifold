@@ -54,6 +54,8 @@ class ErrorModal extends React.Component {
   }
 
   render() {
+    var manifold_version = process.env.REACT_APP_VERSION
+    var email_helper = `mailto:picolabsbyu@gmail.com?subject=Manifold Error (version:%20${manifold_version})&body=${JSON.stringify(Object.values(this.props.errors))}`
     return (
       <div>
         <Modal isOpen={this.props.errorModal} >
@@ -62,7 +64,7 @@ class ErrorModal extends React.Component {
             {this.displayErrors()}
           </ModalBody>
           <ModalFooter>
-          <Button href={"mailto:picolabsbyu@gmail.com?subject=Manifold Error&body=" + JSON.stringify(Object.values(this.props.errors))} >
+          <Button href={email_helper} >
             Report?
           </Button>
             <Button color="primary" onClick={this.copyToClipboard}> Copy </Button>

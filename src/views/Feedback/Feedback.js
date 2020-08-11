@@ -16,6 +16,8 @@ class Feedback extends Component {
 
 
   render(){
+    var manifold_version = process.env.REACT_APP_VERSION
+    var subject_helper = `mailto:picolabsbyu@gmail.com?subject=(version:%20${manifold_version})`
     return (
         <div style={{"maxWidth":"550px"}}>
             <h1> Feedback</h1>
@@ -24,7 +26,7 @@ class Feedback extends Component {
             <p style={{"fontSize":"large"}}>
                 What do you think about Manifold so far? Hate it? Love it? Our goal with Manifold is to help you manage your stuff. If there's anything stopping you from doing that, or if you think of any good ideas, let us know! Questions are also welcome.
             </p>
-            <Button href="mailto:picolabsbyu@gmail.com" size="lg" block>
+            <Button href={subject_helper} size="lg" block>
                 Email Us!
             </Button>
             <p style={{"fontSize":"medium", "paddingTop":"5px"}}>
