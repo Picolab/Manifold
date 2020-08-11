@@ -27,7 +27,6 @@ export class SafeAndMine extends Component {
     }
   }
   componentDidMount() {
-    console.log("TAGID", this.state.tagID);
     const promise = customQuery(this.state.DID, "io.picolabs.safeandmine", "getInformation");
     promise.then((resp) => {
       const { name = "", email = "", phone = "", message = "", shareName = false, shareEmail = false, sharePhone = false} =  resp.data;
