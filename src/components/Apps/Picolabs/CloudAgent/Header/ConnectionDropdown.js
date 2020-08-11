@@ -15,7 +15,8 @@ class ConnectionDropdown extends React.Component {
       invitation: "",
       receivedInvitation: "",
       isStatic: true,
-      actionsToggleActive: true
+      actionsToggleActive: true,
+      loading: true
   	}
 
     this.actionsToggle = this.actionsToggle.bind(this);
@@ -33,7 +34,9 @@ class ConnectionDropdown extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.picoID !== prevProps.picoID) {
-      this.isStatic()
+      this.setState({
+        loading: true
+      },()=>{this.isStatic();})
     }
   }
   onChange(stateKey) {
@@ -52,7 +55,8 @@ class ConnectionDropdown extends React.Component {
     });
     promise.then((resp) => {
       this.setState({
-        isStatic: resp.data
+        isStatic: resp.data,
+        loading: !resp.data
       });
 
       if(resp.data === false) {
@@ -83,7 +87,8 @@ class ConnectionDropdown extends React.Component {
     })
     promise.then((resp) => {
       this.setState({
-        invitation: resp.data
+        invitation: resp.data,
+        loading: false
       });
     }).catch((e) => {
         displayError(true, "Error getting invitation.", 404);
@@ -185,6 +190,17 @@ class ConnectionDropdown extends React.Component {
 
 
   render () {
+      if(this.state.loading) {
+        return(
+          <div className="connectionButtonContainer">
+            <div className="connectionButtonLoading">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        );
+      }
       return(
         <div className="connectionButtonContainer">
           {this.displayConnectionActions()}
