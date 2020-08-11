@@ -53,15 +53,18 @@ class CardGrid extends Component {
     gridSettings.minH = pos.minh || 2.25;
     gridSettings.maxW = pos.maxw || 8;
     gridSettings.maxH = pos.maxh || 5;
+
+    let cardType = (this.props.cardType) ? this.props.cardType : (index > this.props.lastCommunityIndex ? 'Thing' : 'Community');
+
     return(
       <div key={"gridCard" + index.toString()} data-grid={gridSettings} >
 
         {this.props.dropTargets && <DropTargetCard
-                                    cardType={this.props.cardType}
+                                    cardType={cardType}
                                     picoID={picoID}
                                     handleDrop={this.props.handleDrop} />}
         {!this.props.dropTargets && <Card
-                                      cardType={this.props.cardType}
+                                      cardType={cardType}
                                       picoID={picoID}/>}
       </div>
     )

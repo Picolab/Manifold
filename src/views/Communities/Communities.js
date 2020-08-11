@@ -41,18 +41,24 @@ class Communities extends Component {
 
   render(){
     return (
-      <div className="commContainer">
-        <div className="communities">
-          <CommunityHeader />
-          {this.renderGrid()}
-        </div>
-        <div className="commSidebar">
-          <CardSideBar />
-        </div>
+      <div className="communities">
+        <CommunityHeader />
+        {this.renderGrid()}
       </div>
     );
   }
 }
+/*
+<div className="commContainer">
+  <div className="communities">
+    <CommunityHeader />
+    {this.renderGrid()}
+  </div>
+  <div className="commSidebar">
+    <CardSideBar />
+  </div>
+</div>
+*/
 
 Communities.propTypes = {
   communitiesIdList: PropTypes.array.isRequired
