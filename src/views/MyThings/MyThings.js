@@ -15,9 +15,6 @@ export class MyThings extends Component {
 
   componentDidUpdate(previousProps) {
     if(this.props.thingIdList.length !== previousProps.thingIdList.length || this.state.thingIdListLength !== this.props.thingIdList.length ) {
-      if(this.loadingTimeout) {
-        clearTimeout(this.loadingTimeout);
-      }
       this.setState({
         loading: true,
         thingIdListLength: this.props.thingIdList.length
@@ -37,7 +34,14 @@ export class MyThings extends Component {
     let grid = await this.renderGrid()
     this.setState({
       grid: grid
-    }, ()=>{this.setState({loading: false})})
+    }, ()=>{this.doneLoading();})
+  }
+
+  doneLoading() {
+    if(this.loadingTimeout) {
+      clearTimeout(this.loadingTimeout);
+    }
+    this.setState({loading: false})
   }
 
   async renderGrid() {
