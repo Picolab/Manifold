@@ -14,7 +14,6 @@ class CardHeader extends Component {
       }
 
       this.toggleSettings = this.toggleSettings.bind(this);
-      console.log("PROPS", props);
     }
 
     toggleSettings() {

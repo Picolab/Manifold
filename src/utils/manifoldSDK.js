@@ -65,11 +65,11 @@ export function retrieveOtherProfile() {
 }
 
 export function createThing(name, icon){
-  return axios.post(`${sky_event(getManifoldECI())}/Create_Thing/manifold/create_thing`, {name, icon});
+  return axios.post(`${sky_event(getManifoldECI())}/Create_Thing/manifold/create_thing`, { name, icon });
 }
 
-export function createCommunity(name){
-  return axios.post(`${sky_event(getManifoldECI())}/Create_Thing/manifold/create_community?name=${name}`);
+export function createCommunity(name, icon){
+  return axios.post(`${sky_event(getManifoldECI())}/Create_Thing/manifold/create_community`, { name, icon });
 }
 
 export function removeThing(name, picoID){

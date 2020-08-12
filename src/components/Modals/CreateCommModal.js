@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { createCommunity } from '../../utils/manifoldSDK';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import IconSelector from './CreateThingModal/IconSelector';
+import { createCommunity } from '../../utils/manifoldSDK';
 import { connect } from 'react-redux';
 import { commandAction } from '../../actions/command';
 
@@ -10,7 +11,9 @@ export class CreateCommModal extends Component{
     super(props);
 
     this.state = {
-      name: ""
+      name: "",
+      iconSelector: "",
+      icon: ""
     };
 
     this.handleAddClick = this.handleAddClick.bind(this);
@@ -30,32 +33,60 @@ export class CreateCommModal extends Component{
       alert('Please enter a name.');
       return;
     }
+    this.props.createCommunity(newName, this.state.icon);
     this.handleToggle();
-    this.props.createCommunity(newName);
   }
 
   handleToggle() {
     //reset the name state, then toggle
-    this.setState({name: ""});
+    this.setState({name: "", iconSelector: ""});
     this.props.toggleFunc();
   }
 
-  render(){
-    return (
-      <Modal isOpen={this.state.modalOn} toggle={this.handleToggle} className={'modal-primary'}>
-        <ModalHeader toggle={this.handleToggle}>Create a new Community</ModalHeader>
+  handleNextClick = () => {
+    if (this.state.name !== "") this.setState({ iconSelector: this.state.name})
+  }
+
+  createButton = () => {
+    if (this.state.iconSelector) {
+      return (<Button id="createButton" color="primary" onClick={this.handleAddClick}>Create Community</Button>);
+    }
+    else {
+      return (<Button id="createButton" color="primary" onClick={this.handleNextClick}>Next</Button>);
+    }
+  }
+
+  modalBody = () => {
+    if (this.state.iconSelector) {
+      return (
+        <ModalBody>
+          <IconSelector search={this.state.iconSelector} selected={this.state.icon} setSelected={(icon) => { this.setState({icon}); }} />
+        </ModalBody>
+      );
+    }
+    else {
+      return (
         <ModalBody>
           <div className="form-group">
             <label> New Community's name</label>
             <input type="text" className="form-control" id="name" placeholder="Community Name" onChange={(element) => this.setState({ name: element.target.value})}/>
           </div>
         </ModalBody>
+      );
+    }
+  }
+
+  render(){
+    return (
+      <Modal isOpen={this.state.modalOn} toggle={this.handleToggle} className={'modal-primary'}>
+        <ModalHeader toggle={this.handleToggle}>Create a new Community</ModalHeader>
+          {this.modalBody()}
         <ModalFooter>
-          <Button id="createButton" color="primary" onClick={this.handleAddClick}>Create Community</Button>{' '}
+          {this.createButton()}
           <Button id="createCancel" color="secondary" onClick={this.handleToggle}>Cancel</Button>
         </ModalFooter>
       </Modal>
-    )
+    );
   }
 }
 
@@ -67,8 +98,8 @@ CreateCommModal.propTypes = {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    createCommunity: (name) => {
-      dispatch(commandAction(createCommunity, [name]))
+    createCommunity: (name, icon) => {
+      dispatch(commandAction(createCommunity, [name, icon], {delay : 500} ))
     }
   }
 }

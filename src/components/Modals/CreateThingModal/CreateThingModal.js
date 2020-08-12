@@ -75,7 +75,6 @@ export class CreateThingModal extends Component{
         </ModalBody>
       );
     }
-
   }
 
   render(){
