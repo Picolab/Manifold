@@ -5,10 +5,20 @@ import { getThingIdList, getCommunitiesIdList } from '../../reducers';
 import { connect } from 'react-redux';
 
 class Dashboard extends Component {
+  handleDrop = (dropTargetCard, draggedCard) => {
+      console.log("dropTargetCard", dropTargetCard);
+      console.log("draggedCard", draggedCard);
+    }
+
   render() {
     return (
       <div>
-        <CardGrid idList={[ ...this.props.communitiesIdList, ...this.props.thingIdList ]} lastCommunityIndex={this.props.communitiesIdList.length-1} />
+        <CardGrid
+          idList={[ ...this.props.communitiesIdList, ...this.props.thingIdList ]}
+          lastCommunityIndex={this.props.communitiesIdList.length-1}
+          dropTargets={true}
+          handleDrop={this.handleDrop}
+        />
       </div>
     );
   }

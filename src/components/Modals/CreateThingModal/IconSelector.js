@@ -6,15 +6,31 @@ import { customQuery } from '../../../utils/manifoldSDK';
 import { styles } from './styles';
 
 const IconSelector = ({search, selected, setSelected}) => {
-  const [icons, setIcons] = useState([]);
+  const [ searchTerm, setSearchTerm ] = useState(search);
+  const [ icons, setIcons ] = useState([]);
+  const [ button, clickButton ] = useState(0)
 
   useEffect(() => {
-    customQuery(getManifoldECI(), 'iconfinder', 'getIcons', {query: search} ).then((resp) => {
+    customQuery(getManifoldECI(), 'iconfinder', 'getIcons', { query: searchTerm }).then((resp) => {
       setIcons(resp.data);
     });
-  }, []);
+  }, [button]);
+
+  const onClick = () => {
+    setSelected(null);
+    clickButton(button+1);
+  }
+
+  const onChange = (e) => {
+    setSearchTerm(e.target.value);
+  }
 
   const iconList = () => {
+    if (icons.length === 0) {
+      return (
+        <div style={styles.noResults}>No icons found for '{searchTerm}'. Try another search term above.</div>
+      );
+    }
     return icons.map((x, i) => {
       let key = search + ' icon ' + i;
       return (<Icon key={key} src={x} alt={key} selected={selected} setSelected={setSelected} />)
@@ -23,7 +39,9 @@ const IconSelector = ({search, selected, setSelected}) => {
 
   return (
     <div>
-      Select an icon:
+      <div>
+        <input type="text" placeholder="Find new icons" value={searchTerm} onChange={onChange} /><button type="button" onClick={onClick}>Search</button>
+      </div>
       <div style={styles.iconList}>
         {iconList()}
       </div>

@@ -21,7 +21,8 @@ class CardGrid extends Component {
         newPos.w !== prevPos.w || newPos.h !== prevPos.h) {
         let index = newPos.i.substr(8);//the id here is "cardGrid" + <indexInArray>, so we just want the index
         let picoID = this.props.idList[index];
-        this.props.savePosition(picoID, newPos.x, newPos.y, newPos.w, newPos.h)
+        let cardType = (this.props.cardType) ? this.props.cardType : (index > this.props.lastCommunityIndex ? 'Thing' : 'Community');
+        this.props.savePosition(picoID, newPos.x, newPos.y, newPos.w, newPos.h, cardType)
       }
     }
   }
@@ -92,7 +93,6 @@ CardGrid.defaultProps = {
 
 CardGrid.propTypes = {
   idList: PropTypes.array.isRequired,
-  cardType: PropTypes.string.isRequired, //this identifies whether we are displaying Things or Communities
   dropTargets: PropTypes.bool,
   handleDrop: function(props, propName, componentName) {
                 if ((props['dropTargets'] === true && (props[propName] === undefined || typeof(props[propName]) !== 'function'))) {
@@ -111,10 +111,10 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    savePosition: (picoID, x, y, w, h) => {
-      if(ownProps.cardType === 'Thing'){
+    savePosition: (picoID, x, y, w, h, cardType) => {
+      if(cardType === 'Thing'){
         dispatch(commandAction(moveThing, [picoID, x, y, w, h]));
-      }else if(ownProps.cardType === 'Community'){
+      }else if(cardType === 'Community'){
         dispatch(commandAction(moveCommunity, [picoID, x, y, w, h]));
       }else{
         console.error("UNKNOWN CARD TYPE WHEN TRYING TO SAVE POSITION!");

@@ -16,5 +16,12 @@ export const styles = {
   iconList: {
     overflow: 'auto',
     whiteSpace: 'nowrap'
+  },
+  noResults: {
+    textAlign: 'center',
+    padding: 60,
+    margin: 'auto',
+    backgroundColor: '#FAFAFA',
+    borderRadius: 30
   }
 }
