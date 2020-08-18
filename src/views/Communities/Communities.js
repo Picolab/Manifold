@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import CommunityHeader from './CommunityHeader';
 import CardGrid from '../../components/Grids/CardGrid';
-import CardSideBar from '../../components/CardSideBar/CardSideBar';
 import { commandAction } from '../../actions/command';
 import { addToCommunity } from '../../utils/manifoldSDK';
 import PropTypes from 'prop-types';

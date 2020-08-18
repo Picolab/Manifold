@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { getDID } from '../../reducers';
 
 import { DragSource } from 'react-dnd';
 import DragTypes from '../DragTypes';
@@ -11,8 +13,9 @@ import './cardStyles.css';
 const cardSpec = {
   beginDrag(props){
     return {
-      cardType: props.cardType
-      //...(props.object)
+      cardType: props.cardType,
+      picoID: props.picoID,
+      DID: props.DID
     }
   }
 }
@@ -28,12 +31,10 @@ class DraggableCard extends Component {
   render() {
     const { isDragging, connectDragSource } = this.props
     return connectDragSource(
-      <div>
-        {isDragging ? <div className="draggingCard"/> :
+      <div style={{width: '100%', height: '100%'}}>
             <Card
               cardType={this.props.cardType}
               picoID={this.props.picoID}/>
-        }
       </div>
     )
   }
@@ -44,4 +45,13 @@ DraggableCard.propTypes = {
   cardType: PropTypes.string.isRequired
 }
 
-export default DragSource(DragTypes.Card, cardSpec, collect)(DraggableCard);
+const Draggable = DragSource(DragTypes.Card, cardSpec, collect)(DraggableCard);
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    DID: getDID(state, ownProps.picoID)
+  }
+}
+
+
+export default connect(mapStateToProps)(Draggable);

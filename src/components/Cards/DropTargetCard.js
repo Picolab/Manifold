@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { getDID } from '../../reducers';
 
 import { DropTarget } from 'react-dnd';
 import DragTypes from '../DragTypes';
@@ -15,10 +17,10 @@ const dropCardSpec = {
     }
     const draggedCard = monitor.getItem();
     const thisCard = {
-      cardType: props.cardType
-      //...(props.object)
+      cardType: props.cardType,
+      picoID: props.picoID,
+      DID: props.DID
     }
-    console.log("successfully dropped!", draggedCard);
     props.handleDrop(thisCard, draggedCard);
   }
 }
@@ -50,4 +52,12 @@ DropTargetCard.propTypes = {
   handleDrop: PropTypes.func.isRequired
 }
 
-export default DropTarget(DragTypes.Card, dropCardSpec, collect)(DropTargetCard);
+const Drop = DropTarget(DragTypes.Card, dropCardSpec, collect)(DropTargetCard);
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    DID: getDID(state, ownProps.picoID)
+  }
+}
+
+export default connect(mapStateToProps)(Drop);

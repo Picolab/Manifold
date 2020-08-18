@@ -44,7 +44,7 @@ class CardHeader extends Component {
         <div className="card-header draggable" style={{"backgroundColor": this.props.color}}>
           <div style={{float: "left", "maxWidth":"85%", "overflow":"hidden", "textOverflow": "ellipsis"}}>
             <div style={{display: 'inline-block'}}>
-              {this.props.icon && <div style={{ display: 'inline-block', background: 'white', padding: 5, borderRadius: 15 }}><img src={this.props.icon} style={{width: 20, height: 20}} /></div>}
+              {this.props.icon && <div style={{ display: 'inline-block', background: 'white', padding: 5, borderRadius: 15 }}><img src={this.props.icon} alt={"icon"} style={{width: 20, height: 20}} /></div>}
               <div style={{display: 'inline-block', marginLeft: 20, height: 30, verticalAlign: 'middle'}}><h4>{this.props.name}</h4></div>
             </div>
           </div>

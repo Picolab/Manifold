@@ -96,8 +96,8 @@ export function moveCommunity(picoID, x, y, w, h){
   return axios.post(`${sky_event(getManifoldECI())}/Move_Thing/manifold/move_community?picoID=${picoID}&x=${x}&y=${y}&w=${w}&h=${h}`);
 }
 
-export function addToCommunity(commEci, toAddEci){
-  return axios.post(`${sky_event(commEci)}/AddToCommunity/community/addToCommunity?toAddEci=${toAddEci}`);
+export function addToCommunity(commEci, eci, picoID){ //eci and picoID correspond to the thing being added to the community
+  return axios.post(`${sky_event(commEci)}/AddToCommunity/community/add_to_community`, { eci, picoID });
 }
 
 export function discovery(eci){

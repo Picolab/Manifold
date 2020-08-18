@@ -6,6 +6,7 @@ import Card from '../Cards/Card';
 import { moveThing, moveCommunity } from '../../utils/manifoldSDK';
 import { commandAction } from '../../actions/command';
 import DropTargetCard from '../Cards/DropTargetCard';
+import DraggableCard from '../Cards/DraggableCard';
 import { getPositionArray } from '../../reducers';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
@@ -60,10 +61,13 @@ class CardGrid extends Component {
     return(
       <div key={"gridCard" + index.toString()} data-grid={gridSettings} >
 
-        {this.props.dropTargets && <DropTargetCard
+        {this.props.dropTargets && cardType === 'Community' && <DropTargetCard
                                     cardType={cardType}
                                     picoID={picoID}
                                     handleDrop={this.props.handleDrop} />}
+        {this.props.dropTargets && cardType === 'Thing' && <DraggableCard
+                                    picoID={picoID}
+                                    cardType={cardType}/>}
         {!this.props.dropTargets && <Card
                                       cardType={cardType}
                                       picoID={picoID}/>}
