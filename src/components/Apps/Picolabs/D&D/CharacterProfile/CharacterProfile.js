@@ -35,9 +35,11 @@ class CharacterProfile extends React.Component {
   }
 
   toggle() {
+    localStorage.removeItem("profeciencies");
     this.setState(prevState => ({
       modal: !prevState.modal,
-      activeTab: '1'
+      activeTab: '1',
+      character: {}
     }));
   }
 
@@ -49,6 +51,12 @@ class CharacterProfile extends React.Component {
     }
   }
 
+  completeCharacter() {
+    if(this.state.character.race && this.state.character.class && this.state.character.profeciencies !== undefined && this.state.character.profeciencies.isComplete === true) {
+      return true
+    }
+    return false;
+  }
   getCharacterCreationData() {
     if(!(this.state.races && this.state.classes && this.state.abilities)) {
       const promise = this.props.manifoldQuery({
@@ -89,6 +97,7 @@ class CharacterProfile extends React.Component {
   }
 
   render() {
+    let { abilities, races, classes, character } = this.state
     return(
       <div className="profile-container">
         {this.displayProfile()}
@@ -125,28 +134,31 @@ class CharacterProfile extends React.Component {
               <TabContent style={styles.tabContent} activeTab={this.state.activeTab}>
                 <TabPane tabId="1">
                   <RaceSelection
-                    races={this.state.races}
-                    abilities={this.state.abilities}
+                    races={races}
+                    abilities={abilities}
                     buildCharacter={this.buildCharacter}
                   />
                 </TabPane>
                 <TabPane tabId="2">
                   <ClassSelection
-                    classes={this.state.classes}
-                    abilities={this.state.abilities}
+                    classes={classes}
+                    abilities={abilities}
                     buildCharacter={this.buildCharacter}
                   />
                 </TabPane>
                 <TabPane tabId="3">
                   <AbilitySelection
-                    abilities={this.state.abilities}
+                    abilities={abilities}
+                    ability_bonus={(character.race) ? character.race.ability_bonuses[0] : {} }
+                    buildCharacter={this.buildCharacter}
                   />
                 </TabPane>
               </TabContent>
             </div>
           </ModalBody>
           <ModalFooter style={styles.modalFooter}>
-            <button className="D-DButton" onClick={this.toggle}>Create</button>{' '}
+            {this.completeCharacter() ? <button className="D-DButton" onClick={this.toggle} >Create</button>
+                                      : <button className="DisabledD-DButton" >Create</button>}{' '}
           </ModalFooter>
         </Modal>
       </div>

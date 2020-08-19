@@ -3,7 +3,6 @@ import React from 'react';
 class ProfeciencyChoice extends React.Component {
   constructor(props) {
     super(props);
-    console.log(localStorage.getItem("profeciencies"));
 
     let profeciencies = localStorage.getItem("profeciencies") === null ? {} : JSON.parse(localStorage.getItem("profeciencies"))
     this.state = {
@@ -24,11 +23,12 @@ class ProfeciencyChoice extends React.Component {
       let map = this.state.chosen
       delete map[name]
       this.setState({
-        chosen: map,
+        chosen: Object.assign({}, map),
         chosenNumber: map.size,
         isActive: true
       })
-      this.props.buildCharacter("profeciencies", map)
+      map["isComplete"] = false
+      this.props.buildCharacter("profeciencies", Object.assign({}, map))
       localStorage.setItem("profeciencies", JSON.stringify(map));
     }
     else {
@@ -36,12 +36,15 @@ class ProfeciencyChoice extends React.Component {
         let map = this.state.chosen
         map[name] = value
         let chosenNumber = Object.keys(map).length;
+        console.log("map", map);
         this.setState({
-          chosen: map,
+          chosen: Object.assign({}, map),
           chosenNumber: chosenNumber,
           isActive: chosenNumber === this.state.choose ? false : true
         })
-        this.props.buildCharacter("profeciencies", map)
+        let isComplete = (chosenNumber === this.state.choose) ? true : false
+        map["isComplete"] = isComplete
+        this.props.buildCharacter("profeciencies", Object.assign({}, map))
         localStorage.setItem("profeciencies", JSON.stringify(map));
       }
     }

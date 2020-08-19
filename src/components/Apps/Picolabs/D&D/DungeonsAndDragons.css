@@ -27,6 +27,18 @@
   color: white;
 }
 
+.DisabledD-DButton {
+  display: block;
+  background-color: transparent;
+  border-color: white;
+  border-radius: 5px;
+  margin-top: 10px;
+  width: 40%;
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+}
+
 .D-DButton:hover {
   background-color: red;
   border-color: red;
