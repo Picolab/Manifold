@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createThing } from '../../utils/manifoldSDK';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { connect } from 'react-redux';
 import { commandAction } from '../../actions/command';
 
@@ -10,7 +10,9 @@ export class CreateThingModal extends Component{
     super(props);
 
     this.state = {
-      name: ""
+      name: "",
+      dropdownOpen : false,
+      selectedKind: 'Default'
     };
 
     this.handleAddClick = this.handleAddClick.bind(this);
@@ -37,18 +39,32 @@ export class CreateThingModal extends Component{
 
   handleToggle() {
     //reset the name state, then toggle
-    this.setState({name: ""});
+    this.setState({name: "", selectedKind: "Default"});
     this.props.toggleFunc();
   }
 
-  render(){
+  render() {
+
     return (
       <Modal isOpen={this.state.modalOn} toggle={this.handleToggle} className={'modal-primary'}>
         <ModalHeader toggle={this.handleToggle}>Create a new Thing</ModalHeader>
         <ModalBody>
           <div className="form-group">
-            <label> New Thing's name</label>
-            <input type="text" className="form-control" id="name" placeholder="THING NAME" onChange={(element) => this.setState({ name: element.target.value})}/>
+            <label> New Thing Name</label>
+            <input type="text" className="form-control" id="name" placeholder="Thing name" onChange={(element) => this.setState({ name: element.target.value})}/>
+          </div>
+          <div>
+            <label>Kind</label>
+            <Dropdown isOpen={this.state.dropdownOpen} toggle={() => this.setState({dropdownOpen : !this.state.dropdownOpen})}>
+              <DropdownToggle caret>
+                {this.state.selectedKind}
+              </DropdownToggle>
+              <DropdownMenu>
+                <DropdownItem onClick={() => {this.setState({selectedKind : 'Sensor'})}}>Sensor</DropdownItem>
+                <DropdownItem onClick={() => {this.setState({selectedKind : 'Bicycle'})}}>Bicycle</DropdownItem>
+                <DropdownItem onClick={() => {this.setState({selectedKind : 'Furnace'})}}>Furnace</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
           </div>
         </ModalBody>
         <ModalFooter>

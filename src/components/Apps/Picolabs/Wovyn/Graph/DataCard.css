@@ -1,0 +1,20 @@
+#mysection {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card {
+    display: flex;
+    background: #f8f8f8;  
+    margin: 8px;
+    padding: 16px;
+    width: 100%;
+    max-height: 80%;
+    border-radius: 4px;
+    box-shadow: 0px 0px 8px;
+}
+
+.header {
+    min-height: inherit;
+}
