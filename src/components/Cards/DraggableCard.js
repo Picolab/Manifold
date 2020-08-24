@@ -29,7 +29,7 @@ const collect = (connect, monitor) => {
 
 class DraggableCard extends Component {
   render() {
-    const { isDragging, connectDragSource } = this.props
+    const { /*isDragging,*/ connectDragSource } = this.props
     return connectDragSource(
       <div style={{width: '100%', height: '100%'}}>
             <Card

@@ -12,6 +12,7 @@ import Reminders from './Picolabs/Reminders/Reminders';
 import SmartMirrorCardView from './Picolabs/SmartMirror/SmartMirrorCardView';
 import ManifoldMonitor from './Picolabs/ManifoldMonitor/CardView';
 import CloudAgentCard from './Picolabs/CloudAgent/CloudAgentCard';
+import CommunitiesApp from './Picolabs/Communities';
 
 export default {
   "io.picolabs.safeandmine" : SafeAndMineCardView,
@@ -27,5 +28,6 @@ export default {
   "io.picolabs.reminders": Reminders,
   "io.picolabs.manifold.smart_mirror": SmartMirrorCardView,
   "io.picolabs.manifold_monitor": ManifoldMonitor,
-  "io.picolabs.manifold_cloud_agent": CloudAgentCard
+  "io.picolabs.manifold_cloud_agent": CloudAgentCard,
+  "io.picolabs.community": CommunitiesApp
 }

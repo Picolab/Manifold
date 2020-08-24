@@ -100,6 +100,10 @@ export function addToCommunity(commEci, eci, picoID){ //eci and picoID correspon
   return axios.post(`${sky_event(commEci)}/AddToCommunity/community/add_to_community`, { eci, picoID });
 }
 
+export function removeFromCommunity(eci, picoID) {
+  return axios.post(`${sky_event(eci)}/RemoveFromCommunity/community/remove_from_community`, { picoID });
+}
+
 export function discovery(eci){
   return axios.post(`${sky_event(eci)}/DISCOVERY/manifold/apps`);
 }
