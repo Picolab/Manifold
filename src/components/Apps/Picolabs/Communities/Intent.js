@@ -28,6 +28,8 @@ const Intent = ({ intent, signalEvent }) => {
       domain: 'community',
       type: 'request_promise',
       attrs: { ...attrs, domain: intent.domain, type: intent.type }
+    }).then(() => {
+      toggleOpen(!isOpened);
     });
   }
 
