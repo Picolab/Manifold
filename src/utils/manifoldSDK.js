@@ -68,7 +68,7 @@ export function createThing(name, icon){
   return axios.post(`${sky_event(getManifoldECI())}/Create_Thing/manifold/create_thing`, { name, icon });
 }
 
-export function createCommunity(name, icon){
+export function createCommunity(name, icon) {
   return axios.post(`${sky_event(getManifoldECI())}/Create_Thing/manifold/create_community`, { name, icon });
 }
 
@@ -84,16 +84,16 @@ export function colorThing(name, color){
   return axios.post(`${sky_event(getManifoldECI())}/colorThing/manifold/color_thing?dname=${name}&color=%23${color.substring(1)}`);
 }
 
-export function moveThing(picoID, x, y, w, h){
-  return axios.post(`${sky_event(getManifoldECI())}/Move_Thing/manifold/move_thing?picoID=${picoID}&x=${x}&y=${y}&w=${w}&h=${h}`);
+export function moveThing(picoID, x, y, w, h, dashX, dashY, dashW, dashH){
+  return axios.post(`${sky_event(getManifoldECI())}/Move_Thing/manifold/move_thing`, { picoID, x, y, w, h, dashX, dashY, dashW, dashH });
 }
 
 export function renameThing(picoID, changedName) {
   return axios.post(`${sky_event(getManifoldECI())}/Change_Thing_Name/manifold/change_thing_name?picoID=${picoID}&changedName=${changedName}`);
 }
 
-export function moveCommunity(picoID, x, y, w, h){
-  return axios.post(`${sky_event(getManifoldECI())}/Move_Thing/manifold/move_community?picoID=${picoID}&x=${x}&y=${y}&w=${w}&h=${h}`);
+export function moveCommunity(picoID, x, y, w, h, dashX, dashY, dashW, dashH){
+  return axios.post(`${sky_event(getManifoldECI())}/Move_Thing/manifold/move_community`, { picoID, x, y, w, h, dashX, dashY, dashW, dashH });
 }
 
 export function addToCommunity(commEci, eci, picoID){ //eci and picoID correspond to the thing being added to the community

@@ -5,6 +5,7 @@ import { storeNotifications, storeNotificationsCount } from '../../actions';
 import { getNotificationsCount, getNotifications } from '../../reducers';
 import {customQuery, customEvent, displayError} from '../../utils/manifoldSDK';
 import {getManifoldECI} from '../../utils/AuthService';
+import { NOTIFICATIONS } from '../../utils/config';
 import './notificationsCSS.css'
 
 class NotificationsModal extends Component {
@@ -27,14 +28,18 @@ class NotificationsModal extends Component {
 
   componentDidMount() {
     this.getNotifications();
-    this.poll()
-    window.addEventListener("mouseover", this.resetPoll)
-    window.addEventListener("visibilitychange", this.visibilitychange)
+    if (NOTIFICATIONS) {
+      this.poll()
+      window.addEventListener("mouseover", this.resetPoll)
+      window.addEventListener("visibilitychange", this.visibilitychange)
+    }
   }
 
   componentWilUnmount() {
-    window.removeEventListener("mouseover", this.resetPoll);
-    window.removeEventListener("visibilitychange", this.visibilitychange);
+    if (NOTIFICATIONS) {
+      window.removeEventListener("mouseover", this.resetPoll);
+      window.removeEventListener("visibilitychange", this.visibilitychange);
+    }
   }
 
   resetPoll() {

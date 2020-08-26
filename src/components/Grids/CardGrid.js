@@ -23,7 +23,12 @@ class CardGrid extends Component {
         let index = newPos.i.substr(8);//the id here is "cardGrid" + <indexInArray>, so we just want the index
         let picoID = this.props.idList[index];
         let cardType = (this.props.cardType) ? this.props.cardType : (index > this.props.lastCommunityIndex ? 'Thing' : 'Community');
-        this.props.savePosition(picoID, newPos.x, newPos.y, newPos.w, newPos.h, cardType)
+        if (this.props.dashboard) {
+          this.props.savePosition(picoID, null, null, null, null, cardType, newPos.x, newPos.y, newPos.w, newPos.h);
+        }
+        else {
+          this.props.savePosition(picoID, newPos.x, newPos.y, newPos.w, newPos.h, cardType, null, null, null, null);
+        }
       }
     }
   }
@@ -47,10 +52,10 @@ class CardGrid extends Component {
   renderCard = (picoID, index) => {
     let pos = this.props.positionArray[index];
     let gridSettings = {};
-    gridSettings.x = pos.x || 0;
-    gridSettings.y = pos.y || 0;
-    gridSettings.w = pos.w || 3;
-    gridSettings.h = pos.h || 2.25;
+    gridSettings.x = (this.props.dashboard ? pos.dashX : pos.x) || 0;
+    gridSettings.y = (this.props.dashboard ? pos.dashY : pos.y) || 0;
+    gridSettings.w = (this.props.dashboard ? pos.dashW : pos.w) || 3;
+    gridSettings.h = (this.props.dashboard ? pos.dashH : pos.h)|| 2.25;
     gridSettings.minW = pos.minw || 3;
     gridSettings.minH = pos.minh || 2.25;
     gridSettings.maxW = pos.maxw || 8;
@@ -115,11 +120,11 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    savePosition: (picoID, x, y, w, h, cardType) => {
+    savePosition: (picoID, x, y, w, h, cardType, dashX, dashY, dashW, dashH) => {
       if(cardType === 'Thing'){
-        dispatch(commandAction(moveThing, [picoID, x, y, w, h]));
+        dispatch(commandAction(moveThing, [ picoID, x, y, w, h, dashX, dashY, dashW, dashH ]));
       }else if(cardType === 'Community'){
-        dispatch(commandAction(moveCommunity, [picoID, x, y, w, h]));
+        dispatch(commandAction(moveCommunity, [ picoID, x, y, w, h, dashX, dashY, dashW, dashH ]));
       }else{
         console.error("UNKNOWN CARD TYPE WHEN TRYING TO SAVE POSITION!");
       }

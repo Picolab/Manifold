@@ -19,6 +19,7 @@ class Dashboard extends Component {
           lastCommunityIndex={this.props.communitiesIdList.length-1}
           dropTargets={true}
           handleDrop={this.handleDrop}
+          dashboard={true}
         />
       </div>
     );
