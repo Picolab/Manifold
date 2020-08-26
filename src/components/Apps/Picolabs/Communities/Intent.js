@@ -10,7 +10,7 @@ const Intent = ({ intent, signalEvent }) => {
     return intent.attrs.map((x, i) => {
       return (
         <div key={x+i}>
-          <div>{x}:</div>
+          <div style={styles.attr}>{x}:</div>
           <Input type="text" name={x} id={x} placeholder={x} value={attrs[x]} onChange={(e) => {
             console.log("attrs", attrs)
             let newVal = e.target.value;

@@ -9,6 +9,17 @@ export const styles = {
     marginRight: 20
   },
   button: {
-    marginTop: 5
+    marginTop: 15
+  },
+  title: {
+    fontWeight: 'bold',
+    marginBottom: 3
+  },
+  upperMargin: {
+    marginTop: 20
+  },
+  attr: {
+    marginTop: 10,
+    marginBottom: 2
   }
 };

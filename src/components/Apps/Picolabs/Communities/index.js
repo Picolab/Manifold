@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ListGroup } from 'reactstrap';
 import Member from './Member';
 import Intent from './Intent';
+import { styles } from './styles';
 
 const CommunitiesApp = (props) => {
   const [ members, setMembers ] = useState([]);
@@ -30,11 +31,10 @@ const CommunitiesApp = (props) => {
     fetchIntents();
     }, []);
 
-  console.log("props!!!", props);
   const listMembers = () => {
     return members.map((x, i) => {
       return (
-        <Member name={x.name} icon={x.icon} id={x.picoID} key={i} fetchMembers={fetchMembers} commDID={props.DID} />
+        <Member name={x.name} icon={x.icon} id={x.picoID} key={i} fetchMembers={fetchMembers} fetchIntents={fetchIntents} commDID={props.DID} />
       )
     })
   }
@@ -51,11 +51,12 @@ const CommunitiesApp = (props) => {
     <div className="shortenedWidth">
       <ListGroup>
         <div>
-          Community Members:
+          {members.length > 0 && <div style={styles.title} >Community Members:</div>}
+          {members.length === 0 && <div>This community has no members</div>}
           {listMembers()}
         </div>
         <div>
-          Events:
+          {intents.length > 0 && <div style={{...styles.title, ...styles.upperMargin}}>Events:</div>}
           {listIntents()}
         </div>
       </ListGroup>

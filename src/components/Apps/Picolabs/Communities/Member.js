@@ -3,10 +3,11 @@ import { ListGroupItem } from 'reactstrap';
 import { removeFromCommunity } from '../../../../utils/manifoldSDK';
 import { styles } from './styles'
 
-const Member = ({ name, icon, id, commDID, fetchMembers }) => {
+const Member = ({ name, icon, id, commDID, fetchMembers, fetchIntents }) => {
   const removeMember = () => {
     removeFromCommunity(commDID, id).then((resp) => {
       fetchMembers();
+      fetchIntents();
     });
   }
 
