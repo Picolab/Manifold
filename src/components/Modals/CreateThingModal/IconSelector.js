@@ -11,7 +11,7 @@ const IconSelector = ({search, selected, setSelected}) => {
   const [ button, clickButton ] = useState(0)
 
   useEffect(() => {
-    customQuery(getManifoldECI(), 'iconfinder', 'getIcons', { query: searchTerm }).then((resp) => {
+    customQuery(getManifoldECI(), 'io.picolabs.manifold_pico', 'getIcons', { query: searchTerm }).then((resp) => {
       setIcons(resp.data);
     });
   }, [button]);

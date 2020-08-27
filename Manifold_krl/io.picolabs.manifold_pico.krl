@@ -2,7 +2,7 @@ ruleset io.picolabs.manifold_pico {
   meta {
     use module io.picolabs.wrangler alias wrangler
     use module io.picolabs.subscription alias subscription
-    shares __testing, getManifoldInfo, isAChild, getThings
+    shares __testing, getManifoldInfo, isAChild, getThings, getIcons
     provides __testing, getManifoldInfo, getThings
   }//end meta
   global {
@@ -13,6 +13,12 @@ ruleset io.picolabs.manifold_pico {
                      { "name": "isAChild", "args": ["name"] }],
         "events": [ { "domain": "manifold", "type": "create_thing",
                       "attrs": [ "name" ] },
+                    { "domain": "manifold", "type": "remove_thing",
+                      "attrs": [ "picoID" ] },
+                    { "domain": "manifold", "type": "create_community",
+                                    "attrs": [ "name" ] },
+                    { "domain": "manifold", "type": "remove_community",
+                      "attrs": [ "picoID" ] },
                     { "domain": "manifold", "type": "devReset",
                       "attrs": [ ] }
                       ,{ "domain": "manifold", "type": "change_thing_name",
@@ -38,6 +44,14 @@ ruleset io.picolabs.manifold_pico {
       })
     }
 
+    getIcons = function(query, icon_count=15, premium=0) {
+      http:get("https://api.iconfinder.com/v4/icons/search",
+      qs = { "query": query, "count": icon_count, "premium": premium },
+      headers = { "authorization": "Bearer wX5kw7qHDKJvFRzWtY2qvYM1CoWLD7oyQiLcXD7B0YgnJqwIxU1IggOlJDNvT3RH" }){"content"}.decode().get("icons").map(function(x) {
+        array = x{"raster_sizes"};
+        array[array.length()-1]{"formats"}[0]{"preview_url"}
+      });
+    }
 
     hasTutorial = function() {
       ent:tutorial.defaultsTo(false);
@@ -50,7 +64,7 @@ ruleset io.picolabs.manifold_pico {
       })
     }
 
-    initiate_subscription = defaction(eci, channel_name, wellKnown, role_type, optionalHost = meta:host) {
+    initiate_subscription = defaction(eci, channel_name, wellKnown, role_type, icon, optionalHost = meta:host) {
       every{
         event:send({
           "eci": eci, "eid": "subscription",
@@ -58,6 +72,7 @@ ruleset io.picolabs.manifold_pico {
           "attrs": {
                    "name"        : event:attr("name"),
                    "picoID"     : event:attr("id"),
+                   "icon"       : icon,
                    "Rx_role"     : role_type,
                    "Tx_role"     : "manifold_pico",
                    "Tx_Rx_Type"  : "Manifold" , // auto_accept
@@ -114,7 +129,7 @@ ruleset io.picolabs.manifold_pico {
   rule createThing {
     select when manifold create_thing
     if event:attr("name") && wrangler:children().length() <= max_picos then
-      send_directive("Attempting to create new Thing", { "thing":event:attr("name") })
+      send_directive("Attempting to create new Thing", { "thing":event:attr("name"), "icon": event:attr("icon") })
     fired {
       raise wrangler event "new_child_request"
         attributes event:attrs.put({ "event_type": "manifold_create_thing" })
@@ -124,7 +139,7 @@ ruleset io.picolabs.manifold_pico {
   rule thingCompleted {
     select when wrangler child_initialized
       where event_type == "manifold_create_thing" || rs_attrs{"event_type"} == "manifold_create_thing"
-    initiate_subscription(event:attr("eci"), event:attr("name"), subscription:wellKnown_Rx(){"id"}, thing_role);
+    initiate_subscription(event:attr("eci"), event:attr("name"), subscription:wellKnown_Rx(){"id"}, thing_role, event:attr("icon"));
   }
 
   rule autoAcceptSubscriptions {
@@ -141,10 +156,12 @@ ruleset io.picolabs.manifold_pico {
       subID = event:attr("Id");
       name = event:attr("name");
       picoID = event:attr("picoID");
+      icon = event:attr("icon");
       obj_structure = {
         "name": name,
         "subID": subID,
         "picoID": picoID,
+        "icon": icon,
         "color": "#eceff1"//default color
       }
     }
@@ -169,7 +186,7 @@ ruleset io.picolabs.manifold_pico {
   rule communityCompleted {
     select when wrangler child_initialized
       where event_type == "manifold_create_community" || rs_attrs{"event_type"} == "manifold_create_community"
-    initiate_subscription(event:attr("eci"), event:attr("name"), subscription:wellKnown_Rx(){"id"}, community_role);
+    initiate_subscription(event:attr("eci"), event:attr("name"), subscription:wellKnown_Rx(){"id"}, community_role, event:attr("icon"));
   }
   rule trackCommSubscription {
     select when wrangler subscription_added where event:attr("Tx_role") == community_role
@@ -181,6 +198,7 @@ ruleset io.picolabs.manifold_pico {
         "name": name,
         "subID": subID,
         "picoID": picoID,
+        "icon": icon,
         "color": "#87cefa" //default community color
       };
     }
@@ -227,7 +245,7 @@ ruleset io.picolabs.manifold_pico {
     select when manifold remove_community
     pre {
       picoID = event:attr("picoID");
-      subID = subIDFromPicoID(picoID, ent:things).klog("found subID: ");
+      subID = subIDFromPicoID(picoID, ent:communities).klog("found subID: ");
       sub = subscription:established("Id", event:attr("subID"))[0].klog("found sub: ");
     }
     if picoID && subID && sub then
@@ -255,15 +273,20 @@ ruleset io.picolabs.manifold_pico {
     select when manifold move_thing
     pre {
       picoID = event:attr("picoID");
+      p = ent:things{[picoID, "pos", "x"]}.klog("LAST X")
     }
     if picoID && isAThing(picoID) then
       send_directive("Updating Thing Location", { "attrs": event:attrs })
     fired {
       ent:things{[picoID, "pos"]} := {
-        "x": event:attr("x").as("Number"),
-        "y": event:attr("y").as("Number"),
-        "w": event:attr("w").as("Number"),
-        "h": event:attr("h").as("Number"),
+        "x": event:attr("x").defaultsTo(ent:things{[picoID, "pos", "x"]}).defaultsTo(0).as("Number"),
+        "y": event:attr("y").defaultsTo(ent:things{[picoID, "pos", "y"]}).defaultsTo(0).as("Number"),
+        "w": event:attr("w").defaultsTo(ent:things{[picoID, "pos", "w"]}).defaultsTo(0).as("Number"),
+        "h": event:attr("h").defaultsTo(ent:things{[picoID, "pos", "h"]}).defaultsTo(0).as("Number"),
+        "dashX": event:attr("dashX").defaultsTo(ent:things{[picoID, "pos", "dashX"]}).defaultsTo(0).as("Number"),
+        "dashY": event:attr("dashY").defaultsTo(ent:things{[picoID, "pos", "dashY"]}).defaultsTo(0).as("Number"),
+        "dashW": event:attr("dashW").defaultsTo(ent:things{[picoID, "pos", "dashW"]}).defaultsTo(3).as("Number"),
+        "dashH": event:attr("dashH").defaultsTo(ent:things{[picoID, "pos", "dashH"]}).defaultsTo(2.25).as("Number"),
         "minw": 3,
         "minh": 2.25,
         "maxw": 8,
@@ -280,11 +303,15 @@ ruleset io.picolabs.manifold_pico {
     if picoID && isACommunity(picoID) then
       send_directive("Updating Community Location", { "attrs": event:attrs })
     fired {
-      ent:communities{[picoID, "pos"]} := {
-        "x": event:attr("x").as("Number"),
-        "y": event:attr("y").as("Number"),
-        "w": event:attr("w").as("Number"),
-        "h": event:attr("h").as("Number"),
+     ent:communities{[picoID, "pos"]} := {
+        "x": event:attr("x").defaultsTo(ent:communities{[picoID, "pos", "x"]}).defaultsTo(0).as("Number"),
+        "y": event:attr("y").defaultsTo(ent:communities{[picoID, "pos", "y"]}).defaultsTo(0).as("Number"),
+        "w": event:attr("w").defaultsTo(ent:communities{[picoID, "pos", "w"]}).defaultsTo(0).as("Number"),
+        "h": event:attr("h").defaultsTo(ent:communities{[picoID, "pos", "h"]}).defaultsTo(0).as("Number"),
+        "dashX": event:attr("dashX").defaultsTo(ent:communities{[picoID, "pos", "dashX"]}).defaultsTo(0).as("Number"),
+        "dashY": event:attr("dashY").defaultsTo(ent:communities{[picoID, "pos", "dashY"]}).defaultsTo(0).as("Number"),
+        "dashW": event:attr("dashW").defaultsTo(ent:communities{[picoID, "pos", "dashW"]}).defaultsTo(3).as("Number"),
+        "dashH": event:attr("dashH").defaultsTo(ent:communities{[picoID, "pos", "dashH"]}).defaultsTo(2.25).as("Number"),
         "minw": 3,
         "minh": 2.25,
         "maxw": 8,
