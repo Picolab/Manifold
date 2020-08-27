@@ -75,29 +75,29 @@ export class CommunityDropdown extends Component {
           tag="span"
           onClick={this.props.toggleSettings}
           data-toggle="dropdown"
-          aria-expanded={this.state.isOpen} >
+          aria-expanded={this.state.isOpen}
+          size='lg'>
 
           <i className="fa fa-gear float-right fa-lg manifoldDropdown"/>
         </DropdownToggle>
-        <DropdownMenu right>
-
-          <DropdownItem onClick={this.openRemove} >
+        <DropdownMenu right style={{width: 200}}>
+          <DropdownItem onClick={this.openRemove} style={{width: 200}} >
             Remove Community
-            <i className="fa fa-trash float-right" />
+            <i className="fa fa-trash float-right" style={{"marginRight": "0", "marginTop": "4px"}} />
           </DropdownItem>
           <RemoveCommunityModal modalOn={this.state.removeOpen} toggleFunc={this.toggleRemove} picoID={this.props.picoID}/>
 
-          <DropdownItem onClick={this.openInstall}>
+          <DropdownItem onClick={this.openInstall} style={{width: 200}} >
             Install an App
-            <i className="fa fa-cloud-download float-right"/>
+            <i className="fa fa-cloud-download float-right" style={{"marginRight": "0", "marginTop": "4px"}}/>
           </DropdownItem>
           <InstallModal modalOn={this.state.installOpen} toggleFunc={this.toggleInstall} picoID={this.props.picoID}/>
 
-          <DropdownItem onClick={this.openColor}>
+          {/*<DropdownItem onClick={this.openColor}>
             Change Color
-            <i className="fa fa-cubes float-right"/>
+            <i className="fa fa-cubes float-right" style={{"marginRight": "0", "marginTop": "4px"}}/>
           </DropdownItem>
-          <ColorModal modalOn={this.state.colorOpen} toggleFunc={this.toggleColor} picoID={this.props.picoID}/>
+          <ColorModal modalOn={this.state.colorOpen} toggleFunc={this.toggleColor} picoID={this.props.picoID}/>*/}
 
         </DropdownMenu>
 
