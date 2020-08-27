@@ -1,6 +1,5 @@
-.column {
+.homeColumn {
   width: 50%;
-  background-color: black;
   color: white;
 }
 
@@ -48,4 +47,24 @@
 .center-container {
   margin-top: 50%;
   margin-left: 40%;
+}
+
+.home {
+  background-image: url("https://assets.vg247.com/current//2019/08/dnd-essentials-kit-vg247-2.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.createGame {
+  background-image: url("https://i.pinimg.com/originals/88/ac/9d/88ac9d1382d8f9b4d561948c062af1b0.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.overlay {
+  background-color: rgba(0,0,0,.5);
+}
+
+.createGameModalFooter {
+  justify-content: center;
 }

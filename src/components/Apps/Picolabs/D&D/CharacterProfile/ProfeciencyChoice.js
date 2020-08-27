@@ -36,7 +36,6 @@ class ProfeciencyChoice extends React.Component {
         let map = this.state.chosen
         map[name] = value
         let chosenNumber = Object.keys(map).length;
-        console.log("map", map);
         this.setState({
           chosen: Object.assign({}, map),
           chosenNumber: chosenNumber,
@@ -55,12 +54,14 @@ class ProfeciencyChoice extends React.Component {
     for (let i in list) {
       let checked = this.state.chosen[list[i].name] ? true : false
       let disabled =  !checked && !this.state.isActive ? true : false
+      let name = (list[i].name.split(":")[1] === undefined) ? list[i].name : list[i].name.split(":")[1]
+
       out.push(
         <div key={list[i].name}>
           {checked && <input type="checkbox" className="profeciencyChoice" onClick={()=>{this.choiceHandler(list[i]);}} defaultChecked/>}
           {!checked && !disabled && <input type="checkbox" className="profeciencyChoice" onClick={()=>{this.choiceHandler(list[i]);}}/>}
           {disabled && <input type="checkbox" className="profeciencyChoice" disabled/>}
-          {' '}{list[i].name.split(":")[1]}
+          {' '}{name}
         </div>
       )
     }

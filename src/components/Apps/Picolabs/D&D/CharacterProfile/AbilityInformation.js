@@ -23,8 +23,8 @@ class AbilityInformation extends React.Component {
     let out = [];
     for (let i in list) {
       out.push(
-        <div key={list[i].full_name} className="detailsSectionList">
-          {list[i].full_name}
+        <div key={list[i].name} className="detailsSectionList">
+          {list[i].name}
         </div>
       )
     }
@@ -43,6 +43,12 @@ class AbilityInformation extends React.Component {
           <div className="detailsSectionTitle">
             {details.full_name} Details
           </div>
+        </div>
+        <div className="detailsSection">
+          Description: {details.desc[0]}
+        </div>
+        <div className="detailsSection">
+          Skills: {this.displaySectionList(details.skills)}
         </div>
       </div>
     )

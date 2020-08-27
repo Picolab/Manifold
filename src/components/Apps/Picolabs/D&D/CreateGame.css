@@ -1,0 +1,29 @@
+.createGameForm {
+  color: white;
+  height: 10em;
+  position: relative;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 55%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+}
+
+.createGameColumn {
+  float: left;
+  width: 33.33%;
+  color: white;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.gameInvitationContainer {
+  width: 30%;
+  font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+  font-size: .9vw;
+  text-rendering: optimizeLegibility;
+  margin: 10px;
+  margin-top: 20px;
+}

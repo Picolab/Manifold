@@ -1,7 +1,6 @@
 import React from 'react';
-import CharacterProfile from './CharacterProfile/CharacterProfile'
-import { Media } from 'reactstrap';
-import icon from './D&D.png';
+import HomeDND from './HomeDND'
+import CreateGame from './CreateGame'
 import "./DungeonsAndDragons.css"
 
 class DungeonsAndDragons extends React.Component {
@@ -9,30 +8,35 @@ class DungeonsAndDragons extends React.Component {
     super(props);
 
     this.state = {
+      currentPage: "CreateGame"
     };
-
+    this.changeCurrentPage = this.changeCurrentPage.bind(this);
   }
 
+  changeCurrentPage(page) {
+    this.setState({
+      currentPage: page
+    })
+  }
 
   render() {
-    return(
-      <div>
-        <div className="row" style={{"height": "100vh"}}>
-          <div className="column">
-            <Media object src={icon} className='icon'/>
-            <div className="center-container">
-              <button className="D-DButton"> Create Game </button>
-              <button className="D-DButton"> Join Game</button>
-            </div>
-          </div>
-          <div className="column">
-            <CharacterProfile
-              manifoldQuery={this.props.manifoldQuery}
-            />
-          </div>
-        </div>
-      </div>
-    );
+    if(this.state.currentPage === "HomeDND") {
+      return(
+        <HomeDND
+          manifoldQuery={this.props.manifoldQuery}
+          signalEvent={this.props.signalEvent}
+          changeCurrentPage={this.changeCurrentPage}
+        />
+      );
+    }
+    else if(this.state.currentPage === "CreateGame") {
+      return(
+        <CreateGame
+          signalEvent={this.props.signalEvent}
+          changeCurrentPage={this.changeCurrentPage}
+        />
+      );
+    }
   }
 
 }

@@ -10,7 +10,7 @@ class AbilitySelection extends React.Component {
       abilities: this.props.abilities,
       abilityInformation: { toggle: false, details: null },
       ability_bonus: this.props.ability_bonus,
-      ability_choices: {},
+      ability_choices: {}
 
     };
     this.handleBaseScoreChange = this.handleBaseScoreChange.bind(this)
@@ -22,6 +22,8 @@ class AbilitySelection extends React.Component {
         abilities: this.props.abilities,
         ability_bonus: this.props.ability_bonus
       })
+
+      this.setAttributes();
     }
   }
 
@@ -43,7 +45,7 @@ class AbilitySelection extends React.Component {
   }
 
   setAttributes() {
-    let { abilities, ability_bonus } = this.state
+    let { abilities, ability_bonus, ability_choices} = this.state
     let map = {}
     for(let i in abilities) {
       let bonus = (ability_bonus.name === abilities[i].name) ? ability_bonus.bonus : 0
@@ -51,15 +53,19 @@ class AbilitySelection extends React.Component {
       map[abilities[i].name] = isNaN(total) ? bonus : total
     }
 
-    this.props.buildCharacter("abilities", map);
+    if(JSON.stringify(map) !== JSON.stringify(ability_choices)) {
+      this.setState({
+        ability_choices: map
+      })
+      this.props.buildCharacter("abilities", map);
+    }
   }
 
   displayAbilities() {
-    let { abilities, ability_bonus, ability_choices } = this.state
+    let { abilities, ability_bonus } = this.state
     let out = []
     let map = {}
     for(let i in abilities) {
-      // let ability_score = ability_choices[abilities[i].name] ? ability_choices[abilities[i].name].score : 0
       let bonus = (ability_bonus.name === abilities[i].name) ? ability_bonus.bonus : 0
       let total = parseInt(this.state[abilities[i].name],10) + parseInt(bonus, 10)
       out.push(
@@ -83,6 +89,7 @@ class AbilitySelection extends React.Component {
       )
 
     }
+
     return out;
   }
 

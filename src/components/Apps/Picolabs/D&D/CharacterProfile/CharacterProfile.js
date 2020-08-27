@@ -2,11 +2,12 @@ import React from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import './CharacterProfile.css';
 import { displayError } from '../../../../../utils/manifoldSDK';
-import { styles } from './CharacterProfileStyles';
+import { styles } from '../ModalStyles';
 import RaceSelection from './RaceSelection';
 import ClassSelection from './ClassSelection';
 import AbilitySelection from './AbilitySelection'
 import CharacterDisplay from './CharacterDisplay';
+import Other from './Other';
 
 
 class CharacterProfile extends React.Component {
@@ -18,20 +19,47 @@ class CharacterProfile extends React.Component {
       races: null,
       classes: null,
       abilities: null,
-      character: {}
+      character: null,
+      characterBuild: {}
+
     };
     this.toggle = this.toggle.bind(this);
     this.getCharacterCreationData = this.getCharacterCreationData.bind(this);
     this.buildCharacter = this.buildCharacter.bind(this);
+    this.getCharacter = this.getCharacter.bind(this);
+    this.setCharacter = this.setCharacter.bind(this);
+  }
+
+  componentDidMount() {
+    this.getCharacter();
+  }
+
+  getCharacter() {
+    const promise = this.props.manifoldQuery({
+      rid: "D-D_Character_Profile",
+      funcName: "getCharacter"
+    });
+    promise.then((resp) => {
+      let character = Object.keys(resp.data).length === 0 ? null : resp.data
+      if(character) {
+        this.getCharacterCreationData()
+      }
+      this.setState({
+        character: character
+      });
+    }).catch((e) => {
+        displayError(true, "Error getting Character.", 404);
+    });
   }
 
   buildCharacter(key, value) {
-    let map = this.state.character
+    let map = this.state.characterBuild
     map[key] = value
     this.setState({
-      character: map
+      characterBuild: map
     })
-    console.log("character",map);
+
+    console.log("character", map);
   }
 
   toggle() {
@@ -39,7 +67,7 @@ class CharacterProfile extends React.Component {
     this.setState(prevState => ({
       modal: !prevState.modal,
       activeTab: '1',
-      character: {}
+      characterBuild: {}
     }));
   }
 
@@ -52,11 +80,12 @@ class CharacterProfile extends React.Component {
   }
 
   completeCharacter() {
-    if(this.state.character.race && this.state.character.class && this.state.character.profeciencies !== undefined && this.state.character.profeciencies.isComplete === true) {
+    if(this.state.characterBuild.race && this.state.characterBuild.class && this.state.characterBuild.profeciencies !== undefined && this.state.characterBuild.profeciencies.isComplete === true) {
       return true
     }
     return false;
   }
+
   getCharacterCreationData() {
     if(!(this.state.races && this.state.classes && this.state.abilities)) {
       const promise = this.props.manifoldQuery({
@@ -77,11 +106,29 @@ class CharacterProfile extends React.Component {
     }
   }
 
-  displayProfile() {
-    if(this.state.profile) {
+  setCharacter() {
+    const promise = this.props.signalEvent({
+      domain: "dnd",
+      type: "set_character",
+      attrs : { character: JSON.stringify(this.state.characterBuild) }
+    });
+    promise.then((resp) => {
+      this.getCharacter();
+      this.toggle();
+    }).catch((e) => {
+        displayError(true, "Error setting Character.", 404);
+    });
+  }
+
+  displayCharacter() {
+    if(this.state.character) {
+      console.log(this.state.abilities);
       return(
         <div style={{ "marginTop": "5%"}}>
-          <CharacterDisplay />
+          <CharacterDisplay
+            character={this.state.character}
+            abilities={this.state.abilities}
+          />
           <button className="D-DButton" onClick={()=>{this.getCharacterCreationData(); this.toggle();}}> Create New Character </button>
         </div>
       )
@@ -97,10 +144,11 @@ class CharacterProfile extends React.Component {
   }
 
   render() {
-    let { abilities, races, classes, character } = this.state
+    let { abilities, races, classes, characterBuild } = this.state
+
     return(
       <div className="profile-container">
-        {this.displayProfile()}
+        {this.displayCharacter()}
         <Modal style={{"border": "1px solid red", "borderColor": "red"}} isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader style={styles.modalContent} toggle={this.toggle}>Character Creation</ModalHeader>
           <ModalBody style={styles.modalContent}>
@@ -130,6 +178,14 @@ class CharacterProfile extends React.Component {
                     Abilities
                   </NavLink>
                 </NavItem>
+                <NavItem>
+                  <NavLink
+                    style={(this.state.activeTab === '4') ? styles.navLink : {}}
+                    onClick={() => { this.tabToggle('4'); }}
+                  >
+                    Other
+                  </NavLink>
+                </NavItem>
               </Nav>
               <TabContent style={styles.tabContent} activeTab={this.state.activeTab}>
                 <TabPane tabId="1">
@@ -149,7 +205,12 @@ class CharacterProfile extends React.Component {
                 <TabPane tabId="3">
                   <AbilitySelection
                     abilities={abilities}
-                    ability_bonus={(character.race) ? character.race.ability_bonuses[0] : {} }
+                    ability_bonus={(characterBuild.race) ? characterBuild.race.ability_bonuses[0] : {} }
+                    buildCharacter={this.buildCharacter}
+                  />
+                </TabPane>
+                <TabPane tabId="4">
+                  <Other
                     buildCharacter={this.buildCharacter}
                   />
                 </TabPane>
@@ -157,7 +218,7 @@ class CharacterProfile extends React.Component {
             </div>
           </ModalBody>
           <ModalFooter style={styles.modalFooter}>
-            {this.completeCharacter() ? <button className="D-DButton" onClick={this.toggle} >Create</button>
+            {this.completeCharacter() ? <button className="D-DButton" onClick={this.setCharacter} >Create</button>
                                       : <button className="DisabledD-DButton" >Create</button>}{' '}
           </ModalFooter>
         </Modal>

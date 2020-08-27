@@ -20,8 +20,8 @@ function encodeQueryData(data) {
 
 export function customEvent(eci, domain, type, attributes, eid){
   eid = eid ? eid : "customEvent";
-  const attrs = encodeQueryData(attributes);
-  return axios.post(`${sky_event(eci)}/${eid}/${domain}/${type}?${attrs}`);
+
+  return axios.post(`${sky_event(eci)}/${eid}/${domain}/${type}`, attributes);
 }
 
 export function customQuery(eci, ruleset, funcName, params){
