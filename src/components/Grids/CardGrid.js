@@ -65,14 +65,10 @@ class CardGrid extends Component {
 
     return(
       <div key={"gridCard" + index.toString()} data-grid={gridSettings} >
-
-        {this.props.dropTargets && cardType === 'Community' && <DropTargetCard
+        {this.props.dropTargets && <DraggableCard
+                                    picoID={picoID}
                                     cardType={cardType}
-                                    picoID={picoID}
-                                    handleDrop={this.props.handleDrop} />}
-        {this.props.dropTargets && cardType === 'Thing' && <DraggableCard
-                                    picoID={picoID}
-                                    cardType={cardType}/>}
+                                    handleDrop={this.props.handleDrop}/>}
         {!this.props.dropTargets && <Card
                                       cardType={cardType}
                                       picoID={picoID}/>}
@@ -85,6 +81,8 @@ class CardGrid extends Component {
       <ResponsiveReactGridLayout {...this.props}
         onLayoutChange={this.onLayoutChange}
         onBreakpointChange={this.onBreakpointChange}
+        isDraggable={!this.props.dropTargets}
+        isResizable={!this.props.dropTargets}
         draggableCancel=".nonDraggable">
           {this.props.idList.map(this.renderCard)}
       </ResponsiveReactGridLayout>

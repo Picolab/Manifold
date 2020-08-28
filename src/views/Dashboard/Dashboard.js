@@ -5,19 +5,26 @@ import { getThingIdList, getCommunitiesIdList } from '../../reducers';
 import { connect } from 'react-redux';
 import { commandAction } from '../../actions/command';
 import { addToCommunity } from '../../utils/manifoldSDK';
+import Switch from './Switch';
 
 class Dashboard extends Component {
+  state = {
+    dragDropToggle: false
+  };
+
   handleDrop = (dropTargetCard, draggedCard) => {
-    this.props.addThingToComm(dropTargetCard.DID, draggedCard.DID, draggedCard.picoID);
+    console.log(dropTargetCard, draggedCard);
+    if (dropTargetCard.picoID !== draggedCard.picoID && dropTargetCard.cardType === 'Community') this.props.addThingToComm(dropTargetCard.DID, draggedCard.DID, draggedCard.picoID);
   }
 
   render() {
     return (
       <div>
+        <Switch active={this.state.dragDropToggle} setActive={(val) => {this.setState({ dragDropToggle: val })}} />
         <CardGrid
           idList={[ ...this.props.communitiesIdList, ...this.props.thingIdList ]}
           lastCommunityIndex={this.props.communitiesIdList.length-1}
-          dropTargets={true}
+          dropTargets={this.state.dragDropToggle}
           handleDrop={this.handleDrop}
           dashboard={true}
         />

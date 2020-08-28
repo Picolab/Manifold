@@ -6,7 +6,7 @@ import { getDID } from '../../reducers';
 import { DragSource } from 'react-dnd';
 import DragTypes from '../DragTypes';
 
-import Card from './Card';
+import DropTargetCard from './DropTargetCard';
 
 import './cardStyles.css';
 
@@ -32,9 +32,10 @@ class DraggableCard extends Component {
     const { /*isDragging,*/ connectDragSource } = this.props
     return connectDragSource(
       <div style={{width: '100%', height: '100%'}}>
-            <Card
+            <DropTargetCard
               cardType={this.props.cardType}
-              picoID={this.props.picoID}/>
+              picoID={this.props.picoID}
+              handleDrop={this.props.handleDrop}/>
       </div>
     )
   }
