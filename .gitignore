@@ -17,3 +17,6 @@ build
 npm-debug.log
 src/utils/config.js
 src/utils/config.js
+package-lock.json
+package.json
+src/utils/config.js
