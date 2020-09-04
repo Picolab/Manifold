@@ -112,8 +112,6 @@ export function getPositionArray(state, picoIDArray) {
     }else if(communities.get(picoID)) {
       let pos = communities.getIn([picoID, "pos"]) || Map({});
       toReturn = toReturn.push(pos);
-    }else{
-      toReturn = toReturn.push(null);
     }
   });
   return toReturn.toJS();

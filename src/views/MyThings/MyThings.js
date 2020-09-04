@@ -6,19 +6,50 @@ import MyThingsHeader from '../../components/MyThingsComponents/MyThingsHeader';
 import { getThingIdList } from '../../reducers';
 import MediaQuery from 'react-responsive';
 import PropTypes from 'prop-types';
+import "./MyThings.css";
 //import Header from '../../components/Header/Header';
 import { Dropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap';
 
 export class MyThings extends Component {
-  state = { thingsSize: 'Grid', dropdownOpen: false};
-  renderGrid(){
+  state = { thingsSize: 'Grid', dropdownOpen: false, loading: true, grid: <div></div>};
+
+  componentDidUpdate(previousProps) {
+    if(this.props.thingIdList.length !== previousProps.thingIdList.length || this.state.thingIdListLength !== this.props.thingIdList.length ) {
+      this.setState({
+        loading: true,
+        thingIdListLength: this.props.thingIdList.length
+      })
+      this.setGrid();
+    }
+  }
+
+  componentDidMount() {
     this.toggle = this.toggle.bind(this);
+    this.setGrid = this.setGrid.bind(this);
+    this.renderGrid = this.renderGrid.bind(this);
+    this.loadingTimeout = setTimeout(()=>{this.setGrid();}, 1000);
+  }
+
+  async setGrid() {
+    let grid = await this.renderGrid()
+    this.setState({
+      grid: grid
+    }, ()=>{this.doneLoading();})
+  }
+
+  doneLoading() {
+    if(this.loadingTimeout) {
+      clearTimeout(this.loadingTimeout);
+    }
+    this.setState({loading: false})
+  }
+
+  async renderGrid() {
     //make sure the things object really exists before trying to display them
     if(this.props.thingIdList.length > 0) {
         if(this.state.thingsSize === 'List') {
           return (
             <div>
-              {this.loadDropdown()}
               <CardList idList={this.props.thingIdList}/>
             </div>
           );
@@ -26,7 +57,6 @@ export class MyThings extends Component {
           return (
             <div>
               <MediaQuery minWidth={600}>
-                {this.loadDropdown()}
                 <CardGrid idList={this.props.thingIdList} cardType="Thing"/>
               </MediaQuery>
               <MediaQuery maxWidth={599}>
@@ -59,10 +89,16 @@ export class MyThings extends Component {
 
   changeThingsSize = () => {
     if(this.state.thingsSize === 'Grid') {
-      this.setState({thingsSize: 'List'});
+      this.setState({
+        thingsSize: 'List',
+        loading: true
+      }, ()=> {this.setGrid()});
     }
     else if(this.state.thingsSize === 'List') {
-      this.setState({thingsSize: 'Grid'});
+      this.setState({
+        thingsSize: 'Grid',
+        loading: true
+      }, ()=> {this.setGrid()});
     }
   }
 
@@ -72,13 +108,39 @@ export class MyThings extends Component {
     }));
   }
 
-  render(){
+  spinner() {
     return (
-      <div>
-        <MyThingsHeader />
-        {this.renderGrid()}
+      <div className="loadingContainer">
+        <div className="loadingio-spinner-gear-q92uneavp2a-downLeft"><div className="gear-rotate-left">
+        <div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        </div></div>
+        <div className="loadingio-spinner-gear-q92uneavp2a-downRight"><div className="gear-rotate-right">
+        <div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        </div></div>
+        <div className="loading-text">Loading Things...</div>
       </div>
-    );
+    )
+  }
+
+  render(){
+    if(this.state.loading) {
+
+      return (
+        <div>
+          <MyThingsHeader />
+          {this.spinner()}
+        </div>
+      );
+    }
+    else {
+      return (
+        <div>
+          <MyThingsHeader />
+          {this.loadDropdown()}
+          {this.state.grid}
+        </div>
+      );
+    }
   }
 }
 

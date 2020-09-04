@@ -1,6 +1,6 @@
 {
   "name": "Manifold",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "homepage": ".",
   "devDependencies": {
@@ -42,11 +42,10 @@
     "reactstrap": "^5.0.0",
     "redux": "^3.7.2",
     "redux-immutable": "^4.0.0",
-    "redux-saga": "^0.15.6",
-    "uuid": "^3.2.1"
+    "redux-saga": "^0.15.6"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "REACT_APP_VERSION=$npm_package_version react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"

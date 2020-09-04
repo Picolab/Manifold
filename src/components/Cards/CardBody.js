@@ -20,7 +20,7 @@ export class CardBody extends Component {
     }else{
       return (
         <div>
-          Error loading the custom component!
+          Error loading the app! This could be due to the app being depricated.
         </div>
       )
     }

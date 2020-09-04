@@ -14,7 +14,6 @@ ruleset io.picolabs.manifold.email_notifications {
     }
     
     getDefaultRecipient = function(contacts) {
-      contacts.klog("contacts");
       default_recipient = contacts.filter(function(x) {
         (x{"email"} != null && x{"favorite"} == "true");
       });
