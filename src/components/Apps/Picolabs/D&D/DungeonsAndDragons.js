@@ -32,6 +32,7 @@ class DungeonsAndDragons extends React.Component {
     else if(this.state.currentPage === "CreateGame") {
       return(
         <CreateGame
+          manifoldQuery={this.props.manifoldQuery}
           signalEvent={this.props.signalEvent}
           changeCurrentPage={this.changeCurrentPage}
         />

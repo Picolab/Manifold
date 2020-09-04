@@ -1,5 +1,6 @@
 import React from 'react';
 import { Media } from 'reactstrap';
+import GameSearch from './GameSearch';
 import icon from './D&D.png';
 import './CreateGame.css';
 
@@ -24,11 +25,13 @@ class CreateGame extends React.Component {
               <input type="text" placeholder="Invitation"/>
             </div>
           </div>
-          <div class="overlay createGameColumn">
+          <div className="overlay createGameColumn">
             Story
           </div>
-          <div class="overlay createGameColumn">
-            Search
+          <div className="overlay createGameColumn">
+            <GameSearch
+              manifoldQuery={this.props.manifoldQuery}
+            />
           </div>
         </div>
       </div>

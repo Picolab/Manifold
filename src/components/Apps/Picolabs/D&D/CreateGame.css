@@ -17,6 +17,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  border: 1px dotted red;
 }
 
 .gameInvitationContainer {
@@ -26,4 +27,118 @@
   text-rendering: optimizeLegibility;
   margin: 10px;
   margin-top: 20px;
+}
+
+.searchContainer {
+  font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+  text-rendering: optimizeLegibility;
+  height: 50%;
+  border-top: 3px solid red;
+}
+
+.searchBarContainer {
+  width: 100%;
+  margin: 10px;
+}
+
+.searchBar {
+  height: 40%;
+  width: 80%;
+}
+
+.spellInput {
+  height: 40%;
+  width: 38%;
+}
+
+.DNDSearchButton {
+  background-color: transparent;
+  border-color: white;
+  border-radius: 5px;
+  color: white;
+  margin-left: 5px;
+}
+
+.DNDSearchButton:hover {
+  background-color: red;
+  border-color: red;
+  color: white;
+}
+
+.spellCard {
+  font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+  text-rendering: optimizeLegibility;
+  background-color: #77684c;
+  width: 93%;
+  color: wheat;
+  border: 1.5px dotted black;
+  margin: 10px;
+  padding: 10px;
+  box-shadow: 0 4px 8px 0 rgba(100, 0, 0, 0.4);
+  transition: 0.3s;
+}
+
+.spellCard:hover {
+  box-shadow: 0 8px 16px 0 rgba(200,0,0,0.4);
+  border: 1.5px solid black;
+  color: black;
+}
+
+.spellCardContainercontainer {
+  padding: 2px 16px;
+}
+
+.searchResultsContainer {
+  border-top: 3px solid red;
+  overflow: scroll;
+  height: 86.5%;
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+}
+
+div.spellCardContainer > h4 {
+  font-size: 1.2vw;
+}
+
+
+div.spellCardContainer > p {
+  font-size: .8vw;
+  margin-bottom: .6vw;
+}
+
+.monsterRow {
+  display: flex;
+  font-size: .8vw;
+  margin-bottom: .2vw;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.monsterHeader {
+  font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+  text-rendering: optimizeLegibility;
+  font-size: 1vw;
+  font-weight: bold;
+}
+
+.monsterAction {
+  font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+  text-rendering: optimizeLegibility;
+  font-size: .8vw;
+}
+
+.monsterAction > span {
+  font-weight: bold;
+}
+
+.monsterDefinition {
+  font-size: .8vw;
+  margin-bottom: .2vw;
+  display: flex;
+}
+
+.monsterDefinition > span {
+  font-weight: bold;
+  margin-right: 4px;
 }
