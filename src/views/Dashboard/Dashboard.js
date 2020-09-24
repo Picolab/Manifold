@@ -12,9 +12,9 @@ class Dashboard extends Component {
     dragDropToggle: false
   };
 
-  handleDrop = (dropTargetCard, draggedCard) => {
+  handleDrop = (dropTargetCard, draggedCard, callback) => {
     console.log(dropTargetCard, draggedCard);
-    if (dropTargetCard.picoID !== draggedCard.picoID && dropTargetCard.cardType === 'Community') this.props.addThingToComm(dropTargetCard.DID, draggedCard.DID, draggedCard.picoID);
+    if (dropTargetCard.picoID !== draggedCard.picoID && dropTargetCard.cardType === 'Community') this.props.addThingToComm(dropTargetCard.DID, draggedCard.DID, draggedCard.picoID).then(callback);
   }
 
   render() {
@@ -47,9 +47,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addThingToComm: (commEci, eci, picoID) => {
-      dispatch(commandAction(addToCommunity, [commEci, eci, picoID], {delay : 500} ));
-    }
+    addThingToComm: addToCommunity
   }
 }
 

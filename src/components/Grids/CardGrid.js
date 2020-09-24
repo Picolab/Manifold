@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import Card from '../Cards/Card';
 import { moveThing, moveCommunity } from '../../utils/manifoldSDK';
 import { commandAction } from '../../actions/command';
-import DropTargetCard from '../Cards/DropTargetCard';
 import DraggableCard from '../Cards/DraggableCard';
 import { getPositionArray } from '../../reducers';
 

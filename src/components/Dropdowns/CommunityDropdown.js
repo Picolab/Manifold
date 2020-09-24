@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem} from 'reactstrap';
-import ColorModal from '../Modals/ColorModal';
-// import CommunitiesModal from '../Modals/CommunitiesModal';
+import CommunitiesModal from '../Modals/CommunitiesModal';
 import InstallModal from '../Modals/InstallModal';
 import RemoveCommunityModal from '../Modals/RemoveCommunityModal';
 import PropTypes from 'prop-types';
@@ -24,7 +23,7 @@ export class CommunityDropdown extends Component {
 
     this.toggleRemove = this.toggleRemove.bind(this);
     this.toggleInstall = this.toggleInstall.bind(this);
-    this.toggleColor = this.toggleColor.bind(this);
+    this.toggleCommunity = this.toggleCommunity.bind(this);
   }
 
   //this allows the modal to update its state when its props change
@@ -50,6 +49,11 @@ export class CommunityDropdown extends Component {
     this.toggleColor();
   }
 
+  openCommunity = () => {
+    this.props.toggleSettings();
+    this.toggleCommunity();
+  }
+
   toggleRemove() {
     this.setState({
       removeOpen: !this.state.removeOpen
@@ -62,9 +66,10 @@ export class CommunityDropdown extends Component {
     })
   }
 
-  toggleColor() {
+  toggleCommunity() {
+    console.log("toggle community")
     this.setState({
-      colorOpen: !this.state.colorOpen
+      communityOpen: !this.state.communityOpen
     })
   }
 
@@ -93,11 +98,13 @@ export class CommunityDropdown extends Component {
           </DropdownItem>
           <InstallModal modalOn={this.state.installOpen} toggleFunc={this.toggleInstall} picoID={this.props.picoID}/>
 
-          {/*<DropdownItem onClick={this.openColor}>
-            Change Color
-            <i className="fa fa-cubes float-right" style={{"marginRight": "0", "marginTop": "4px"}}/>
+          <DropdownItem onClick={this.openCommunity} style={{width: 200}} >
+            Add to Community
+            <i className="fa fa-cloud-download float-right" style={{"marginRight": "0", "marginTop": "4px"}}/>
           </DropdownItem>
-          <ColorModal modalOn={this.state.colorOpen} toggleFunc={this.toggleColor} picoID={this.props.picoID}/>*/}
+          <CommunitiesModal modalOn={this.state.communityOpen} toggleFunc={this.toggleCommunity} picoID={this.props.picoID} />
+
+
 
         </DropdownMenu>
 

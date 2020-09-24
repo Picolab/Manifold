@@ -16,8 +16,6 @@ class Communities extends Component {
   }
 
   handleDrop(dropTargetCard, draggedCard) {
-    console.log("dropTargetCard", dropTargetCard);
-    console.log("draggedCard", draggedCard);
     //this.props.createCommSubscription(dropTargetCard.Tx, draggedCard.Tx)
   }
 
@@ -28,7 +26,7 @@ class Communities extends Component {
         <CardGrid
           idList={this.props.communitiesIdList}
           cardType="Community"
-          dropTargets={true}
+          dropTargets={false}
           handleDrop={this.handleDrop}/>
       )
     }else{

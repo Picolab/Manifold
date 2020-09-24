@@ -22,6 +22,7 @@ const dropCardSpec = {
       DID: props.DID
     }
     props.handleDrop(thisCard, draggedCard);
+    console.log("component", component);
   }
 }
 

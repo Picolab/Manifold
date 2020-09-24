@@ -8,11 +8,13 @@ import { styles } from './styles';
 const IconSelector = ({search, selected, setSelected}) => {
   const [ searchTerm, setSearchTerm ] = useState(search);
   const [ icons, setIcons ] = useState([]);
-  const [ button, clickButton ] = useState(0)
+  const [ button, clickButton ] = useState(0);
+  const [ notFound, setNotFound ] = useState(search);
 
   useEffect(() => {
     customQuery(getManifoldECI(), 'io.picolabs.manifold_pico', 'getIcons', { query: searchTerm }).then((resp) => {
       setIcons(resp.data);
+      setNotFound(searchTerm);
     });
   }, [button]);
 
@@ -28,7 +30,7 @@ const IconSelector = ({search, selected, setSelected}) => {
   const iconList = () => {
     if (icons.length === 0) {
       return (
-        <div style={styles.noResults}>No icons found for '{searchTerm}'. Try another search term above.</div>
+        <div style={styles.noResults}>No icons found for '{notFound}'. Try another search term above.</div>
       );
     }
     return icons.map((x, i) => {
