@@ -142,3 +142,163 @@ div.spellCardContainer > p {
   font-weight: bold;
   margin-right: 4px;
 }
+
+.invitationContainer {
+  display: flex;
+}
+
+.playersColumn {
+  padding: 10px;
+}
+
+.playersContainer {
+  margin-top: 10px;
+  width: 100%;
+}
+
+.playerContainer {
+  display: flex;
+  border: 1px solid red;
+  width: 100%;
+  padding: 5px;
+}
+
+.playerContainer:hover {
+  background-color: black;
+}
+
+.playerImage {
+  width: 15%;
+}
+
+.playerName {
+  margin: auto auto auto 10px;
+}
+
+
+.recGameInvitationContainer {
+  text-align: center;
+}
+
+.playerInfoSection {
+  font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+  text-rendering: optimizeLegibility;
+  font-size: 1vw;
+  margin: 10px;
+}
+
+.playerInfoAbilities {
+  width: 85%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.playerInfoImage {
+  width: 35%;
+}
+
+.playerInfoImageContainer {
+  display: flex;
+}
+
+.playerInfoName {
+  display: block;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 10px;
+}
+
+.storyBody {
+  overflow: scroll;
+  border-bottom: 1px solid red;
+  width: 100%;
+  height: 70%;
+}
+
+
+.DNDsent {
+  width: 200px;
+  border: 2px solid red;
+  background-color: red;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+  margin-right: 5px;
+  float: right;
+  clear: left;
+  clear: right;
+  width: 200px;
+  text-align: left;
+  overflow-wrap: break-word;
+}
+
+.DNDreceived {
+  width: 200px;
+  border: 2px solid #D0D0D0;
+  background-color: 	#FFF;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+  margin-left: 5px;
+  width: 200px;
+  clear: both;
+  text-align: left;
+  overflow-wrap: break-word;
+  color: black;
+}
+
+.DNDsendMessageButtonContainer {
+  background-color: gray;
+  width: 3vw;
+  height: 3vw;
+  justify-content: center;
+  display: flex;
+  border-radius: 3vw;
+  margin: 1vw;
+  border-color: red
+}
+
+.DNDsendMessageButtonContainer:hover {
+  cursor: pointer;
+  background-color: red;
+}
+
+
+.DNDsendButton {
+  top: 2vw;
+  position: absolute;
+  color: red;
+  color: white;
+  font-size: 1.1vw;
+}
+
+.DNDsendButton:hover {
+  cursor: pointer;
+}
+
+.story {
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
+  height: 100%;
+  display:flex;
+  flex-direction:column;
+}
+
+.storyHeader {
+  font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+  text-rendering: optimizeLegibility;
+  font-size: 2vw;
+  font-weight: bold;
+  text-align: center;
+  color: red;
+}
+
+
+.DNDmessageInput {
+  border-color: #fff;
+  height: 70%;
+  margin: 10px;
+}
+.DNDmessageInput:focus {
+  border-color: #fff;
+}

@@ -29,5 +29,5 @@ export default {
   "io.picolabs.manifold.smart_mirror": SmartMirror,
   "io.picolabs.manifold_monitor": ManifoldMonitor,
   "io.picolabs.manifold_cloud_agent": CloudAgent,
-  "D-D_Game": DungeonsAndDragons
+  "DND_Game": DungeonsAndDragons
 }

@@ -19,38 +19,50 @@ class CharacterProfile extends React.Component {
       races: null,
       classes: null,
       abilities: null,
-      character: null,
+      character: this.props.character,
       characterBuild: {}
 
     };
     this.toggle = this.toggle.bind(this);
     this.getCharacterCreationData = this.getCharacterCreationData.bind(this);
     this.buildCharacter = this.buildCharacter.bind(this);
-    this.getCharacter = this.getCharacter.bind(this);
     this.setCharacter = this.setCharacter.bind(this);
   }
 
   componentDidMount() {
-    this.getCharacter();
+    this.getCharacterCreationData()
   }
 
-  getCharacter() {
-    const promise = this.props.manifoldQuery({
-      rid: "D-D_Character_Profile",
-      funcName: "getCharacter"
-    });
-    promise.then((resp) => {
-      let character = Object.keys(resp.data).length === 0 ? null : resp.data
-      if(character) {
-        this.getCharacterCreationData()
-      }
+  componentDidUpdate(prevProps) {
+    if (this.props.details !== prevProps.details) {
       this.setState({
-        character: character
-      });
-    }).catch((e) => {
-        displayError(true, "Error getting Character.", 404);
-    });
+        character: this.props.character
+      })
+
+      if(this.props.character) {
+        console.log("here!!");
+        this.getCharacterCreationData();
+      }
+    }
   }
+
+  // getCharacter() {
+  //   const promise = this.props.manifoldQuery({
+  //     rid: "DND_Character_Profile",
+  //     funcName: "getCharacter"
+  //   });
+  //   promise.then((resp) => {
+  //     let character = Object.keys(resp.data).length === 0 ? null : resp.data
+  //     if(character) {
+  //       this.getCharacterCreationData()
+  //     }
+  //     this.setState({
+  //       character: character
+  //     });
+  //   }).catch((e) => {
+  //       displayError(true, "Error getting Character.", 404);
+  //   });
+  // }
 
   buildCharacter(key, value) {
     let map = this.state.characterBuild
@@ -89,7 +101,7 @@ class CharacterProfile extends React.Component {
   getCharacterCreationData() {
     if(!(this.state.races && this.state.classes && this.state.abilities)) {
       const promise = this.props.manifoldQuery({
-        rid: "D-D_Character_Profile",
+        rid: "DND_Character_Profile",
         funcName: "getCharacterCreationData"
       });
       promise.then((resp) => {
@@ -100,6 +112,8 @@ class CharacterProfile extends React.Component {
           classes: results.classes,
           abilities: results.abilities
         });
+
+        console.log("result.abilities", results.abilities)
       }).catch((e) => {
           displayError(true, "Error getting Character Creation Data.", 404);
       });
@@ -113,7 +127,7 @@ class CharacterProfile extends React.Component {
       attrs : { character: JSON.stringify(this.state.characterBuild) }
     });
     promise.then((resp) => {
-      this.getCharacter();
+      this.props.getCharacter();
       this.toggle();
     }).catch((e) => {
         displayError(true, "Error setting Character.", 404);
@@ -121,12 +135,11 @@ class CharacterProfile extends React.Component {
   }
 
   displayCharacter() {
-    if(this.state.character) {
-      console.log(this.state.abilities);
+    if(this.props.character) {
       return(
         <div style={{ "marginTop": "5%"}}>
           <CharacterDisplay
-            character={this.state.character}
+            character={this.props.character}
             abilities={this.state.abilities}
           />
           <button className="D-DButton" onClick={()=>{this.getCharacterCreationData(); this.toggle();}}> Create New Character </button>
@@ -205,7 +218,7 @@ class CharacterProfile extends React.Component {
                 <TabPane tabId="3">
                   <AbilitySelection
                     abilities={abilities}
-                    ability_bonus={(characterBuild.race) ? characterBuild.race.ability_bonuses[0] : {} }
+                    ability_bonus={(characterBuild.race) ? characterBuild.race.ability_bonuses : {} }
                     buildCharacter={this.buildCharacter}
                   />
                 </TabPane>

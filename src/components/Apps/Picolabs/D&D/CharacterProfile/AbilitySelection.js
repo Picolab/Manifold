@@ -48,7 +48,7 @@ class AbilitySelection extends React.Component {
     let { abilities, ability_bonus, ability_choices} = this.state
     let map = {}
     for(let i in abilities) {
-      let bonus = (ability_bonus.name === abilities[i].name) ? ability_bonus.bonus : 0
+      let bonus = (ability_bonus[abilities[i].name] ) ? ability_bonus[abilities[i].name].bonus : 0
       let total = parseInt(this.state[abilities[i].name],10) + parseInt(bonus, 10)
       map[abilities[i].name] = isNaN(total) ? bonus : total
     }
@@ -66,7 +66,7 @@ class AbilitySelection extends React.Component {
     let out = []
     let map = {}
     for(let i in abilities) {
-      let bonus = (ability_bonus.name === abilities[i].name) ? ability_bonus.bonus : 0
+      let bonus = (ability_bonus[abilities[i].name] ) ? ability_bonus[abilities[i].name].bonus : 0
       let total = parseInt(this.state[abilities[i].name],10) + parseInt(bonus, 10)
       out.push(
         <div>

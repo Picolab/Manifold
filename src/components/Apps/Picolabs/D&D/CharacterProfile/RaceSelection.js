@@ -33,7 +33,17 @@ class RaceSelection extends React.Component {
     this.setState({
       raceChoice: raceChoice.name
     })
+    raceChoice.ability_bonuses = this.modifyAbilityBonuses(raceChoice.ability_bonuses);
     this.props.buildCharacter("race", raceChoice)
+  }
+
+  modifyAbilityBonuses(bonuses) {
+    let obj = {}
+    for (let i in bonuses) {
+      obj[bonuses[i].name] = bonuses[i]
+    }
+
+    return obj;
   }
 
   displayRaces() {

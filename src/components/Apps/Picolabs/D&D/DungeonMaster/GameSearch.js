@@ -1,6 +1,5 @@
 import React from 'react';
-import { Card, CardTitle, CardText } from 'reactstrap';
-import { displayError } from '../../../../utils/manifoldSDK';
+import { displayError } from '../../../../../utils/manifoldSDK';
 
 class GameSearch extends React.Component {
   constructor(props) {

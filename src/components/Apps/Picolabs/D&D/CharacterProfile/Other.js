@@ -57,8 +57,11 @@ class Other extends React.Component {
         </div>
         <div for="bane">Name: </div>
         <input type="text" name="name" id="name" placeholder="Character Name" value={this.state.name} onChange={this.onChange} />
-        <div for="descripton">Descripton: </div>
-        <Input type="textarea" name="descripton" id="descripton" placeholder="Add a description for your character." value={this.state.descripton} onChange={this.onChange}/>
+        <div className="descriptionHeader">
+          <div for="descripton">Descripton: </div>
+          <div>{this.state.descripton.length}/300</div>
+        </div>
+        <Input type="textarea" name="descripton" id="descripton" maxlength="300" placeholder="Add a description for your character." value={this.state.descripton} onChange={this.onChange}/>
       </div>
     )
   }

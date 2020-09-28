@@ -23,6 +23,8 @@ class CharacterDisplay extends React.Component {
   displayAbilities() {
     let { abilities, character } = this.state
     let out = [];
+    console.log("character abilitites", character.abilities);
+    console.log("abilities", abilities)
     for (let i in abilities) {
       out.push(
         <div>
