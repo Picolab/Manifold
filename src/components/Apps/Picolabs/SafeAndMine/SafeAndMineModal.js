@@ -48,7 +48,7 @@ class SafeAndMineModal extends React.Component {
 
 
   updateData() {
-    console.log("state", this.state)
+    //console.log("state", this.state)
     let attrs = {
       name: this.state.name,
       email: this.state.email,
