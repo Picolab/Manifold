@@ -10,6 +10,7 @@ ruleset io.picolabs.manifold_pico {
       { "queries": [ { "name":"getManifoldPico" },
                      { "name": "getManifoldInfo" },
                      { "name": "getThings" },
+                     { "name": "getIcons", "args": ["query"] },
                      { "name": "isAChild", "args": ["name"] }],
         "events": [ { "domain": "manifold", "type": "create_thing",
                       "attrs": [ "name" ] },
@@ -50,6 +51,8 @@ ruleset io.picolabs.manifold_pico {
       headers = { "authorization": "Bearer wX5kw7qHDKJvFRzWtY2qvYM1CoWLD7oyQiLcXD7B0YgnJqwIxU1IggOlJDNvT3RH" }){"content"}.decode().get("icons").map(function(x) {
         array = x{"raster_sizes"};
         array[array.length()-1]{"formats"}[0]{"preview_url"}
+      }).filter(function(x){
+         x.as("String") != "null"
       });
     }
 
@@ -246,7 +249,7 @@ ruleset io.picolabs.manifold_pico {
     pre {
       picoID = event:attr("picoID");
       subID = subIDFromPicoID(picoID, ent:communities).klog("found subID: ");
-      sub = subscription:established("Id", event:attr("subID"))[0].klog("found sub: ");
+      sub = subscription:established("Id", subID/*event:attr("subID")*/)[0].klog("found sub: ");
     }
     if picoID && subID && sub then
       send_directive("Attempting to cancel subscription to Community", {"community":event:attr("name")})

@@ -9,7 +9,8 @@ ruleset io.picolabs.thing {
       { "queries": [ { "name": "__testing", "name":"getManifoldPico" },
                      { "name": "__testing", "name":"getManifoldInfo" }],
         "events": [ { "domain": "manifold", "type": "create_thing",
-                      "attrs": [ "name" ] } ] }
+                      "attrs": [ "name" ] },
+                    { "domain": "community", "type": "publish_intent"} ] }
 
     app = {"name":"thing","version":"0.0"/* img: , pre: , ..*/};
     bindings = function(){
@@ -43,7 +44,7 @@ ruleset io.picolabs.thing {
         attributes event:attrs;
     }
   }
-  
+
   rule uninstallApp {
     select when manifold uninstallapp
     pre {}
@@ -51,6 +52,21 @@ ruleset io.picolabs.thing {
     fired {
       raise wrangler event "uninstall_rulesets_requested"
         attributes event:attrs;
+    }
+  }
+
+  rule publish_intents {
+    select when wrangler subscription_added
+    always {
+      raise community event "publish_intent"
+    }
+  }
+
+  rule rs_added {
+    select when wrangler ruleset_added
+
+    always {
+      raise community event "publish_intent"
     }
   }
 
