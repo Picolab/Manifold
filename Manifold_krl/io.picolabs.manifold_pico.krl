@@ -22,7 +22,7 @@ ruleset io.picolabs.manifold_pico {
     communityRids = "io.picolabs.community;io.picolabs.subscription"
     thing_role = "manifold_thing"
     community_role = "manifold_community"
-    max_picos = 30
+    max_picos = 100
 
     getManifoldInfo = function() {
       {
