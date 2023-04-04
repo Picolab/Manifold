@@ -1,7 +1,7 @@
 ruleset io.picolabs.manifold.pico_mailer {
   meta {
     shares __testing
-    
+    use module io.picolabs.wrangler alias wrangler
     use module io.picolabs.gmail.credential alias google
   }
   global {
@@ -35,8 +35,15 @@ ruleset io.picolabs.manifold.pico_mailer {
         if not response{"content"}.decode(){"error"}
     }
   }
+  rule whoami {
+    select when system online
+    pre {
+      rid = meta:rid.klog("rid")
+      myself = wrangler:myself().klog("myself")
+    }
+  }
   rule connect {
-    select when email connect or system online
+    select when email connect // or system online
     pre {
       username = event:attr("username") || "picolabsbyu@gmail.com"
       password = event:attr("password")
