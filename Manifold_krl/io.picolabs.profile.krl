@@ -81,10 +81,10 @@ ruleset io.picolabs.profile {
     pre {
       profile = event:attr("profile") // .klog("profile")
       googleProfile = {
-        "displayName" : profile["ig"] || profile{"Af"},
-        "firstName" : profile["ofa"] || profile{"uZ"},
-        "lastName" : profile["wea"] || profile{"IX"},
-        "profileImgURL" : profile["Paa"] || profile{"tO"},
+        "displayName" : profile["ig"] || profile{"yf"},
+        "firstName" : profile["ofa"] || profile{"OZ"},
+        "lastName" : profile["wea"] || profile{"ey"},
+        "profileImgURL" : profile["Paa"] || profile{"IO"},
         "email" : profile["U3"] || profile{"fw"},
         "favorite": ent:profile{"google"}{"favorite"} == "true" => "true" | "false"
       }
