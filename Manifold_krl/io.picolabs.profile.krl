@@ -81,11 +81,11 @@ ruleset io.picolabs.profile {
     pre {
       profile = event:attr("profile") // .klog("profile")
       googleProfile = {
-        "displayName" : profile["ig"] || profile{"yf"},
-        "firstName" : profile["ofa"] || profile{"OZ"},
-        "lastName" : profile["wea"] || profile{"ey"},
-        "profileImgURL" : profile["Paa"] || profile{"IO"},
-        "email" : profile["U3"] || profile{"fw"},
+        "displayName" : profile["ig"] || profile{"zf"},
+        "firstName" : profile["ofa"] || profile{"XZ"},
+        "lastName" : profile["wea"] || profile{"nY"},
+        "profileImgURL" : profile["Paa"] || profile{"LO"},
+        "email" : profile["U3"] || profile{"gw"},
         "favorite": ent:profile{"google"}{"favorite"} == "true" => "true" | "false"
       }
     }
@@ -95,7 +95,7 @@ ruleset io.picolabs.profile {
       "eid": "google_verified",
       "domain": "email",
       "type": "save_verified_email",
-      "attrs": {"email": profile["U3"] || profile{"fw"}}
+      "attrs": {"email": profile["U3"] || profile{"gw"}}
     });
     fired {
       ent:profile := ent:profile.defaultsTo({}).put("google", googleProfile);
