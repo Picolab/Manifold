@@ -35,6 +35,7 @@ ruleset io.picolabs.manifold_pico {
       ent:things.defaultsTo({}).map(function(value, key) {
         sub = subscription:established("Id", value{"subID"})[0];
         sub.put(value)
+           .put("picoId",key)
       })
     }
 
